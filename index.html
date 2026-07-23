@@ -808,12 +808,13 @@
                         <label class="block text-xs font-bold mb-1 modal-label-text">ចំនួនដៅសរុប ($)៖</label>
                         <input type="number" step="any" id="glTarget" placeholder="ឧ. 1500" class="modal-item-input w-full p-2.5 text-sm font-bold text-emerald-600">
                     </div>
-                    <div>
+                    <div id="glCurrentWrapper">
                         <label class="block text-xs font-bold mb-1 modal-label-text">សន្សំបានបច្ចុប្បន្ន ($)៖</label>
                         <input type="number" step="any" id="glCurrent" placeholder="ឧ. 400" class="modal-item-input w-full p-2.5 text-sm font-bold text-blue-600">
                     </div>
                 </div>
-                <button onclick="saveSavingsGoal()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg transition shadow">បន្ថែម/រក្សាទុកគោលដៅ</button>
+
+                <button id="glSaveBtn" onclick="saveSavingsGoal()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg transition shadow">បន្ថែម/រក្សាទុកគោលដៅ</button>
                 
                 <p class="text-xs border-t pt-2 font-bold modal-label-text border-gray-200 dark:border-gray-700">បញ្ជីគោលដៅសន្សំប្រាក់៖</p>
                 <div class="max-h-48 overflow-y-auto space-y-2 pr-1" id="goalListContainer"></div>
@@ -850,7 +851,7 @@
                         <select id="bgCurrency" class="modal-item-input w-full p-2.5 text-sm font-bold text-amber-700"></select>
                     </div>
                 </div>
-                <button onclick="saveBudgetLimit()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-lg transition shadow">បន្ថែម/រក្សាទុកថវិកា</button>
+                <button id="bgSaveBtn" onclick="saveBudgetLimit()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-lg transition shadow">បន្ថែម/រក្សាទុកថវិកា</button>
                 
                 <p class="text-xs border-t pt-2 font-bold modal-label-text border-gray-200 dark:border-gray-700">បញ្ជីថវិកាដែលបានកំណត់៖</p>
                 <div class="max-h-48 overflow-y-auto space-y-2 pr-1" id="budgetListContainer"></div>
@@ -951,7 +952,7 @@
     </div>
 
     <script>
-        // Ensure state is defined globally on window
+        // Global state container
         window.state = {
             exchangeRate: 4100,
             hideAmounts: false, 
@@ -972,8 +973,8 @@
                 { id: 'b2', cat: 'សាំង', limit: 50, cur: 'L (លីត្រ)' }
             ],
             goals: [
-                { id: 'g1', name: '🛵 ទិញម៉ូតូ', target: 1500, current: 400 },
-                { id: 'g2', name: '🏖️ ដើរលេងសៀមរាប', target: 300, current: 180 }
+                { id: 'g1', name: '🛵 ទិញម៉ូតូ', target: 1500, current: 400, linkedAcc: 'NONE' },
+                { id: 'g2', name: '🏖️ ដើរលេងសៀមរាប', target: 300, current: 180, linkedAcc: 'NONE' }
             ],
             shortcuts: [
                 { id: 's1', name: '🍔 បាយថ្ងៃត្រង់ ($2.50)', cat: 'អាហារ', acc: '👛 Wallet', cur: 'USD', inc: 0, exp: 2.5, desc: 'បាយថ្ងៃត្រង់' },
@@ -983,9 +984,18 @@
             transactions: []
         };
 
+        // Utility: Format Money (Hoisted & Immediately Attached to Window)
+        function formatMoney(amount, cur) {
+            if (window.state && window.state.hideAmounts) return '••••••';
+            const num = Number(amount) || 0;
+            if (cur === 'KHR') return Math.round(num).toLocaleString('en-US') + ' ៛';
+            if (cur === 'USD') return num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' $';
+            return num.toLocaleString('en-US', {maximumFractionDigits: 2}) + ' ' + (cur || '');
+        }
+        window.formatMoney = formatMoney;
+
         window.charts = { expense: null, trend: null };
 
-        // Audio chime helper
         window.playChimeSound = function() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1383,386 +1393,9 @@
             if (tabId === 'dashboard') window.updateDashboard();
         };
 
-        window.formatMoney = function(amount, cur) {
-            if (window.state.hideAmounts) return '••••••';
-            if (cur === 'KHR') return amount.toLocaleString('en-US') + ' ៛';
-            if (cur === 'USD') return amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' $';
-            return amount.toLocaleString('en-US', {maximumFractionDigits: 2}) + ' ' + cur;
-        };
-
         window.updateExchangeRate = function() {
             window.state.exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 4100;
             window.renderTable();
-            window.updateDashboard();
-        };
-
-        window.filterByAccountFromCard = function(accName) {
-            const sel = document.getElementById('filterAccount');
-            if (sel) {
-                sel.value = accName;
-                window.switchTab('entry');
-                window.renderTable();
-                window.showToast(`បង្ហាញប្រតិបត្តិការរបស់៖ ${accName}`, 'info');
-            }
-        };
-
-        window.renderTable = function() {
-            const tbody = document.getElementById('tableBody');
-            if (!tbody) return;
-            const searchQ = (document.getElementById('searchInput')?.value || '').toLowerCase();
-            const filterAcc = document.getElementById('filterAccount')?.value || 'ALL';
-            
-            tbody.innerHTML = '';
-            let totals = {}; 
-            window.state.currencies.forEach(c => totals[c] = { in: 0, out: 0 });
-
-            let rowCount = 1;
-
-            window.state.transactions.forEach(tx => {
-                if (filterAcc !== 'ALL' && tx.acc !== filterAcc) return;
-                const matchStr = `${tx.cat} ${tx.desc}`.toLowerCase();
-                if (searchQ && !matchStr.includes(searchQ)) return;
-
-                const curKey = tx.cur || 'USD';
-                if (!totals[curKey]) totals[curKey] = { in: 0, out: 0 };
-                totals[curKey].in += (tx.inc || 0);
-                totals[curKey].out += (tx.exp || 0);
-
-                let accOptsHtml = window.state.accounts.map(a => `<option value="${a}" ${tx.acc===a?'selected':''}>${a}</option>`).join('');
-                let curOptsHtml = window.state.currencies.map(c => `<option value="${c}" ${tx.cur===c?'selected':''}>${c}</option>`).join('');
-                let catOptsHtml = window.state.categories.map(c => `<option value="${c}" ${tx.cat===c?'selected':''}>${c}</option>`).join('');
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-blue-50/50 dark:hover:bg-zinc-800/50 transition-colors group";
-                
-                tr.innerHTML = `
-                    <td class="px-3 py-2 text-sm text-gray-500 dark:text-gray-300 text-center">${rowCount++}</td>
-                    <td class="px-3 py-2"><input type="datetime-local" step="1" value="${window.formatForDateTimeInput(tx.date)}" onchange="updateTx('${tx.id}', 'date', this.value)" class="editable-input text-xs font-mono text-slate-800 dark:text-slate-100"></td>
-                    <td class="px-3 py-2">
-                        <select onchange="updateTx('${tx.id}', 'cat', this.value)" class="editable-input text-sm font-medium text-slate-800 dark:text-slate-100">
-                            ${catOptsHtml}
-                        </select>
-                    </td>
-                    <td class="px-3 py-2"><input type="text" value="${tx.desc}" onchange="updateTx('${tx.id}', 'desc', this.value)" class="editable-input text-sm text-slate-800 dark:text-slate-100"></td>
-                    <td class="px-3 py-2">
-                        <select onchange="updateTx('${tx.id}', 'acc', this.value)" class="editable-input text-sm font-medium text-slate-800 dark:text-slate-100">
-                            ${accOptsHtml}
-                        </select>
-                    </td>
-                    <td class="px-3 py-2">
-                        <select onchange="updateTx('${tx.id}', 'cur', this.value)" class="editable-input text-sm font-bold text-amber-700 dark:text-amber-400">
-                            ${curOptsHtml}
-                        </select>
-                    </td>
-                    <td class="px-3 py-2"><input type="${window.state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${window.state.hideAmounts ? '••••••' : (tx.inc||0)}" onchange="updateTx('${tx.id}', 'inc', this.value)" class="editable-input text-sm font-semibold text-green-600 dark:text-emerald-400 text-right"></td>
-                    <td class="px-3 py-2"><input type="${window.state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${window.state.hideAmounts ? '••••••' : (tx.exp||0)}" onchange="updateTx('${tx.id}', 'exp', this.value)" class="editable-input text-sm font-semibold text-red-500 dark:text-rose-400 text-right"></td>
-                    <td class="px-3 py-2 text-center">
-                        <button onclick="confirmDelete('${tx.id}')" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 opacity-0 group-hover:opacity-100 transition">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            // Table Footer Totals
-            let incText = '', expText = '';
-            Object.keys(totals).forEach(c => {
-                if (totals[c].in > 0) incText += `<div class="font-bold text-green-600 dark:text-emerald-400">${window.formatMoney(totals[c].in, c)}</div>`;
-                if (totals[c].out > 0) expText += `<div class="font-bold text-red-500 dark:text-rose-400">${window.formatMoney(totals[c].out, c)}</div>`;
-            });
-            document.getElementById('totIncCell').innerHTML = incText || '<div class="font-bold text-green-600 dark:text-emerald-400">$ 0.00</div>';
-            document.getElementById('totExpCell').innerHTML = expText || '<div class="font-bold text-red-500 dark:text-rose-400">$ 0.00</div>';
-        };
-
-        window.updateTx = function(id, field, val) {
-            const tx = window.state.transactions.find(t => t.id === id);
-            if (tx) {
-                if (field === 'inc' || field === 'exp') tx[field] = parseFloat(val) || 0;
-                else tx[field] = val;
-                window.pushTxToFirebase(tx);
-                window.renderTable();
-                window.updateDashboard();
-            }
-        };
-
-        window.addRow = function() {
-            window.playChimeSound();
-            const now = new Date();
-            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
-            const newTx = {
-                id: window.generateId(),
-                date: nowIso,
-                cat: window.state.categories[0] || 'ផ្សេងៗ',
-                desc: 'ចំណាយថ្មី',
-                acc: window.state.accounts[0] || '🏦 ABA',
-                cur: 'USD',
-                inc: 0,
-                exp: 0
-            };
-            window.state.transactions.push(newTx);
-            window.pushTxToFirebase(newTx);
-            window.renderTable();
-            window.updateDashboard();
-        };
-
-        window.renderShortcuts = function() {
-            const container = document.getElementById('shortcutsContainer');
-            if(!container) return;
-            container.innerHTML = '';
-            window.state.shortcuts.forEach(sc => {
-                container.innerHTML += `
-                    <button onclick="executeShortcut('${sc.id}')" class="px-3 py-1.5 bg-blue-50 dark:bg-zinc-800 hover:bg-blue-100 dark:hover:bg-zinc-700 text-blue-700 dark:text-amber-300 border border-blue-200 dark:border-zinc-700 text-xs font-bold rounded-lg transition whitespace-nowrap flex items-center gap-1 shadow-sm">
-                        ⚡ ${sc.name}
-                    </button>
-                `;
-            });
-        };
-
-        window.executeShortcut = function(shortcutId) {
-            window.playChimeSound();
-            const sc = window.state.shortcuts.find(s => s.id === shortcutId);
-            if (!sc) return;
-            const now = new Date();
-            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
-            const newTx = {
-                id: window.generateId(),
-                date: nowIso, cat: sc.cat, desc: sc.desc || sc.name, acc: sc.acc, cur: sc.cur, inc: sc.inc||0, exp: sc.exp||0
-            };
-            window.state.transactions.push(newTx);
-            window.pushTxToFirebase(newTx);
-            window.renderTable();
-            window.updateDashboard();
-            window.showToast(`បានកត់ត្រា ${sc.name} រួចរាល់!`, 'success');
-        };
-
-        window.renderSavingsGoals = function() {
-            const container = document.getElementById('goalsContainer');
-            if (!container) return;
-            container.innerHTML = '';
-
-            window.state.goals.forEach(g => {
-                const pct = g.target > 0 ? Math.min(Math.round((g.current / g.target) * 100), 100) : 0;
-                container.innerHTML += `
-                    <div class="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
-                        <div class="flex justify-between items-center mb-1 text-xs font-bold">
-                            <span class="text-slate-800 dark:text-slate-100">${g.name}</span>
-                            <span class="text-emerald-600 dark:text-emerald-400">${window.formatMoney(g.current, 'USD')} / ${window.formatMoney(g.target, 'USD')} (${pct}%)</span>
-                        </div>
-                        <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
-                            <div class="bg-emerald-500 h-2 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            if (window.state.goals.length === 0) {
-                container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់មានគោលដៅសន្សំ។ ចុច "+ បន្ថែមគោលដៅ" ដើម្បីកំណត់។</p>`;
-            }
-        };
-
-        window.openGoalModal = function() {
-            window.renderGoalList();
-            document.getElementById('goalModal').classList.remove('hidden');
-        };
-        window.closeGoalModal = function() { document.getElementById('goalModal').classList.add('hidden'); };
-
-        window.saveSavingsGoal = function() {
-            const name = document.getElementById('glName').value.trim();
-            const target = parseFloat(document.getElementById('glTarget').value) || 0;
-            const current = parseFloat(document.getElementById('glCurrent').value) || 0;
-
-            if (!name || target <= 0) return;
-            window.state.goals.push({ id: window.generateId(), name, target, current });
-            window.saveGoalsToCloud();
-            window.renderGoalList();
-            document.getElementById('glName').value = '';
-            document.getElementById('glTarget').value = '';
-            document.getElementById('glCurrent').value = '';
-            window.showToast('បានរក្សាទុកគោលដៅសន្សំប្រាក់', 'success');
-        };
-
-        window.deleteGoal = function(id) {
-            window.state.goals = window.state.goals.filter(g => g.id !== id);
-            window.saveGoalsToCloud();
-            window.renderGoalList();
-            window.showToast('បានលុបគោលដៅសន្សំ', 'info');
-        };
-
-        window.renderGoalList = function() {
-            const container = document.getElementById('goalListContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            window.state.goals.forEach(g => {
-                container.innerHTML += `
-                    <div class="flex items-center justify-between p-2 bg-emerald-50/50 rounded border text-xs">
-                        <span class="font-bold modal-label-text">${g.name}: ${window.formatMoney(g.current, 'USD')} / ${window.formatMoney(g.target, 'USD')}</span>
-                        <button onclick="deleteGoal('${g.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
-                    </div>
-                `;
-            });
-        };
-
-        window.renderBudgetWidget = function() {
-            const container = document.getElementById('budgetProgressContainer');
-            if(!container) return;
-            container.innerHTML = '';
-
-            const currentMonth = new Date().toISOString().substring(0, 7);
-            
-            window.state.budgets.forEach(b => {
-                let spent = 0;
-                window.state.transactions.forEach(tx => {
-                    if (tx.date && tx.date.substring(0, 7) === currentMonth && tx.cat === b.cat && tx.cur === b.cur) {
-                        spent += (tx.exp || 0);
-                    }
-                });
-
-                const pct = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
-                let colorClass = "bg-emerald-500";
-                let textClass = "text-emerald-600 dark:text-emerald-400";
-                if (pct >= 80 && pct < 100) { colorClass = "bg-amber-500"; textClass = "text-amber-600 dark:text-amber-400"; }
-                if (pct >= 100) { colorClass = "bg-red-500"; textClass = "text-red-600 dark:text-rose-400"; }
-
-                container.innerHTML += `
-                    <div class="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
-                        <div class="flex justify-between items-center mb-1 text-xs font-bold">
-                            <span class="text-slate-800 dark:text-slate-100">${b.cat} (${b.cur})</span>
-                            <span class="${textClass}">${window.formatMoney(spent, b.cur)} / ${window.formatMoney(b.limit, b.cur)} (${pct}%)</span>
-                        </div>
-                        <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
-                            <div class="${colorClass} h-2 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            if (window.state.budgets.length === 0) {
-                container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់បានកំណត់ថវិកា។ ចុច "⚙️ កំណត់ថវិកា" ដើម្បីកំណត់។</p>`;
-            }
-        };
-
-        window.openBudgetModal = function() {
-            const catSel = document.getElementById('bgCategory');
-            const curSel = document.getElementById('bgCurrency');
-            catSel.innerHTML = window.state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
-            curSel.innerHTML = window.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
-            window.renderBudgetList();
-            document.getElementById('budgetModal').classList.remove('hidden');
-        };
-        window.closeBudgetModal = function() { document.getElementById('budgetModal').classList.add('hidden'); };
-
-        window.saveBudgetLimit = function() {
-            const cat = document.getElementById('bgCategory').value;
-            const limit = parseFloat(document.getElementById('bgLimit').value) || 0;
-            const cur = document.getElementById('bgCurrency').value;
-
-            if (limit <= 0) return;
-            window.state.budgets = window.state.budgets.filter(b => !(b.cat === cat && b.cur === cur));
-            window.state.budgets.push({ id: window.generateId(), cat, limit, cur });
-            window.saveBudgetsToCloud();
-            window.renderBudgetList();
-            document.getElementById('bgLimit').value = '';
-            window.showToast('បានរក្សាទុកថវិកា', 'success');
-        };
-
-        window.deleteBudget = function(id) {
-            window.state.budgets = window.state.budgets.filter(b => b.id !== id);
-            window.saveBudgetsToCloud();
-            window.renderBudgetList();
-            window.showToast('បានលុបថវិកា', 'info');
-        };
-
-        window.renderBudgetList = function() {
-            const container = document.getElementById('budgetListContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            window.state.budgets.forEach(b => {
-                container.innerHTML += `
-                    <div class="flex items-center justify-between p-2 bg-indigo-50/50 rounded border text-xs">
-                        <span class="font-bold modal-label-text">${b.cat}: ${window.formatMoney(b.limit, b.cur)}</span>
-                        <button onclick="deleteBudget('${b.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
-                    </div>
-                `;
-            });
-        };
-
-        window.openShortcutModal = function() {
-            document.getElementById('scCategory').innerHTML = window.state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
-            document.getElementById('scAccount').innerHTML = window.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
-            document.getElementById('scCurrency').innerHTML = window.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
-            window.renderShortcutList();
-            document.getElementById('shortcutModal').classList.remove('hidden');
-        };
-        window.closeShortcutModal = function() { document.getElementById('shortcutModal').classList.add('hidden'); };
-
-        window.addNewShortcut = function() {
-            const name = document.getElementById('scName').value.trim();
-            const cat = document.getElementById('scCategory').value;
-            const acc = document.getElementById('scAccount').value;
-            const amount = parseFloat(document.getElementById('scAmount').value) || 0;
-            const cur = document.getElementById('scCurrency').value;
-
-            if (!name || amount <= 0) return;
-            window.state.shortcuts.push({ id: window.generateId(), name, cat, acc, cur, inc: 0, exp: amount, desc: name });
-            window.saveShortcutsToCloud();
-            window.renderShortcutList();
-            document.getElementById('scName').value = '';
-            document.getElementById('scAmount').value = '';
-            window.showToast('បានបន្ថែមប៊ូតុងរហ័ស', 'success');
-        };
-
-        window.deleteShortcut = function(id) {
-            window.state.shortcuts = window.state.shortcuts.filter(s => s.id !== id);
-            window.saveShortcutsToCloud();
-            window.renderShortcutList();
-            window.showToast('បានលុបប៊ូតុងរហ័ស', 'info');
-        };
-
-        window.renderShortcutList = function() {
-            const container = document.getElementById('shortcutListContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            window.state.shortcuts.forEach(s => {
-                container.innerHTML += `
-                    <div class="flex items-center justify-between p-2 bg-blue-50/50 rounded border text-xs">
-                        <span class="font-bold modal-label-text">${s.name} (${window.formatMoney(s.exp, s.cur)})</span>
-                        <button onclick="deleteShortcut('${s.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
-                    </div>
-                `;
-            });
-        };
-
-        window.openAccountsModal = function() { window.renderAccountsList(); document.getElementById('accountsModal').classList.remove('hidden'); };
-        window.closeAccountsModal = function() { document.getElementById('accountsModal').classList.add('hidden'); };
-        window.renderAccountsList = function() {
-            const c = document.getElementById('accountsListContainer'); if(!c) return; c.innerHTML = '';
-            if (!window.state.hiddenAccounts) window.state.hiddenAccounts = [];
-            window.state.accounts.forEach((acc, i) => {
-                const isHidden = window.state.hiddenAccounts.includes(acc);
-                c.innerHTML += `
-                    <div class="flex items-center justify-between p-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-sm gap-2">
-                        <button onclick="toggleAccountVisibility('${acc}')" class="px-2 py-1.5 rounded-lg border text-xs font-bold transition flex items-center gap-1 ${isHidden ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-emerald-100 text-emerald-800 border-emerald-300'}" title="${isHidden ? 'ចុចដើម្បីបង្ហាញលើ Dashboard' : 'ចុចដើម្បីលាក់ពី Dashboard'}">
-                            ${isHidden ? '🙈 លាក់' : '👁️ បង្ហាញ'}
-                        </button>
-                        <input type="text" value="${acc}" onchange="editAccountName(${i}, this.value)" class="modal-item-input flex-1 outline-none">
-                        <button onclick="deleteAccount(${i})" class="text-red-500 hover:text-red-600 font-bold text-xs bg-red-50 dark:bg-red-950/50 px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900">🗑️ លុប</button>
-                    </div>`;
-            });
-        };
-
-        window.toggleAccountVisibility = function(accName) {
-            if (!window.state.hiddenAccounts) window.state.hiddenAccounts = [];
-            if (window.state.hiddenAccounts.includes(accName)) {
-                window.state.hiddenAccounts = window.state.hiddenAccounts.filter(a => a !== accName);
-                window.showToast(`បានបង្ហាញ៖ ${accName} លើ Dashboard`, 'success');
-            } else {
-                window.state.hiddenAccounts.push(accName);
-                window.showToast(`បានលាក់៖ ${accName} ពី Dashboard`, 'info');
-            }
-            window.saveUiConfigToLocal();
-            window.saveUiConfigToCloud();
-            window.renderAccountsList();
             window.updateDashboard();
         };
 
@@ -1836,25 +1469,410 @@
         };
         window.closeModal = function() { document.getElementById('confirmModal').classList.add('hidden'); window.deleteTargetId = null; };
 
+
+        window.filterByAccountFromCard = function(accName) {
+            const sel = document.getElementById('filterAccount');
+            if (sel) {
+                sel.value = accName;
+                window.switchTab('entry');
+                window.renderTable();
+                window.showToast(`បង្ហាញប្រតិបត្តិការរបស់៖ ${accName}`, 'info');
+            }
+        };
+
+        window.toggleAccountVisibility = function(accName) {
+            if (!window.state.hiddenAccounts) window.state.hiddenAccounts = [];
+            if (window.state.hiddenAccounts.includes(accName)) {
+                window.state.hiddenAccounts = window.state.hiddenAccounts.filter(a => a !== accName);
+                window.showToast(`បានបង្ហាញ៖ ${accName} លើ Dashboard`, 'success');
+            } else {
+                window.state.hiddenAccounts.push(accName);
+                window.showToast(`បានលាក់៖ ${accName} ពី Dashboard`, 'info');
+            }
+            window.saveUiConfigToLocal();
+            window.saveUiConfigToCloud();
+            window.renderAccountsList();
+            window.updateDashboard();
+        };
+
+        window.renderTable = function() {
+            const tbody = document.getElementById('tableBody');
+            if (!tbody) return;
+            const searchQ = (document.getElementById('searchInput')?.value || '').toLowerCase();
+            const filterAcc = document.getElementById('filterAccount')?.value || 'ALL';
+            
+            tbody.innerHTML = '';
+            let totals = {}; 
+            window.state.currencies.forEach(c => totals[c] = { in: 0, out: 0 });
+
+            let rowCount = 1;
+
+            window.state.transactions.forEach(tx => {
+                if (filterAcc !== 'ALL' && tx.acc !== filterAcc) return;
+                const matchStr = `${tx.cat} ${tx.desc}`.toLowerCase();
+                if (searchQ && !matchStr.includes(searchQ)) return;
+
+                const curKey = tx.cur || 'USD';
+                if (!totals[curKey]) totals[curKey] = { in: 0, out: 0 };
+                totals[curKey].in += (tx.inc || 0);
+                totals[curKey].out += (tx.exp || 0);
+
+                let accOptsHtml = window.state.accounts.map(a => `<option value="${a}" ${tx.acc===a?'selected':''}>${a}</option>`).join('');
+                let curOptsHtml = window.state.currencies.map(c => `<option value="${c}" ${tx.cur===c?'selected':''}>${c}</option>`).join('');
+                let catOptsHtml = window.state.categories.map(c => `<option value="${c}" ${tx.cat===c?'selected':''}>${c}</option>`).join('');
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-blue-50/50 dark:hover:bg-zinc-800/50 transition-colors group";
+                
+                tr.innerHTML = `
+                    <td class="px-3 py-2 text-sm text-gray-500 dark:text-gray-300 text-center">${rowCount++}</td>
+                    <td class="px-3 py-2"><input type="datetime-local" step="1" value="${window.formatForDateTimeInput(tx.date)}" onchange="updateTx('${tx.id}', 'date', this.value)" class="editable-input text-xs font-mono text-slate-800 dark:text-slate-100"></td>
+                    <td class="px-3 py-2">
+                        <select onchange="updateTx('${tx.id}', 'cat', this.value)" class="editable-input text-sm font-medium text-slate-800 dark:text-slate-100">
+                            ${catOptsHtml}
+                        </select>
+                    </td>
+                    <td class="px-3 py-2"><input type="text" value="${tx.desc}" onchange="updateTx('${tx.id}', 'desc', this.value)" class="editable-input text-sm text-slate-800 dark:text-slate-100"></td>
+                    <td class="px-3 py-2">
+                        <select onchange="updateTx('${tx.id}', 'acc', this.value)" class="editable-input text-sm font-medium text-slate-800 dark:text-slate-100">
+                            ${accOptsHtml}
+                        </select>
+                    </td>
+                    <td class="px-3 py-2">
+                        <select onchange="updateTx('${tx.id}', 'cur', this.value)" class="editable-input text-sm font-bold text-amber-700 dark:text-amber-400">
+                            ${curOptsHtml}
+                        </select>
+                    </td>
+                    <td class="px-3 py-2"><input type="${window.state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${window.state.hideAmounts ? '••••••' : (tx.inc||0)}" onchange="updateTx('${tx.id}', 'inc', this.value)" class="editable-input text-sm font-semibold text-green-600 dark:text-emerald-400 text-right"></td>
+                    <td class="px-3 py-2"><input type="${window.state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${window.state.hideAmounts ? '••••••' : (tx.exp||0)}" onchange="updateTx('${tx.id}', 'exp', this.value)" class="editable-input text-sm font-semibold text-red-500 dark:text-rose-400 text-right"></td>
+                    <td class="px-3 py-2 text-center">
+                        <button onclick="confirmDelete('${tx.id}')" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 opacity-0 group-hover:opacity-100 transition">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            let incText = '', expText = '';
+            Object.keys(totals).forEach(c => {
+                if (totals[c].in > 0) incText += `<div class="font-bold text-green-600 dark:text-emerald-400">${window.formatMoney(totals[c].in, c)}</div>`;
+                if (totals[c].out > 0) expText += `<div class="font-bold text-red-500 dark:text-rose-400">${window.formatMoney(totals[c].out, c)}</div>`;
+            });
+            document.getElementById('totIncCell').innerHTML = incText || '<div class="font-bold text-green-600 dark:text-emerald-400">$ 0.00</div>';
+            document.getElementById('totExpCell').innerHTML = expText || '<div class="font-bold text-red-500 dark:text-rose-400">$ 0.00</div>';
+        };
+
+        window.updateTx = function(id, field, val) {
+            const tx = window.state.transactions.find(t => t.id === id);
+            if (tx) {
+                if (field === 'inc' || field === 'exp') tx[field] = parseFloat(val) || 0;
+                else tx[field] = val;
+                window.pushTxToFirebase(tx);
+                window.renderTable();
+                window.updateDashboard();
+            }
+        };
+
+        window.addRow = function() {
+            window.playChimeSound();
+            const now = new Date();
+            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+            const newTx = {
+                id: window.generateId(),
+                date: nowIso,
+                cat: window.state.categories[0] || 'ផ្សេងៗ',
+                desc: 'ចំណាយថ្មី',
+                acc: window.state.accounts[0] || '🏦 ABA',
+                cur: 'USD',
+                inc: 0,
+                exp: 0
+            };
+            window.state.transactions.push(newTx);
+            window.pushTxToFirebase(newTx);
+            window.renderTable();
+            window.updateDashboard();
+        };
+
+        window.renderShortcuts = function() {
+            const container = document.getElementById('shortcutsContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            window.state.shortcuts.forEach(sc => {
+                container.innerHTML += `
+                    <button onclick="executeShortcut('${sc.id}')" class="px-3 py-1.5 bg-blue-50 dark:bg-zinc-800 hover:bg-blue-100 dark:hover:bg-zinc-700 text-blue-700 dark:text-amber-300 border border-blue-200 dark:border-zinc-700 text-xs font-bold rounded-lg transition whitespace-nowrap flex items-center gap-1 shadow-sm">
+                        ⚡ ${sc.name}
+                    </button>
+                `;
+            });
+        };
+
+        window.executeShortcut = function(shortcutId) {
+            window.playChimeSound();
+            const sc = window.state.shortcuts.find(s => s.id === shortcutId);
+            if (!sc) return;
+            const now = new Date();
+            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+            const newTx = {
+                id: window.generateId(),
+                date: nowIso, cat: sc.cat, desc: sc.desc || sc.name, acc: sc.acc, cur: sc.cur, inc: sc.inc||0, exp: sc.exp||0
+            };
+            window.state.transactions.push(newTx);
+            window.pushTxToFirebase(newTx);
+            window.renderTable();
+            window.updateDashboard();
+            window.showToast(`បានកត់ត្រា ${sc.name} រួចរាល់!`, 'success');
+        };
+
+        window.openShortcutModal = function() {
+             window.showToast('មុខងារនេះកំពុងអភិវឌ្ឍ...', 'info');
+        };
+
+        window.openGoalModal = function() {
+            const sel = document.getElementById('glLinkedAcc');
+            if (sel) {
+                sel.innerHTML = `<option value="NONE">គ្មាន (កំណត់ចំនួនដោយដៃ)</option>`;
+                window.state.accounts.forEach(a => {
+                    sel.innerHTML += `<option value="${a}">🔗 ភ្ជាប់កុង ${a}</option>`;
+                });
+            }
+            window.toggleGoalCurrentInput();
+            window.renderGoalList();
+            document.getElementById('goalModal').classList.remove('hidden');
+        };
+
+        window.toggleGoalCurrentInput = function() {
+            const linkedVal = document.getElementById('glLinkedAcc')?.value;
+            const currentWrapper = document.getElementById('glCurrentWrapper');
+            if (linkedVal && linkedVal !== 'NONE') {
+                if (currentWrapper) currentWrapper.classList.add('hidden');
+            } else {
+                if (currentWrapper) currentWrapper.classList.remove('hidden');
+            }
+        };
+
+        window.closeGoalModal = function() { document.getElementById('goalModal').classList.add('hidden'); };
+
+        window.saveSavingsGoal = function() {
+            const name = document.getElementById('glName').value.trim();
+            const linkedAcc = document.getElementById('glLinkedAcc')?.value || 'NONE';
+            const target = parseFloat(document.getElementById('glTarget').value) || 0;
+            const current = parseFloat(document.getElementById('glCurrent')?.value) || 0;
+
+            if (!name || target <= 0) return;
+            window.state.goals.push({ id: window.generateId(), name, linkedAcc, target, current });
+            window.saveGoalsToCloud();
+            window.renderGoalList();
+            document.getElementById('glName').value = '';
+            document.getElementById('glTarget').value = '';
+            if(document.getElementById('glCurrent')) document.getElementById('glCurrent').value = '';
+            window.showToast('បានរក្សាទុកគោលដៅសន្សំប្រាក់', 'success');
+        };
+
+        window.deleteGoal = function(id) {
+            window.state.goals = window.state.goals.filter(g => g.id !== id);
+            window.saveGoalsToCloud();
+            window.renderGoalList();
+            window.showToast('បានលុបគោលដៅសន្សំ', 'info');
+        };
+
+        window.editGoal = function(id) {
+            const g = window.state.goals.find(x => x.id === id);
+            if(!g) return;
+            document.getElementById('glName').value = g.name;
+            if(document.getElementById('glLinkedAcc')) document.getElementById('glLinkedAcc').value = g.linkedAcc || 'NONE';
+            document.getElementById('glTarget').value = g.target;
+            if(document.getElementById('glCurrent')) document.getElementById('glCurrent').value = g.current || 0;
+            window.toggleGoalCurrentInput();
+            window.deleteGoal(id);
+        };
+
+        window.renderGoalList = function() {
+            const container = document.getElementById('goalListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            window.state.goals.forEach(g => {
+                const linkLabel = (g.linkedAcc && g.linkedAcc !== 'NONE') ? ` 🔗 (${g.linkedAcc})` : '';
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded border dark:border-emerald-800 text-xs">
+                        <span class="font-bold modal-label-text">${g.name}${linkLabel}: គោលដៅ ${window.formatMoney(g.target, 'USD')}</span>
+                        <div class="flex gap-2">
+                            <button onclick="editGoal('${g.id}')" class="text-blue-500 font-bold hover:underline">✏️ កែ</button>
+                            <button onclick="deleteGoal('${g.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
+                        </div>
+                    </div>
+                `;
+            });
+        };
+
+        window.openBudgetModal = function() {
+            const catSel = document.getElementById('bgCategory');
+            const curSel = document.getElementById('bgCurrency');
+            if(catSel) catSel.innerHTML = window.state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
+            if(curSel) curSel.innerHTML = window.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+            window.renderBudgetList();
+            document.getElementById('budgetModal').classList.remove('hidden');
+        };
+        window.closeBudgetModal = function() { document.getElementById('budgetModal').classList.add('hidden'); };
+
+        window.saveBudgetLimit = function() {
+            const cat = document.getElementById('bgCategory').value;
+            const limit = parseFloat(document.getElementById('bgLimit').value) || 0;
+            const cur = document.getElementById('bgCurrency').value;
+
+            if (limit <= 0) return;
+            window.state.budgets = window.state.budgets.filter(b => !(b.cat === cat && b.cur === cur));
+            window.state.budgets.push({ id: window.generateId(), cat, limit, cur });
+            window.saveBudgetsToCloud();
+            window.renderBudgetList();
+            document.getElementById('bgLimit').value = '';
+            window.showToast('បានរក្សាទុកថវិកា', 'success');
+        };
+
+        window.deleteBudget = function(id) {
+            window.state.budgets = window.state.budgets.filter(b => b.id !== id);
+            window.saveBudgetsToCloud();
+            window.renderBudgetList();
+            window.showToast('បានលុបថវិកា', 'info');
+        };
+
+        window.editBudget = function(id) {
+            const b = window.state.budgets.find(x => x.id === id);
+            if(!b) return;
+            document.getElementById('bgCategory').value = b.cat;
+            document.getElementById('bgLimit').value = b.limit;
+            document.getElementById('bgCurrency').value = b.cur;
+            window.deleteBudget(id);
+        };
+
+        window.renderBudgetList = function() {
+            const container = document.getElementById('budgetListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            window.state.budgets.forEach(b => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-2 bg-indigo-50 dark:bg-indigo-900/30 rounded border dark:border-indigo-800 text-xs">
+                        <span class="font-bold modal-label-text">${b.cat}: ${window.formatMoney(b.limit, b.cur)}</span>
+                        <div class="flex gap-2">
+                            <button onclick="editBudget('${b.id}')" class="text-blue-500 font-bold hover:underline">✏️ កែ</button>
+                            <button onclick="deleteBudget('${b.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
+                        </div>
+                    </div>
+                `;
+            });
+        };
+
+        window.renderBudgetWidget = function() {
+            const container = document.getElementById('budgetProgressContainer');
+            if(!container) return;
+            container.innerHTML = '';
+
+            const currentMonth = new Date().toISOString().substring(0, 7);
+            
+            window.state.budgets.forEach(b => {
+                let spent = 0;
+                window.state.transactions.forEach(tx => {
+                    if (tx.date && tx.date.substring(0, 7) === currentMonth && tx.cat === b.cat && tx.cur === b.cur) {
+                        spent += (tx.exp || 0);
+                    }
+                });
+
+                const pct = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
+                let colorClass = "bg-emerald-500";
+                let textClass = "text-emerald-600 dark:text-emerald-400";
+                if (pct >= 80 && pct < 100) { colorClass = "bg-amber-500"; textClass = "text-amber-600 dark:text-amber-400"; }
+                if (pct >= 100) { colorClass = "bg-red-500"; textClass = "text-red-600 dark:text-rose-400"; }
+
+                container.innerHTML += `
+                    <div class="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
+                        <div class="flex justify-between items-center mb-1 text-xs font-bold">
+                            <span class="text-slate-800 dark:text-slate-100">${b.cat} (${b.cur})</span>
+                            <span class="${textClass}">${window.formatMoney(spent, b.cur)} / ${window.formatMoney(b.limit, b.cur)} (${pct}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
+                            <div class="${colorClass} h-2 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (window.state.budgets.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់បានកំណត់ថវិកា។ ចុច "⚙️ កំណត់ថវិកា" ដើម្បីកំណត់។</p>`;
+            }
+        };
+
+        window.renderSavingsGoals = function(accBalances = {}) {
+            const container = document.getElementById('goalsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            window.state.goals.forEach(g => {
+                let currentVal = g.current || 0;
+                let isLinked = false;
+
+                if (g.linkedAcc && g.linkedAcc !== 'NONE' && accBalances[g.linkedAcc]) {
+                    isLinked = true;
+                    const bObj = accBalances[g.linkedAcc];
+                    let totalUSD = 0;
+                    Object.keys(bObj).forEach(c => {
+                        if (c === 'USD') totalUSD += bObj[c];
+                        else if (c === 'KHR') totalUSD += bObj[c] / window.state.exchangeRate;
+                    });
+                    currentVal = Math.max(0, totalUSD);
+                }
+
+                const pct = g.target > 0 ? Math.min(Math.round((currentVal / g.target) * 100), 100) : 0;
+                container.innerHTML += `
+                    <div class="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
+                        <div class="flex justify-between items-center mb-1 text-xs font-bold">
+                            <span class="text-slate-800 dark:text-slate-100 flex items-center gap-1">
+                                ${g.name}
+                                ${isLinked ? `<span class="text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded border border-blue-300" title="ភ្ជាប់ជាមួយកុង ${g.linkedAcc}">🔗 ${g.linkedAcc}</span>` : ''}
+                            </span>
+                            <span class="text-emerald-600 dark:text-emerald-400">${window.formatMoney(currentVal, 'USD')} / ${window.formatMoney(g.target, 'USD')} (${pct}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
+                            <div class="bg-emerald-500 h-2 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (window.state.goals.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់មានគោលដៅសន្សំ។ ចុច "+ បន្ថែមគោលដៅ" ដើម្បីកំណត់។</p>`;
+            }
+        };
+
+        // Main Dashboard Updater
         window.updateDashboard = function() {
             let accBalances = {};
             window.state.accounts.forEach(acc => accBalances[acc] = {});
-            let totalUSD = 0, totalKHR = 0;
 
+            // Calculate account balances from transactions
             window.state.transactions.forEach(tx => {
                 if (!accBalances[tx.acc]) accBalances[tx.acc] = {};
                 const cur = tx.cur || 'USD';
                 if (!accBalances[tx.acc][cur]) accBalances[tx.acc][cur] = 0;
                 const bal = (tx.inc || 0) - (tx.exp || 0);
                 accBalances[tx.acc][cur] += bal;
-                if (cur === 'USD') totalUSD += bal;
-                else if (cur === 'KHR') totalKHR += bal;
+            });
+
+            // Calculate Net Worth EXCLUDING hidden accounts!
+            let totalUSD = 0, totalKHR = 0;
+            if (!window.state.hiddenAccounts) window.state.hiddenAccounts = [];
+
+            Object.keys(accBalances).forEach(key => {
+                if (!window.state.hiddenAccounts.includes(key)) {
+                    if (accBalances[key]['USD']) totalUSD += accBalances[key]['USD'];
+                    if (accBalances[key]['KHR']) totalKHR += accBalances[key]['KHR'];
+                }
             });
 
             const combinedNet = totalUSD + (totalKHR / window.state.exchangeRate);
             const netWorthEl = document.getElementById('globalNetWorth');
             if (netWorthEl) netWorthEl.textContent = window.formatMoney(combinedNet, 'USD');
 
+            // Render Account Balance Cards
             const cardGrid = document.getElementById('dashboardCards');
             if (!cardGrid) return;
             cardGrid.innerHTML = '';
@@ -1862,8 +1880,6 @@
             const isDark = window.state.themeStyle === 'aba-dark' || window.state.themeStyle === 'slate';
             const cardBg = isDark ? 'bg-slate-900/90 border-slate-700' : 'bg-white border-slate-200 shadow-md';
             const textMain = isDark ? 'text-slate-100' : 'text-slate-900';
-
-            if (!window.state.hiddenAccounts) window.state.hiddenAccounts = [];
 
             Object.keys(accBalances).forEach(key => {
                 if (window.state.hiddenAccounts.includes(key)) return;
@@ -1892,9 +1908,9 @@
                 `;
             });
 
-            window.renderBudgetWidget();
-            window.renderSavingsGoals();
-            window.drawCharts();
+            if (typeof window.renderBudgetWidget === 'function') window.renderBudgetWidget();
+            if (typeof window.renderSavingsGoals === 'function') window.renderSavingsGoals(accBalances);
+            if (typeof window.drawCharts === 'function') window.drawCharts();
         };
 
         window.drawCharts = function() {
