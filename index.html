@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro Cloud</title>
-    
+
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -147,6 +147,13 @@
         body.theme-aba-dark .bg-slate-50 {
             background-color: #27272a !important;
             color: #f8fafc !important;
+        }
+        /* Report Table Text Contrast Fix in Dark Mode */
+        body.theme-aba-dark td, body.theme-aba-dark th {
+            color: #f8fafc !important;
+        }
+        body.theme-aba-dark .text-gray-800, body.theme-aba-dark .text-gray-500, body.theme-aba-dark .text-gray-600 {
+            color: #cbd5e1 !important;
         }
 
         .modal-overlay {
@@ -329,18 +336,18 @@
         <div id="view-entry" class="hidden space-y-4">
             
             <!-- Quick Shortcuts Toolbar -->
-            <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200">
+            <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1">
                         ⚡ កត់ត្រារហ័ស (1-Click Shortcuts)៖
                     </span>
-                    <button onclick="openShortcutModal()" class="text-[11px] text-blue-600 hover:underline font-bold">+ កែសម្រួលប៊ូតុងរហ័ស</button>
+                    <button onclick="openShortcutModal()" class="text-[11px] text-blue-600 dark:text-amber-400 hover:underline font-bold">+ កែសម្រួលប៊ូតុងរហ័ស</button>
                 </div>
                 <div class="flex items-center gap-2 overflow-x-auto pb-1" id="shortcutsContainer"></div>
             </div>
 
             <!-- Controls & Filters -->
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 
                 <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
                     <!-- Search -->
@@ -394,28 +401,28 @@
             </div>
 
             <!-- The Data Table -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200" id="mainTable">
-                        <thead class="bg-slate-50">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700" id="mainTable">
+                        <thead class="bg-slate-50 dark:bg-zinc-800">
                             <tr>
-                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 uppercase w-12">ល.រ</th>
-                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 uppercase w-52">កាលបរិច្ឆេទ & ម៉ោង</th>
-                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 uppercase w-44">ផ្នែក/ប្រភេទ</th>
-                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 uppercase">ការពិពណ៌នា</th>
-                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 uppercase w-36">គណនី</th>
-                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 uppercase w-28">ខ្នាត/រូបិយប័ណ្ណ</th>
-                                <th class="px-3 py-3 text-right text-xs font-bold text-gray-600 uppercase w-32">ចំណូល</th>
-                                <th class="px-3 py-3 text-right text-xs font-bold text-gray-600 uppercase w-32">ចំណាយ</th>
-                                <th class="px-3 py-3 text-center text-xs font-bold text-gray-600 uppercase w-16">
+                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-12">ល.រ</th>
+                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-52">កាលបរិច្ឆេទ & ម៉ោង</th>
+                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-44">ផ្នែក/ប្រភេទ</th>
+                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">ការពិពណ៌នា</th>
+                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-36">គណនី</th>
+                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-28">ខ្នាត/រូបិយប័ណ្ណ</th>
+                                <th class="px-3 py-3 text-right text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-32">ចំណូល</th>
+                                <th class="px-3 py-3 text-right text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-32">ចំណាយ</th>
+                                <th class="px-3 py-3 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-16">
                                     <button onclick="addRow()" class="text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded border border-blue-200 font-black" title="បន្ថែមថ្មី">+</button>
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody" class="bg-white divide-y divide-gray-100"></tbody>
-                        <tfoot class="bg-slate-50 border-t-2 border-gray-200">
+                        <tbody id="tableBody" class="bg-white dark:bg-zinc-900 divide-y divide-gray-100 dark:divide-zinc-800"></tbody>
+                        <tfoot class="bg-slate-50 dark:bg-zinc-800 border-t-2 border-gray-200 dark:border-zinc-700">
                             <tr>
-                                <td colspan="6" class="px-4 py-4 text-sm font-bold text-slate-800 text-right">សរុប (រាយតាមខ្នាត/រូបិយប័ណ្ណ):</td>
+                                <td colspan="6" class="px-4 py-4 text-sm font-bold text-slate-800 dark:text-slate-100 text-right">សរុប (រាយតាមខ្នាត/រូបិយប័ណ្ណ):</td>
                                 <td class="px-3 py-4 text-right" id="totIncCell"></td>
                                 <td class="px-3 py-4 text-right" id="totExpCell"></td>
                                 <td></td>
@@ -425,18 +432,18 @@
                 </div>
             </div>
             
-            <button onclick="addRow()" class="w-full py-3 border-2 border-dashed border-gray-300 text-gray-600 rounded-xl hover:border-blue-400 hover:text-blue-600 transition font-medium flex items-center justify-center gap-2">
+            <button onclick="addRow()" class="w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 rounded-xl hover:border-blue-400 hover:text-blue-600 transition font-medium flex items-center justify-center gap-2">
                 <i class="fa-solid fa-plus"></i> បន្ថែមជួរដេកថ្មី
             </button>
         </div>
 
         <!-- VIEW: REPORTS -->
         <div id="view-report" class="hidden space-y-6">
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="bg-white dark:bg-zinc-900 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-zinc-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div class="flex flex-wrap items-center gap-4">
                     <div class="flex items-center gap-2">
-                        <label class="text-sm font-bold text-slate-800 whitespace-nowrap">របាយការណ៍តាម៖</label>
-                        <select id="reportPeriod" onchange="toggleCustomPeriod()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 w-56 outline-none font-medium">
+                        <label class="text-sm font-bold text-slate-900 dark:text-slate-100 whitespace-nowrap">របាយការណ៍តាម៖</label>
+                        <select id="reportPeriod" onchange="toggleCustomPeriod()" class="bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-600 text-gray-900 dark:text-slate-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 w-56 outline-none font-bold">
                             <option value="daily">ប្រចាំថ្ងៃ</option>
                             <option value="weekly">ប្រចាំសប្តាហ៍</option>
                             <option value="monthly" selected>ប្រចាំខែ</option>
@@ -446,14 +453,14 @@
                         </select>
                     </div>
 
-                    <div id="customPeriodContainer" class="hidden flex flex-wrap items-center gap-3 bg-blue-50/50 p-2 rounded-lg border border-blue-100">
+                    <div id="customPeriodContainer" class="hidden flex flex-wrap items-center gap-3 bg-blue-50/50 dark:bg-zinc-800/50 p-2 rounded-lg border border-blue-100 dark:border-zinc-700">
                         <div class="flex items-center gap-1.5">
-                            <span class="text-xs font-bold text-gray-600">ចាប់ពី៖</span>
-                            <input type="datetime-local" step="1" id="customStartDate" onchange="renderReports()" class="bg-white border border-gray-300 text-xs rounded-lg p-1.5 font-mono text-slate-800">
+                            <span class="text-xs font-bold text-gray-600 dark:text-gray-300">ចាប់ពី៖</span>
+                            <input type="datetime-local" step="1" id="customStartDate" onchange="renderReports()" class="bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 text-xs rounded-lg p-1.5 font-mono text-slate-800 dark:text-white">
                         </div>
                         <div class="flex items-center gap-1.5">
-                            <span class="text-xs font-bold text-gray-600">ដល់៖</span>
-                            <input type="datetime-local" step="1" id="customEndDate" onchange="renderReports()" class="bg-white border border-gray-300 text-xs rounded-lg p-1.5 font-mono text-slate-800">
+                            <span class="text-xs font-bold text-gray-600 dark:text-gray-300">ដល់៖</span>
+                            <input type="datetime-local" step="1" id="customEndDate" onchange="renderReports()" class="bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 text-xs rounded-lg p-1.5 font-mono text-slate-800 dark:text-white">
                         </div>
                     </div>
                 </div>
@@ -470,38 +477,38 @@
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-6" id="reportPrintArea">
                 <!-- Period Report -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="bg-slate-50 px-5 py-3 border-b border-gray-200 font-bold text-slate-800">របាយការណ៍តាមពេលវេលា</div>
+                <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-200 dark:border-zinc-700 overflow-hidden">
+                    <div class="bg-slate-50 dark:bg-zinc-800 px-5 py-3 border-b border-gray-200 dark:border-zinc-700 font-bold text-slate-900 dark:text-amber-300">របាយការណ៍តាមពេលវេលា</div>
                     <div class="overflow-x-auto max-h-[500px]">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-white sticky top-0 shadow-sm z-10">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
+                            <thead class="bg-white dark:bg-zinc-800 sticky top-0 shadow-sm z-10">
                                 <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">កាលបរិច្ឆេទ</th>
-                                    <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase">ខ្នាត/រូបិយប័ណ្ណ</th>
-                                    <th class="px-4 py-3 text-right text-xs font-bold text-green-600 uppercase">ចំណូល</th>
-                                    <th class="px-4 py-3 text-right text-xs font-bold text-red-500 uppercase">ចំណាយ</th>
-                                    <th class="px-4 py-3 text-right text-xs font-bold text-slate-800 uppercase">សមតុល្យ</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-slate-200 uppercase">កាលបរិច្ឆេទ</th>
+                                    <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 dark:text-slate-200 uppercase">ខ្នាត/រូបិយប័ណ្ណ</th>
+                                    <th class="px-4 py-3 text-right text-xs font-bold text-green-600 dark:text-emerald-400 uppercase">ចំណូល</th>
+                                    <th class="px-4 py-3 text-right text-xs font-bold text-red-500 dark:text-rose-400 uppercase">ចំណាយ</th>
+                                    <th class="px-4 py-3 text-right text-xs font-bold text-slate-800 dark:text-amber-300 uppercase">សមតុល្យ</th>
                                 </tr>
                             </thead>
-                            <tbody id="repPeriodBody" class="divide-y divide-gray-100"></tbody>
+                            <tbody id="repPeriodBody" class="divide-y divide-gray-100 dark:divide-zinc-800"></tbody>
                         </table>
                     </div>
                 </div>
 
                 <!-- Category Report -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="bg-slate-50 px-5 py-3 border-b border-gray-200 font-bold text-slate-800">របាយការណ៍តាមផ្នែក (សរុបរួម)</div>
+                <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-200 dark:border-zinc-700 overflow-hidden">
+                    <div class="bg-slate-50 dark:bg-zinc-800 px-5 py-3 border-b border-gray-200 dark:border-zinc-700 font-bold text-slate-900 dark:text-amber-300">របាយការណ៍តាមផ្នែក (សរុបរួម)</div>
                     <div class="overflow-x-auto max-h-[500px]">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-white sticky top-0 shadow-sm z-10">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
+                            <thead class="bg-white dark:bg-zinc-800 sticky top-0 shadow-sm z-10">
                                 <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">ផ្នែក / ប្រភេទ</th>
-                                    <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase">ខ្នាត/រូបិយប័ណ្ណ</th>
-                                    <th class="px-4 py-3 text-right text-xs font-bold text-green-600 uppercase">ចំណូល</th>
-                                    <th class="px-4 py-3 text-right text-xs font-bold text-red-500 uppercase">ចំណាយ</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-slate-200 uppercase">ផ្នែក / ប្រភេទ</th>
+                                    <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 dark:text-slate-200 uppercase">ខ្នាត/រូបិយប័ណ្ណ</th>
+                                    <th class="px-4 py-3 text-right text-xs font-bold text-green-600 dark:text-emerald-400 uppercase">ចំណូល</th>
+                                    <th class="px-4 py-3 text-right text-xs font-bold text-red-500 dark:text-rose-400 uppercase">ចំណាយ</th>
                                 </tr>
                             </thead>
-                            <tbody id="repCatBody" class="divide-y divide-gray-100"></tbody>
+                            <tbody id="repCatBody" class="divide-y divide-gray-100 dark:divide-zinc-800"></tbody>
                         </table>
                     </div>
                 </div>
@@ -590,17 +597,17 @@
                 <div class="border-t pt-3 space-y-2 border-gray-200 dark:border-zinc-700">
                     <label class="block text-xs font-bold text-slate-900 dark:text-slate-100 mb-1">👁️ បង្ហាញ/លាក់ ផ្នែកលើ Dashboard៖</label>
                     
-                    <label class="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border text-xs cursor-pointer">
+                    <label class="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700 text-xs cursor-pointer">
                         <span class="font-bold text-slate-900 dark:text-slate-100">💳 សមតុល្យតាមគណនី (Account Balances)</span>
                         <input type="checkbox" id="chkAccounts" checked onchange="toggleSection('sec-accounts', this.checked)" class="w-4 h-4 text-blue-600 rounded">
                     </label>
 
-                    <label class="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border text-xs cursor-pointer">
+                    <label class="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700 text-xs cursor-pointer">
                         <span class="font-bold text-slate-900 dark:text-slate-100">🎯 ថវិកាចំណាយប្រចាំខែ (Spending Budget Widget)</span>
                         <input type="checkbox" id="chkBudgets" checked onchange="toggleSection('sec-budgets', this.checked)" class="w-4 h-4 text-blue-600 rounded">
                     </label>
 
-                    <label class="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border text-xs cursor-pointer">
+                    <label class="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700 text-xs cursor-pointer">
                         <span class="font-bold text-slate-900 dark:text-slate-100">📊 ក្រាហ្វវិភាគ (Analytics Charts)</span>
                         <input type="checkbox" id="chkCharts" checked onchange="toggleSection('sec-charts', this.checked)" class="w-4 h-4 text-blue-600 rounded">
                     </label>
@@ -1038,6 +1045,17 @@
             }
         }
 
+        /* === CARD OPTION ACTION (FILTER BY ACCOUNT) === */
+        function filterByAccountFromCard(accName) {
+            const sel = document.getElementById('filterAccount');
+            if (sel) {
+                sel.value = accName;
+                switchTab('entry');
+                renderTable();
+                showToast(`បង្ហាញប្រតិបត្តិការរបស់៖ ${accName}`, 'info');
+            }
+        }
+
         /* === INITIALIZATION & STORAGE === */
         window.onload = () => {
             const savedUi = localStorage.getItem('finance_ui_config');
@@ -1142,7 +1160,7 @@
             document.body.style.backgroundImage = 'none';
             saveUiConfigToLocal();
             saveUiConfigToCloud();
-            showToast('បានលុប Background', 'info');
+            showToast('បានលុបរូប', 'info');
         }
 
         function saveUiCustomizations() {
@@ -1363,29 +1381,29 @@
                 let catOptsHtml = state.categories.map(c => `<option value="${c}" ${tx.cat===c?'selected':''}>${c}</option>`).join('');
 
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-blue-50/50 transition-colors group";
+                tr.className = "hover:bg-blue-50/50 dark:hover:bg-zinc-800/50 transition-colors group";
                 
                 tr.innerHTML = `
-                    <td class="px-3 py-2 text-sm text-gray-500 text-center">${rowCount++}</td>
-                    <td class="px-3 py-2"><input type="datetime-local" step="1" value="${formatForDateTimeInput(tx.date)}" onchange="updateTx('${tx.id}', 'date', this.value)" class="editable-input text-xs font-mono text-slate-800"></td>
+                    <td class="px-3 py-2 text-sm text-gray-500 dark:text-gray-300 text-center">${rowCount++}</td>
+                    <td class="px-3 py-2"><input type="datetime-local" step="1" value="${formatForDateTimeInput(tx.date)}" onchange="updateTx('${tx.id}', 'date', this.value)" class="editable-input text-xs font-mono text-slate-800 dark:text-slate-100"></td>
                     <td class="px-3 py-2">
-                        <select onchange="updateTx('${tx.id}', 'cat', this.value)" class="editable-input text-sm font-medium text-slate-800">
+                        <select onchange="updateTx('${tx.id}', 'cat', this.value)" class="editable-input text-sm font-medium text-slate-800 dark:text-slate-100">
                             ${catOptsHtml}
                         </select>
                     </td>
-                    <td class="px-3 py-2"><input type="text" value="${tx.desc}" onchange="updateTx('${tx.id}', 'desc', this.value)" class="editable-input text-sm text-slate-800"></td>
+                    <td class="px-3 py-2"><input type="text" value="${tx.desc}" onchange="updateTx('${tx.id}', 'desc', this.value)" class="editable-input text-sm text-slate-800 dark:text-slate-100"></td>
                     <td class="px-3 py-2">
-                        <select onchange="updateTx('${tx.id}', 'acc', this.value)" class="editable-input text-sm font-medium text-slate-800">
+                        <select onchange="updateTx('${tx.id}', 'acc', this.value)" class="editable-input text-sm font-medium text-slate-800 dark:text-slate-100">
                             ${accOptsHtml}
                         </select>
                     </td>
                     <td class="px-3 py-2">
-                        <select onchange="updateTx('${tx.id}', 'cur', this.value)" class="editable-input text-sm font-bold text-amber-700">
+                        <select onchange="updateTx('${tx.id}', 'cur', this.value)" class="editable-input text-sm font-bold text-amber-700 dark:text-amber-400">
                             ${curOptsHtml}
                         </select>
                     </td>
-                    <td class="px-3 py-2"><input type="${state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${state.hideAmounts ? '••••••' : (tx.inc||0)}" onchange="updateTx('${tx.id}', 'inc', this.value)" class="editable-input text-sm font-semibold text-green-600 text-right"></td>
-                    <td class="px-3 py-2"><input type="${state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${state.hideAmounts ? '••••••' : (tx.exp||0)}" onchange="updateTx('${tx.id}', 'exp', this.value)" class="editable-input text-sm font-semibold text-red-500 text-right"></td>
+                    <td class="px-3 py-2"><input type="${state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${state.hideAmounts ? '••••••' : (tx.inc||0)}" onchange="updateTx('${tx.id}', 'inc', this.value)" class="editable-input text-sm font-semibold text-green-600 dark:text-emerald-400 text-right"></td>
+                    <td class="px-3 py-2"><input type="${state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${state.hideAmounts ? '••••••' : (tx.exp||0)}" onchange="updateTx('${tx.id}', 'exp', this.value)" class="editable-input text-sm font-semibold text-red-500 dark:text-rose-400 text-right"></td>
                     <td class="px-3 py-2 text-center">
                         <button onclick="confirmDelete('${tx.id}')" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 opacity-0 group-hover:opacity-100 transition">
                             <i class="fa-solid fa-trash-can"></i>
@@ -1405,12 +1423,12 @@
 
             Object.keys(totals).forEach(c => {
                 if (totals[c].in > 0 || totals[c].out > 0) {
-                    incCell.innerHTML += `<div class="text-sm font-bold text-green-600 mb-0.5">${formatMoney(totals[c].in, c)}</div>`;
-                    expCell.innerHTML += `<div class="text-sm font-bold text-red-500 mb-0.5">${formatMoney(totals[c].out, c)}</div>`;
+                    incCell.innerHTML += `<div class="text-sm font-bold text-green-600 dark:text-emerald-400 mb-0.5">${formatMoney(totals[c].in, c)}</div>`;
+                    expCell.innerHTML += `<div class="text-sm font-bold text-red-500 dark:text-rose-400 mb-0.5">${formatMoney(totals[c].out, c)}</div>`;
                 }
             });
-            if (incCell.innerHTML === '') incCell.innerHTML = `<div class="text-sm font-bold text-green-600">${formatMoney(0, 'USD')}</div>`;
-            if (expCell.innerHTML === '') expCell.innerHTML = `<div class="text-sm font-bold text-red-500">${formatMoney(0, 'USD')}</div>`;
+            if (incCell.innerHTML === '') incCell.innerHTML = `<div class="text-sm font-bold text-green-600 dark:text-emerald-400">${formatMoney(0, 'USD')}</div>`;
+            if (expCell.innerHTML === '') expCell.innerHTML = `<div class="text-sm font-bold text-red-500 dark:text-rose-400">${formatMoney(0, 'USD')}</div>`;
         }
 
         function addRow() {
@@ -1444,7 +1462,7 @@
             container.innerHTML = '';
             state.shortcuts.forEach(sc => {
                 container.innerHTML += `
-                    <button onclick="executeShortcut('${sc.id}')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold rounded-lg transition whitespace-nowrap flex items-center gap-1 shadow-sm">
+                    <button onclick="executeShortcut('${sc.id}')" class="px-3 py-1.5 bg-blue-50 dark:bg-zinc-800 hover:bg-blue-100 dark:hover:bg-zinc-700 text-blue-700 dark:text-amber-300 border border-blue-200 dark:border-zinc-700 text-xs font-bold rounded-lg transition whitespace-nowrap flex items-center gap-1 shadow-sm">
                         ⚡ ${sc.name}
                     </button>
                 `;
@@ -1485,9 +1503,9 @@
 
                 const pct = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
                 let colorClass = "bg-emerald-500";
-                let textClass = "text-emerald-600";
-                if (pct >= 80 && pct < 100) { colorClass = "bg-amber-500"; textClass = "text-amber-600"; }
-                if (pct >= 100) { colorClass = "bg-red-500"; textClass = "text-red-600"; }
+                let textClass = "text-emerald-600 dark:text-emerald-400";
+                if (pct >= 80 && pct < 100) { colorClass = "bg-amber-500"; textClass = "text-amber-600 dark:text-amber-400"; }
+                if (pct >= 100) { colorClass = "bg-red-500"; textClass = "text-red-600 dark:text-rose-400"; }
 
                 container.innerHTML += `
                     <div class="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
@@ -1529,7 +1547,7 @@
             saveBudgetsToCloud();
             renderBudgetList();
             document.getElementById('bgLimit').value = '';
-            showToast('បាន រក្សាទុកថវិកា', 'success');
+            showToast('បានរក្សាទុកថវិកា', 'success');
         }
 
         function deleteBudget(id) {
@@ -1717,7 +1735,10 @@
                                 <span class="p-1.5 bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-amber-400 rounded-lg text-xs font-bold">💳</span>
                                 <span class="font-black ${textMain} text-sm">${key}</span>
                             </div>
-                            <span class="text-xs text-slate-400"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+                            <!-- Interactive 3-dot button to filter transactions by this account -->
+                            <button onclick="filterByAccountFromCard('${key}')" class="text-slate-400 hover:text-blue-600 dark:hover:text-amber-300 p-1 rounded transition" title="មើលប្រតិបត្តិការកុងនេះ">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
                         </div>
                         <div class="space-y-1">${cardContent}</div>
                     </div>
@@ -1839,17 +1860,17 @@
                         if(d[cur].in > 0 || d[cur].out > 0) {
                             const bal = d[cur].in - d[cur].out;
                             html += `
-                            <tr class="hover:bg-slate-50 border-b border-gray-50">
-                                <td class="px-4 py-2 text-sm text-gray-800">${key}</td>
-                                <td class="px-4 py-2 text-sm text-right text-gray-500 font-medium">${cur}</td>
-                                <td class="px-4 py-2 text-sm text-right text-green-600">${formatMoney(d[cur].in, cur)}</td>
-                                <td class="px-4 py-2 text-sm text-right text-red-500">${formatMoney(d[cur].out, cur)}</td>
-                                ${showBal ? `<td class="px-4 py-2 text-sm text-right font-bold ${bal<0?'text-red-500':'text-blue-600'}">${formatMoney(bal, cur)}</td>` : ''}
+                            <tr class="hover:bg-slate-50 dark:hover:bg-zinc-800 border-b border-gray-100 dark:border-zinc-800">
+                                <td class="px-4 py-2.5 text-sm font-bold text-slate-900 dark:text-slate-100">${key}</td>
+                                <td class="px-4 py-2.5 text-sm text-right font-medium text-gray-700 dark:text-slate-300">${cur}</td>
+                                <td class="px-4 py-2.5 text-sm text-right font-bold text-green-600 dark:text-emerald-400">${formatMoney(d[cur].in, cur)}</td>
+                                <td class="px-4 py-2.5 text-sm text-right font-bold text-red-500 dark:text-rose-400">${formatMoney(d[cur].out, cur)}</td>
+                                ${showBal ? `<td class="px-4 py-2.5 text-sm text-right font-black ${bal<0?'text-red-500 dark:text-rose-400':'text-blue-600 dark:text-sky-400'}">${formatMoney(bal, cur)}</td>` : ''}
                             </tr>`;
                         }
                     });
                 });
-                return html || `<tr><td colspan="5" class="text-center py-4 text-sm text-gray-500">គ្មានទិន្នន័យ</td></tr>`;
+                return html || `<tr><td colspan="5" class="text-center py-4 text-sm text-gray-500 dark:text-slate-400">គ្មានទិន្នន័យ</td></tr>`;
             }
 
             document.getElementById('repPeriodBody').innerHTML = buildRows(pData, true);
