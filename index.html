@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro (Cloud Sync)</title>
+    <title>ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro (Cloud Sync & Budgeting)</title>
     
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,6 +13,9 @@
     
     <!-- Chart.js for Interactive Charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- html2pdf.js for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap');
@@ -84,7 +87,7 @@
                     <div class="flex items-center gap-3">
                         <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន
+                            ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន (Pro Cloud)
                         </h1>
                     </div>
                     <div class="flex items-center gap-2 mt-2">
@@ -140,6 +143,21 @@
                 <!-- Populated by JS -->
             </div>
 
+            <!-- FEATURE 1: Monthly Budget Progress Bar Widget -->
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-gray-700 flex items-center gap-2">
+                        🎯 ថវិកាចំណាយប្រចាំខែ (Monthly Spending Budget)
+                    </h2>
+                    <button onclick="openBudgetModal()" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1.5 rounded-lg border border-indigo-200 transition">
+                        ⚙️ កំណត់ថវិកា
+                    </button>
+                </div>
+                <div id="budgetProgressContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
             <!-- Charts Section -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Pie Chart -->
@@ -162,40 +180,69 @@
         <!-- VIEW: TRANSACTIONS (DATA ENTRY) -->
         <div id="view-entry" class="hidden space-y-4">
             
+            <!-- FEATURE 2: Quick Shortcuts Toolbar -->
+            <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-bold text-gray-600 flex items-center gap-1">
+                        ⚡ កត់ត្រារហ័ស (1-Click Shortcuts)៖
+                    </span>
+                    <button onclick="openShortcutModal()" class="text-[11px] text-blue-600 hover:underline font-bold">+ កែសម្រួលប៊ូតុងរហ័ស</button>
+                </div>
+                <div class="flex items-center gap-2 overflow-x-auto pb-1" id="shortcutsContainer">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
             <!-- Controls & Filters -->
             <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 
                 <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
                     <!-- Search -->
-                    <div class="relative w-full sm:w-64">
+                    <div class="relative w-full sm:w-52">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
                         </div>
                         <input type="text" id="searchInput" oninput="renderTable()" placeholder="ស្វែងរក..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
                     </div>
-                    <!-- Filter Account & Account Settings -->
-                    <div class="flex items-center gap-2 w-full sm:w-auto">
-                        <select id="filterAccount" onchange="renderTable()" class="block w-full sm:w-40 py-2 px-3 border border-gray-300 bg-white rounded-lg text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <!-- Filter Account & Settings -->
+                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                        <select id="filterAccount" onchange="renderTable()" class="block w-32 py-2 px-3 border border-gray-300 bg-white rounded-lg text-sm shadow-sm focus:outline-none focus:ring-blue-500">
                             <!-- Populated dynamically -->
                         </select>
-                        <button onclick="openAccountsModal()" class="px-3 py-2 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg border border-slate-300 flex items-center gap-1.5 transition whitespace-nowrap" title="បន្ថែម/កែសម្រួលគណនី">
-                            ⚙️ គ្រប់គ្រងគណនី
+                        <button onclick="openAccountsModal()" class="px-2.5 py-2 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg border border-slate-300 flex items-center gap-1 transition whitespace-nowrap">
+                            ⚙️ គណនី
+                        </button>
+                        <button onclick="openCurrenciesModal()" class="px-2.5 py-2 text-xs bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold rounded-lg border border-amber-300 flex items-center gap-1 transition whitespace-nowrap">
+                            ⛽ ខ្នាត
+                        </button>
+                        <button onclick="openCategoriesModal()" class="px-2.5 py-2 text-xs bg-purple-50 hover:bg-purple-100 text-purple-800 font-bold rounded-lg border border-purple-300 flex items-center gap-1 transition whitespace-nowrap">
+                            📁 ប្រភេទ
+                        </button>
+                        <button onclick="openTransferModal()" class="px-2.5 py-2 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-sm flex items-center gap-1 transition whitespace-nowrap">
+                            🔄 ផ្ទេរប្រាក់
                         </button>
                     </div>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
                     <input type="file" id="fileInput" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="hidden" onchange="importData(event)">
-                    <button onclick="document.getElementById('fileInput').click()" class="px-4 py-2 text-sm bg-purple-50 text-purple-700 border border-purple-200 rounded-lg hover:bg-purple-100 transition font-medium flex items-center gap-2">
-                        📥 នាំចូល
+                    <button onclick="document.getElementById('fileInput').click()" class="px-3 py-2 text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-lg hover:bg-indigo-100 transition font-medium flex items-center gap-1">
+                        📥 នាំចូល Excel
                     </button>
-                    <button onclick="exportToHTML()" class="px-4 py-2 text-sm bg-slate-800 text-white rounded-lg hover:bg-slate-900 transition font-medium">
-                        HTML
-                    </button>
-                    <button onclick="exportToExcel()" class="px-4 py-2 text-sm bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-medium">
+                    <button onclick="exportToExcel()" class="px-3 py-2 text-xs bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-medium">
                         Excel
                     </button>
-                    <button onclick="confirmClearData()" class="px-4 py-2 text-sm bg-red-50 text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition font-medium ml-auto">
+
+                    <!-- FEATURE 4: Backup & Restore JSON Buttons -->
+                    <button onclick="exportToJSON()" class="px-3 py-2 text-xs bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition font-bold" title="ទាញយក Backup កូដ JSON">
+                        💾 Backup JSON
+                    </button>
+                    <input type="file" id="jsonFileInput" accept=".json" class="hidden" onchange="importFromJSON(event)">
+                    <button onclick="document.getElementById('jsonFileInput').click()" class="px-3 py-2 text-xs bg-sky-100 text-sky-800 border border-sky-300 rounded-lg hover:bg-sky-200 transition font-bold" title="ចាក់បញ្ចូល Backup JSON">
+                        📂 Restore JSON
+                    </button>
+
+                    <button onclick="confirmClearData()" class="px-3 py-2 text-xs bg-red-50 text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition font-medium ml-auto">
                         លុបទិន្នន័យ
                     </button>
                 </div>
@@ -209,10 +256,10 @@
                             <tr>
                                 <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-12">ល.រ</th>
                                 <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-52">កាលបរិច្ឆេទ & ម៉ោង</th>
-                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-40">ផ្នែក/ប្រភេទ</th>
+                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-44">ផ្នែក/ប្រភេទ</th>
                                 <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase">ការពិពណ៌នា</th>
-                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-32">គណនី</th>
-                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-24">រូបិយប័ណ្ណ</th>
+                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-36">គណនី</th>
+                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-28">ខ្នាត/រូបិយប័ណ្ណ</th>
                                 <th class="px-3 py-3 text-right text-xs font-bold text-gray-500 uppercase w-32">ចំណូល</th>
                                 <th class="px-3 py-3 text-right text-xs font-bold text-gray-500 uppercase w-32">ចំណាយ</th>
                                 <th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase w-16">
@@ -225,15 +272,9 @@
                         </tbody>
                         <tfoot class="bg-slate-50 border-t-2 border-gray-200">
                             <tr>
-                                <td colspan="6" class="px-4 py-4 text-sm font-bold text-gray-700 text-right">សរុប (រាយតាមរូបិយប័ណ្ណ):</td>
-                                <td class="px-3 py-4 text-right">
-                                    <div id="totIncUSD" class="text-sm font-bold text-green-600">0.00 $</div>
-                                    <div id="totIncKHR" class="text-sm font-bold text-green-600 mt-1">0 ៛</div>
-                                </td>
-                                <td class="px-3 py-4 text-right">
-                                    <div id="totExpUSD" class="text-sm font-bold text-red-500">0.00 $</div>
-                                    <div id="totExpKHR" class="text-sm font-bold text-red-500 mt-1">0 ៛</div>
-                                </td>
+                                <td colspan="6" class="px-4 py-4 text-sm font-bold text-gray-700 text-right">សរុប (រាយតាមខ្នាត/រូបិយប័ណ្ណ):</td>
+                                <td class="px-3 py-4 text-right" id="totIncCell"></td>
+                                <td class="px-3 py-4 text-right" id="totExpCell"></td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -249,33 +290,44 @@
 
         <!-- VIEW: REPORTS -->
         <div id="view-report" class="hidden space-y-6">
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-wrap items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <label class="text-sm font-medium text-gray-600 whitespace-nowrap">របាយការណ៍តាម៖</label>
-                    <select id="reportPeriod" onchange="toggleCustomPeriod()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 w-56 outline-none font-medium">
-                        <option value="daily">ប្រចាំថ្ងៃ</option>
-                        <option value="weekly">ប្រចាំសប្តាហ៍</option>
-                        <option value="monthly" selected>ប្រចាំខែ</option>
-                        <option value="quarterly">ប្រចាំត្រីមាស</option>
-                        <option value="yearly">ប្រចាំឆ្នាំ</option>
-                        <option value="custom">កំណត់ផ្ទាល់ខ្លួន (តាមម៉ោង នាទី)</option>
-                    </select>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-bold text-gray-700 whitespace-nowrap">របាយការណ៍តាម៖</label>
+                        <select id="reportPeriod" onchange="toggleCustomPeriod()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 w-56 outline-none font-medium">
+                            <option value="daily">ប្រចាំថ្ងៃ</option>
+                            <option value="weekly">ប្រចាំសប្តាហ៍</option>
+                            <option value="monthly" selected>ប្រចាំខែ</option>
+                            <option value="quarterly">ប្រចាំត្រីមាស (Quarterly)</option>
+                            <option value="yearly">ប្រចាំឆ្នាំ</option>
+                            <option value="custom">កំណត់ផ្ទាល់ខ្លួន ( Custom Range )</option>
+                        </select>
+                    </div>
+
+                    <div id="customPeriodContainer" class="hidden flex flex-wrap items-center gap-3 bg-blue-50/50 p-2 rounded-lg border border-blue-100">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs font-bold text-gray-600">ចាប់ពី៖</span>
+                            <input type="datetime-local" step="1" id="customStartDate" onchange="renderReports()" class="bg-white border border-gray-300 text-xs rounded-lg p-1.5 font-mono">
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs font-bold text-gray-600">ដល់៖</span>
+                            <input type="datetime-local" step="1" id="customEndDate" onchange="renderReports()" class="bg-white border border-gray-300 text-xs rounded-lg p-1.5 font-mono">
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Custom Range Picker with Hours & Minutes -->
-                <div id="customPeriodContainer" class="hidden flex flex-wrap items-center gap-3 bg-blue-50/60 p-2 rounded-lg border border-blue-200">
-                    <div class="flex items-center gap-1.5 text-xs text-gray-700 font-medium">
-                        <span>ពី៖</span>
-                        <input type="datetime-local" step="1" id="customStartDate" onchange="renderReports()" class="bg-white border border-gray-300 rounded-md px-2 py-1 text-xs focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    </div>
-                    <div class="flex items-center gap-1.5 text-xs text-gray-700 font-medium">
-                        <span>ដល់៖</span>
-                        <input type="datetime-local" step="1" id="customEndDate" onchange="renderReports()" class="bg-white border border-gray-300 rounded-md px-2 py-1 text-xs focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    </div>
+                <!-- FEATURE 3: PDF Export & Print Button -->
+                <div class="flex items-center gap-2">
+                    <button onclick="exportToPDF()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg shadow flex items-center gap-1 transition">
+                        📄 ទាញយក PDF
+                    </button>
+                    <button onclick="window.print()" class="px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow flex items-center gap-1 transition">
+                        🖨️ បោះពុម្ព (Print)
+                    </button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6" id="reportPrintArea">
                 <!-- Period Report -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div class="bg-slate-50 px-5 py-3 border-b border-gray-200 font-bold text-gray-700">របាយការណ៍តាមពេលវេលា</div>
@@ -284,7 +336,7 @@
                             <thead class="bg-white sticky top-0 shadow-sm z-10">
                                 <tr>
                                     <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">កាលបរិច្ឆេទ</th>
-                                    <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase">រូបិយប័ណ្ណ</th>
+                                    <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase">ខ្នាត/រូបិយប័ណ្ណ</th>
                                     <th class="px-4 py-3 text-right text-xs font-bold text-green-600 uppercase">ចំណូល</th>
                                     <th class="px-4 py-3 text-right text-xs font-bold text-red-500 uppercase">ចំណាយ</th>
                                     <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase">សមតុល្យ</th>
@@ -303,7 +355,7 @@
                             <thead class="bg-white sticky top-0 shadow-sm z-10">
                                 <tr>
                                     <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">ផ្នែក / ប្រភេទ</th>
-                                    <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase">រូបិយប័ណ្ណ</th>
+                                    <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase">ខ្នាត/រូបិយប័ណ្ណ</th>
                                     <th class="px-4 py-3 text-right text-xs font-bold text-green-600 uppercase">ចំណូល</th>
                                     <th class="px-4 py-3 text-right text-xs font-bold text-red-500 uppercase">ចំណាយ</th>
                                 </tr>
@@ -317,14 +369,86 @@
 
     </div>
 
-    <!-- Custom Modal for Delete Confirmation -->
-    <div id="confirmModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4 transform transition-all">
-            <h3 class="text-lg font-bold text-gray-900 mb-2" id="modalTitle">បញ្ជាក់ការលុប</h3>
-            <p class="text-sm text-gray-500 mb-6" id="modalDesc">តើអ្នកពិតជាចង់លុបទិន្នន័យនេះមែនទេ?</p>
-            <div class="flex justify-end gap-3">
-                <button onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បោះបង់</button>
-                <button id="modalConfirmBtn" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg">យល់ព្រមលុប</button>
+    <!-- Modal for Managing Budget Limits -->
+    <div id="budgetModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <span>🎯</span> កំណត់ថវិកាចំណាយប្រចាំខែ
+                </h3>
+                <button onclick="closeBudgetModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
+            </div>
+            
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">ជ្រើសរើសផ្នែក/ប្រភេទ៖</label>
+                    <select id="bgCategory" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 font-medium"></select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">កំណត់ថវិកាអតិបរមា៖</label>
+                        <input type="number" step="any" id="bgLimit" placeholder="ឧ. 200" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-indigo-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">ខ្នាត/រូបិយប័ណ្ណ៖</label>
+                        <select id="bgCurrency" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-amber-700 bg-gray-50"></select>
+                    </div>
+                </div>
+                <button onclick="saveBudgetLimit()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-lg transition">បន្ថែម/រក្សាទុកថវិកា</button>
+                
+                <p class="text-xs text-gray-400 border-t pt-2">បញ្ជីថវិកាដែលបានកំណត់៖</p>
+                <div class="max-h-48 overflow-y-auto space-y-2 pr-1" id="budgetListContainer"></div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeBudgetModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បិទ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Managing Shortcuts -->
+    <div id="shortcutModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <span>⚡</span> គ្រប់គ្រងប៊ូតុងកត់ត្រារហ័ស
+                </h3>
+                <button onclick="closeShortcutModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
+            </div>
+            
+            <div class="space-y-3 mb-6">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">ឈ្មោះប៊ូតុង (ឧ. បាយថ្ងៃត្រង់ $2.50)៖</label>
+                    <input type="text" id="scName" placeholder="ឈ្មោះប៊ូតុង..." class="w-full p-2 border border-gray-300 rounded-lg text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">ប្រភេទ៖</label>
+                        <select id="scCategory" class="w-full p-2 border border-gray-300 rounded-lg text-xs bg-gray-50"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">គណនី៖</label>
+                        <select id="scAccount" class="w-full p-2 border border-gray-300 rounded-lg text-xs bg-gray-50"></select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">ចំនួនចំណាយ៖</label>
+                        <input type="number" step="any" id="scAmount" placeholder="0.00" class="w-full p-2 border border-gray-300 rounded-lg text-sm font-bold text-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">ខ្នាត៖</label>
+                        <select id="scCurrency" class="w-full p-2 border border-gray-300 rounded-lg text-xs bg-gray-50"></select>
+                    </div>
+                </div>
+                <button onclick="addNewShortcut()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition">បន្ថែមប៊ូតុងរហ័ស</button>
+                
+                <p class="text-xs text-gray-400 border-t pt-2">បញ្ជីប៊ូតុងរហ័សបច្ចុប្បន្ន៖</p>
+                <div class="max-h-40 overflow-y-auto space-y-1.5 pr-1" id="shortcutListContainer"></div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeShortcutModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បិទ</button>
             </div>
         </div>
     </div>
@@ -340,22 +464,117 @@
             </div>
             
             <div class="space-y-4 mb-6">
-                <!-- Add New Account Form -->
                 <div class="flex gap-2">
                     <input type="text" id="newAccountName" placeholder="ឈ្មោះគណនីថ្មី (ឧ. Wing, Canadia...)" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                     <button onclick="addNewAccount()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition">បន្ថែម</button>
                 </div>
-
-                <p class="text-xs text-gray-400">បញ្ជីគណនីបច្ចុប្បន្ន (អាចកែឈ្មោះ ឬចុចលុបបាន)៖</p>
-
-                <!-- List of Existing Accounts -->
-                <div class="max-h-60 overflow-y-auto space-y-2 pr-1" id="accountsListContainer">
-                    <!-- Rendered dynamically -->
-                </div>
+                <div class="max-h-60 overflow-y-auto space-y-2 pr-1" id="accountsListContainer"></div>
             </div>
 
             <div class="flex justify-end">
                 <button onclick="closeAccountsModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បិទ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Managing Custom Currencies / Units -->
+    <div id="currenciesModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <span>⛽</span> គ្រប់គ្រងខ្នាត / រូបិយប័ណ្ណ
+                </h3>
+                <button onclick="closeCurrenciesModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
+            </div>
+            
+            <div class="space-y-4 mb-6">
+                <div class="flex gap-2">
+                    <input type="text" id="newCurrencyName" placeholder="ឈ្មោះខ្នាត (ឧ. L, THB, Point...)" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+                    <button onclick="addNewCurrency()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-lg transition">បន្ថែម</button>
+                </div>
+                <div class="max-h-60 overflow-y-auto space-y-2 pr-1" id="currenciesListContainer"></div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeCurrenciesModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បិទ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Managing Custom Categories -->
+    <div id="categoriesModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <span>📁</span> គ្រប់គ្រងផ្នែក / ប្រភេទ
+                </h3>
+                <button onclick="closeCategoriesModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
+            </div>
+            
+            <div class="space-y-4 mb-6">
+                <div class="flex gap-2">
+                    <input type="text" id="newCategoryName" placeholder="ឈ្មោះប្រភេទថ្មី..." class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 outline-none">
+                    <button onclick="addNewCategory()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold rounded-lg transition">បន្ថែម</button>
+                </div>
+                <div class="max-h-60 overflow-y-auto space-y-2 pr-1" id="categoriesListContainer"></div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeCategoriesModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បិទ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Account Transfer -->
+    <div id="transferModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <span>🔄</span> ផ្ទេរប្រាក់រវាងគណនី
+                </h3>
+                <button onclick="closeTransferModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
+            </div>
+            
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">ពីគណនី (ចេញ)៖</label>
+                    <select id="transferFromAcc" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 font-medium"></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">ទៅគណនី (ចូល)៖</label>
+                    <select id="transferToAcc" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 font-medium"></select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">ចំនួន៖</label>
+                        <input type="number" step="any" id="transferAmount" placeholder="0.00" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-blue-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">ខ្នាត/រូបិយប័ណ្ណ៖</label>
+                        <select id="transferCurrency" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-amber-700 bg-gray-50"></select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">ការពិពណ៌នាបញ្ជាក់៖</label>
+                    <input type="text" id="transferDesc" value="ផ្ទេរប្រាក់រវាងគណនី" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <button onclick="closeTransferModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បោះបង់</button>
+                <button onclick="executeTransfer()" class="px-4 py-2 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow transition">ផ្ទេរប្រាក់ឥឡូវនេះ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Modal for Confirmation -->
+    <div id="confirmModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4 transform transition-all">
+            <h3 class="text-lg font-bold text-gray-900 mb-2" id="modalTitle">បញ្ជាក់ការលុប</h3>
+            <p class="text-sm text-gray-500 mb-6" id="modalDesc">តើអ្នកពិតជាចង់លុបទិន្នន័យនេះមែនទេ?</p>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បោះបង់</button>
+                <button id="modalConfirmBtn" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg">យល់ព្រមលុប</button>
             </div>
         </div>
     </div>
@@ -406,26 +625,45 @@
                 }
                 renderTable();
                 updateDashboard();
-            }, (error) => {
-                console.error("Firebase Read Error:", error);
-                if (statusBadge) {
-                    statusBadge.className = "bg-red-500/20 text-red-200 border border-red-400/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5";
-                    statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400"></span> 🔴 បរាជ័យក្នុងការភ្ជាប់`;
-                }
             });
 
-            // Realtime Sync Listener for Accounts
-            const accRef = ref(db, 'accounts');
-            onValue(accRef, (snapshot) => {
+            // Sync Accounts
+            onValue(ref(db, 'accounts'), (snapshot) => {
                 const data = snapshot.val();
-                if (data && Array.isArray(data)) {
-                    state.accounts = data;
-                } else if (data && typeof data === 'object') {
-                    state.accounts = Object.values(data);
-                }
+                if (data) state.accounts = Array.isArray(data) ? data : Object.values(data);
                 renderFilterAccounts();
                 renderTable();
                 updateDashboard();
+            });
+
+            // Sync Currencies
+            onValue(ref(db, 'currencies'), (snapshot) => {
+                const data = snapshot.val();
+                if (data) state.currencies = Array.isArray(data) ? data : Object.values(data);
+                renderTable();
+                updateDashboard();
+            });
+
+            // Sync Categories
+            onValue(ref(db, 'categories'), (snapshot) => {
+                const data = snapshot.val();
+                if (data) state.categories = Array.isArray(data) ? data : Object.values(data);
+                renderTable();
+                updateDashboard();
+            });
+
+            // Sync Budgets
+            onValue(ref(db, 'budgets'), (snapshot) => {
+                const data = snapshot.val();
+                if (data) state.budgets = Array.isArray(data) ? data : Object.values(data);
+                updateDashboard();
+            });
+
+            // Sync Shortcuts
+            onValue(ref(db, 'shortcuts'), (snapshot) => {
+                const data = snapshot.val();
+                if (data) state.shortcuts = Array.isArray(data) ? data : Object.values(data);
+                renderShortcuts();
             });
 
         } catch (e) {
@@ -435,10 +673,20 @@
 
     <script>
         /* === STATE MANAGEMENT === */
-        const STORAGE_KEY = 'financeProData';
         let state = {
             exchangeRate: 4100,
-            accounts: ['ABA', 'AC', 'Wallet', 'Savings'],
+            accounts: ['ABA', 'AC', 'Wallet', 'Savings', 'កាតសាំង'],
+            currencies: ['USD', 'KHR', 'L (លីត្រ)'],
+            categories: ['ប្រាក់ខែ', 'អាហារ', 'សាំង', 'បង់ថ្លៃភ្លើង/ទឹក', 'ទិញទំនិញ', 'ផ្ទេរប្រាក់', 'ផ្សេងៗ'],
+            budgets: [
+                { id: 'b1', cat: 'អាហារ', limit: 200, cur: 'USD' },
+                { id: 'b2', cat: 'សាំង', limit: 50, cur: 'L (លីត្រ)' }
+            ],
+            shortcuts: [
+                { id: 's1', name: 'បាយថ្ងៃត្រង់ ($2.50)', cat: 'អាហារ', acc: 'Wallet', cur: 'USD', inc: 0, exp: 2.5, desc: 'បាយថ្ងៃត្រង់' },
+                { id: 's2', name: 'កាហ្វេ ($1.50)', cat: 'អាហារ', acc: 'Wallet', cur: 'USD', inc: 0, exp: 1.5, desc: 'ទិញកាហ្វេ' },
+                { id: 's3', name: 'ចាក់សាំង (10L)', cat: 'សាំង', acc: 'កាតសាំង', cur: 'L (លីត្រ)', inc: 0, exp: 10, desc: 'ចាក់សាំង' }
+            ],
             transactions: []
         };
         let charts = { expense: null, trend: null };
@@ -459,127 +707,147 @@
 
         /* === INITIALIZATION & STORAGE === */
         window.onload = () => {
-            const savedAccs = localStorage.getItem('financeProAccounts');
-            if (savedAccs) {
-                try { state.accounts = JSON.parse(savedAccs); } catch(e){}
-            }
-            document.getElementById('exchangeRate').value = state.exchangeRate;
             renderFilterAccounts();
+            renderShortcuts();
             renderTable();
             updateDashboard();
         };
 
-        function saveStateToCloud() {
-            // Save to Local Storage as backup
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-            updateDashboard();
+        function renderFilterAccounts() {
+            const sel = document.getElementById('filterAccount');
+            if (!sel) return;
+            const currentVal = sel.value || 'ALL';
+            sel.innerHTML = `<option value="ALL">គ្រប់គណនី</option>`;
+            state.accounts.forEach(a => {
+                sel.innerHTML += `<option value="${a}">${a}</option>`;
+            });
+            sel.value = state.accounts.includes(currentVal) ? currentVal : 'ALL';
         }
 
+        /* === FIREBASE SAVE HELPERS === */
         function saveAccountsToCloud() {
-            localStorage.setItem('financeProAccounts', JSON.stringify(state.accounts));
             if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                const db = window.firebaseDb;
-                const accRef = window.firebaseRef(db, 'accounts');
-                window.firebaseSet(accRef, state.accounts).catch(err => console.error("Firebase Accounts Save Error:", err));
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'accounts'), state.accounts);
             }
             renderFilterAccounts();
             renderTable();
             updateDashboard();
         }
 
+        function saveCurrenciesToCloud() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'currencies'), state.currencies);
+            }
+            renderTable();
+            updateDashboard();
+        }
+
+        function saveCategoriesToCloud() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'categories'), state.categories);
+            }
+            renderTable();
+            updateDashboard();
+        }
+
+        function saveBudgetsToCloud() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'budgets'), state.budgets);
+            }
+            updateDashboard();
+        }
+
+        function saveShortcutsToCloud() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'shortcuts'), state.shortcuts);
+            }
+            renderShortcuts();
+        }
+
         function pushTxToFirebase(tx) {
             if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                const db = window.firebaseDb;
-                const newRef = window.firebaseRef(db, 'transactions/' + tx.id);
-                window.firebaseSet(newRef, tx).catch(err => console.error("Firebase Save Error:", err));
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'transactions/' + tx.id), tx);
             }
         }
 
         function removeTxFromFirebase(id) {
             if (window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
-                const db = window.firebaseDb;
-                const txRef = window.firebaseRef(db, 'transactions/' + id);
-                window.firebaseRemove(txRef).catch(err => console.error("Firebase Delete Error:", err));
+                window.firebaseRemove(window.firebaseRef(window.firebaseDb, 'transactions/' + id));
             }
         }
 
         function clearAllFromFirebase() {
             if (window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
-                const db = window.firebaseDb;
-                const txRef = window.firebaseRef(db, 'transactions');
-                window.firebaseRemove(txRef).catch(err => console.error("Firebase Clear Error:", err));
+                window.firebaseRemove(window.firebaseRef(window.firebaseDb, 'transactions'));
             }
         }
 
-        /* === UI NAVIGATION === */
+        /* === TAB SWITCHING === */
         function switchTab(tabId) {
             ['dashboard', 'entry', 'report'].forEach(t => {
-                document.getElementById('view-' + t).classList.add('hidden');
-                document.getElementById('tab-' + t).classList.remove('active');
+                const viewEl = document.getElementById('view-' + t);
+                const tabEl = document.getElementById('tab-' + t);
+                if (viewEl) viewEl.classList.add('hidden');
+                if (tabEl) tabEl.classList.remove('active');
             });
-            document.getElementById('view-' + tabId).classList.remove('hidden');
-            document.getElementById('tab-' + tabId).classList.add('active');
+            const targetView = document.getElementById('view-' + tabId);
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetView) targetView.classList.remove('hidden');
+            if (targetTab) targetTab.classList.add('active');
 
             if (tabId === 'report') renderReports();
             if (tabId === 'dashboard') updateDashboard();
         }
 
-        /* === HELPER FORMATTING === */
         function formatMoney(amount, cur) {
             if (cur === 'KHR') return amount.toLocaleString('en-US') + ' ៛';
-            return amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' $';
+            if (cur === 'USD') return amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' $';
+            return amount.toLocaleString('en-US', {maximumFractionDigits: 2}) + ' ' + cur;
         }
 
         function updateExchangeRate() {
-            const rate = parseFloat(document.getElementById('exchangeRate').value) || 4100;
-            state.exchangeRate = rate;
-            saveStateToCloud();
+            state.exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 4100;
+            renderTable();
+            updateDashboard();
         }
 
         /* === TABLE RENDERING & LOGIC === */
-        function renderFilterAccounts() {
-            const filterSelect = document.getElementById('filterAccount');
-            if (!filterSelect) return;
-            const currentVal = filterSelect.value || 'ALL';
-            filterSelect.innerHTML = `<option value="ALL">គ្រប់គណនី</option>`;
-            state.accounts.forEach(acc => {
-                filterSelect.innerHTML += `<option value="${acc}" ${currentVal === acc ? 'selected' : ''}>${acc}</option>`;
-            });
-        }
-
         function renderTable() {
             const tbody = document.getElementById('tableBody');
             const searchQ = document.getElementById('searchInput').value.toLowerCase();
             const filterAcc = document.getElementById('filterAccount').value;
             
             tbody.innerHTML = '';
-            let tUSD = {in:0, out:0}, tKHR = {in:0, out:0};
+            let totals = {}; 
+            state.currencies.forEach(c => totals[c] = { in: 0, out: 0 });
+
             let rowCount = 1;
 
             state.transactions.forEach(tx => {
-                // Apply Search & Filter
                 if (filterAcc !== 'ALL' && tx.acc !== filterAcc) return;
                 const matchStr = `${tx.cat} ${tx.desc}`.toLowerCase();
                 if (searchQ && !matchStr.includes(searchQ)) return;
 
-                // Accumulate totals
-                if(tx.cur === 'USD') { tUSD.in += tx.inc; tUSD.out += tx.exp; }
-                else { tKHR.in += tx.inc; tKHR.out += tx.exp; }
+                const curKey = tx.cur || 'USD';
+                if (!totals[curKey]) totals[curKey] = { in: 0, out: 0 };
+                totals[curKey].in += (tx.inc || 0);
+                totals[curKey].out += (tx.exp || 0);
 
-                // Build Account Options dynamically
                 let accOptsHtml = state.accounts.map(a => `<option value="${a}" ${tx.acc===a?'selected':''}>${a}</option>`).join('');
-                if (!state.accounts.includes(tx.acc) && tx.acc) {
-                    accOptsHtml += `<option value="${tx.acc}" selected>${tx.acc}</option>`;
-                }
+                let curOptsHtml = state.currencies.map(c => `<option value="${c}" ${tx.cur===c?'selected':''}>${c}</option>`).join('');
+                let catOptsHtml = state.categories.map(c => `<option value="${c}" ${tx.cat===c?'selected':''}>${c}</option>`).join('');
 
-                // Build Row HTML
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-blue-50/50 transition-colors group";
                 
                 tr.innerHTML = `
                     <td class="px-3 py-2 text-sm text-gray-500 text-center">${rowCount++}</td>
                     <td class="px-3 py-2"><input type="datetime-local" step="1" value="${formatForDateTimeInput(tx.date)}" onchange="updateTx('${tx.id}', 'date', this.value)" class="editable-input text-xs font-mono"></td>
-                    <td class="px-3 py-2"><input type="text" value="${tx.cat}" onchange="updateTx('${tx.id}', 'cat', this.value)" class="editable-input text-sm"></td>
+                    <td class="px-3 py-2">
+                        <select onchange="updateTx('${tx.id}', 'cat', this.value)" class="editable-input text-sm font-medium">
+                            ${catOptsHtml}
+                        </select>
+                    </td>
                     <td class="px-3 py-2"><input type="text" value="${tx.desc}" onchange="updateTx('${tx.id}', 'desc', this.value)" class="editable-input text-sm"></td>
                     <td class="px-3 py-2">
                         <select onchange="updateTx('${tx.id}', 'acc', this.value)" class="editable-input text-sm font-medium">
@@ -587,9 +855,8 @@
                         </select>
                     </td>
                     <td class="px-3 py-2">
-                        <select onchange="updateTx('${tx.id}', 'cur', this.value)" class="editable-input text-sm font-medium">
-                            <option value="USD" ${tx.cur==='USD'?'selected':''}>USD ($)</option>
-                            <option value="KHR" ${tx.cur==='KHR'?'selected':''}>KHR (៛)</option>
+                        <select onchange="updateTx('${tx.id}', 'cur', this.value)" class="editable-input text-sm font-bold text-amber-700">
+                            ${curOptsHtml}
                         </select>
                     </td>
                     <td class="px-3 py-2"><input type="number" step="any" min="0" value="${tx.inc||0}" onchange="updateTx('${tx.id}', 'inc', this.value)" class="editable-input text-sm font-semibold text-green-600 text-right"></td>
@@ -604,31 +871,33 @@
             });
 
             if(tbody.innerHTML === '') {
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-gray-400 text-sm">មិនមានទិន្នន័យ។ ចុច "បន្ថែមជួរដេកថ្មី"។</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-gray-400 text-sm">មិនមានទិន្នន័យ។ ចុច "បន្ថែមជួរដេកថ្មី" ឬចុចប៊ូតុងកត់ត្រារហ័ស។</td></tr>`;
             }
 
-            // Update UI Totals
-            document.getElementById('totIncUSD').textContent = formatMoney(tUSD.in, 'USD');
-            document.getElementById('totExpUSD').textContent = formatMoney(tUSD.out, 'USD');
-            document.getElementById('totIncKHR').textContent = formatMoney(tKHR.in, 'KHR');
-            document.getElementById('totExpKHR').textContent = formatMoney(tKHR.out, 'KHR');
+            const incCell = document.getElementById('totIncCell');
+            const expCell = document.getElementById('totExpCell');
+            incCell.innerHTML = ''; expCell.innerHTML = '';
+
+            Object.keys(totals).forEach(c => {
+                if (totals[c].in > 0 || totals[c].out > 0) {
+                    incCell.innerHTML += `<div class="text-sm font-bold text-green-600 mb-0.5">${formatMoney(totals[c].in, c)}</div>`;
+                    expCell.innerHTML += `<div class="text-sm font-bold text-red-500 mb-0.5">${formatMoney(totals[c].out, c)}</div>`;
+                }
+            });
+            if (incCell.innerHTML === '') incCell.innerHTML = '<div class="text-sm font-bold text-green-600">0.00 $</div>';
+            if (expCell.innerHTML === '') expCell.innerHTML = '<div class="text-sm font-bold text-red-500">0.00 $</div>';
         }
 
         function addRow() {
             const now = new Date();
-            const localIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
-            const defaultAcc = state.accounts.length > 0 ? state.accounts[0] : 'Wallet';
+            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
             const newTx = {
                 id: generateId(),
-                date: localIso, cat: 'ផ្សេងៗ', desc: '', acc: defaultAcc, cur: 'USD', inc: 0, exp: 0
+                date: nowIso, cat: state.categories[0]||'ផ្សេងៗ', desc: '', acc: state.accounts[0]||'Wallet', cur: state.currencies[0]||'USD', inc: 0, exp: 0
             };
             state.transactions.push(newTx);
             pushTxToFirebase(newTx);
-            saveStateToCloud();
             renderTable();
-            // Scroll to bottom
-            const tableContainer = document.getElementById('mainTable').parentElement;
-            tableContainer.scrollTop = tableContainer.scrollHeight;
         }
 
         function updateTx(id, field, value) {
@@ -637,189 +906,294 @@
                 if(field === 'inc' || field === 'exp') tx[field] = parseFloat(value) || 0;
                 else tx[field] = value;
                 pushTxToFirebase(tx);
-                saveStateToCloud();
                 renderTable();
+                updateDashboard();
             }
         }
 
-        /* === MODALS === */
-        let deleteTargetId = null;
-        let isClearAll = false;
-
-        function confirmDelete(id) {
-            deleteTargetId = id;
-            isClearAll = false;
-            document.getElementById('modalTitle').textContent = "លុបប្រតិបត្តិការ";
-            document.getElementById('modalDesc').textContent = "តើអ្នកពិតជាចង់លុបជួរដេកនេះមែនទេ? សកម្មភាពនេះមិនអាចទាញត្រឡប់បានទេ។";
-            document.getElementById('modalConfirmBtn').onclick = executeDelete;
-            document.getElementById('confirmModal').classList.remove('hidden');
-        }
-
-        function confirmClearData() {
-            isClearAll = true;
-            document.getElementById('modalTitle').textContent = "លុបទិន្នន័យទាំងអស់";
-            document.getElementById('modalDesc').textContent = "តើអ្នកពិតជាចង់លុបទិន្នន័យទាំងអស់មែនទេ? វានឹងក្លាយជាផ្ទាំងទទេស្អាត។";
-            document.getElementById('modalConfirmBtn').onclick = executeDelete;
-            document.getElementById('confirmModal').classList.remove('hidden');
-        }
-
-        function executeDelete() {
-            if (isClearAll) {
-                state.transactions = [];
-                clearAllFromFirebase();
-            } else if (deleteTargetId) {
-                state.transactions = state.transactions.filter(t => t.id !== deleteTargetId);
-                removeTxFromFirebase(deleteTargetId);
-            }
-            saveStateToCloud();
-            renderTable();
-            closeModal();
-        }
-
-        function closeModal() {
-            document.getElementById('confirmModal').classList.add('hidden');
-            deleteTargetId = null;
-        }
-
-        /* === ACCOUNT MANAGEMENT MODAL LOGIC === */
-        function openAccountsModal() {
-            renderAccountsList();
-            document.getElementById('accountsModal').classList.remove('hidden');
-        }
-
-        function closeAccountsModal() {
-            document.getElementById('accountsModal').classList.add('hidden');
-        }
-
-        function renderAccountsList() {
-            const container = document.getElementById('accountsListContainer');
+        /* === FEATURE 2: QUICK SHORTCUTS Execution === */
+        function renderShortcuts() {
+            const container = document.getElementById('shortcutsContainer');
+            if(!container) return;
             container.innerHTML = '';
-            if (state.accounts.length === 0) {
-                container.innerHTML = `<div class="text-xs text-gray-400 text-center py-2">គ្មានគណនីទេ</div>`;
-                return;
-            }
-            state.accounts.forEach((acc, index) => {
-                const item = document.createElement('div');
-                item.className = 'flex items-center justify-between p-2.5 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 text-sm';
-                item.innerHTML = `
-                    <input type="text" value="${acc}" onchange="editAccountName(${index}, this.value)" class="bg-transparent font-semibold text-gray-800 outline-none focus:bg-white focus:px-2 focus:py-1 focus:rounded border border-transparent focus:border-blue-400">
-                    <button onclick="deleteAccount(${index})" class="text-red-500 hover:text-red-700 p-1 font-bold text-xs bg-red-50 hover:bg-red-100 rounded transition" title="លុបគណនី">
-                        🗑️ លុប
+            state.shortcuts.forEach(sc => {
+                container.innerHTML += `
+                    <button onclick="executeShortcut('${sc.id}')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold rounded-lg transition whitespace-nowrap flex items-center gap-1 shadow-sm">
+                        ⚡ ${sc.name}
                     </button>
                 `;
-                container.appendChild(item);
             });
         }
 
-        function addNewAccount() {
-            const input = document.getElementById('newAccountName');
-            const name = input.value.trim();
-            if (!name) return;
-            if (state.accounts.includes(name)) {
-                alert('ឈ្មោះគណនីនេះមានរួចហើយ!');
-                return;
-            }
-            state.accounts.push(name);
-            input.value = '';
-            saveAccountsToCloud();
-            renderAccountsList();
+        function executeShortcut(shortcutId) {
+            const sc = state.shortcuts.find(s => s.id === shortcutId);
+            if (!sc) return;
+            const now = new Date();
+            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+            const newTx = {
+                id: generateId(),
+                date: nowIso, cat: sc.cat, desc: sc.desc || sc.name, acc: sc.acc, cur: sc.cur, inc: sc.inc||0, exp: sc.exp||0
+            };
+            state.transactions.push(newTx);
+            pushTxToFirebase(newTx);
+            renderTable();
+            updateDashboard();
         }
 
-        function editAccountName(index, newName) {
-            newName = newName.trim();
-            if (!newName) return;
-            const oldName = state.accounts[index];
-            if (oldName === newName) return;
+        /* === FEATURE 1: BUDGET CALCULATOR & DASHBOARD PROGRESS WIDGET === */
+        function renderBudgetWidget() {
+            const container = document.getElementById('budgetProgressContainer');
+            if(!container) return;
+            container.innerHTML = '';
 
-            // Update transactions that used old account name
-            state.transactions.forEach(tx => {
-                if (tx.acc === oldName) {
-                    tx.acc = newName;
-                    pushTxToFirebase(tx);
-                }
-            });
+            const currentMonth = new Date().toISOString().substring(0, 7);
+            
+            state.budgets.forEach(b => {
+                let spent = 0;
+                state.transactions.forEach(tx => {
+                    if (tx.date && tx.date.substring(0, 7) === currentMonth && tx.cat === b.cat && tx.cur === b.cur) {
+                        spent += (tx.exp || 0);
+                    }
+                });
 
-            state.accounts[index] = newName;
-            saveAccountsToCloud();
-            renderAccountsList();
-        }
+                const pct = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
+                let colorClass = "bg-emerald-500";
+                let textClass = "text-emerald-600";
+                if (pct >= 80 && pct < 100) { colorClass = "bg-amber-500"; textClass = "text-amber-600"; }
+                if (pct >= 100) { colorClass = "bg-red-500"; textClass = "text-red-600"; }
 
-        function deleteAccount(index) {
-            const accName = state.accounts[index];
-            const inUse = state.transactions.some(tx => tx.acc === accName);
-            if (inUse) {
-                if (!confirm(`គណនី "${accName}" មានប្រតិបត្តិការនៅក្នុងប្រព័ន្ធ។ តើអ្នកពិតជាចង់លុបមែនទេ?`)) {
-                    return;
-                }
-            }
-            state.accounts.splice(index, 1);
-            saveAccountsToCloud();
-            renderAccountsList();
-        }
-
-        /* === DASHBOARD & CHARTS === */
-        function updateDashboard() {
-            let accBalances = {};
-            state.accounts.forEach(acc => {
-                accBalances[acc] = { usd:0, khr:0 };
-            });
-
-            let totalUSD = 0, totalKHR = 0;
-
-            // Compute Balances
-            state.transactions.forEach(tx => {
-                if (!accBalances[tx.acc]) {
-                    accBalances[tx.acc] = { usd: 0, khr: 0 };
-                }
-                const bal = tx.inc - tx.exp;
-                if(tx.cur === 'USD') {
-                    accBalances[tx.acc].usd += bal;
-                    totalUSD += bal;
-                } else {
-                    accBalances[tx.acc].khr += bal;
-                    totalKHR += bal;
-                }
-            });
-
-            // Global Net Worth = USD + (KHR / Rate)
-            const combinedNet = totalUSD + (totalKHR / state.exchangeRate);
-            document.getElementById('globalNetWorth').textContent = formatMoney(combinedNet, 'USD');
-
-            // Render Cards dynamically
-            const cardGrid = document.getElementById('dashboardCards');
-            cardGrid.innerHTML = '';
-
-            Object.keys(accBalances).forEach(key => {
-                const b = accBalances[key];
-                const active = b.usd !== 0 || b.khr !== 0;
-                cardGrid.innerHTML += `
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between ${!active ? 'opacity-50' : ''}">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="p-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold">💳</span>
-                            <span class="font-bold text-gray-700">${key}</span>
+                container.innerHTML += `
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <div class="flex justify-between items-center mb-1 text-xs font-bold">
+                            <span class="text-gray-700">${b.cat} (${b.cur})</span>
+                            <span class="${textClass}">${formatMoney(spent, b.cur)} / ${formatMoney(b.limit, b.cur)} (${pct}%)</span>
                         </div>
-                        <div>
-                            <div class="text-lg font-black ${b.usd < 0 ? 'text-red-500' : 'text-slate-800'}">${formatMoney(b.usd, 'USD')}</div>
-                            <div class="text-sm font-bold ${b.khr < 0 ? 'text-red-500' : 'text-slate-500'}">${formatMoney(b.khr, 'KHR')}</div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                            <div class="${colorClass} h-2 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
                         </div>
                     </div>
                 `;
             });
 
+            if (state.budgets.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់បានកំណត់ថវិកា។ ចុច "⚙️ កំណត់ថវិកា" ដើម្បីកំណត់។</p>`;
+            }
+        }
+
+        /* === MODALS FOR BUDGET & SHORTCUTS === */
+        function openBudgetModal() {
+            const catSel = document.getElementById('bgCategory');
+            const curSel = document.getElementById('bgCurrency');
+            catSel.innerHTML = state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
+            curSel.innerHTML = state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+            renderBudgetList();
+            document.getElementById('budgetModal').classList.remove('hidden');
+        }
+        function closeBudgetModal() { document.getElementById('budgetModal').classList.add('hidden'); }
+
+        function saveBudgetLimit() {
+            const cat = document.getElementById('bgCategory').value;
+            const limit = parseFloat(document.getElementById('bgLimit').value) || 0;
+            const cur = document.getElementById('bgCurrency').value;
+
+            if (limit <= 0) return;
+            state.budgets = state.budgets.filter(b => !(b.cat === cat && b.cur === cur));
+            state.budgets.push({ id: generateId(), cat, limit, cur });
+            saveBudgetsToCloud();
+            renderBudgetList();
+            document.getElementById('bgLimit').value = '';
+        }
+
+        function deleteBudget(id) {
+            state.budgets = state.budgets.filter(b => b.id !== id);
+            saveBudgetsToCloud();
+            renderBudgetList();
+        }
+
+        function renderBudgetList() {
+            const container = document.getElementById('budgetListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            state.budgets.forEach(b => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-2 bg-indigo-50/50 rounded border text-xs">
+                        <span class="font-bold text-gray-800">${b.cat}: ${formatMoney(b.limit, b.cur)}</span>
+                        <button onclick="deleteBudget('${b.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
+                    </div>
+                `;
+            });
+        }
+
+        function openShortcutModal() {
+            document.getElementById('scCategory').innerHTML = state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
+            document.getElementById('scAccount').innerHTML = state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
+            document.getElementById('scCurrency').innerHTML = state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+            renderShortcutList();
+            document.getElementById('shortcutModal').classList.remove('hidden');
+        }
+        function closeShortcutModal() { document.getElementById('shortcutModal').classList.add('hidden'); }
+
+        function addNewShortcut() {
+            const name = document.getElementById('scName').value.trim();
+            const cat = document.getElementById('scCategory').value;
+            const acc = document.getElementById('scAccount').value;
+            const amount = parseFloat(document.getElementById('scAmount').value) || 0;
+            const cur = document.getElementById('scCurrency').value;
+
+            if (!name || amount <= 0) return;
+            state.shortcuts.push({ id: generateId(), name, cat, acc, cur, inc: 0, exp: amount, desc: name });
+            saveShortcutsToCloud();
+            renderShortcutList();
+            document.getElementById('scName').value = '';
+            document.getElementById('scAmount').value = '';
+        }
+
+        function deleteShortcut(id) {
+            state.shortcuts = state.shortcuts.filter(s => s.id !== id);
+            saveShortcutsToCloud();
+            renderShortcutList();
+        }
+
+        function renderShortcutList() {
+            const container = document.getElementById('shortcutListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            state.shortcuts.forEach(s => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-2 bg-blue-50/50 rounded border text-xs">
+                        <span class="font-bold text-gray-800">${s.name} (${formatMoney(s.exp, s.cur)})</span>
+                        <button onclick="deleteShortcut('${s.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
+                    </div>
+                `;
+            });
+        }
+
+        /* === ACCOUNTS, CURRENCIES, CATEGORIES & TRANSFER MODALS === */
+        function openAccountsModal() { renderAccountsList(); document.getElementById('accountsModal').classList.remove('hidden'); }
+        function closeAccountsModal() { document.getElementById('accountsModal').classList.add('hidden'); }
+        function renderAccountsList() {
+            const c = document.getElementById('accountsListContainer'); if(!c) return; c.innerHTML = '';
+            state.accounts.forEach((acc, i) => {
+                c.innerHTML += `<div class="flex items-center justify-between p-2.5 bg-slate-50 rounded border text-sm"><input type="text" value="${acc}" onchange="editAccountName(${i}, this.value)" class="bg-transparent font-bold outline-none"><button onclick="deleteAccount(${i})" class="text-red-500 font-bold text-xs bg-red-50 p-1 rounded">🗑️ លុប</button></div>`;
+            });
+        }
+        function addNewAccount() { const name = document.getElementById('newAccountName').value.trim(); if(!name || state.accounts.includes(name)) return; state.accounts.push(name); saveAccountsToCloud(); renderAccountsList(); document.getElementById('newAccountName').value = ''; }
+        function editAccountName(i, val) { val = val.trim(); if(!val) return; state.accounts[i] = val; saveAccountsToCloud(); renderAccountsList(); }
+        function deleteAccount(i) { state.accounts.splice(i, 1); saveAccountsToCloud(); renderAccountsList(); }
+
+        function openCurrenciesModal() { renderCurrenciesList(); document.getElementById('currenciesModal').classList.remove('hidden'); }
+        function closeCurrenciesModal() { document.getElementById('currenciesModal').classList.add('hidden'); }
+        function renderCurrenciesList() {
+            const c = document.getElementById('currenciesListContainer'); if(!c) return; c.innerHTML = '';
+            state.currencies.forEach((cur, i) => {
+                c.innerHTML += `<div class="flex items-center justify-between p-2.5 bg-amber-50 rounded border text-sm"><input type="text" value="${cur}" onchange="editCurrencyName(${i}, this.value)" class="bg-transparent font-bold outline-none"><button onclick="deleteCurrency(${i})" class="text-red-500 font-bold text-xs bg-red-50 p-1 rounded">🗑️ លុប</button></div>`;
+            });
+        }
+        function addNewCurrency() { const name = document.getElementById('newCurrencyName').value.trim(); if(!name || state.currencies.includes(name)) return; state.currencies.push(name); saveCurrenciesToCloud(); renderCurrenciesList(); document.getElementById('newCurrencyName').value = ''; }
+        function editCurrencyName(i, val) { val = val.trim(); if(!val) return; state.currencies[i] = val; saveCurrenciesToCloud(); renderCurrenciesList(); }
+        function deleteCurrency(i) { state.currencies.splice(i, 1); saveCurrenciesToCloud(); renderCurrenciesList(); }
+
+        function openCategoriesModal() { renderCategoriesList(); document.getElementById('categoriesModal').classList.remove('hidden'); }
+        function closeCategoriesModal() { document.getElementById('categoriesModal').classList.add('hidden'); }
+        function renderCategoriesList() {
+            const c = document.getElementById('categoriesListContainer'); if(!c) return; c.innerHTML = '';
+            state.categories.forEach((cat, i) => {
+                c.innerHTML += `<div class="flex items-center justify-between p-2.5 bg-purple-50 rounded border text-sm"><input type="text" value="${cat}" onchange="editCategoryName(${i}, this.value)" class="bg-transparent font-bold outline-none"><button onclick="deleteCategory(${i})" class="text-red-500 font-bold text-xs bg-red-50 p-1 rounded">🗑️ លុប</button></div>`;
+            });
+        }
+        function addNewCategory() { const name = document.getElementById('newCategoryName').value.trim(); if(!name || state.categories.includes(name)) return; state.categories.push(name); saveCategoriesToCloud(); renderCategoriesList(); document.getElementById('newCategoryName').value = ''; }
+        function editCategoryName(i, val) { val = val.trim(); if(!val) return; state.categories[i] = val; saveCategoriesToCloud(); renderCategoriesList(); }
+        function deleteCategory(i) { state.categories.splice(i, 1); saveCategoriesToCloud(); renderCategoriesList(); }
+
+        function openTransferModal() {
+            document.getElementById('transferFromAcc').innerHTML = state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
+            document.getElementById('transferToAcc').innerHTML = state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
+            if(state.accounts.length > 1) document.getElementById('transferToAcc').selectedIndex = 1;
+            document.getElementById('transferCurrency').innerHTML = state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+            document.getElementById('transferModal').classList.remove('hidden');
+        }
+        function closeTransferModal() { document.getElementById('transferModal').classList.add('hidden'); }
+        function executeTransfer() {
+            const fromAcc = document.getElementById('transferFromAcc').value;
+            const toAcc = document.getElementById('transferToAcc').value;
+            const amount = parseFloat(document.getElementById('transferAmount').value) || 0;
+            const cur = document.getElementById('transferCurrency').value;
+            const desc = document.getElementById('transferDesc').value || 'ផ្ទេរប្រាក់រវាងគណនី';
+            if (fromAcc === toAcc || amount <= 0) return;
+
+            const now = new Date();
+            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+            const outTx = { id: generateId(), date: nowIso, cat: 'ផ្ទេរប្រាក់', desc: `${desc} -> ទៅ ${toAcc}`, acc: fromAcc, cur, inc: 0, exp: amount };
+            const inTx = { id: generateId(), date: nowIso, cat: 'ផ្ទេរប្រាក់', desc: `${desc} <- ពី ${fromAcc}`, acc: toAcc, cur, inc: amount, exp: 0 };
+
+            state.transactions.push(outTx, inTx);
+            pushTxToFirebase(outTx); pushTxToFirebase(inTx);
+            renderTable(); updateDashboard(); closeTransferModal();
+        }
+
+        /* === DELETE CONFIRMATION === */
+        let deleteTargetId = null; let isClearAll = false;
+        function confirmDelete(id) { deleteTargetId = id; isClearAll = false; document.getElementById('modalTitle').textContent = "លុបប្រតិបត្តិការ"; document.getElementById('confirmModal').classList.remove('hidden'); }
+        function confirmClearData() { isClearAll = true; document.getElementById('modalTitle').textContent = "លុបទិន្នន័យទាំងអស់"; document.getElementById('confirmModal').classList.remove('hidden'); }
+        function executeDelete() {
+            if (isClearAll) { state.transactions = []; clearAllFromFirebase(); }
+            else if (deleteTargetId) { state.transactions = state.transactions.filter(t => t.id !== deleteTargetId); removeTxFromFirebase(deleteTargetId); }
+            renderTable(); updateDashboard(); closeModal();
+        }
+        function closeModal() { document.getElementById('confirmModal').classList.add('hidden'); deleteTargetId = null; }
+
+        /* === DASHBOARD & CHARTS === */
+        function updateDashboard() {
+            let accBalances = {};
+            state.accounts.forEach(acc => accBalances[acc] = {});
+            let totalUSD = 0, totalKHR = 0;
+
+            state.transactions.forEach(tx => {
+                if (!accBalances[tx.acc]) accBalances[tx.acc] = {};
+                const cur = tx.cur || 'USD';
+                if (!accBalances[tx.acc][cur]) accBalances[tx.acc][cur] = 0;
+                const bal = (tx.inc || 0) - (tx.exp || 0);
+                accBalances[tx.acc][cur] += bal;
+                if (cur === 'USD') totalUSD += bal;
+                else if (cur === 'KHR') totalKHR += bal;
+            });
+
+            const combinedNet = totalUSD + (totalKHR / state.exchangeRate);
+            document.getElementById('globalNetWorth').textContent = formatMoney(combinedNet, 'USD');
+
+            const cardGrid = document.getElementById('dashboardCards');
+            cardGrid.innerHTML = '';
+            Object.keys(accBalances).forEach(key => {
+                const bObj = accBalances[key];
+                let cardContent = ''; let hasData = false;
+                Object.keys(bObj).forEach(c => {
+                    if (bObj[c] !== 0) {
+                        hasData = true;
+                        cardContent += `<div class="text-sm font-bold ${bObj[c] < 0 ? 'text-red-500' : 'text-slate-800'}">${formatMoney(bObj[c], c)}</div>`;
+                    }
+                });
+                if (!hasData) cardContent = `<div class="text-sm font-bold text-slate-400">0.00 $</div>`;
+                cardGrid.innerHTML += `
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between ${!hasData ? 'opacity-60' : ''}">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="p-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold">💳</span>
+                            <span class="font-bold text-gray-700">${key}</span>
+                        </div>
+                        <div class="space-y-1">${cardContent}</div>
+                    </div>
+                `;
+            });
+
+            renderBudgetWidget();
             drawCharts();
         }
 
         function drawCharts() {
-            // Chart 1: Expenses by Category (Current Month)
-            const currentMonth = new Date().toISOString().substring(0, 7); // YYYY-MM
-            let catExpenses = {};
-            
-            // Chart 2: Income vs Expense Trend (Last 6 Months)
-            let monthTrend = {}; 
-            // Generate last 6 months keys
+            const currentMonth = new Date().toISOString().substring(0, 7);
+            let catExpenses = {}; let monthTrend = {}; 
+
             for(let i=5; i>=0; i--) {
-                const d = new Date();
-                d.setMonth(d.getMonth() - i);
+                const d = new Date(); d.setMonth(d.getMonth() - i);
                 monthTrend[d.toISOString().substring(0,7)] = { inc: 0, exp: 0 };
             }
 
@@ -827,38 +1201,28 @@
                 if(!tx.date) return;
                 const mKey = tx.date.substring(0,7);
                 const isUSD = tx.cur === 'USD';
-                
-                // Convert everything to USD for unified charts
                 const incConverted = isUSD ? tx.inc : tx.inc / state.exchangeRate;
                 const expConverted = isUSD ? tx.exp : tx.exp / state.exchangeRate;
 
-                // Pie Chart Data (Only this month)
                 if(mKey === currentMonth && expConverted > 0) {
                     catExpenses[tx.cat] = (catExpenses[tx.cat] || 0) + expConverted;
                 }
-
-                // Bar Chart Data (If within last 6 months)
                 if(monthTrend[mKey]) {
                     monthTrend[mKey].inc += incConverted;
                     monthTrend[mKey].exp += expConverted;
                 }
             });
 
-            // Destroy old charts if exist
             if(charts.expense) charts.expense.destroy();
             if(charts.trend) charts.trend.destroy();
 
-            // Render Pie Chart
             const ctxPie = document.getElementById('expenseChart').getContext('2d');
-            const catLabels = Object.keys(catExpenses).length ? Object.keys(catExpenses) : ['គ្មានចំណាយ'];
-            const catData = Object.keys(catExpenses).length ? Object.values(catExpenses) : [1];
-            
             charts.expense = new Chart(ctxPie, {
                 type: 'doughnut',
                 data: {
-                    labels: catLabels,
+                    labels: Object.keys(catExpenses).length ? Object.keys(catExpenses) : ['គ្មានចំណាយ'],
                     datasets: [{
-                        data: catData,
+                        data: Object.keys(catExpenses).length ? Object.values(catExpenses) : [1],
                         backgroundColor: ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#d946ef', '#f43f5e'],
                         borderWidth: 0
                     }]
@@ -866,44 +1230,26 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
             });
 
-            // Render Bar Chart
             const ctxBar = document.getElementById('trendChart').getContext('2d');
-            const mLabels = Object.keys(monthTrend).map(m => m.split('-')[1] + '/' + m.split('-')[0].substring(2)); // MM/YY
             charts.trend = new Chart(ctxBar, {
                 type: 'bar',
                 data: {
-                    labels: mLabels,
+                    labels: Object.keys(monthTrend).map(m => m.split('-')[1] + '/' + m.split('-')[0].substring(2)),
                     datasets: [
                         { label: 'ចំណូល ($)', data: Object.values(monthTrend).map(m=>m.inc), backgroundColor: '#10b981', borderRadius: 4 },
                         { label: 'ចំណាយ ($)', data: Object.values(monthTrend).map(m=>m.exp), backgroundColor: '#ef4444', borderRadius: 4 }
                     ]
                 },
-                options: { 
-                    responsive: true, maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, grid: { borderDash: [4,4] } }, x: { grid: { display: false } } }
-                }
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
             });
         }
 
-        /* === REPORTING === */
+        /* === REPORTING & PDF EXPORT === */
         function toggleCustomPeriod() {
             const periodType = document.getElementById('reportPeriod').value;
             const container = document.getElementById('customPeriodContainer');
-            if (periodType === 'custom') {
-                container.classList.remove('hidden');
-                const startEl = document.getElementById('customStartDate');
-                const endEl = document.getElementById('customEndDate');
-                if(!startEl.value) {
-                    const d = new Date(); d.setHours(0,0,0,0);
-                    startEl.value = formatForDateTimeInput(d.toISOString());
-                }
-                if(!endEl.value) {
-                    const now = new Date();
-                    endEl.value = formatForDateTimeInput(now.toISOString());
-                }
-            } else {
-                container.classList.add('hidden');
-            }
+            if (periodType === 'custom') container.classList.remove('hidden');
+            else container.classList.add('hidden');
             renderReports();
         }
 
@@ -921,8 +1267,7 @@
                     return `${year} សប្តាហ៍ទី ${w}`;
                 case 'monthly': return `${year}-${(month+1).toString().padStart(2,'0')}`;
                 case 'quarterly':
-                    const q = Math.floor(month / 3) + 1;
-                    return `${year} ត្រីមាសទី ${q} (Q${q})`;
+                    return `${year} ត្រីមាសទី ${Math.floor(month / 3) + 1} (Q${Math.floor(month / 3) + 1})`;
                 case 'yearly': return `${year}`;
                 default: return dateStr;
             }
@@ -932,29 +1277,17 @@
             const periodType = document.getElementById('reportPeriod').value;
             let pData = {}, cData = {};
 
-            const startVal = document.getElementById('customStartDate').value;
-            const endVal = document.getElementById('customEndDate').value;
-
             state.transactions.forEach(r => {
                 if(!r.date && r.inc === 0 && r.exp === 0) return; 
+                const pKey = getPeriodKey(r.date, periodType);
+                const cat = r.cat || 'ផ្សេងៗ'; const cur = r.cur || 'USD';
 
-                // Custom Date & Time Filter Logic
-                if (periodType === 'custom') {
-                    if (startVal && r.date < startVal) return;
-                    if (endVal && r.date > endVal) return;
-                }
-
-                const pKey = (periodType === 'custom') 
-                    ? `ចន្លោះពេលជ្រើសរើស (${startVal ? startVal.replace('T', ' ') : 'ដើមដំបូង'} ដល់ ${endVal ? endVal.replace('T', ' ') : 'បច្ចុប្បន្ន'})`
-                    : getPeriodKey(r.date, periodType);
-
-                const cat = r.cat || 'ផ្សេងៗ';
-                const cur = r.cur;
-
-                if(!pData[pKey]) pData[pKey] = { USD: {in:0, out:0}, KHR: {in:0, out:0} };
+                if(!pData[pKey]) pData[pKey] = {};
+                if(!pData[pKey][cur]) pData[pKey][cur] = { in: 0, out: 0 };
                 pData[pKey][cur].in += r.inc; pData[pKey][cur].out += r.exp;
 
-                if(!cData[cat]) cData[cat] = { USD: {in:0, out:0}, KHR: {in:0, out:0} };
+                if(!cData[cat]) cData[cat] = {};
+                if(!cData[cat][cur]) cData[cat][cur] = { in: 0, out: 0 };
                 cData[cat][cur].in += r.inc; cData[cat][cur].out += r.exp;
             });
 
@@ -962,7 +1295,7 @@
                 let html = '';
                 Object.keys(dataObj).sort().reverse().forEach(key => {
                     const d = dataObj[key];
-                    ['USD', 'KHR'].forEach(cur => {
+                    Object.keys(d).forEach(cur => {
                         if(d[cur].in > 0 || d[cur].out > 0) {
                             const bal = d[cur].in - d[cur].out;
                             html += `
@@ -983,19 +1316,65 @@
             document.getElementById('repCatBody').innerHTML = buildRows(cData, false);
         }
 
-        /* === EXPORT & IMPORT === */
-        function exportToHTML() {
-            let html = `<table border="1" style="border-collapse:collapse; width:100%; text-align:left; font-family:sans-serif;">
-                <tr style="background:#f1f5f9;"><th>កាលបរិច្ឆេទ</th><th>ផ្នែក</th><th>ការពិពណ៌នា</th><th>គណនី</th><th>រូបិយប័ណ្ណ</th><th>ចំណូល</th><th>ចំណាយ</th></tr>`;
-            state.transactions.forEach(t => {
-                html += `<tr><td>${t.date}</td><td>${t.cat}</td><td>${t.desc}</td><td>${t.acc}</td><td>${t.cur}</td><td>${t.inc}</td><td>${t.exp}</td></tr>`;
-            });
-            html += `</table>`;
-            
-            const blob = new Blob([`<meta charset="UTF-8"><h2>របាយការណ៍ចំណូលចំណាយ</h2>${html}`], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = 'របាយការណ៍.html';
-            a.click(); URL.revokeObjectURL(url);
+        /* FEATURE 3: EXPORT TO PDF */
+        function exportToPDF() {
+            const element = document.getElementById('reportPrintArea');
+            const opt = {
+                margin:       0.5,
+                filename:     `Financial_Report_${new Date().toISOString().split('T')[0]}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        /* FEATURE 4: BACKUP & RESTORE JSON */
+        function exportToJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `Finance_Backup_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importFromJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported) {
+                        if (imported.accounts) state.accounts = imported.accounts;
+                        if (imported.currencies) state.currencies = imported.currencies;
+                        if (imported.categories) state.categories = imported.categories;
+                        if (imported.budgets) state.budgets = imported.budgets;
+                        if (imported.shortcuts) state.shortcuts = imported.shortcuts;
+                        if (imported.transactions) state.transactions = imported.transactions;
+
+                        saveAccountsToCloud();
+                        saveCurrenciesToCloud();
+                        saveCategoriesToCloud();
+                        saveBudgetsToCloud();
+                        saveShortcutsToCloud();
+
+                        if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                            const txMap = {};
+                            state.transactions.forEach(tx => txMap[tx.id] = tx);
+                            window.firebaseSet(window.firebaseRef(window.firebaseDb, 'transactions'), txMap);
+                        }
+                        renderTable();
+                        updateDashboard();
+                        alert('ចាក់បញ្ចូលទិន្នន័យ (Restore) ជោគជ័យ!');
+                    }
+                } catch (err) {
+                    alert('ឯកសារ JSON មិនត្រឹមត្រូវ!');
+                }
+            };
+            reader.readAsText(file);
         }
 
         function exportToExcel() {
@@ -1017,35 +1396,23 @@
                 const data = new Uint8Array(e.target.result);
                 const workbook = XLSX.read(data, {type: 'array'});
                 const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
-                
                 let start = (rows.length > 0 && isNaN(parseFloat(rows[0][5]))) ? 1 : 0;
                 
                 for(let i=start; i<rows.length; i++) {
                     const r = rows[i];
                     if(!r || r.length===0 || r.every(c=>!c)) continue;
-                    
                     let dateStr = r[0] || new Date().toISOString().split('T')[0];
-                    if(dateStr.toString().includes('/')) {
-                        let p = dateStr.split('/');
-                        if(p.length===3) dateStr = `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
-                    }
-
                     const newTx = {
-                        id: generateId(),
-                        date: dateStr,
-                        cat: r[1] || 'ផ្សេងៗ',
-                        desc: r[2] || '',
-                        acc: ['ABA','AC','Wallet','Savings'].includes(r[3]) ? r[3] : 'Wallet',
-                        cur: ['USD','KHR'].includes(r[4]) ? r[4] : (r[4]?.toString().includes('៛') ? 'KHR' : 'USD'),
-                        inc: parseFloat(r[5]) || 0,
-                        exp: parseFloat(r[6]) || 0
+                        id: generateId(), date: dateStr, cat: r[1]||'ផ្សេងៗ', desc: r[2]||'',
+                        acc: state.accounts.includes(r[3]) ? r[3] : state.accounts[0],
+                        cur: state.currencies.includes(r[4]) ? r[4] : 'USD',
+                        inc: parseFloat(r[5]) || 0, exp: parseFloat(r[6]) || 0
                     };
                     state.transactions.push(newTx);
                     pushTxToFirebase(newTx);
                 }
                 event.target.value = '';
-                saveStateToCloud();
-                renderTable();
+                renderTable(); updateDashboard();
             };
             reader.readAsArrayBuffer(file);
         }
