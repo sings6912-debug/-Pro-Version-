@@ -173,14 +173,15 @@
                         </div>
                         <input type="text" id="searchInput" oninput="renderTable()" placeholder="ស្វែងរក..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
                     </div>
-                    <!-- Filter Account -->
-                    <select id="filterAccount" onchange="renderTable()" class="block w-full sm:w-40 py-2 px-3 border border-gray-300 bg-white rounded-lg text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option value="ALL">គ្រប់គណនី</option>
-                        <option value="ABA">កុង ABA</option>
-                        <option value="AC">កុង AC</option>
-                        <option value="Wallet">កាបូបលុយ</option>
-                        <option value="Savings">លុយសន្សំ</option>
-                    </select>
+                    <!-- Filter Account & Account Settings -->
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <select id="filterAccount" onchange="renderTable()" class="block w-full sm:w-40 py-2 px-3 border border-gray-300 bg-white rounded-lg text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <!-- Populated dynamically -->
+                        </select>
+                        <button onclick="openAccountsModal()" class="px-3 py-2 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg border border-slate-300 flex items-center gap-1.5 transition whitespace-nowrap" title="បន្ថែម/កែសម្រួលគណនី">
+                            ⚙️ គ្រប់គ្រងគណនី
+                        </button>
+                    </div>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
@@ -207,7 +208,7 @@
                         <thead class="bg-slate-50">
                             <tr>
                                 <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-12">ល.រ</th>
-                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-36">កាលបរិច្ឆេទ</th>
+                                <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-52">កាលបរិច្ឆេទ & ម៉ោង</th>
                                 <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-40">ផ្នែក/ប្រភេទ</th>
                                 <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase">ការពិពណ៌នា</th>
                                 <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase w-32">គណនី</th>
@@ -248,14 +249,30 @@
 
         <!-- VIEW: REPORTS -->
         <div id="view-report" class="hidden space-y-6">
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
-                <label class="text-sm font-medium text-gray-600 whitespace-nowrap">របាយការណ៍តាម៖</label>
-                <select id="reportPeriod" onchange="renderReports()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 w-48 outline-none font-medium">
-                    <option value="daily">ប្រចាំថ្ងៃ</option>
-                    <option value="weekly">ប្រចាំសប្តាហ៍</option>
-                    <option value="monthly" selected>ប្រចាំខែ</option>
-                    <option value="yearly">ប្រចាំឆ្នាំ</option>
-                </select>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-wrap items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <label class="text-sm font-medium text-gray-600 whitespace-nowrap">របាយការណ៍តាម៖</label>
+                    <select id="reportPeriod" onchange="toggleCustomPeriod()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 w-56 outline-none font-medium">
+                        <option value="daily">ប្រចាំថ្ងៃ</option>
+                        <option value="weekly">ប្រចាំសប្តាហ៍</option>
+                        <option value="monthly" selected>ប្រចាំខែ</option>
+                        <option value="quarterly">ប្រចាំត្រីមាស</option>
+                        <option value="yearly">ប្រចាំឆ្នាំ</option>
+                        <option value="custom">កំណត់ផ្ទាល់ខ្លួន (តាមម៉ោង នាទី)</option>
+                    </select>
+                </div>
+
+                <!-- Custom Range Picker with Hours & Minutes -->
+                <div id="customPeriodContainer" class="hidden flex flex-wrap items-center gap-3 bg-blue-50/60 p-2 rounded-lg border border-blue-200">
+                    <div class="flex items-center gap-1.5 text-xs text-gray-700 font-medium">
+                        <span>ពី៖</span>
+                        <input type="datetime-local" step="1" id="customStartDate" onchange="renderReports()" class="bg-white border border-gray-300 rounded-md px-2 py-1 text-xs focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                    <div class="flex items-center gap-1.5 text-xs text-gray-700 font-medium">
+                        <span>ដល់៖</span>
+                        <input type="datetime-local" step="1" id="customEndDate" onchange="renderReports()" class="bg-white border border-gray-300 rounded-md px-2 py-1 text-xs focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -312,12 +329,42 @@
         </div>
     </div>
 
+    <!-- Modal for Managing Custom Accounts -->
+    <div id="accountsModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <span>⚙️</span> គ្រប់គ្រងគណនី / កាបូបលុយ
+                </h3>
+                <button onclick="closeAccountsModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
+            </div>
+            
+            <div class="space-y-4 mb-6">
+                <!-- Add New Account Form -->
+                <div class="flex gap-2">
+                    <input type="text" id="newAccountName" placeholder="ឈ្មោះគណនីថ្មី (ឧ. Wing, Canadia...)" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <button onclick="addNewAccount()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition">បន្ថែម</button>
+                </div>
+
+                <p class="text-xs text-gray-400">បញ្ជីគណនីបច្ចុប្បន្ន (អាចកែឈ្មោះ ឬចុចលុបបាន)៖</p>
+
+                <!-- List of Existing Accounts -->
+                <div class="max-h-60 overflow-y-auto space-y-2 pr-1" id="accountsListContainer">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeAccountsModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បិទ</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase SDK Modules -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getDatabase, ref, onValue, set, push, remove, update } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+        import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
-        // User's Exact Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyBo9Wq8tNJ5UC0HULZaH2TjZDa6oBEQtl0",
             authDomain: "my-finance-app-531c4.firebaseapp.com",
@@ -328,26 +375,23 @@
             appId: "1:465702728125:web:850252ec0c20a09ebd62d4"
         };
 
-        let app, db;
         try {
-            app = initializeApp(firebaseConfig);
-            db = getDatabase(app);
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase(app);
+
+            // Export Firebase DB handlers to window object
             window.firebaseDb = db;
             window.firebaseRef = ref;
             window.firebaseSet = set;
-            window.firebasePush = push;
             window.firebaseRemove = remove;
-            window.firebaseUpdate = update;
-            window.firebaseOnValue = onValue;
 
-            // Update UI status to Connected
             const statusBadge = document.getElementById('cloudStatusBadge');
             if (statusBadge) {
                 statusBadge.className = "bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5";
-                statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> 🟢 Cloud រួចរាល់`;
+                statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> 🟢 ភ្ជាប់ Cloud រួចរាល់`;
             }
 
-            // Realtime Sync Listener
+            // Realtime Sync Listener for Transactions
             const txRef = ref(db, 'transactions');
             onValue(txRef, (snapshot) => {
                 const data = snapshot.val();
@@ -364,11 +408,24 @@
                 updateDashboard();
             }, (error) => {
                 console.error("Firebase Read Error:", error);
-                const statusBadge = document.getElementById('cloudStatusBadge');
                 if (statusBadge) {
                     statusBadge.className = "bg-red-500/20 text-red-200 border border-red-400/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5";
                     statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400"></span> 🔴 បរាជ័យក្នុងការភ្ជាប់`;
                 }
+            });
+
+            // Realtime Sync Listener for Accounts
+            const accRef = ref(db, 'accounts');
+            onValue(accRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data && Array.isArray(data)) {
+                    state.accounts = data;
+                } else if (data && typeof data === 'object') {
+                    state.accounts = Object.values(data);
+                }
+                renderFilterAccounts();
+                renderTable();
+                updateDashboard();
             });
 
         } catch (e) {
@@ -381,9 +438,20 @@
         const STORAGE_KEY = 'financeProData';
         let state = {
             exchangeRate: 4100,
+            accounts: ['ABA', 'AC', 'Wallet', 'Savings'],
             transactions: []
         };
         let charts = { expense: null, trend: null };
+
+        function formatForDateTimeInput(dStr) {
+            if (!dStr) return '';
+            if (dStr.length === 10) return dStr + 'T00:00:00';
+            if (dStr.includes('T')) return dStr.slice(0, 19);
+            const d = new Date(dStr);
+            if (isNaN(d.getTime())) return dStr;
+            const now = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+            return now.toISOString().slice(0, 19);
+        }
 
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
@@ -391,7 +459,12 @@
 
         /* === INITIALIZATION & STORAGE === */
         window.onload = () => {
+            const savedAccs = localStorage.getItem('financeProAccounts');
+            if (savedAccs) {
+                try { state.accounts = JSON.parse(savedAccs); } catch(e){}
+            }
             document.getElementById('exchangeRate').value = state.exchangeRate;
+            renderFilterAccounts();
             renderTable();
             updateDashboard();
         };
@@ -399,6 +472,18 @@
         function saveStateToCloud() {
             // Save to Local Storage as backup
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            updateDashboard();
+        }
+
+        function saveAccountsToCloud() {
+            localStorage.setItem('financeProAccounts', JSON.stringify(state.accounts));
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                const db = window.firebaseDb;
+                const accRef = window.firebaseRef(db, 'accounts');
+                window.firebaseSet(accRef, state.accounts).catch(err => console.error("Firebase Accounts Save Error:", err));
+            }
+            renderFilterAccounts();
+            renderTable();
             updateDashboard();
         }
 
@@ -452,6 +537,16 @@
         }
 
         /* === TABLE RENDERING & LOGIC === */
+        function renderFilterAccounts() {
+            const filterSelect = document.getElementById('filterAccount');
+            if (!filterSelect) return;
+            const currentVal = filterSelect.value || 'ALL';
+            filterSelect.innerHTML = `<option value="ALL">គ្រប់គណនី</option>`;
+            state.accounts.forEach(acc => {
+                filterSelect.innerHTML += `<option value="${acc}" ${currentVal === acc ? 'selected' : ''}>${acc}</option>`;
+            });
+        }
+
         function renderTable() {
             const tbody = document.getElementById('tableBody');
             const searchQ = document.getElementById('searchInput').value.toLowerCase();
@@ -471,21 +566,24 @@
                 if(tx.cur === 'USD') { tUSD.in += tx.inc; tUSD.out += tx.exp; }
                 else { tKHR.in += tx.inc; tKHR.out += tx.exp; }
 
+                // Build Account Options dynamically
+                let accOptsHtml = state.accounts.map(a => `<option value="${a}" ${tx.acc===a?'selected':''}>${a}</option>`).join('');
+                if (!state.accounts.includes(tx.acc) && tx.acc) {
+                    accOptsHtml += `<option value="${tx.acc}" selected>${tx.acc}</option>`;
+                }
+
                 // Build Row HTML
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-blue-50/50 transition-colors group";
                 
                 tr.innerHTML = `
                     <td class="px-3 py-2 text-sm text-gray-500 text-center">${rowCount++}</td>
-                    <td class="px-3 py-2"><input type="date" value="${tx.date}" onchange="updateTx('${tx.id}', 'date', this.value)" class="editable-input text-sm"></td>
+                    <td class="px-3 py-2"><input type="datetime-local" step="1" value="${formatForDateTimeInput(tx.date)}" onchange="updateTx('${tx.id}', 'date', this.value)" class="editable-input text-xs font-mono"></td>
                     <td class="px-3 py-2"><input type="text" value="${tx.cat}" onchange="updateTx('${tx.id}', 'cat', this.value)" class="editable-input text-sm"></td>
                     <td class="px-3 py-2"><input type="text" value="${tx.desc}" onchange="updateTx('${tx.id}', 'desc', this.value)" class="editable-input text-sm"></td>
                     <td class="px-3 py-2">
-                        <select onchange="updateTx('${tx.id}', 'acc', this.value)" class="editable-input text-sm">
-                            <option value="ABA" ${tx.acc==='ABA'?'selected':''}>កុង ABA</option>
-                            <option value="AC" ${tx.acc==='AC'?'selected':''}>កុង AC</option>
-                            <option value="Wallet" ${tx.acc==='Wallet'?'selected':''}>កាបូបលុយ</option>
-                            <option value="Savings" ${tx.acc==='Savings'?'selected':''}>លុយសន្សំ</option>
+                        <select onchange="updateTx('${tx.id}', 'acc', this.value)" class="editable-input text-sm font-medium">
+                            ${accOptsHtml}
                         </select>
                     </td>
                     <td class="px-3 py-2">
@@ -517,10 +615,12 @@
         }
 
         function addRow() {
-            const today = new Date().toISOString().split('T')[0];
+            const now = new Date();
+            const localIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+            const defaultAcc = state.accounts.length > 0 ? state.accounts[0] : 'Wallet';
             const newTx = {
                 id: generateId(),
-                date: today, cat: 'ផ្សេងៗ', desc: '', acc: 'Wallet', cur: 'USD', inc: 0, exp: 0
+                date: localIso, cat: 'ផ្សេងៗ', desc: '', acc: defaultAcc, cur: 'USD', inc: 0, exp: 0
             };
             state.transactions.push(newTx);
             pushTxToFirebase(newTx);
@@ -581,16 +681,96 @@
             deleteTargetId = null;
         }
 
+        /* === ACCOUNT MANAGEMENT MODAL LOGIC === */
+        function openAccountsModal() {
+            renderAccountsList();
+            document.getElementById('accountsModal').classList.remove('hidden');
+        }
+
+        function closeAccountsModal() {
+            document.getElementById('accountsModal').classList.add('hidden');
+        }
+
+        function renderAccountsList() {
+            const container = document.getElementById('accountsListContainer');
+            container.innerHTML = '';
+            if (state.accounts.length === 0) {
+                container.innerHTML = `<div class="text-xs text-gray-400 text-center py-2">គ្មានគណនីទេ</div>`;
+                return;
+            }
+            state.accounts.forEach((acc, index) => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between p-2.5 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 text-sm';
+                item.innerHTML = `
+                    <input type="text" value="${acc}" onchange="editAccountName(${index}, this.value)" class="bg-transparent font-semibold text-gray-800 outline-none focus:bg-white focus:px-2 focus:py-1 focus:rounded border border-transparent focus:border-blue-400">
+                    <button onclick="deleteAccount(${index})" class="text-red-500 hover:text-red-700 p-1 font-bold text-xs bg-red-50 hover:bg-red-100 rounded transition" title="លុបគណនី">
+                        🗑️ លុប
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function addNewAccount() {
+            const input = document.getElementById('newAccountName');
+            const name = input.value.trim();
+            if (!name) return;
+            if (state.accounts.includes(name)) {
+                alert('ឈ្មោះគណនីនេះមានរួចហើយ!');
+                return;
+            }
+            state.accounts.push(name);
+            input.value = '';
+            saveAccountsToCloud();
+            renderAccountsList();
+        }
+
+        function editAccountName(index, newName) {
+            newName = newName.trim();
+            if (!newName) return;
+            const oldName = state.accounts[index];
+            if (oldName === newName) return;
+
+            // Update transactions that used old account name
+            state.transactions.forEach(tx => {
+                if (tx.acc === oldName) {
+                    tx.acc = newName;
+                    pushTxToFirebase(tx);
+                }
+            });
+
+            state.accounts[index] = newName;
+            saveAccountsToCloud();
+            renderAccountsList();
+        }
+
+        function deleteAccount(index) {
+            const accName = state.accounts[index];
+            const inUse = state.transactions.some(tx => tx.acc === accName);
+            if (inUse) {
+                if (!confirm(`គណនី "${accName}" មានប្រតិបត្តិការនៅក្នុងប្រព័ន្ធ។ តើអ្នកពិតជាចង់លុបមែនទេ?`)) {
+                    return;
+                }
+            }
+            state.accounts.splice(index, 1);
+            saveAccountsToCloud();
+            renderAccountsList();
+        }
+
         /* === DASHBOARD & CHARTS === */
         function updateDashboard() {
-            let accBalances = {
-                'ABA': { usd:0, khr:0 }, 'AC': { usd:0, khr:0 },
-                'Wallet': { usd:0, khr:0 }, 'Savings': { usd:0, khr:0 }
-            };
+            let accBalances = {};
+            state.accounts.forEach(acc => {
+                accBalances[acc] = { usd:0, khr:0 };
+            });
+
             let totalUSD = 0, totalKHR = 0;
 
             // Compute Balances
             state.transactions.forEach(tx => {
+                if (!accBalances[tx.acc]) {
+                    accBalances[tx.acc] = { usd: 0, khr: 0 };
+                }
                 const bal = tx.inc - tx.exp;
                 if(tx.cur === 'USD') {
                     accBalances[tx.acc].usd += bal;
@@ -605,16 +785,9 @@
             const combinedNet = totalUSD + (totalKHR / state.exchangeRate);
             document.getElementById('globalNetWorth').textContent = formatMoney(combinedNet, 'USD');
 
-            // Render Cards
+            // Render Cards dynamically
             const cardGrid = document.getElementById('dashboardCards');
             cardGrid.innerHTML = '';
-            const accIcons = {
-                'ABA': '<svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 4v8h4V8H6zm6 0v8h6V8h-6z"/></svg>',
-                'AC': '<svg class="w-6 h-6 text-indigo-500" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12" stroke="white" stroke-width="2"/></svg>',
-                'Wallet': '<svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>',
-                'Savings': '<svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
-            };
-            const accNames = { 'ABA': 'កុង ABA', 'AC': 'កុង AC', 'Wallet': 'កាបូបលុយ', 'Savings': 'លុយសន្សំ' };
 
             Object.keys(accBalances).forEach(key => {
                 const b = accBalances[key];
@@ -622,7 +795,8 @@
                 cardGrid.innerHTML += `
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between ${!active ? 'opacity-50' : ''}">
                         <div class="flex items-center gap-2 mb-3">
-                            ${accIcons[key]} <span class="font-bold text-gray-700">${accNames[key]}</span>
+                            <span class="p-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold">💳</span>
+                            <span class="font-bold text-gray-700">${key}</span>
                         </div>
                         <div>
                             <div class="text-lg font-black ${b.usd < 0 ? 'text-red-500' : 'text-slate-800'}">${formatMoney(b.usd, 'USD')}</div>
@@ -712,18 +886,43 @@
         }
 
         /* === REPORTING === */
+        function toggleCustomPeriod() {
+            const periodType = document.getElementById('reportPeriod').value;
+            const container = document.getElementById('customPeriodContainer');
+            if (periodType === 'custom') {
+                container.classList.remove('hidden');
+                const startEl = document.getElementById('customStartDate');
+                const endEl = document.getElementById('customEndDate');
+                if(!startEl.value) {
+                    const d = new Date(); d.setHours(0,0,0,0);
+                    startEl.value = formatForDateTimeInput(d.toISOString());
+                }
+                if(!endEl.value) {
+                    const now = new Date();
+                    endEl.value = formatForDateTimeInput(now.toISOString());
+                }
+            } else {
+                container.classList.add('hidden');
+            }
+            renderReports();
+        }
+
         function getPeriodKey(dateStr, period) {
             if(!dateStr) return 'គ្មានកាលបរិច្ឆេទ';
             const d = new Date(dateStr);
-            const year = d.getFullYear(), month = d.getMonth(), date = d.getDate();
+            if (isNaN(d.getTime())) return dateStr;
+            const year = d.getFullYear(), month = d.getMonth();
 
             switch(period) {
-                case 'daily': return dateStr;
+                case 'daily': return dateStr.split('T')[0] || dateStr;
                 case 'weekly': 
                     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
                     const w = Math.ceil((((d - new Date(Date.UTC(d.getUTCFullYear(),0,1)))/86400000)+1)/7);
                     return `${year} សប្តាហ៍ទី ${w}`;
                 case 'monthly': return `${year}-${(month+1).toString().padStart(2,'0')}`;
+                case 'quarterly':
+                    const q = Math.floor(month / 3) + 1;
+                    return `${year} ត្រីមាសទី ${q} (Q${q})`;
                 case 'yearly': return `${year}`;
                 default: return dateStr;
             }
@@ -733,9 +932,22 @@
             const periodType = document.getElementById('reportPeriod').value;
             let pData = {}, cData = {};
 
+            const startVal = document.getElementById('customStartDate').value;
+            const endVal = document.getElementById('customEndDate').value;
+
             state.transactions.forEach(r => {
                 if(!r.date && r.inc === 0 && r.exp === 0) return; 
-                const pKey = getPeriodKey(r.date, periodType);
+
+                // Custom Date & Time Filter Logic
+                if (periodType === 'custom') {
+                    if (startVal && r.date < startVal) return;
+                    if (endVal && r.date > endVal) return;
+                }
+
+                const pKey = (periodType === 'custom') 
+                    ? `ចន្លោះពេលជ្រើសរើស (${startVal ? startVal.replace('T', ' ') : 'ដើមដំបូង'} ដល់ ${endVal ? endVal.replace('T', ' ') : 'បច្ចុប្បន្ន'})`
+                    : getPeriodKey(r.date, periodType);
+
                 const cat = r.cat || 'ផ្សេងៗ';
                 const cur = r.cur;
 
