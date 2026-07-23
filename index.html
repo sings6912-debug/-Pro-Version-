@@ -148,6 +148,17 @@
             background-color: #27272a !important;
             color: #f8fafc !important;
         }
+        /* Search and Filter Inputs Contrast Fixes for Dark Mode */
+        body.theme-aba-dark #searchInput {
+            background-color: #27272a !important;
+            color: #f8fafc !important;
+            border-color: #3f3f46 !important;
+        }
+        body.theme-aba-dark #filterAccount {
+            background-color: #27272a !important;
+            color: #f8fafc !important;
+            border-color: #3f3f46 !important;
+        }
         /* Report Table Text Contrast Fix in Dark Mode */
         body.theme-aba-dark td, body.theme-aba-dark th {
             color: #f8fafc !important;
@@ -355,11 +366,11 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                             <i class="fa-solid fa-magnifying-glass text-xs"></i>
                         </div>
-                        <input type="text" id="searchInput" oninput="renderTable()" placeholder="ស្វែងរក..." class="block w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-slate-800">
+                        <input type="text" id="searchInput" oninput="renderTable()" placeholder="ស្វែងរក..." class="block w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-slate-900 font-bold outline-none">
                     </div>
                     <!-- Filter Account & Settings -->
                     <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                        <select id="filterAccount" onchange="renderTable()" class="block w-32 py-2 px-3 border border-gray-300 bg-white rounded-lg text-sm shadow-sm focus:outline-none focus:ring-blue-500 text-slate-800">
+                        <select id="filterAccount" onchange="renderTable()" class="block w-32 py-2 px-3 border border-gray-300 bg-white rounded-lg text-sm shadow-sm focus:outline-none focus:ring-blue-500 text-slate-900 font-bold">
                         </select>
                         <button onclick="openAccountsModal()" class="px-2.5 py-2 text-xs bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-lg border border-slate-300 flex items-center gap-1 transition whitespace-nowrap">
                             ⚙️ គណនី
