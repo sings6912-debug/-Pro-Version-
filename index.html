@@ -1898,6 +1898,10 @@
         };
 
         window.drawCharts = function() {
+            const isDark = window.state.themeStyle === 'aba-dark' || window.state.themeStyle === 'slate' || document.body.classList.contains('theme-dark');
+            const textColor = isDark ? '#ffffff' : '#0f172a';
+            const gridColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)';
+
             const currentMonth = new Date().toISOString().substring(0, 7);
             let catExpenses = {}; let monthTrend = {}; 
 
@@ -1938,7 +1942,16 @@
                             borderWidth: 0
                         }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { 
+                            legend: { 
+                                position: 'right',
+                                labels: { color: textColor, font: { weight: 'bold' } }
+                            } 
+                        } 
+                    }
                 });
             }
 
@@ -1954,7 +1967,26 @@
                             { label: 'ចំណាយ ($)', data: Object.values(monthTrend).map(m=>m.exp), backgroundColor: '#ef4444', borderRadius: 4 }
                         ]
                     },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: {
+                            legend: {
+                                labels: { color: textColor, font: { weight: 'bold' } }
+                            }
+                        },
+                        scales: { 
+                            x: {
+                                ticks: { color: textColor, font: { weight: 'bold' } },
+                                grid: { color: gridColor }
+                            },
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { color: textColor, font: { weight: 'bold' } },
+                                grid: { color: gridColor }
+                            } 
+                        } 
+                    }
                 });
             }
         };
