@@ -823,6 +823,10 @@
                     <label class="block text-xs font-bold mb-1 modal-label-text">ជ្រើសរើសផ្នែក/ប្រភេទ៖</label>
                     <select id="bgCategory" class="modal-item-input w-full p-2.5 text-sm font-medium"></select>
                 </div>
+                <div>
+                    <label class="block text-xs font-bold mb-1 modal-label-text">🔗 ភ្ជាប់ជាមួយគណនីធនាគារ/កាបូបលុយ៖</label>
+                    <select id="bgLinkedAcc" class="modal-item-input w-full p-2.5 text-sm font-bold text-blue-600 dark:text-blue-400"></select>
+                </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold mb-1 modal-label-text">កំណត់ថវិកាអតិបរមា៖</label>
@@ -1786,7 +1790,8 @@
             window.state.budgets.forEach(b => {
                 let spent = 0;
                 window.state.transactions.forEach(tx => {
-                    if (tx.date && tx.date.substring(0, 7) === currentMonth && tx.cat === b.cat && tx.cur === b.cur) {
+                    const matchAcc = (!b.linkedAcc || b.linkedAcc === 'ALL' || tx.acc === b.linkedAcc);
+                    if (tx.date && tx.date.substring(0, 7) === currentMonth && tx.cat === b.cat && tx.cur === b.cur && matchAcc) {
                         spent += (tx.exp || 0);
                     }
                 });
@@ -1797,10 +1802,15 @@
                 if (pct >= 80 && pct < 100) { colorClass = "bg-amber-500"; textClass = "text-amber-600 dark:text-amber-400"; }
                 if (pct >= 100) { colorClass = "bg-red-500"; textClass = "text-red-600 dark:text-rose-400"; }
 
+                const isLinked = b.linkedAcc && b.linkedAcc !== 'ALL';
+
                 container.innerHTML += `
                     <div class="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
                         <div class="flex justify-between items-center mb-1 text-xs font-bold">
-                            <span class="text-slate-800 dark:text-slate-100">${b.cat} (${b.cur})</span>
+                            <span class="text-slate-800 dark:text-slate-100 flex items-center gap-1">
+                                ${b.cat} (${b.cur})
+                                ${isLinked ? `<span class="text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded border border-blue-300" title="គិតតែពីកុង ${b.linkedAcc}">🔗 ${b.linkedAcc}</span>` : ''}
+                            </span>
                             <span class="${textClass}">${window.formatMoney(spent, b.cur)} / ${window.formatMoney(b.limit, b.cur)} (${pct}%)</span>
                         </div>
                         <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
@@ -1818,22 +1828,29 @@
         window.openBudgetModal = function(editId = null) {
             const catSel = document.getElementById('bgCategory');
             const curSel = document.getElementById('bgCurrency');
+            const accSel = document.getElementById('bgLinkedAcc');
             const saveBtn = document.getElementById('bgSaveBtn');
 
-            catSel.innerHTML = window.state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
-            curSel.innerHTML = window.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+            if (catSel) catSel.innerHTML = window.state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
+            if (curSel) curSel.innerHTML = window.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+            if (accSel) {
+                accSel.innerHTML = `<option value="ALL">គ្រប់គណនីទាំងអស់ (ALL)</option>` +
+                    window.state.accounts.map(a => `<option value="${a}">🔗 ភ្ជាប់កុង ${a}</option>`).join('');
+            }
             
             if (editId) {
                 const budget = window.state.budgets.find(b => b.id === editId);
                 if (budget) {
-                    catSel.value = budget.cat;
-                    curSel.value = budget.cur;
+                    if (catSel) catSel.value = budget.cat;
+                    if (curSel) curSel.value = budget.cur;
+                    if (accSel) accSel.value = budget.linkedAcc || 'ALL';
                     document.getElementById('bgLimit').value = budget.limit;
                     document.getElementById('budgetModal').setAttribute('data-edit-id', editId);
                     if (saveBtn) saveBtn.textContent = '✏️ រក្សាទុកការកែប្រែ';
                 }
             } else {
                 document.getElementById('bgLimit').value = '';
+                if (accSel) accSel.value = 'ALL';
                 document.getElementById('budgetModal').removeAttribute('data-edit-id');
                 if (saveBtn) saveBtn.textContent = 'បន្ថែម/រក្សាទុកថវិកា';
             }
@@ -1847,6 +1864,7 @@
             const cat = document.getElementById('bgCategory').value;
             const limit = parseFloat(document.getElementById('bgLimit').value) || 0;
             const cur = document.getElementById('bgCurrency').value;
+            const linkedAcc = document.getElementById('bgLinkedAcc')?.value || 'ALL';
             const editId = document.getElementById('budgetModal').getAttribute('data-edit-id');
 
             if (limit <= 0) return;
@@ -1857,14 +1875,15 @@
                     budget.cat = cat;
                     budget.limit = limit;
                     budget.cur = cur;
+                    budget.linkedAcc = linkedAcc;
                 }
                 window.showToast('បានកែប្រែថវិកា', 'success');
             } else {
-                const existing = window.state.budgets.find(b => b.cat === cat && b.cur === cur);
+                const existing = window.state.budgets.find(b => b.cat === cat && b.cur === cur && (b.linkedAcc || 'ALL') === linkedAcc);
                 if (existing) {
                     existing.limit = limit;
                 } else {
-                    window.state.budgets.push({ id: window.generateId(), cat, limit, cur });
+                    window.state.budgets.push({ id: window.generateId(), cat, limit, cur, linkedAcc });
                 }
                 window.showToast('បានរក្សាទុកថវិកា', 'success');
             }
@@ -1889,9 +1908,10 @@
             if (!container) return;
             container.innerHTML = '';
             window.state.budgets.forEach(b => {
+                const accLabel = (b.linkedAcc && b.linkedAcc !== 'ALL') ? ` 🔗 (${b.linkedAcc})` : '';
                 container.innerHTML += `
                     <div class="flex items-center justify-between p-2 bg-indigo-50/50 dark:bg-zinc-800/50 rounded border border-indigo-100 dark:border-zinc-700 text-xs">
-                        <span class="font-bold modal-label-text">${b.cat}: ${window.formatMoney(b.limit, b.cur)}</span>
+                        <span class="font-bold modal-label-text">${b.cat}${accLabel}: ${window.formatMoney(b.limit, b.cur)}</span>
                         <div class="flex gap-2">
                             <button onclick="openBudgetModal('${b.id}')" class="text-blue-500 font-bold hover:underline">✏️ កែ</button>
                             <button onclick="deleteBudget('${b.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
