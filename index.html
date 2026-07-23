@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro</title>
+    <title>ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro (Cloud Sync)</title>
     
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -81,11 +81,19 @@
             
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10 gap-6">
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន
-                    </h1>
-                    <p class="text-blue-200 mt-2 text-sm">កត់ត្រា, វិភាគ, និងគ្រប់គ្រងចំណូលចំណាយរបស់អ្នកយ៉ាងឆ្លាតវៃ</p>
+                    <div class="flex items-center gap-3">
+                        <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន
+                        </h1>
+                    </div>
+                    <div class="flex items-center gap-2 mt-2">
+                        <span id="cloudStatusBadge" class="bg-amber-500/20 text-amber-200 border border-amber-400/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                            កំពុងភ្ជាប់ Cloud...
+                        </span>
+                        <p class="text-blue-200 text-xs md:text-sm">ទិន្នន័យ Sync ស្វ័យប្រវត្តិលើ Cloud ☁️</p>
+                    </div>
                 </div>
 
                 <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-xl flex items-center gap-6 min-w-[300px]">
@@ -123,7 +131,6 @@
 
         <!-- VIEW: DASHBOARD -->
         <div id="view-dashboard" class="space-y-6">
-            
             <!-- Cards: Account Balances -->
             <h2 class="text-lg font-bold text-gray-700 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" /><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd" /></svg>
@@ -305,6 +312,70 @@
         </div>
     </div>
 
+    <!-- Firebase SDK Modules -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getDatabase, ref, onValue, set, push, remove, update } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
+        // User's Exact Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBo9Wq8tNJ5UC0HULZaH2TjZDa6oBEQtl0",
+            authDomain: "my-finance-app-531c4.firebaseapp.com",
+            databaseURL: "https://my-finance-app-531c4-default-rtdb.firebaseio.com",
+            projectId: "my-finance-app-531c4",
+            storageBucket: "my-finance-app-531c4.firebasestorage.app",
+            messagingSenderId: "465702728125",
+            appId: "1:465702728125:web:850252ec0c20a09ebd62d4"
+        };
+
+        let app, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getDatabase(app);
+            window.firebaseDb = db;
+            window.firebaseRef = ref;
+            window.firebaseSet = set;
+            window.firebasePush = push;
+            window.firebaseRemove = remove;
+            window.firebaseUpdate = update;
+            window.firebaseOnValue = onValue;
+
+            // Update UI status to Connected
+            const statusBadge = document.getElementById('cloudStatusBadge');
+            if (statusBadge) {
+                statusBadge.className = "bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5";
+                statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> 🟢 Cloud រួចរាល់`;
+            }
+
+            // Realtime Sync Listener
+            const txRef = ref(db, 'transactions');
+            onValue(txRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const loadedTxs = [];
+                    Object.keys(data).forEach(key => {
+                        loadedTxs.push({ id: key, ...data[key] });
+                    });
+                    state.transactions = loadedTxs;
+                } else {
+                    state.transactions = [];
+                }
+                renderTable();
+                updateDashboard();
+            }, (error) => {
+                console.error("Firebase Read Error:", error);
+                const statusBadge = document.getElementById('cloudStatusBadge');
+                if (statusBadge) {
+                    statusBadge.className = "bg-red-500/20 text-red-200 border border-red-400/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5";
+                    statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400"></span> 🔴 បរាជ័យក្នុងការភ្ជាប់`;
+                }
+            });
+
+        } catch (e) {
+            console.error("Firebase Init Error:", e);
+        }
+    </script>
+
     <script>
         /* === STATE MANAGEMENT === */
         const STORAGE_KEY = 'financeProData';
@@ -314,41 +385,45 @@
         };
         let charts = { expense: null, trend: null };
 
-        // Generate dummy data if fresh start
-        function getInitialData() {
-            const today = new Date().toISOString().split('T')[0];
-            return [
-                { id: generateId(), date: today, cat: 'ប្រាក់ខែ', desc: 'ប្រាក់ខែប្រចាំខែ', acc: 'ABA', cur: 'USD', inc: 1500, exp: 0 },
-                { id: generateId(), date: today, cat: 'អាហារ', desc: 'ញ៉ាំបាយ', acc: 'Wallet', cur: 'KHR', inc: 0, exp: 15000 },
-                { id: generateId(), date: today, cat: 'សាំង', desc: 'ចាក់សាំងឡាន', acc: 'AC', cur: 'USD', inc: 0, exp: 20 },
-            ];
-        }
-
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
         }
 
         /* === INITIALIZATION & STORAGE === */
         window.onload = () => {
-            const savedData = localStorage.getItem(STORAGE_KEY);
-            if (savedData) {
-                try {
-                    state = JSON.parse(savedData);
-                } catch (e) { console.error("Error parsing local storage", e); }
-            } else {
-                state.transactions = getInitialData();
-                saveState();
-            }
-            
             document.getElementById('exchangeRate').value = state.exchangeRate;
-            
-            renderTable();      // Render table first
-            updateDashboard();  // Compute stats and charts
+            renderTable();
+            updateDashboard();
         };
 
-        function saveState() {
+        function saveStateToCloud() {
+            // Save to Local Storage as backup
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
             updateDashboard();
+        }
+
+        function pushTxToFirebase(tx) {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                const db = window.firebaseDb;
+                const newRef = window.firebaseRef(db, 'transactions/' + tx.id);
+                window.firebaseSet(newRef, tx).catch(err => console.error("Firebase Save Error:", err));
+            }
+        }
+
+        function removeTxFromFirebase(id) {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
+                const db = window.firebaseDb;
+                const txRef = window.firebaseRef(db, 'transactions/' + id);
+                window.firebaseRemove(txRef).catch(err => console.error("Firebase Delete Error:", err));
+            }
+        }
+
+        function clearAllFromFirebase() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
+                const db = window.firebaseDb;
+                const txRef = window.firebaseRef(db, 'transactions');
+                window.firebaseRemove(txRef).catch(err => console.error("Firebase Clear Error:", err));
+            }
         }
 
         /* === UI NAVIGATION === */
@@ -373,7 +448,7 @@
         function updateExchangeRate() {
             const rate = parseFloat(document.getElementById('exchangeRate').value) || 4100;
             state.exchangeRate = rate;
-            saveState();
+            saveStateToCloud();
         }
 
         /* === TABLE RENDERING & LOGIC === */
@@ -443,11 +518,13 @@
 
         function addRow() {
             const today = new Date().toISOString().split('T')[0];
-            state.transactions.push({
+            const newTx = {
                 id: generateId(),
                 date: today, cat: 'ផ្សេងៗ', desc: '', acc: 'Wallet', cur: 'USD', inc: 0, exp: 0
-            });
-            saveState();
+            };
+            state.transactions.push(newTx);
+            pushTxToFirebase(newTx);
+            saveStateToCloud();
             renderTable();
             // Scroll to bottom
             const tableContainer = document.getElementById('mainTable').parentElement;
@@ -459,7 +536,8 @@
             if (tx) {
                 if(field === 'inc' || field === 'exp') tx[field] = parseFloat(value) || 0;
                 else tx[field] = value;
-                saveState();
+                pushTxToFirebase(tx);
+                saveStateToCloud();
                 renderTable();
             }
         }
@@ -488,10 +566,12 @@
         function executeDelete() {
             if (isClearAll) {
                 state.transactions = [];
+                clearAllFromFirebase();
             } else if (deleteTargetId) {
                 state.transactions = state.transactions.filter(t => t.id !== deleteTargetId);
+                removeTxFromFirebase(deleteTargetId);
             }
-            saveState();
+            saveStateToCloud();
             renderTable();
             closeModal();
         }
@@ -693,7 +773,6 @@
 
         /* === EXPORT & IMPORT === */
         function exportToHTML() {
-            // Rebuild a clean HTML table for export
             let html = `<table border="1" style="border-collapse:collapse; width:100%; text-align:left; font-family:sans-serif;">
                 <tr style="background:#f1f5f9;"><th>កាលបរិច្ឆេទ</th><th>ផ្នែក</th><th>ការពិពណ៌នា</th><th>គណនី</th><th>រូបិយប័ណ្ណ</th><th>ចំណូល</th><th>ចំណាយ</th></tr>`;
             state.transactions.forEach(t => {
@@ -727,7 +806,6 @@
                 const workbook = XLSX.read(data, {type: 'array'});
                 const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
                 
-                // Skip header logic
                 let start = (rows.length > 0 && isNaN(parseFloat(rows[0][5]))) ? 1 : 0;
                 
                 for(let i=start; i<rows.length; i++) {
@@ -740,7 +818,7 @@
                         if(p.length===3) dateStr = `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
                     }
 
-                    state.transactions.push({
+                    const newTx = {
                         id: generateId(),
                         date: dateStr,
                         cat: r[1] || 'ផ្សេងៗ',
@@ -749,10 +827,12 @@
                         cur: ['USD','KHR'].includes(r[4]) ? r[4] : (r[4]?.toString().includes('៛') ? 'KHR' : 'USD'),
                         inc: parseFloat(r[5]) || 0,
                         exp: parseFloat(r[6]) || 0
-                    });
+                    };
+                    state.transactions.push(newTx);
+                    pushTxToFirebase(newTx);
                 }
                 event.target.value = '';
-                saveState();
+                saveStateToCloud();
                 renderTable();
             };
             reader.readAsArrayBuffer(file);
