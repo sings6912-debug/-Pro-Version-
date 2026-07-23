@@ -8,7 +8,7 @@
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- FontAwesome Icons for Eye, Edit, and Theme icons -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- SheetJS for Excel Import/Export -->
@@ -48,7 +48,6 @@
             background: #94a3b8; 
         }
 
-        /* Input styling to look readable across light and dark themes */
         .editable-input {
             width: 100%;
             background: transparent;
@@ -148,7 +147,7 @@
                             <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                             កំពុងភ្ជាប់ Cloud...
                         </span>
-                        <p class="text-blue-200 text-xs md:text-sm" id="displayAppSubtitle">ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️</p>
+                        <p class="text-blue-200 text-xs md:text-sm font-medium" id="displayAppSubtitle">ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️</p>
                     </div>
                 </div>
 
@@ -173,7 +172,6 @@
                         <div>
                             <div class="flex items-center justify-between text-blue-200 text-xs font-medium uppercase tracking-wider mb-1">
                                 <span>អត្រាប្តូរប្រាក់</span>
-                                <!-- Live Exchange Rate Fetch Button -->
                                 <button onclick="fetchLiveExchangeRate()" class="text-xs text-amber-300 hover:underline flex items-center gap-1" title="ទាញយកអត្រាប្តូរប្រាក់ជាក់ស្តែង">
                                     <i class="fa-solid fa-rotate text-[10px]" id="rateSyncSpin"></i>
                                     <span>Live</span>
@@ -186,7 +184,7 @@
                         </div>
                     </div>
 
-                    <!-- Customize Screen / Theme Edit Button (Like ABA) -->
+                    <!-- Customize Screen / Theme Edit Button -->
                     <button onclick="openCustomizeModal()" class="px-3.5 py-3 bg-amber-400 hover:bg-amber-300 text-slate-900 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition">
                         <i class="fa-solid fa-sliders"></i>
                         <span>🎨 កែសម្រួលអេក្រង់</span>
@@ -225,9 +223,7 @@
                         <i class="fa-solid fa-eye-slash"></i> <span id="eyeBtnText">បាំង/បង្ហាញសមតុល្យ</span>
                     </button>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboardCards">
-                    <!-- Populated by JS -->
-                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboardCards"></div>
             </div>
 
             <!-- Monthly Budget Progress Bar Widget -->
@@ -240,9 +236,7 @@
                         ⚙️ កំណត់ថវិកា
                     </button>
                 </div>
-                <div id="budgetProgressContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Populated by JS -->
-                </div>
+                <div id="budgetProgressContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
 
             <!-- Charts Section -->
@@ -275,9 +269,7 @@
                     </span>
                     <button onclick="openShortcutModal()" class="text-[11px] text-blue-600 hover:underline font-bold">+ កែសម្រួលប៊ូតុងរហ័ស</button>
                 </div>
-                <div class="flex items-center gap-2 overflow-x-auto pb-1" id="shortcutsContainer">
-                    <!-- Populated dynamically -->
-                </div>
+                <div class="flex items-center gap-2 overflow-x-auto pb-1" id="shortcutsContainer"></div>
             </div>
 
             <!-- Controls & Filters -->
@@ -294,7 +286,6 @@
                     <!-- Filter Account & Settings -->
                     <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                         <select id="filterAccount" onchange="renderTable()" class="block w-32 py-2 px-3 border border-gray-300 bg-white rounded-lg text-sm shadow-sm focus:outline-none focus:ring-blue-500 text-slate-800">
-                            <!-- Populated dynamically -->
                         </select>
                         <button onclick="openAccountsModal()" class="px-2.5 py-2 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg border border-slate-300 flex items-center gap-1 transition whitespace-nowrap">
                             ⚙️ គណនី
@@ -354,9 +345,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody" class="bg-white divide-y divide-gray-100">
-                            <!-- Rendered via JS -->
-                        </tbody>
+                        <tbody id="tableBody" class="bg-white divide-y divide-gray-100"></tbody>
                         <tfoot class="bg-slate-50 border-t-2 border-gray-200">
                             <tr>
                                 <td colspan="6" class="px-4 py-4 text-sm font-bold text-gray-700 text-right">សរុប (រាយតាមខ្នាត/រូបិយប័ណ្ណ):</td>
@@ -454,7 +443,7 @@
 
     </div>
 
-    <!-- Modal for UI Customization, Titles & Background Images -->
+    <!-- Modal for UI Customization, Local File Upload, Titles, Text Colors & Wallpapers -->
     <div id="customizeModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
         <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg mx-4 transform transition-all text-slate-800">
             <div class="flex justify-between items-center mb-4 border-b pb-3">
@@ -466,19 +455,53 @@
             
             <div class="space-y-4 mb-6 max-h-[70vh] overflow-y-auto pr-1">
                 <!-- App Title Customization -->
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                    <label class="block text-xs font-bold text-gray-700 mb-1">✏️ កែប្រែឈ្មោះប្រព័ន្ធ (App Title)៖</label>
-                    <input type="text" id="cfgAppTitle" placeholder="ឈ្មោះប្រព័ន្ធ..." class="w-full p-2 border border-gray-300 rounded-lg text-sm mb-2 font-bold text-slate-900 bg-white">
-                    <label class="block text-xs font-bold text-gray-700 mb-1">📝 កែប្រែការរៀបរាប់ (Subtitle)៖</label>
-                    <input type="text" id="cfgAppSubtitle" placeholder="ការរៀបរាប់..." class="w-full p-2 border border-gray-300 rounded-lg text-xs text-slate-800 bg-white">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                    <label class="block text-xs font-bold text-gray-700">✏️ កែប្រែឈ្មោះប្រព័ន្ធ & ការរៀបរាប់៖</label>
+                    <div>
+                        <span class="text-[11px] text-gray-500">ឈ្មោះប្រព័ន្ធ (App Title):</span>
+                        <input type="text" id="cfgAppTitle" placeholder="ឈ្មោះប្រព័ន្ធ..." class="w-full p-2 border border-gray-300 rounded-lg text-sm font-bold text-slate-900 bg-white">
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-gray-500">ការរៀបរាប់ (Subtitle):</span>
+                        <input type="text" id="cfgAppSubtitle" placeholder="ការរៀបរាប់..." class="w-full p-2 border border-gray-300 rounded-lg text-xs text-slate-800 bg-white">
+                    </div>
                 </div>
 
-                <!-- Custom Background Image -->
+                <!-- Custom Text Colors -->
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                    <label class="block text-xs font-bold text-gray-700 mb-1">🖼️ ដាក់រូបភាព Background (បញ្ចូល Image Link/URL)៖</label>
+                    <label class="block text-xs font-bold text-gray-700 mb-2">🎨 កែប្រែពណ៌អក្សរចំណងជើង (Text Colors)៖</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] text-gray-600 mb-1">ពណ៌អក្សរចំណងជើង៖</label>
+                            <input type="color" id="cfgTitleColor" value="#ffffff" onchange="applyUiConfig()" class="w-full h-9 rounded border p-1 cursor-pointer bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-gray-600 mb-1">ពណ៌អក្សររៀបរាប់៖</label>
+                            <input type="color" id="cfgSubtitleColor" value="#bfdbfe" onchange="applyUiConfig()" class="w-full h-9 rounded border p-1 cursor-pointer bg-white">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Background Image (Local File & Link) -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                    <label class="block text-xs font-bold text-gray-700">🖼️ ដាក់រូបភាព Background (Wallpaper)៖</label>
+                    
+                    <!-- File Upload Input -->
+                    <div>
+                        <label class="block text-[11px] text-gray-600 mb-1">ជ្រើសរើសរូបភាពពីទូរស័ព្ទ/កុំព្យូទ័រ (Local Image)៖</label>
+                        <input type="file" id="cfgBgFileInput" accept="image/*" onchange="handleLocalBgUpload(event)" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                    </div>
+
+                    <div class="flex items-center gap-2 my-1">
+                        <div class="flex-1 h-px bg-gray-200"></div>
+                        <span class="text-[10px] text-gray-400 font-bold">ឬបញ្ចូល Link</span>
+                        <div class="flex-1 h-px bg-gray-200"></div>
+                    </div>
+
+                    <!-- URL Input -->
                     <div class="flex gap-2">
                         <input type="text" id="cfgBgImageUrl" placeholder="https://example.com/wallpaper.jpg" class="flex-1 p-2 border border-gray-300 rounded-lg text-xs text-slate-900 bg-white">
-                        <button onclick="clearBgImage()" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-xs font-bold rounded-lg text-slate-700">លុបរូប</button>
+                        <button onclick="clearBgImage()" class="px-3 py-1 bg-rose-100 hover:bg-rose-200 text-xs font-bold rounded-lg text-rose-700 transition">លុបរូប</button>
                     </div>
                 </div>
 
@@ -874,6 +897,8 @@
                     if (data.appSubtitle) state.appSubtitle = data.appSubtitle;
                     if (data.themeStyle) state.themeStyle = data.themeStyle;
                     if (data.bgImageUrl !== undefined) state.bgImageUrl = data.bgImageUrl;
+                    if (data.titleColor) state.titleColor = data.titleColor;
+                    if (data.subtitleColor) state.subtitleColor = data.subtitleColor;
                     applyUiConfig();
                 }
             });
@@ -887,9 +912,11 @@
         /* === STATE MANAGEMENT === */
         let state = {
             exchangeRate: 4100,
-            hideAmounts: false, // Eye hide toggle state
-            themeStyle: 'default', // 'default', 'aba-dark', 'slate'
+            hideAmounts: false, 
+            themeStyle: 'default',
             bgImageUrl: '',
+            titleColor: '#ffffff',
+            subtitleColor: '#bfdbfe',
             appTitle: 'ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន (Pro Cloud)',
             appSubtitle: 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️',
             accounts: ['🏦 ABA', '💳 AC', '👛 Wallet', '🐖 Savings', '⛽ កាតសាំង'],
@@ -942,6 +969,8 @@
                     state.themeStyle = parsed.themeStyle || state.themeStyle;
                     state.bgImageUrl = parsed.bgImageUrl || '';
                     state.hideAmounts = parsed.hideAmounts || false;
+                    state.titleColor = parsed.titleColor || '#ffffff';
+                    state.subtitleColor = parsed.subtitleColor || '#bfdbfe';
                 } catch(e) {}
             }
 
@@ -994,27 +1023,50 @@
             }
         }
 
-        /* === ABA THEME & CUSTOMIZE MODAL === */
+        /* === ABA THEME, CUSTOM WALLPAPER & TEXT COLOR MODAL === */
         function openCustomizeModal() {
             document.getElementById('cfgAppTitle').value = state.appTitle || '';
             document.getElementById('cfgAppSubtitle').value = state.appSubtitle || '';
             document.getElementById('cfgBgImageUrl').value = state.bgImageUrl || '';
+            document.getElementById('cfgTitleColor').value = state.titleColor || '#ffffff';
+            document.getElementById('cfgSubtitleColor').value = state.subtitleColor || '#bfdbfe';
             document.getElementById('customizeModal').classList.remove('hidden');
         }
+
         function closeCustomizeModal() {
             document.getElementById('customizeModal').classList.add('hidden');
         }
 
+        function handleLocalBgUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                state.bgImageUrl = e.target.result;
+                document.getElementById('cfgBgImageUrl').value = '';
+                applyUiConfig();
+                saveUiConfigToLocal();
+                saveUiConfigToCloud();
+            };
+            reader.readAsDataURL(file);
+        }
+
         function clearBgImage() {
             document.getElementById('cfgBgImageUrl').value = '';
+            document.getElementById('cfgBgFileInput').value = '';
             state.bgImageUrl = '';
             document.body.style.backgroundImage = 'none';
+            saveUiConfigToLocal();
+            saveUiConfigToCloud();
         }
 
         function saveUiCustomizations() {
             state.appTitle = document.getElementById('cfgAppTitle').value.trim() || 'ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន (Pro Cloud)';
             state.appSubtitle = document.getElementById('cfgAppSubtitle').value.trim() || 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️';
-            state.bgImageUrl = document.getElementById('cfgBgImageUrl').value.trim();
+            const urlVal = document.getElementById('cfgBgImageUrl').value.trim();
+            if (urlVal) state.bgImageUrl = urlVal;
+            state.titleColor = document.getElementById('cfgTitleColor').value || '#ffffff';
+            state.subtitleColor = document.getElementById('cfgSubtitleColor').value || '#bfdbfe';
 
             applyUiConfig();
             saveUiConfigToLocal();
@@ -1030,13 +1082,18 @@
         }
 
         function applyUiConfig() {
-            // Apply Titles
             const titleEl = document.getElementById('displayAppTitle');
             const subTitleEl = document.getElementById('displayAppSubtitle');
-            if (titleEl) titleEl.textContent = state.appTitle;
-            if (subTitleEl) subTitleEl.textContent = state.appSubtitle;
+            
+            if (titleEl) {
+                titleEl.textContent = state.appTitle;
+                titleEl.style.color = state.titleColor || '#ffffff';
+            }
+            if (subTitleEl) {
+                subTitleEl.textContent = state.appSubtitle;
+                subTitleEl.style.color = state.subtitleColor || '#bfdbfe';
+            }
 
-            // Apply Background Image if provided
             const body = document.getElementById('appBody');
             const hero = document.getElementById('heroCard');
 
@@ -1065,6 +1122,8 @@
                 appSubtitle: state.appSubtitle,
                 themeStyle: state.themeStyle,
                 bgImageUrl: state.bgImageUrl,
+                titleColor: state.titleColor,
+                subtitleColor: state.subtitleColor,
                 hideAmounts: state.hideAmounts
             }));
         }
@@ -1075,7 +1134,9 @@
                     appTitle: state.appTitle,
                     appSubtitle: state.appSubtitle,
                     themeStyle: state.themeStyle,
-                    bgImageUrl: state.bgImageUrl
+                    bgImageUrl: state.bgImageUrl,
+                    titleColor: state.titleColor,
+                    subtitleColor: state.subtitleColor
                 });
             }
         }
