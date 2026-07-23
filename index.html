@@ -148,13 +148,13 @@
             background-color: #27272a !important;
             color: #f8fafc !important;
         }
-        /* Search and Filter Inputs Contrast Fixes for Dark Mode */
-        body.theme-aba-dark #searchInput {
-            background-color: #27272a !important;
-            color: #f8fafc !important;
-            border-color: #3f3f46 !important;
+        /* Search and Filter Inputs Contrast Fixes */
+        #searchInput, #filterAccount {
+            background-color: #ffffff;
+            color: #0f172a !important;
+            border: 1px solid #cbd5e1;
         }
-        body.theme-aba-dark #filterAccount {
+        body.theme-aba-dark #searchInput, body.theme-aba-dark #filterAccount {
             background-color: #27272a !important;
             color: #f8fafc !important;
             border-color: #3f3f46 !important;
@@ -205,9 +205,56 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+
+        /* PIN Keypad styling */
+        .pin-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid #3b82f6;
+            transition: background-color 0.2s;
+        }
+        .pin-dot.filled {
+            background-color: #3b82f6;
+        }
     </style>
 </head>
 <body class="text-slate-800 antialiased min-h-screen pb-10" id="appBody">
+
+    <!-- PIN Security Lock Overlay -->
+    <div id="pinLockOverlay" class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-xl flex flex-col items-center justify-center text-white hidden">
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-blue-600/20 border border-blue-500/40 rounded-full flex items-center justify-center mx-auto mb-3 text-blue-400 text-2xl">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="text-xl font-bold" id="pinLockTitle">វាយបញ្ចូលលេខកូដ PIN ៤ ខ្ទង់</h2>
+            <p class="text-xs text-slate-400 mt-1">ដើម្បីចូលប្រើប្រាស់ប្រព័ន្ធហិរញ្ញវត្ថុ</p>
+        </div>
+
+        <!-- 4 PIN Dots -->
+        <div class="flex gap-4 mb-8">
+            <div class="pin-dot" id="dot-0"></div>
+            <div class="pin-dot" id="dot-1"></div>
+            <div class="pin-dot" id="dot-2"></div>
+            <div class="pin-dot" id="dot-3"></div>
+        </div>
+
+        <!-- Keypad -->
+        <div class="grid grid-cols-3 gap-4 w-64">
+            <button onclick="pressPin('1')" class="h-14 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-xl font-bold flex items-center justify-center transition active:scale-95">1</button>
+            <button onclick="pressPin('2')" class="h-14 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-xl font-bold flex items-center justify-center transition active:scale-95">2</button>
+            <button onclick="pressPin('3')" class="h-14 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-xl font-bold flex items-center justify-center transition active:scale-95">3</button>
+            <button onclick="pressPin('4')" class="h-14 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-xl font-bold flex items-center justify-center transition active:scale-95">4</button>
+            <button onclick="pressPin('5')" class="h-14 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-xl font-bold flex items-center justify-center transition active:scale-95">5</button>
+            <button onclick="pressPin('6')" class="h-14 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-xl font-bold flex items-center justify-center transition active:scale-95">6</button>
+            <button onclick="pressPin('7')" class="h-14 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-xl font-bold flex items-center justify-center transition active:scale-95">7</button>
+            <button onclick="pressPin('8')" class="h-14 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-xl font-bold flex items-center justify-center transition active:scale-95">8</button>
+            <button onclick="pressPin('9')" class="h-14 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-xl font-bold flex items-center justify-center transition active:scale-95">9</button>
+            <div></div>
+            <button onclick="pressPin('0')" class="h-14 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-xl font-bold flex items-center justify-center transition active:scale-95">0</button>
+            <button onclick="clearPin()" class="h-14 bg-rose-900/40 hover:bg-rose-800 text-rose-300 rounded-2xl text-sm font-bold flex items-center justify-center transition active:scale-95"><i class="fa-solid fa-delete-left"></i></button>
+        </div>
+    </div>
 
     <!-- Toast Notification Container -->
     <div id="toastContainer"></div>
@@ -269,7 +316,7 @@
                         </div>
                     </div>
 
-                    <!-- Customize Screen / Theme Edit Button -->
+                    <!-- Customize Screen Button -->
                     <button onclick="openCustomizeModal()" class="px-3.5 py-3 bg-amber-400 hover:bg-amber-300 text-slate-900 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition">
                         <i class="fa-solid fa-sliders"></i>
                         <span>🎨 កែសម្រួលអេក្រង់</span>
@@ -309,6 +356,19 @@
                     </button>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboardCards"></div>
+            </div>
+
+            <!-- Savings Goals Widget -->
+            <div id="sec-goals" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                        🐖 គោលដៅសន្សំប្រាក់ (Savings Goals)
+                    </h2>
+                    <button onclick="openGoalModal()" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold px-3 py-1.5 rounded-lg border border-emerald-200 transition">
+                        + បន្ថែមគោលដៅ
+                    </button>
+                </div>
+                <div id="goalsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
 
             <!-- Monthly Budget Progress Bar Widget -->
@@ -366,11 +426,11 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                             <i class="fa-solid fa-magnifying-glass text-xs"></i>
                         </div>
-                        <input type="text" id="searchInput" oninput="renderTable()" placeholder="ស្វែងរក..." class="block w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-slate-900 font-bold outline-none">
+                        <input type="text" id="searchInput" oninput="renderTable()" placeholder="ស្វែងរក..." class="block w-full pl-9 pr-3 py-2 border rounded-lg text-sm font-bold outline-none">
                     </div>
                     <!-- Filter Account & Settings -->
                     <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                        <select id="filterAccount" onchange="renderTable()" class="block w-32 py-2 px-3 border border-gray-300 bg-white rounded-lg text-sm shadow-sm focus:outline-none focus:ring-blue-500 text-slate-900 font-bold">
+                        <select id="filterAccount" onchange="renderTable()" class="block w-32 py-2 px-3 border rounded-lg text-sm shadow-sm focus:outline-none font-bold">
                         </select>
                         <button onclick="openAccountsModal()" class="px-2.5 py-2 text-xs bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-lg border border-slate-300 flex items-center gap-1 transition whitespace-nowrap">
                             ⚙️ គណនី
@@ -552,6 +612,16 @@
                     </div>
                 </div>
 
+                <!-- Security PIN Setting -->
+                <div class="bg-slate-50 dark:bg-zinc-800 p-3 rounded-xl border border-slate-200 dark:border-zinc-700 space-y-2">
+                    <label class="block text-xs font-bold text-slate-900 dark:text-slate-100">🔒 កំណត់សោរ PIN Code ៤ ខ្ទង់៖</label>
+                    <div class="flex items-center gap-2">
+                        <input type="password" maxlength="4" id="cfgPinInput" placeholder="លេខ ៤ ខ្ទង់" class="w-32 p-2 border border-gray-300 dark:border-zinc-600 rounded-lg text-center font-bold tracking-widest text-slate-900 dark:text-white bg-white dark:bg-zinc-700">
+                        <button onclick="savePinCode()" class="px-3 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold">រក្សាទុក PIN</button>
+                        <button onclick="clearPinCode()" class="px-3 py-2 bg-rose-100 text-rose-700 rounded-lg text-xs font-bold">លុប PIN</button>
+                    </div>
+                </div>
+
                 <!-- Custom Text Colors -->
                 <div class="bg-slate-50 dark:bg-zinc-800 p-3 rounded-xl border border-slate-200 dark:border-zinc-700">
                     <label class="block text-xs font-bold text-slate-900 dark:text-slate-100 mb-2">🎨 កែប្រែពណ៌អក្សរចំណងជើង (Text Colors)៖</label>
@@ -614,6 +684,11 @@
                     </label>
 
                     <label class="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700 text-xs cursor-pointer">
+                        <span class="font-bold text-slate-900 dark:text-slate-100">🐖 គោលដៅសន្សំប្រាក់ (Savings Goals Widget)</span>
+                        <input type="checkbox" id="chkGoals" checked onchange="toggleSection('sec-goals', this.checked)" class="w-4 h-4 text-blue-600 rounded">
+                    </label>
+
+                    <label class="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700 text-xs cursor-pointer">
                         <span class="font-bold text-slate-900 dark:text-slate-100">🎯 ថវិកាចំណាយប្រចាំខែ (Spending Budget Widget)</span>
                         <input type="checkbox" id="chkBudgets" checked onchange="toggleSection('sec-budgets', this.checked)" class="w-4 h-4 text-blue-600 rounded">
                     </label>
@@ -627,6 +702,43 @@
 
             <div class="flex justify-end gap-2 border-t pt-3 border-gray-200 dark:border-zinc-700">
                 <button onclick="saveUiCustomizations()" class="px-5 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition shadow">រក្សាទុកការកំណត់</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Managing Savings Goals -->
+    <div id="goalModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all text-slate-800">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <span>🐖</span> កំណត់គោលដៅសន្សំប្រាក់
+                </h3>
+                <button onclick="closeGoalModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
+            </div>
+            
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">ឈ្មោះគោលដៅ (ឧ. 🛵 ទិញម៉ូតូ)៖</label>
+                    <input type="text" id="glName" placeholder="ឈ្មោះគោលដៅ..." class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-medium text-slate-800">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">ចំនួនដៅសរុប ($)៖</label>
+                        <input type="number" step="any" id="glTarget" placeholder="ឧ. 1500" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-emerald-600 bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">សន្សំបានបច្ចុប្បន្ន ($)៖</label>
+                        <input type="number" step="any" id="glCurrent" placeholder="ឧ. 400" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-blue-600 bg-white">
+                    </div>
+                </div>
+                <button onclick="saveSavingsGoal()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg transition">បន្ថែម/រក្សាទុកគោលដៅ</button>
+                
+                <p class="text-xs text-gray-500 border-t pt-2 font-bold">បញ្ជីគោលដៅសន្សំប្រាក់៖</p>
+                <div class="max-h-48 overflow-y-auto space-y-2 pr-1" id="goalListContainer"></div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeGoalModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បិទ</button>
             </div>
         </div>
     </div>
@@ -961,6 +1073,13 @@
                 updateDashboard();
             });
 
+            // Sync Savings Goals
+            onValue(ref(db, 'goals'), (snapshot) => {
+                const data = snapshot.val();
+                if (data) state.goals = Array.isArray(data) ? data : Object.values(data);
+                updateDashboard();
+            });
+
             // Sync Shortcuts
             onValue(ref(db, 'shortcuts'), (snapshot) => {
                 const data = snapshot.val();
@@ -978,6 +1097,7 @@
                     if (data.bgImageUrl !== undefined) state.bgImageUrl = data.bgImageUrl;
                     if (data.titleColor) state.titleColor = data.titleColor;
                     if (data.subtitleColor) state.subtitleColor = data.subtitleColor;
+                    if (data.pinCode) state.pinCode = data.pinCode;
                     applyUiConfig();
                 }
             });
@@ -997,6 +1117,8 @@
             bgImageUrl: '',
             titleColor: '#ffffff',
             subtitleColor: '#bfdbfe',
+            pinCode: '',
+            enteredPin: '',
             appTitle: 'ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន (Pro Cloud)',
             appSubtitle: 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️',
             accounts: ['🏦 ABA', '💳 AC', '👛 Wallet', '🐖 Savings', '⛽ កាតសាំង'],
@@ -1006,6 +1128,10 @@
                 { id: 'b1', cat: 'អាហារ', limit: 200, cur: 'USD' },
                 { id: 'b2', cat: 'សាំង', limit: 50, cur: 'L (លីត្រ)' }
             ],
+            goals: [
+                { id: 'g1', name: '🛵 ទិញម៉ូតូ', target: 1500, current: 400 },
+                { id: 'g2', name: '🏖️ ដើរលេងសៀមរាប', target: 300, current: 180 }
+            ],
             shortcuts: [
                 { id: 's1', name: '🍔 បាយថ្ងៃត្រង់ ($2.50)', cat: 'អាហារ', acc: '👛 Wallet', cur: 'USD', inc: 0, exp: 2.5, desc: 'បាយថ្ងៃត្រង់' },
                 { id: 's2', name: '☕ កាហ្វេ ($1.50)', cat: 'អាហារ', acc: '👛 Wallet', cur: 'USD', inc: 0, exp: 1.5, desc: 'ទិញកាហ្វេ' },
@@ -1014,6 +1140,24 @@
             transactions: []
         };
         let charts = { expense: null, trend: null };
+
+        /* === WEB AUDIO SOUND EFFECT SYNTHESIZER === */
+        function playChimeSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.25);
+            } catch(e) {}
+        }
 
         /* === TOAST NOTIFICATIONS === */
         function showToast(message, type = 'info') {
@@ -1032,6 +1176,72 @@
                 toast.style.transition = 'opacity 0.3s ease';
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
+        }
+
+        /* === PIN SECURITY LOCK SCREEN LOGIC === */
+        function checkPinLock() {
+            if (state.pinCode && state.pinCode.length === 4) {
+                document.getElementById('pinLockOverlay').classList.remove('hidden');
+                updatePinDots();
+            } else {
+                document.getElementById('pinLockOverlay').classList.add('hidden');
+            }
+        }
+
+        function pressPin(digit) {
+            if (state.enteredPin.length < 4) {
+                state.enteredPin += digit;
+                updatePinDots();
+                if (state.enteredPin.length === 4) {
+                    setTimeout(() => {
+                        if (state.enteredPin === state.pinCode) {
+                            playChimeSound();
+                            document.getElementById('pinLockOverlay').classList.add('hidden');
+                            state.enteredPin = '';
+                            showToast('ស្វាគមន៍! បានដោះសោររៀងរាល់ជោគជ័យ', 'success');
+                        } else {
+                            showToast('លេខកូដ PIN មិនត្រឹមត្រូវទេ!', 'error');
+                            state.enteredPin = '';
+                            updatePinDots();
+                        }
+                    }, 150);
+                }
+            }
+        }
+
+        function clearPin() {
+            state.enteredPin = state.enteredPin.slice(0, -1);
+            updatePinDots();
+        }
+
+        function updatePinDots() {
+            for (let i = 0; i < 4; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) {
+                    if (i < state.enteredPin.length) dot.classList.add('filled');
+                    else dot.classList.remove('filled');
+                }
+            }
+        }
+
+        function savePinCode() {
+            const val = document.getElementById('cfgPinInput').value.trim();
+            if (val.length === 4 && !isNaN(val)) {
+                state.pinCode = val;
+                saveUiConfigToLocal();
+                saveUiConfigToCloud();
+                showToast('បានរក្សាទុក PIN Code ៤ ខ្ទង់!', 'success');
+            } else {
+                showToast('សូមបញ្ចូលលេខកូដ PIN ៤ ខ្ទង់!', 'error');
+            }
+        }
+
+        function clearPinCode() {
+            state.pinCode = '';
+            document.getElementById('cfgPinInput').value = '';
+            saveUiConfigToLocal();
+            saveUiConfigToCloud();
+            showToast('បានលុបសោរ PIN Code', 'info');
         }
 
         function formatForDateTimeInput(dStr) {
@@ -1056,17 +1266,6 @@
             }
         }
 
-        /* === CARD OPTION ACTION (FILTER BY ACCOUNT) === */
-        function filterByAccountFromCard(accName) {
-            const sel = document.getElementById('filterAccount');
-            if (sel) {
-                sel.value = accName;
-                switchTab('entry');
-                renderTable();
-                showToast(`បង្ហាញប្រតិបត្តិការរបស់៖ ${accName}`, 'info');
-            }
-        }
-
         /* === INITIALIZATION & STORAGE === */
         window.onload = () => {
             const savedUi = localStorage.getItem('finance_ui_config');
@@ -1080,9 +1279,11 @@
                     state.hideAmounts = parsed.hideAmounts || false;
                     state.titleColor = parsed.titleColor || '#ffffff';
                     state.subtitleColor = parsed.subtitleColor || '#bfdbfe';
+                    state.pinCode = parsed.pinCode || '';
                 } catch(e) {}
             }
 
+            checkPinLock();
             applyUiConfig();
             renderFilterAccounts();
             renderShortcuts();
@@ -1111,6 +1312,7 @@
             updateDashboard();
         }
 
+        /* === STREAMING_CHUNK:Handling live exchange rate, theme styles, and cloud database sync... === */
         /* === LIVE EXCHANGE RATE FETCHING === */
         async function fetchLiveExchangeRate(isSilent = false) {
             const rateSpin = document.getElementById('rateSyncSpin');
@@ -1142,6 +1344,7 @@
             document.getElementById('cfgBgImageUrl').value = state.bgImageUrl || '';
             document.getElementById('cfgTitleColor').value = state.titleColor || '#ffffff';
             document.getElementById('cfgSubtitleColor').value = state.subtitleColor || '#bfdbfe';
+            document.getElementById('cfgPinInput').value = state.pinCode || '';
             document.getElementById('customizeModal').classList.remove('hidden');
         }
 
@@ -1159,7 +1362,7 @@
                 applyUiConfig();
                 saveUiConfigToLocal();
                 saveUiConfigToCloud();
-                showToast('បានអាប់ដេត Background រួចរាល់!', 'success');
+                showToast('បានអាប់ដេត Background រក្សាទុក!', 'success');
             };
             reader.readAsDataURL(file);
         }
@@ -1241,7 +1444,8 @@
                 bgImageUrl: state.bgImageUrl,
                 titleColor: state.titleColor,
                 subtitleColor: state.subtitleColor,
-                hideAmounts: state.hideAmounts
+                hideAmounts: state.hideAmounts,
+                pinCode: state.pinCode
             }));
         }
 
@@ -1253,9 +1457,17 @@
                     themeStyle: state.themeStyle,
                     bgImageUrl: state.bgImageUrl,
                     titleColor: state.titleColor,
-                    subtitleColor: state.subtitleColor
+                    subtitleColor: state.subtitleColor,
+                    pinCode: state.pinCode
                 });
             }
+        }
+
+        function saveGoalsToCloud() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'goals'), state.goals);
+            }
+            updateDashboard();
         }
 
         function toggleSection(secId, isVisible) {
@@ -1277,6 +1489,7 @@
             sel.value = state.accounts.includes(currentVal) ? currentVal : 'ALL';
         }
 
+        /* === STREAMING_CHUNK:Rendering table rows, shortcuts and interactive card filters... === */
         /* === FIREBASE SAVE HELPERS === */
         function saveAccountsToCloud() {
             if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
@@ -1365,6 +1578,17 @@
             updateDashboard();
         }
 
+        /* === CARD OPTION ACTION (FILTER BY ACCOUNT) === */
+        function filterByAccountFromCard(accName) {
+            const sel = document.getElementById('filterAccount');
+            if (sel) {
+                sel.value = accName;
+                switchTab('entry');
+                renderTable();
+                showToast(`បង្ហាញប្រតិបត្តិការរបស់៖ ${accName}`, 'info');
+            }
+        }
+
         /* === TABLE RENDERING & LOGIC === */
         function renderTable() {
             const tbody = document.getElementById('tableBody');
@@ -1443,6 +1667,7 @@
         }
 
         function addRow() {
+            playChimeSound();
             const now = new Date();
             const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
             const newTx = {
@@ -1466,6 +1691,7 @@
             }
         }
 
+        /* === STREAMING_CHUNK:Rendering shortcuts, budget, and savings goals widgets... === */
         /* === QUICK SHORTCUTS === */
         function renderShortcuts() {
             const container = document.getElementById('shortcutsContainer');
@@ -1481,6 +1707,7 @@
         }
 
         function executeShortcut(shortcutId) {
+            playChimeSound();
             const sc = state.shortcuts.find(s => s.id === shortcutId);
             if (!sc) return;
             const now = new Date();
@@ -1494,6 +1721,74 @@
             renderTable();
             updateDashboard();
             showToast(`បានកត់ត្រា ${sc.name} រួចរាល់!`, 'success');
+        }
+
+        /* === SAVINGS GOALS CALCULATOR === */
+        function renderSavingsGoals() {
+            const container = document.getElementById('goalsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            state.goals.forEach(g => {
+                const pct = g.target > 0 ? Math.min(Math.round((g.current / g.target) * 100), 100) : 0;
+                container.innerHTML += `
+                    <div class="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
+                        <div class="flex justify-between items-center mb-1 text-xs font-bold">
+                            <span class="text-slate-800 dark:text-slate-100">${g.name}</span>
+                            <span class="text-emerald-600 dark:text-emerald-400">${formatMoney(g.current, 'USD')} / ${formatMoney(g.target, 'USD')} (${pct}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
+                            <div class="bg-emerald-500 h-2 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (state.goals.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់មានគោលដៅសន្សំ។ ចុច "+ បន្ថែមគោលដៅ" ដើម្បីកំណត់។</p>`;
+            }
+        }
+
+        function openGoalModal() {
+            renderGoalList();
+            document.getElementById('goalModal').classList.remove('hidden');
+        }
+        function closeGoalModal() { document.getElementById('goalModal').classList.add('hidden'); }
+
+        function saveSavingsGoal() {
+            const name = document.getElementById('glName').value.trim();
+            const target = parseFloat(document.getElementById('glTarget').value) || 0;
+            const current = parseFloat(document.getElementById('glCurrent').value) || 0;
+
+            if (!name || target <= 0) return;
+            state.goals.push({ id: generateId(), name, target, current });
+            saveGoalsToCloud();
+            renderGoalList();
+            document.getElementById('glName').value = '';
+            document.getElementById('glTarget').value = '';
+            document.getElementById('glCurrent').value = '';
+            showToast('បានរក្សាទុកគោលដៅសន្សំប្រាក់', 'success');
+        }
+
+        function deleteGoal(id) {
+            state.goals = state.goals.filter(g => g.id !== id);
+            saveGoalsToCloud();
+            renderGoalList();
+            showToast('បានលុបគោលដៅសន្សំ', 'info');
+        }
+
+        function renderGoalList() {
+            const container = document.getElementById('goalListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            state.goals.forEach(g => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-2 bg-emerald-50/50 rounded border text-xs">
+                        <span class="font-bold text-gray-800">${g.name}: ${formatMoney(g.current, 'USD')} / ${formatMoney(g.target, 'USD')}</span>
+                        <button onclick="deleteGoal('${g.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
+                    </div>
+                `;
+            });
         }
 
         /* === BUDGET CALCULATOR === */
@@ -1628,6 +1923,7 @@
             });
         }
 
+        /* === STREAMING_CHUNK:Implementing custom categories, currencies, accounts, and inter-account transfers... === */
         /* === ACCOUNTS, CURRENCIES, CATEGORIES & TRANSFER MODALS === */
         function openAccountsModal() { renderAccountsList(); document.getElementById('accountsModal').classList.remove('hidden'); }
         function closeAccountsModal() { document.getElementById('accountsModal').classList.add('hidden'); }
@@ -1674,6 +1970,7 @@
         }
         function closeTransferModal() { document.getElementById('transferModal').classList.add('hidden'); }
         function executeTransfer() {
+            playChimeSound();
             const fromAcc = document.getElementById('transferFromAcc').value;
             const toAcc = document.getElementById('transferToAcc').value;
             const amount = parseFloat(document.getElementById('transferAmount').value) || 0;
@@ -1703,6 +2000,7 @@
         }
         function closeModal() { document.getElementById('confirmModal').classList.add('hidden'); deleteTargetId = null; }
 
+        /* === STREAMING_CHUNK:Updating Dashboard calculations and rendering Chart.js visualizations... === */
         /* === DASHBOARD & CHARTS === */
         function updateDashboard() {
             let accBalances = {};
@@ -1746,7 +2044,6 @@
                                 <span class="p-1.5 bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-amber-400 rounded-lg text-xs font-bold">💳</span>
                                 <span class="font-black ${textMain} text-sm">${key}</span>
                             </div>
-                            <!-- Interactive 3-dot button to filter transactions by this account -->
                             <button onclick="filterByAccountFromCard('${key}')" class="text-slate-400 hover:text-blue-600 dark:hover:text-amber-300 p-1 rounded transition" title="មើលប្រតិបត្តិការកុងនេះ">
                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                             </button>
@@ -1757,6 +2054,7 @@
             });
 
             renderBudgetWidget();
+            renderSavingsGoals();
             drawCharts();
         }
 
@@ -1816,6 +2114,7 @@
             });
         }
 
+        /* === STREAMING_CHUNK:Finalizing reporting engines and data import/export handlers... === */
         /* === REPORTING & EXPORTS === */
         function toggleCustomPeriod() {
             const periodType = document.getElementById('reportPeriod').value;
@@ -1926,6 +2225,7 @@
                         if (imported.currencies) state.currencies = imported.currencies;
                         if (imported.categories) state.categories = imported.categories;
                         if (imported.budgets) state.budgets = imported.budgets;
+                        if (imported.goals) state.goals = imported.goals;
                         if (imported.shortcuts) state.shortcuts = imported.shortcuts;
                         if (imported.transactions) state.transactions = imported.transactions;
 
@@ -1934,6 +2234,7 @@
                         saveCurrenciesToCloud();
                         saveCategoriesToCloud();
                         saveBudgetsToCloud();
+                        saveGoalsToCloud();
                         saveShortcutsToCloud();
                         saveUiConfigToCloud();
 
