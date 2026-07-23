@@ -75,7 +75,29 @@
             background-color: #eff6ff;
         }
 
-        /* Explicit Modal Item Contrast Fixes */
+        /* Bulletproof Modal Item & Text Contrast Rules */
+        .modal-content-card {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+        
+        .modal-content-card label,
+        .modal-content-card span,
+        .modal-content-card h3,
+        .modal-content-card h4,
+        .modal-content-card p,
+        .modal-content-card legend,
+        .modal-label-text {
+            color: #0f172a !important;
+        }
+
+        .modal-sub-card {
+            background-color: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+
         .modal-item-input {
             background-color: #ffffff !important;
             color: #0f172a !important;
@@ -84,87 +106,147 @@
             padding: 6px 10px;
             font-weight: 600;
         }
-        body.theme-aba-dark .modal-item-input {
-            background-color: #2a2d3d !important;
-            color: #f8fafc !important;
-            border-color: #475569 !important;
+
+        /* Dark Theme Scoped Overrides for Modals */
+        body.theme-dark .modal-content-card,
+        body.theme-aba-dark .modal-content-card,
+        body.theme-slate .modal-content-card {
+            background-color: #18181b !important;
+            color: #ffffff !important;
+            border: 1px solid #3f3f46 !important;
         }
 
-        /* Modal Card & Adaptive Text Rules - HIGH CONTRAST FIXED */
-        .modal-content-card {
-            background-color: #ffffff;
-            color: #0f172a;
-        }
-        .modal-content-card label,
-        .modal-content-card span,
-        .modal-content-card h3,
-        .modal-content-card p {
-            color: #0f172a !important;
-        }
-
-        body.theme-aba-dark .modal-content-card {
-            background-color: #1e1e1e !important;
-            color: #f8fafc !important;
-            border: 1px solid #334155 !important;
-        }
-        body.theme-aba-dark .modal-content-card h3,
+        body.theme-dark .modal-content-card label,
+        body.theme-dark .modal-content-card span,
+        body.theme-dark .modal-content-card h3,
+        body.theme-dark .modal-content-card h4,
+        body.theme-dark .modal-content-card p,
+        body.theme-dark .modal-content-card legend,
+        body.theme-dark .modal-content-card div,
+        body.theme-dark .modal-label-text,
         body.theme-aba-dark .modal-content-card label,
         body.theme-aba-dark .modal-content-card span,
-        body.theme-aba-dark .modal-content-card p {
-            color: #f8fafc !important;
-        }
-        body.theme-aba-dark .modal-content-card .bg-slate-50,
-        body.theme-aba-dark .modal-content-card .bg-gray-50 {
-            background-color: #27272a !important;
-            border-color: #3f3f46 !important;
+        body.theme-aba-dark .modal-content-card h3,
+        body.theme-aba-dark .modal-content-card h4,
+        body.theme-aba-dark .modal-content-card p,
+        body.theme-aba-dark .modal-content-card legend,
+        body.theme-aba-dark .modal-content-card div,
+        body.theme-aba-dark .modal-label-text,
+        body.theme-slate .modal-content-card label,
+        body.theme-slate .modal-content-card span,
+        body.theme-slate .modal-content-card h3,
+        body.theme-slate .modal-content-card h4,
+        body.theme-slate .modal-content-card p,
+        body.theme-slate .modal-content-card legend,
+        body.theme-slate .modal-content-card div,
+        body.theme-slate .modal-label-text {
+            color: #ffffff !important;
         }
 
-        /* Custom Dark Theme Rules */
-        body.theme-aba-dark {
-            background-color: #121212;
+        body.theme-dark .modal-sub-card,
+        body.theme-aba-dark .modal-sub-card,
+        body.theme-slate .modal-sub-card {
+            background-color: #27272a !important;
+            border-color: #3f3f46 !important;
+            color: #ffffff !important;
+        }
+
+        body.theme-dark .modal-item-input,
+        body.theme-aba-dark .modal-item-input,
+        body.theme-slate .modal-item-input {
+            background-color: #1e1e24 !important;
+            color: #ffffff !important;
+            border-color: #52525b !important;
+        }
+
+        /* Custom Dark Theme Rules for Main Layout */
+        body.theme-aba-dark, body.theme-slate, body.theme-dark {
             color: #f8fafc;
         }
-        body.theme-aba-dark .bg-white {
+        body.theme-aba-dark {
+            background-color: #121212;
+        }
+        body.theme-slate {
+            background-color: #0f172a;
+        }
+        body.theme-aba-dark .bg-white, body.theme-slate .bg-white {
             background-color: #1e1e1e !important;
             color: #f8fafc !important;
             border-color: #334155 !important;
         }
-        body.theme-aba-dark .tab-btn.active {
+        body.theme-aba-dark .tab-btn.active, body.theme-slate .tab-btn.active {
             border-bottom: 3px solid #d4af37;
             color: #f3e5ab;
             background-color: #2a2415;
         }
-        body.theme-aba-dark .tab-btn {
+        body.theme-aba-dark .tab-btn, body.theme-slate .tab-btn {
             color: #94a3b8;
         }
-        body.theme-aba-dark input, body.theme-aba-dark select {
+        body.theme-aba-dark input, body.theme-aba-dark select,
+        body.theme-slate input, body.theme-slate select {
             color: #f8fafc;
         }
-        body.theme-aba-dark option {
+        body.theme-aba-dark option, body.theme-slate option {
             background-color: #1e1e1e;
             color: #f8fafc;
         }
-        body.theme-aba-dark .bg-slate-50 {
+        body.theme-aba-dark .bg-slate-50, body.theme-slate .bg-slate-50 {
             background-color: #27272a !important;
             color: #f8fafc !important;
         }
+
+        /* Dashboard Card Widgets Contrast Fix */
+        .widget-card-title {
+            color: #0f172a !important;
+            font-weight: 800;
+        }
+        body.theme-dark .widget-card-title,
+        body.theme-aba-dark .widget-card-title,
+        body.theme-slate .widget-card-title {
+            color: #ffffff !important;
+        }
+
+        /* Shortcuts Label Contrast Fix */
+        .shortcuts-toolbar-label {
+            color: #0f172a !important;
+            font-weight: 800;
+        }
+        body.theme-dark .shortcuts-toolbar-label,
+        body.theme-aba-dark .shortcuts-toolbar-label,
+        body.theme-slate .shortcuts-toolbar-label {
+            color: #ffffff !important;
+        }
+        
         /* Search and Filter Inputs Contrast Fixes */
         #searchInput, #filterAccount {
             background-color: #ffffff;
             color: #0f172a !important;
             border: 1px solid #cbd5e1;
         }
-        body.theme-aba-dark #searchInput, body.theme-aba-dark #filterAccount {
+        body.theme-dark #searchInput, body.theme-dark #filterAccount,
+        body.theme-aba-dark #searchInput, body.theme-aba-dark #filterAccount,
+        body.theme-slate #searchInput, body.theme-slate #filterAccount {
             background-color: #27272a !important;
-            color: #f8fafc !important;
-            border-color: #3f3f46 !important;
+            color: #ffffff !important;
+            border-color: #52525b !important;
         }
+
         /* Report Table Text Contrast Fix in Dark Mode */
-        body.theme-aba-dark td, body.theme-aba-dark th {
-            color: #f8fafc !important;
+        body.theme-dark td, body.theme-dark th,
+        body.theme-aba-dark td, body.theme-aba-dark th,
+        body.theme-slate td, body.theme-slate th {
+            color: #ffffff !important;
         }
-        body.theme-aba-dark .text-gray-800, body.theme-aba-dark .text-gray-500, body.theme-aba-dark .text-gray-600 {
-            color: #cbd5e1 !important;
+        body.theme-dark .text-gray-800, body.theme-dark .text-gray-500, body.theme-dark .text-gray-600,
+        body.theme-aba-dark .text-gray-800, body.theme-aba-dark .text-gray-500, body.theme-aba-dark .text-gray-600,
+        body.theme-slate .text-gray-800, body.theme-slate .text-gray-500, body.theme-slate .text-gray-600 {
+            color: #e2e8f0 !important;
+        }
+        body.theme-dark tfoot, body.theme-dark tfoot td,
+        body.theme-aba-dark tfoot, body.theme-aba-dark tfoot td,
+        body.theme-slate tfoot, body.theme-slate tfoot td {
+            background-color: #18181b !important;
+            color: #ffffff !important;
         }
 
         .modal-overlay {
@@ -361,7 +443,7 @@
             <!-- Savings Goals Widget -->
             <div id="sec-goals" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                    <h2 class="text-lg font-bold widget-card-title flex items-center gap-2">
                         🐖 គោលដៅសន្សំប្រាក់ (Savings Goals)
                     </h2>
                     <button onclick="openGoalModal()" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold px-3 py-1.5 rounded-lg border border-emerald-200 transition">
@@ -374,7 +456,7 @@
             <!-- Monthly Budget Progress Bar Widget -->
             <div id="sec-budgets" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                    <h2 class="text-lg font-bold widget-card-title flex items-center gap-2">
                         🎯 ថវិកាចំណាយប្រចាំខែ (Monthly Spending Budget)
                     </h2>
                     <button onclick="openBudgetModal()" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1.5 rounded-lg border border-indigo-200 transition">
@@ -388,14 +470,14 @@
             <div id="sec-charts" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Pie Chart -->
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-md font-bold text-slate-800 dark:text-slate-100 mb-4 text-center">ចំណាយតាមផ្នែក (ខែនេះ)</h3>
+                    <h3 class="text-md font-bold widget-card-title mb-4 text-center">ចំណាយតាមផ្នែក (ខែនេះ)</h3>
                     <div class="relative h-[300px] w-full flex justify-center">
                         <canvas id="expenseChart"></canvas>
                     </div>
                 </div>
                 <!-- Bar Chart -->
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-md font-bold text-slate-800 dark:text-slate-100 mb-4 text-center">ចំណូល vs ចំណាយ (៦ ខែចុងក្រោយ)</h3>
+                    <h3 class="text-md font-bold widget-card-title mb-4 text-center">ចំណូល vs ចំណាយ (៦ ខែចុងក្រោយ)</h3>
                     <div class="relative h-[300px] w-full flex justify-center">
                         <canvas id="trendChart"></canvas>
                     </div>
@@ -409,7 +491,7 @@
             <!-- Quick Shortcuts Toolbar -->
             <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1">
+                    <span class="text-xs font-bold shortcuts-toolbar-label flex items-center gap-1">
                         ⚡ កត់ត្រារហ័ស (1-Click Shortcuts)៖
                     </span>
                     <button onclick="openShortcutModal()" class="text-[11px] text-blue-600 dark:text-amber-400 hover:underline font-bold">+ កែសម្រួលប៊ូតុងរហ័ស</button>
@@ -491,11 +573,11 @@
                             </tr>
                         </thead>
                         <tbody id="tableBody" class="bg-white dark:bg-zinc-900 divide-y divide-gray-100 dark:divide-zinc-800"></tbody>
-                        <tfoot class="bg-slate-50 dark:bg-zinc-800 border-t-2 border-gray-200 dark:border-zinc-700">
+                        <tfoot class="bg-slate-100 dark:bg-zinc-800 border-t-2 border-gray-300 dark:border-zinc-700">
                             <tr>
-                                <td colspan="6" class="px-4 py-4 text-sm font-bold text-slate-800 dark:text-slate-100 text-right">សរុប (រាយតាមខ្នាត/រូបិយប័ណ្ណ):</td>
-                                <td class="px-3 py-4 text-right" id="totIncCell"></td>
-                                <td class="px-3 py-4 text-right" id="totExpCell"></td>
+                                <td colspan="6" class="px-4 py-4 text-sm font-bold text-slate-900 dark:text-slate-100 text-right">សរុប (រាយតាមខ្នាត/រូបិយប័ណ្ណ):</td>
+                                <td class="px-3 py-4 text-right text-sm font-bold text-green-600 dark:text-emerald-400" id="totIncCell"></td>
+                                <td class="px-3 py-4 text-right text-sm font-bold text-red-500 dark:text-rose-400" id="totExpCell"></td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -592,7 +674,7 @@
     <div id="customizeModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
         <div class="modal-content-card rounded-2xl shadow-2xl p-6 w-full max-w-lg mx-4 transform transition-all">
             <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200 dark:border-gray-700">
-                <h3 class="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-slate-100">
+                <h3 class="text-lg font-bold flex items-center gap-2 modal-label-text">
                     <i class="fa-solid fa-palette text-amber-500"></i> កែសម្រួលអេក្រង់ & Theme
                 </h3>
                 <button onclick="closeCustomizeModal()" class="text-gray-400 hover:text-gray-200 font-bold text-xl px-2">&times;</button>
@@ -600,67 +682,67 @@
             
             <div class="space-y-4 mb-6 max-h-[70vh] overflow-y-auto pr-1">
                 <!-- App Title Customization -->
-                <div class="bg-slate-50 dark:bg-zinc-800 p-3 rounded-xl border border-slate-200 dark:border-zinc-700 space-y-2">
-                    <label class="block text-xs font-bold text-slate-900 dark:text-slate-100">✏️ កែប្រែឈ្មោះប្រព័ន្ធ & ការរៀបរាប់៖</label>
+                <div class="modal-sub-card p-3 rounded-xl space-y-2">
+                    <label class="block text-xs font-bold modal-label-text">✏️ កែប្រែឈ្មោះប្រព័ន្ធ & ការរៀបរាប់៖</label>
                     <div>
-                        <span class="text-[11px] text-slate-800 dark:text-slate-200 font-bold">ឈ្មោះប្រព័ន្ធ (App Title):</span>
-                        <input type="text" id="cfgAppTitle" placeholder="ឈ្មោះប្រព័ន្ធ..." class="w-full p-2 border border-gray-300 dark:border-zinc-600 rounded-lg text-sm font-bold text-slate-900 dark:text-white bg-white dark:bg-zinc-700">
+                        <span class="text-[11px] font-bold modal-label-text block mb-1">ឈ្មោះប្រព័ន្ធ (App Title):</span>
+                        <input type="text" id="cfgAppTitle" placeholder="ឈ្មោះប្រព័ន្ធ..." class="modal-item-input w-full p-2 text-sm font-bold">
                     </div>
                     <div>
-                        <span class="text-[11px] text-slate-800 dark:text-slate-200 font-bold">ការរៀបរាប់ (Subtitle):</span>
-                        <input type="text" id="cfgAppSubtitle" placeholder="ការរៀបរាប់..." class="w-full p-2 border border-gray-300 dark:border-zinc-600 rounded-lg text-xs text-slate-800 dark:text-white bg-white dark:bg-zinc-700">
+                        <span class="text-[11px] font-bold modal-label-text block mb-1">ការរៀបរាប់ (Subtitle):</span>
+                        <input type="text" id="cfgAppSubtitle" placeholder="ការរៀបរាប់..." class="modal-item-input w-full p-2 text-xs">
                     </div>
                 </div>
 
                 <!-- Security PIN Setting -->
-                <div class="bg-slate-50 dark:bg-zinc-800 p-3 rounded-xl border border-slate-200 dark:border-zinc-700 space-y-2">
-                    <label class="block text-xs font-bold text-slate-900 dark:text-slate-100">🔒 កំណត់សោរ PIN Code ៤ ខ្ទង់៖</label>
+                <div class="modal-sub-card p-3 rounded-xl space-y-2">
+                    <label class="block text-xs font-bold modal-label-text">🔒 កំណត់សោរ PIN Code ៤ ខ្ទង់៖</label>
                     <div class="flex items-center gap-2">
-                        <input type="password" maxlength="4" id="cfgPinInput" placeholder="លេខ ៤ ខ្ទង់" class="w-32 p-2 border border-gray-300 dark:border-zinc-600 rounded-lg text-center font-bold tracking-widest text-slate-900 dark:text-white bg-white dark:bg-zinc-700">
-                        <button onclick="savePinCode()" class="px-3 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold">រក្សាទុក PIN</button>
-                        <button onclick="clearPinCode()" class="px-3 py-2 bg-rose-100 text-rose-700 rounded-lg text-xs font-bold">លុប PIN</button>
+                        <input type="password" maxlength="4" id="cfgPinInput" placeholder="លេខ ៤ ខ្ទង់" class="modal-item-input w-32 p-2 text-center font-bold tracking-widest">
+                        <button onclick="savePinCode()" class="px-3 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold shadow">រក្សាទុក PIN</button>
+                        <button onclick="clearPinCode()" class="px-3 py-2 bg-rose-100 text-rose-700 rounded-lg text-xs font-bold shadow">លុប PIN</button>
                     </div>
                 </div>
 
                 <!-- Custom Text Colors -->
-                <div class="bg-slate-50 dark:bg-zinc-800 p-3 rounded-xl border border-slate-200 dark:border-zinc-700">
-                    <label class="block text-xs font-bold text-slate-900 dark:text-slate-100 mb-2">🎨 កែប្រែពណ៌អក្សរចំណងជើង (Text Colors)៖</label>
+                <div class="modal-sub-card p-3 rounded-xl">
+                    <label class="block text-xs font-bold mb-2 modal-label-text">🎨 កែប្រែពណ៌អក្សរចំណងជើង (Text Colors)៖</label>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-[11px] text-slate-800 dark:text-slate-200 font-bold mb-1">ពណ៌អក្សរចំណងជើង៖</label>
+                            <label class="block text-[11px] font-bold mb-1 modal-label-text">ពណ៌អក្សរចំណងជើង៖</label>
                             <input type="color" id="cfgTitleColor" value="#ffffff" onchange="applyUiConfig()" class="w-full h-9 rounded border p-1 cursor-pointer bg-white dark:bg-zinc-700">
                         </div>
                         <div>
-                            <label class="block text-[11px] text-slate-800 dark:text-slate-200 font-bold mb-1">ពណ៌អក្សររៀបរាប់៖</label>
+                            <label class="block text-[11px] font-bold mb-1 modal-label-text">ពណ៌អក្សររៀបរាប់៖</label>
                             <input type="color" id="cfgSubtitleColor" value="#bfdbfe" onchange="applyUiConfig()" class="w-full h-9 rounded border p-1 cursor-pointer bg-white dark:bg-zinc-700">
                         </div>
                     </div>
                 </div>
 
                 <!-- Custom Background Image -->
-                <div class="bg-slate-50 dark:bg-zinc-800 p-3 rounded-xl border border-slate-200 dark:border-zinc-700 space-y-2">
-                    <label class="block text-xs font-bold text-slate-900 dark:text-slate-100">🖼️ ដាក់រូបភាព Background (Wallpaper)៖</label>
+                <div class="modal-sub-card p-3 rounded-xl space-y-2">
+                    <label class="block text-xs font-bold modal-label-text">🖼️ ដាក់រូបភាព Background (Wallpaper)៖</label>
                     
                     <div>
-                        <label class="block text-[11px] text-slate-800 dark:text-slate-200 font-bold mb-1">ជ្រើសរើសរូបភាពពីទូរស័ព្ទ/កុំព្យូទ័រ (Local Image)៖</label>
-                        <input type="file" id="cfgBgFileInput" accept="image/*" onchange="handleLocalBgUpload(event)" class="block w-full text-xs text-slate-900 dark:text-slate-100 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                        <label class="block text-[11px] font-bold mb-1 modal-label-text">ជ្រើសរើសរូបភាពពីទូរស័ព្ទ/កុំព្យូទ័រ (Local Image)៖</label>
+                        <input type="file" id="cfgBgFileInput" accept="image/*" onchange="handleLocalBgUpload(event)" class="block w-full text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
                     </div>
 
                     <div class="flex items-center gap-2 my-1">
                         <div class="flex-1 h-px bg-gray-300 dark:bg-zinc-700"></div>
-                        <span class="text-[10px] text-slate-800 dark:text-gray-300 font-bold">ឬបញ្ចូល Link</span>
+                        <span class="text-[10px] font-bold modal-label-text">ឬបញ្ចូល Link</span>
                         <div class="flex-1 h-px bg-gray-300 dark:bg-zinc-700"></div>
                     </div>
 
                     <div class="flex gap-2">
-                        <input type="text" id="cfgBgImageUrl" placeholder="https://example.com/wallpaper.jpg" class="flex-1 p-2 border border-gray-300 dark:border-zinc-600 rounded-lg text-xs text-slate-900 dark:text-white bg-white dark:bg-zinc-700">
+                        <input type="text" id="cfgBgImageUrl" placeholder="https://example.com/wallpaper.jpg" class="modal-item-input flex-1 p-2 text-xs">
                         <button onclick="clearBgImage()" class="px-3 py-1 bg-rose-100 hover:bg-rose-200 text-xs font-bold rounded-lg text-rose-700 transition">លុបរូប</button>
                     </div>
                 </div>
 
                 <!-- Theme Presets -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-900 dark:text-slate-100 mb-2">🎨 ជ្រើសរើសប្រភេទ Theme (ពណ៌អេក្រង់)៖</label>
+                    <label class="block text-xs font-bold mb-2 modal-label-text">🎨 ជ្រើសរើសប្រភេទ Theme (ពណ៌អេក្រង់)៖</label>
                     <div class="grid grid-cols-3 gap-2">
                         <button onclick="setThemeStyle('default')" class="p-2.5 border-2 rounded-xl text-xs font-bold text-center transition bg-slate-100 text-slate-900 border-blue-500">
                             Classic Light ⬜
@@ -676,25 +758,25 @@
 
                 <!-- Display Section Toggles -->
                 <div class="border-t pt-3 space-y-2 border-gray-200 dark:border-zinc-700">
-                    <label class="block text-xs font-bold text-slate-900 dark:text-slate-100 mb-1">👁️ បង្ហាញ/លាក់ ផ្នែកលើ Dashboard៖</label>
+                    <label class="block text-xs font-bold mb-1 modal-label-text">👁️ បង្ហាញ/លាក់ ផ្នែកលើ Dashboard៖</label>
                     
-                    <label class="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700 text-xs cursor-pointer">
-                        <span class="font-bold text-slate-900 dark:text-slate-100">💳 សមតុល្យតាមគណនី (Account Balances)</span>
+                    <label class="flex items-center justify-between p-2.5 modal-sub-card rounded-lg text-xs cursor-pointer">
+                        <span class="font-bold modal-label-text">💳 សមតុល្យតាមគណនី (Account Balances)</span>
                         <input type="checkbox" id="chkAccounts" checked onchange="toggleSection('sec-accounts', this.checked)" class="w-4 h-4 text-blue-600 rounded">
                     </label>
 
-                    <label class="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700 text-xs cursor-pointer">
-                        <span class="font-bold text-slate-900 dark:text-slate-100">🐖 គោលដៅសន្សំប្រាក់ (Savings Goals Widget)</span>
+                    <label class="flex items-center justify-between p-2.5 modal-sub-card rounded-lg text-xs cursor-pointer">
+                        <span class="font-bold modal-label-text">🐖 គោលដៅសន្សំប្រាក់ (Savings Goals Widget)</span>
                         <input type="checkbox" id="chkGoals" checked onchange="toggleSection('sec-goals', this.checked)" class="w-4 h-4 text-blue-600 rounded">
                     </label>
 
-                    <label class="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700 text-xs cursor-pointer">
-                        <span class="font-bold text-slate-900 dark:text-slate-100">🎯 ថវិកាចំណាយប្រចាំខែ (Spending Budget Widget)</span>
+                    <label class="flex items-center justify-between p-2.5 modal-sub-card rounded-lg text-xs cursor-pointer">
+                        <span class="font-bold modal-label-text">🎯 ថវិកាចំណាយប្រចាំខែ (Spending Budget Widget)</span>
                         <input type="checkbox" id="chkBudgets" checked onchange="toggleSection('sec-budgets', this.checked)" class="w-4 h-4 text-blue-600 rounded">
                     </label>
 
-                    <label class="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700 text-xs cursor-pointer">
-                        <span class="font-bold text-slate-900 dark:text-slate-100">📊 ក្រាហ្វវិភាគ (Analytics Charts)</span>
+                    <label class="flex items-center justify-between p-2.5 modal-sub-card rounded-lg text-xs cursor-pointer">
+                        <span class="font-bold modal-label-text">📊 ក្រាហ្វវិភាគ (Analytics Charts)</span>
                         <input type="checkbox" id="chkCharts" checked onchange="toggleSection('sec-charts', this.checked)" class="w-4 h-4 text-blue-600 rounded">
                     </label>
                 </div>
@@ -708,32 +790,32 @@
 
     <!-- Modal for Managing Savings Goals -->
     <div id="goalModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all text-slate-800">
-            <div class="flex justify-between items-center mb-4 border-b pb-3">
-                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <div class="modal-content-card rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold flex items-center gap-2 modal-label-text">
                     <span>🐖</span> កំណត់គោលដៅសន្សំប្រាក់
                 </h3>
-                <button onclick="closeGoalModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
+                <button onclick="closeGoalModal()" class="text-gray-400 hover:text-gray-200 font-bold text-xl px-2">&times;</button>
             </div>
             
             <div class="space-y-4 mb-6">
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">ឈ្មោះគោលដៅ (ឧ. 🛵 ទិញម៉ូតូ)៖</label>
-                    <input type="text" id="glName" placeholder="ឈ្មោះគោលដៅ..." class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-medium text-slate-800">
+                    <label class="block text-xs font-bold mb-1 modal-label-text">ឈ្មោះគោលដៅ (ឧ. 🛵 ទិញម៉ូតូ)៖</label>
+                    <input type="text" id="glName" placeholder="ឈ្មោះគោលដៅ..." class="modal-item-input w-full p-2.5 text-sm font-medium">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">ចំនួនដៅសរុប ($)៖</label>
-                        <input type="number" step="any" id="glTarget" placeholder="ឧ. 1500" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-emerald-600 bg-white">
+                        <label class="block text-xs font-bold mb-1 modal-label-text">ចំនួនដៅសរុប ($)៖</label>
+                        <input type="number" step="any" id="glTarget" placeholder="ឧ. 1500" class="modal-item-input w-full p-2.5 text-sm font-bold text-emerald-600">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">សន្សំបានបច្ចុប្បន្ន ($)៖</label>
-                        <input type="number" step="any" id="glCurrent" placeholder="ឧ. 400" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-blue-600 bg-white">
+                        <label class="block text-xs font-bold mb-1 modal-label-text">សន្សំបានបច្ចុប្បន្ន ($)៖</label>
+                        <input type="number" step="any" id="glCurrent" placeholder="ឧ. 400" class="modal-item-input w-full p-2.5 text-sm font-bold text-blue-600">
                     </div>
                 </div>
-                <button onclick="saveSavingsGoal()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg transition">បន្ថែម/រក្សាទុកគោលដៅ</button>
+                <button onclick="saveSavingsGoal()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg transition shadow">បន្ថែម/រក្សាទុកគោលដៅ</button>
                 
-                <p class="text-xs text-gray-500 border-t pt-2 font-bold">បញ្ជីគោលដៅសន្សំប្រាក់៖</p>
+                <p class="text-xs border-t pt-2 font-bold modal-label-text border-gray-200 dark:border-gray-700">បញ្ជីគោលដៅសន្សំប្រាក់៖</p>
                 <div class="max-h-48 overflow-y-auto space-y-2 pr-1" id="goalListContainer"></div>
             </div>
 
@@ -745,32 +827,32 @@
 
     <!-- Modal for Managing Budget Limits -->
     <div id="budgetModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all text-slate-800">
-            <div class="flex justify-between items-center mb-4 border-b pb-3">
-                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <div class="modal-content-card rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold flex items-center gap-2 modal-label-text">
                     <span>🎯</span> កំណត់ថវិកាចំណាយប្រចាំខែ
                 </h3>
-                <button onclick="closeBudgetModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
+                <button onclick="closeBudgetModal()" class="text-gray-400 hover:text-gray-200 font-bold text-xl px-2">&times;</button>
             </div>
             
             <div class="space-y-4 mb-6">
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">ជ្រើសរើសផ្នែក/ប្រភេទ៖</label>
-                    <select id="bgCategory" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 font-medium text-slate-800"></select>
+                    <label class="block text-xs font-bold mb-1 modal-label-text">ជ្រើសរើសផ្នែក/ប្រភេទ៖</label>
+                    <select id="bgCategory" class="modal-item-input w-full p-2.5 text-sm font-medium"></select>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">កំណត់ថវិកាអតិបរមា៖</label>
-                        <input type="number" step="any" id="bgLimit" placeholder="ឧ. 200" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-indigo-600 bg-white">
+                        <label class="block text-xs font-bold mb-1 modal-label-text">កំណត់ថវិកាអតិបរមា៖</label>
+                        <input type="number" step="any" id="bgLimit" placeholder="ឧ. 200" class="modal-item-input w-full p-2.5 text-sm font-bold text-indigo-600">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">ខ្នាត/រូបិយប័ណ្ណ៖</label>
-                        <select id="bgCurrency" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-amber-700 bg-gray-50 text-slate-800"></select>
+                        <label class="block text-xs font-bold mb-1 modal-label-text">ខ្នាត/រូបិយប័ណ្ណ៖</label>
+                        <select id="bgCurrency" class="modal-item-input w-full p-2.5 text-sm font-bold text-amber-700"></select>
                     </div>
                 </div>
-                <button onclick="saveBudgetLimit()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-lg transition">បន្ថែម/រក្សាទុកថវិកា</button>
+                <button onclick="saveBudgetLimit()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-lg transition shadow">បន្ថែម/រក្សាទុកថវិកា</button>
                 
-                <p class="text-xs text-gray-500 border-t pt-2 font-bold">បញ្ជីថវិកាដែលបានកំណត់៖</p>
+                <p class="text-xs border-t pt-2 font-bold modal-label-text border-gray-200 dark:border-gray-700">បញ្ជីថវិកាដែលបានកំណត់៖</p>
                 <div class="max-h-48 overflow-y-auto space-y-2 pr-1" id="budgetListContainer"></div>
             </div>
 
@@ -780,80 +862,23 @@
         </div>
     </div>
 
-    <!-- Modal for Managing Shortcuts -->
-    <div id="shortcutModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all text-slate-800">
-            <div class="flex justify-between items-center mb-4 border-b pb-3">
-                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                    <span>⚡</span> គ្រប់គ្រងប៊ូតុងកត់ត្រារហ័ស
-                </h3>
-                <button onclick="closeShortcutModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
-            </div>
-            
-            <div class="space-y-3 mb-6">
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">ឈ្មោះប៊ូតុង (ឧ. 🍔 បាយថ្ងៃត្រង់ $2.50)៖</label>
-                    <input type="text" id="scName" placeholder="ឈ្មោះប៊ូតុង..." class="w-full p-2 border border-gray-300 rounded-lg text-sm text-slate-900 bg-white">
-                    <div class="flex items-center gap-1 mt-1 text-xs text-gray-500 overflow-x-auto py-1">
-                        <span class="text-[10px] whitespace-nowrap font-bold">ចុច Emoji៖</span>
-                        <span class="emoji-btn" onclick="appendEmoji('scName', '🍔')">🍔</span>
-                        <span class="emoji-btn" onclick="appendEmoji('scName', '☕')">☕</span>
-                        <span class="emoji-btn" onclick="appendEmoji('scName', '⛽')">⛽</span>
-                        <span class="emoji-btn" onclick="appendEmoji('scName', '🚗')">🚗</span>
-                        <span class="emoji-btn" onclick="appendEmoji('scName', '💵')">💵</span>
-                        <span class="emoji-btn" onclick="appendEmoji('scName', '🛒')">🛒</span>
-                        <span class="emoji-btn" onclick="appendEmoji('scName', '🎁')">🎁</span>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">ប្រភេទ៖</label>
-                        <select id="scCategory" class="w-full p-2 border border-gray-300 rounded-lg text-xs bg-gray-50 text-slate-800"></select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">គណនី៖</label>
-                        <select id="scAccount" class="w-full p-2 border border-gray-300 rounded-lg text-xs bg-gray-50 text-slate-800"></select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">ចំនួនចំណាយ៖</label>
-                        <input type="number" step="any" id="scAmount" placeholder="0.00" class="w-full p-2 border border-gray-300 rounded-lg text-sm font-bold text-red-500 bg-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">ខ្នាត៖</label>
-                        <select id="scCurrency" class="w-full p-2 border border-gray-300 rounded-lg text-xs bg-gray-50 text-slate-800"></select>
-                    </div>
-                </div>
-                <button onclick="addNewShortcut()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition">បន្ថែមប៊ូតុងរហ័ស</button>
-                
-                <p class="text-xs text-gray-500 font-bold border-t pt-2">បញ្ជីប៊ូតុងរហ័សបច្ចុប្បន្ន៖</p>
-                <div class="max-h-40 overflow-y-auto space-y-1.5 pr-1" id="shortcutListContainer"></div>
-            </div>
-
-            <div class="flex justify-end">
-                <button onclick="closeShortcutModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បិទ</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal for Managing Custom Accounts -->
     <div id="accountsModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all text-slate-800">
-            <div class="flex justify-between items-center mb-4 border-b pb-3">
-                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <div class="modal-content-card rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold flex items-center gap-2 modal-label-text">
                     <span>⚙️</span> គ្រប់គ្រងគណនី / កាបូបលុយ
                 </h3>
-                <button onclick="closeAccountsModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
+                <button onclick="closeAccountsModal()" class="text-gray-400 hover:text-gray-200 font-bold text-xl px-2">&times;</button>
             </div>
             
             <div class="space-y-4 mb-6">
                 <div>
                     <div class="flex gap-2">
-                        <input type="text" id="newAccountName" placeholder="ឈ្មោះគណនីថ្មី (ឧ. 🏦 ABA, 💳 Wing...)" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                        <input type="text" id="newAccountName" placeholder="ឈ្មោះគណនីថ្មី (ឧ. 🏦 ABA, 💳 Wing...)" class="modal-item-input flex-1 px-3 py-2 text-sm">
                         <button onclick="addNewAccount()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition">បន្ថែម</button>
                     </div>
-                    <div class="flex items-center gap-1 mt-1.5 text-xs text-gray-500 overflow-x-auto py-1">
+                    <div class="flex items-center gap-1 mt-1.5 text-xs overflow-x-auto py-1 modal-label-text">
                         <span class="text-[10px] font-bold">ចុចរើស Emoji៖</span>
                         <span class="emoji-btn" onclick="appendEmoji('newAccountName', '🏦')">🏦</span>
                         <span class="emoji-btn" onclick="appendEmoji('newAccountName', '💳')">💳</span>
@@ -871,106 +896,38 @@
         </div>
     </div>
 
-    <!-- Modal for Managing Custom Currencies -->
-    <div id="currenciesModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all text-slate-800">
-            <div class="flex justify-between items-center mb-4 border-b pb-3">
-                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                    <span>⛽</span> គ្រប់គ្រងខ្នាត / រូបិយប័ណ្ណ
-                </h3>
-                <button onclick="closeCurrenciesModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
-            </div>
-            
-            <div class="space-y-4 mb-6">
-                <div>
-                    <div class="flex gap-2">
-                        <input type="text" id="newCurrencyName" placeholder="ឈ្មោះខ្នាត (ឧ. L, THB, Point...)" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-900 bg-white focus:ring-2 focus:ring-amber-500 outline-none">
-                        <button onclick="addNewCurrency()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-lg transition">បន្ថែម</button>
-                    </div>
-                    <div class="flex items-center gap-1 mt-1.5 text-xs text-gray-500 overflow-x-auto py-1">
-                        <span class="text-[10px] font-bold">ចុចរើស Emoji៖</span>
-                        <span class="emoji-btn" onclick="appendEmoji('newCurrencyName', '⛽')">⛽</span>
-                        <span class="emoji-btn" onclick="appendEmoji('newCurrencyName', '💵')">💵</span>
-                        <span class="emoji-btn" onclick="appendEmoji('newCurrencyName', '៛')">៛</span>
-                        <span class="emoji-btn" onclick="appendEmoji('newCurrencyName', '🪙')">🪙</span>
-                    </div>
-                </div>
-                <div class="max-h-60 overflow-y-auto space-y-2 pr-1" id="currenciesListContainer"></div>
-            </div>
-
-            <div class="flex justify-end">
-                <button onclick="closeCurrenciesModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បិទ</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for Managing Custom Categories -->
-    <div id="categoriesModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all text-slate-800">
-            <div class="flex justify-between items-center mb-4 border-b pb-3">
-                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                    <span>📁</span> គ្រប់គ្រងផ្នែក / ប្រភេទ
-                </h3>
-                <button onclick="closeCategoriesModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
-            </div>
-            
-            <div class="space-y-4 mb-6">
-                <div>
-                    <div class="flex gap-2">
-                        <input type="text" id="newCategoryName" placeholder="ឈ្មោះប្រភេទថ្មី..." class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-900 bg-white focus:ring-2 focus:ring-purple-500 outline-none">
-                        <button onclick="addNewCategory()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold rounded-lg transition">បន្ថែម</button>
-                    </div>
-                    <div class="flex items-center gap-1 mt-1.5 text-xs text-gray-500 overflow-x-auto py-1">
-                        <span class="text-[10px] font-bold">ចុចរើស Emoji៖</span>
-                        <span class="emoji-btn" onclick="appendEmoji('newCategoryName', '🍔')">🍔</span>
-                        <span class="emoji-btn" onclick="appendEmoji('newCategoryName', '⛽')">⛽</span>
-                        <span class="emoji-btn" onclick="appendEmoji('newCategoryName', '💡')">💡</span>
-                        <span class="emoji-btn" onclick="appendEmoji('newCategoryName', '🛒')">🛒</span>
-                        <span class="emoji-btn" onclick="appendEmoji('newCategoryName', '🎓')">🎓</span>
-                        <span class="emoji-btn" onclick="appendEmoji('newCategoryName', '🏥')">🏥</span>
-                    </div>
-                </div>
-                <div class="max-h-60 overflow-y-auto space-y-2 pr-1" id="categoriesListContainer"></div>
-            </div>
-
-            <div class="flex justify-end">
-                <button onclick="closeCategoriesModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បិទ</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal for Account Transfer -->
     <div id="transferModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all text-slate-800">
-            <div class="flex justify-between items-center mb-4 border-b pb-3">
-                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+        <div class="modal-content-card rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold flex items-center gap-2 modal-label-text">
                     <span>🔄</span> ផ្ទេរប្រាក់រវាងគណនី
                 </h3>
-                <button onclick="closeTransferModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl px-2">&times;</button>
+                <button onclick="closeTransferModal()" class="text-gray-400 hover:text-gray-200 font-bold text-xl px-2">&times;</button>
             </div>
             
             <div class="space-y-4 mb-6">
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">ពីគណនី (ចេញ)៖</label>
-                    <select id="transferFromAcc" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 text-slate-800 font-medium"></select>
+                    <label class="block text-xs font-bold mb-1 modal-label-text">ពីគណនី (ចេញ)៖</label>
+                    <select id="transferFromAcc" class="modal-item-input w-full p-2.5 text-sm font-medium"></select>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">ទៅគណនី (ចូល)៖</label>
-                    <select id="transferToAcc" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 text-slate-800 font-medium"></select>
+                    <label class="block text-xs font-bold mb-1 modal-label-text">ទៅគណនី (ចូល)៖</label>
+                    <select id="transferToAcc" class="modal-item-input w-full p-2.5 text-sm font-medium"></select>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">ចំនួន៖</label>
-                        <input type="number" step="any" id="transferAmount" placeholder="0.00" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-blue-600 bg-white">
+                        <label class="block text-xs font-bold mb-1 modal-label-text">ចំនួន៖</label>
+                        <input type="number" step="any" id="transferAmount" placeholder="0.00" class="modal-item-input w-full p-2.5 text-sm font-bold text-blue-600">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">ខ្នាត/រូបិយប័ណ្ណ៖</label>
-                        <select id="transferCurrency" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-bold text-amber-700 bg-gray-50 text-slate-800"></select>
+                        <label class="block text-xs font-bold mb-1 modal-label-text">ខ្នាត/រូបិយប័ណ្ណ៖</label>
+                        <select id="transferCurrency" class="modal-item-input w-full p-2.5 text-sm font-bold text-amber-700"></select>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">ការពិពណ៌នាបញ្ជាក់៖</label>
-                    <input type="text" id="transferDesc" value="ផ្ទេរប្រាក់រវាងគណនី" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm text-slate-900 bg-white">
+                    <label class="block text-xs font-bold mb-1 modal-label-text">ការពិពណ៌នាបញ្ជាក់៖</label>
+                    <input type="text" id="transferDesc" value="ផ្ទេរប្រាក់រវាងគណនី" class="modal-item-input w-full p-2.5 text-sm">
                 </div>
             </div>
 
@@ -983,15 +940,1235 @@
 
     <!-- Custom Modal for Confirmation -->
     <div id="confirmModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4 transform transition-all text-slate-800">
-            <h3 class="text-lg font-bold text-gray-900 mb-2" id="modalTitle">បញ្ជាក់ការលុប</h3>
-            <p class="text-sm text-gray-600 mb-6" id="modalDesc">តើអ្នកពិតជាចង់លុបទិន្នន័យនេះមែនទេ?</p>
+        <div class="modal-content-card rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4 transform transition-all">
+            <h3 class="text-lg font-bold mb-2 modal-label-text" id="modalTitle">បញ្ជាក់ការលុប</h3>
+            <p class="text-sm mb-6 modal-label-text" id="modalDesc">តើអ្នកពិតជាចង់លុបទិន្នន័យនេះមែនទេ?</p>
             <div class="flex justify-end gap-3">
                 <button onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បោះបង់</button>
                 <button id="modalConfirmBtn" onclick="executeDelete()" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg">យល់ព្រមលុប</button>
             </div>
         </div>
     </div>
+
+    <script>
+        // Ensure state is defined globally on window
+        window.state = {
+            exchangeRate: 4100,
+            hideAmounts: false, 
+            hiddenAccounts: [],
+            themeStyle: 'default',
+            bgImageUrl: '',
+            titleColor: '#ffffff',
+            subtitleColor: '#bfdbfe',
+            pinCode: '',
+            enteredPin: '',
+            appTitle: 'ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន (Pro Cloud)',
+            appSubtitle: 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️',
+            accounts: ['🏦 ABA', '💳 AC', '👛 Wallet', '🐖 Savings', '⛽ កាតសាំង'],
+            currencies: ['USD', 'KHR', 'L (លីត្រ)'],
+            categories: ['ប្រាក់ខែ', 'អាហារ', 'សាំង', 'បង់ថ្លៃភ្លើង/ទឹក', 'ទិញទំនិញ', 'ផ្ទេរប្រាក់', 'ផ្សេងៗ'],
+            budgets: [
+                { id: 'b1', cat: 'អាហារ', limit: 200, cur: 'USD' },
+                { id: 'b2', cat: 'សាំង', limit: 50, cur: 'L (លីត្រ)' }
+            ],
+            goals: [
+                { id: 'g1', name: '🛵 ទិញម៉ូតូ', target: 1500, current: 400 },
+                { id: 'g2', name: '🏖️ ដើរលេងសៀមរាប', target: 300, current: 180 }
+            ],
+            shortcuts: [
+                { id: 's1', name: '🍔 បាយថ្ងៃត្រង់ ($2.50)', cat: 'អាហារ', acc: '👛 Wallet', cur: 'USD', inc: 0, exp: 2.5, desc: 'បាយថ្ងៃត្រង់' },
+                { id: 's2', name: '☕ កាហ្វេ ($1.50)', cat: 'អាហារ', acc: '👛 Wallet', cur: 'USD', inc: 0, exp: 1.5, desc: 'ទិញកាហ្វេ' },
+                { id: 's3', name: '⛽ ចាក់សាំង (10L)', cat: 'សាំង', acc: '⛽ កាតសាំង', cur: 'L (លីត្រ)', inc: 0, exp: 10, desc: 'ចាក់សាំង' }
+            ],
+            transactions: []
+        };
+
+        window.charts = { expense: null, trend: null };
+
+        // Audio chime helper
+        window.playChimeSound = function() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.25);
+            } catch(e) {}
+        };
+
+        // Toast Notification System
+        window.showToast = function(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            const toast = document.createElement('div');
+            let bg = 'bg-slate-800 text-white';
+            if (type === 'success') bg = 'bg-emerald-600 text-white';
+            if (type === 'error') bg = 'bg-rose-600 text-white';
+            
+            toast.className = `toast-msg ${bg} px-4 py-2.5 rounded-xl shadow-lg text-xs font-bold flex items-center gap-2 border border-white/10`;
+            toast.innerHTML = `<span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        };
+
+        // PIN Security Screen Logic
+        window.checkPinLock = function() {
+            if (window.state.pinCode && window.state.pinCode.length === 4) {
+                document.getElementById('pinLockOverlay').classList.remove('hidden');
+                window.updatePinDots();
+            } else {
+                document.getElementById('pinLockOverlay').classList.add('hidden');
+            }
+        };
+
+        window.pressPin = function(digit) {
+            if (window.state.enteredPin.length < 4) {
+                window.state.enteredPin += digit;
+                window.updatePinDots();
+                if (window.state.enteredPin.length === 4) {
+                    setTimeout(() => {
+                        if (window.state.enteredPin === window.state.pinCode) {
+                            window.playChimeSound();
+                            document.getElementById('pinLockOverlay').classList.add('hidden');
+                            window.state.enteredPin = '';
+                            window.showToast('ស្វាគមន៍! បានដោះសោររៀងរាល់ជោគជ័យ', 'success');
+                        } else {
+                            window.showToast('លេខកូដ PIN មិនត្រឹមត្រូវទេ!', 'error');
+                            window.state.enteredPin = '';
+                            window.updatePinDots();
+                        }
+                    }, 150);
+                }
+            }
+        };
+
+        window.clearPin = function() {
+            window.state.enteredPin = window.state.enteredPin.slice(0, -1);
+            window.updatePinDots();
+        };
+
+        window.updatePinDots = function() {
+            for (let i = 0; i < 4; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) {
+                    if (i < window.state.enteredPin.length) dot.classList.add('filled');
+                    else dot.classList.remove('filled');
+                }
+            }
+        };
+
+        window.savePinCode = function() {
+            const val = document.getElementById('cfgPinInput').value.trim();
+            if (val.length === 4 && !isNaN(val)) {
+                window.state.pinCode = val;
+                window.saveUiConfigToLocal();
+                window.saveUiConfigToCloud();
+                window.showToast('បានរក្សាទុក PIN Code ៤ ខ្ទង់!', 'success');
+            } else {
+                window.showToast('សូមបញ្ចូលលេខកូដ PIN ៤ ខ្ទង់!', 'error');
+            }
+        };
+
+        window.clearPinCode = function() {
+            window.state.pinCode = '';
+            document.getElementById('cfgPinInput').value = '';
+            window.saveUiConfigToLocal();
+            window.saveUiConfigToCloud();
+            window.showToast('បានលុបសោរ PIN Code', 'info');
+        };
+
+        window.formatForDateTimeInput = function(dStr) {
+            if (!dStr) return '';
+            if (dStr.length === 10) return dStr + 'T00:00:00';
+            if (dStr.includes('T')) return dStr.slice(0, 19);
+            const d = new Date(dStr);
+            if (isNaN(d.getTime())) return dStr;
+            const now = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+            return now.toISOString().slice(0, 19);
+        };
+
+        window.generateId = function() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        };
+
+        window.appendEmoji = function(inputId, emoji) {
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.value += emoji;
+                input.focus();
+            }
+        };
+
+        // Eye Toggle
+        window.toggleHideAmounts = function() {
+            window.state.hideAmounts = !window.state.hideAmounts;
+            const eyeIcon = document.getElementById('eyeIcon');
+            const eyeBtnText = document.getElementById('eyeBtnText');
+            
+            if (window.state.hideAmounts) {
+                if (eyeIcon) eyeIcon.className = 'fa-solid fa-eye-slash';
+                if (eyeBtnText) eyeBtnText.textContent = 'បង្ហាញសមតុល្យ';
+            } else {
+                if (eyeIcon) eyeIcon.className = 'fa-solid fa-eye';
+                if (eyeBtnText) eyeBtnText.textContent = 'បាំងសមតុល្យ';
+            }
+
+            window.saveUiConfigToLocal();
+            window.renderTable();
+            window.updateDashboard();
+        };
+
+        // Live Exchange Rate
+        window.fetchLiveExchangeRate = async function(isSilent = false) {
+            const rateSpin = document.getElementById('rateSyncSpin');
+            if (rateSpin) rateSpin.classList.add('animate-spin');
+
+            try {
+                const response = await fetch('https://open.er-api.com/v6/latest/USD');
+                const data = await response.json();
+                if (data && data.rates && data.rates.KHR) {
+                    const liveRate = Math.round(data.rates.KHR);
+                    const rateInput = document.getElementById('exchangeRate');
+                    if (rateInput) rateInput.value = liveRate;
+                    window.updateExchangeRate();
+                    if (!isSilent) {
+                        window.showToast(`អត្រាប្តូរប្រាក់៖ 1$ = ${liveRate.toLocaleString()} ៛`, 'success');
+                    }
+                }
+            } catch (err) {
+                if (!isSilent) window.showToast('មិនអាចទាញយកអត្រាប្តូរប្រាក់បានទេ', 'error');
+            } finally {
+                if (rateSpin) rateSpin.classList.remove('animate-spin');
+            }
+        };
+
+        // Customize UI & Theme Modals
+        window.openCustomizeModal = function() {
+            document.getElementById('cfgAppTitle').value = window.state.appTitle || '';
+            document.getElementById('cfgAppSubtitle').value = window.state.appSubtitle || '';
+            document.getElementById('cfgBgImageUrl').value = window.state.bgImageUrl || '';
+            document.getElementById('cfgTitleColor').value = window.state.titleColor || '#ffffff';
+            document.getElementById('cfgSubtitleColor').value = window.state.subtitleColor || '#bfdbfe';
+            document.getElementById('cfgPinInput').value = window.state.pinCode || '';
+            document.getElementById('customizeModal').classList.remove('hidden');
+        };
+
+        window.closeCustomizeModal = function() {
+            document.getElementById('customizeModal').classList.add('hidden');
+        };
+
+        window.handleLocalBgUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                window.state.bgImageUrl = e.target.result;
+                document.getElementById('cfgBgImageUrl').value = '';
+                window.applyUiConfig();
+                window.saveUiConfigToLocal();
+                window.saveUiConfigToCloud();
+                window.showToast('បានអាប់ដេត Background រក្សាទុក!', 'success');
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.clearBgImage = function() {
+            document.getElementById('cfgBgImageUrl').value = '';
+            document.getElementById('cfgBgFileInput').value = '';
+            window.state.bgImageUrl = '';
+            document.body.style.backgroundImage = 'none';
+            window.saveUiConfigToLocal();
+            window.saveUiConfigToCloud();
+            window.showToast('បានលុបរូប', 'info');
+        };
+
+        window.saveUiCustomizations = function() {
+            window.state.appTitle = document.getElementById('cfgAppTitle').value.trim() || 'ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន (Pro Cloud)';
+            window.state.appSubtitle = document.getElementById('cfgAppSubtitle').value.trim() || 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️';
+            const urlVal = document.getElementById('cfgBgImageUrl').value.trim();
+            if (urlVal) window.state.bgImageUrl = urlVal;
+            window.state.titleColor = document.getElementById('cfgTitleColor').value || '#ffffff';
+            window.state.subtitleColor = document.getElementById('cfgSubtitleColor').value || '#bfdbfe';
+
+            window.applyUiConfig();
+            window.saveUiConfigToLocal();
+            window.saveUiConfigToCloud();
+            window.closeCustomizeModal();
+            window.showToast('បានរក្សាទុកការកំណត់អេក្រង់', 'success');
+        };
+
+        window.setThemeStyle = function(theme) {
+            window.state.themeStyle = theme;
+            window.applyUiConfig();
+            window.saveUiConfigToLocal();
+            window.saveUiConfigToCloud();
+        };
+
+        window.applyUiConfig = function() {
+            const titleEl = document.getElementById('displayAppTitle');
+            const subTitleEl = document.getElementById('displayAppSubtitle');
+            
+            if (titleEl) {
+                titleEl.textContent = window.state.appTitle;
+                titleEl.style.color = window.state.titleColor || '#ffffff';
+            }
+            if (subTitleEl) {
+                subTitleEl.textContent = window.state.appSubtitle;
+                subTitleEl.style.color = window.state.subtitleColor || '#bfdbfe';
+            }
+
+            const body = document.getElementById('appBody');
+            const hero = document.getElementById('heroCard');
+
+            if (window.state.bgImageUrl) {
+                body.style.backgroundImage = `url('${window.state.bgImageUrl}')`;
+            } else {
+                body.style.backgroundImage = 'none';
+            }
+
+            body.className = "text-slate-800 antialiased min-h-screen pb-10";
+            body.classList.remove('theme-aba-dark', 'theme-slate', 'theme-dark');
+
+            if (window.state.themeStyle === 'aba-dark') {
+                body.classList.add('theme-aba-dark', 'theme-dark');
+                if (hero) hero.className = "bg-gradient-to-br from-neutral-900 via-amber-950 to-neutral-950 rounded-2xl shadow-xl p-6 mb-6 text-white relative overflow-hidden border border-amber-500/30";
+            } else if (window.state.themeStyle === 'slate') {
+                body.classList.add('theme-slate', 'theme-dark');
+                body.style.backgroundColor = '#0f172a';
+                if (hero) hero.className = "bg-gradient-to-br from-slate-800 to-slate-950 rounded-2xl shadow-xl p-6 mb-6 text-white relative overflow-hidden border border-slate-700";
+            } else {
+                body.style.backgroundColor = '#f1f5f9';
+                if (hero) hero.className = "bg-gradient-to-br from-blue-800 to-indigo-900 rounded-2xl shadow-xl p-6 mb-6 text-white relative overflow-hidden";
+            }
+            
+            window.updateDashboard();
+        };
+
+        window.saveUiConfigToLocal = function() {
+            localStorage.setItem('finance_ui_config', JSON.stringify({
+                appTitle: window.state.appTitle,
+                appSubtitle: window.state.appSubtitle,
+                themeStyle: window.state.themeStyle,
+                bgImageUrl: window.state.bgImageUrl,
+                titleColor: window.state.titleColor,
+                subtitleColor: window.state.subtitleColor,
+                hideAmounts: window.state.hideAmounts,
+                hiddenAccounts: window.state.hiddenAccounts || [],
+                pinCode: window.state.pinCode
+            }));
+        };
+
+        window.saveUiConfigToCloud = function() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'uiConfig'), {
+                    appTitle: window.state.appTitle,
+                    appSubtitle: window.state.appSubtitle,
+                    themeStyle: window.state.themeStyle,
+                    bgImageUrl: window.state.bgImageUrl,
+                    titleColor: window.state.titleColor,
+                    subtitleColor: window.state.subtitleColor,
+                    hiddenAccounts: window.state.hiddenAccounts || [],
+                    pinCode: window.state.pinCode
+                });
+            }
+        };
+
+        window.saveGoalsToCloud = function() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'goals'), window.state.goals);
+            }
+            window.updateDashboard();
+        };
+
+        window.toggleSection = function(secId, isVisible) {
+            const el = document.getElementById(secId);
+            if (el) {
+                if (isVisible) el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            }
+        };
+
+        window.renderFilterAccounts = function() {
+            const sel = document.getElementById('filterAccount');
+            if (!sel) return;
+            const currentVal = sel.value || 'ALL';
+            sel.innerHTML = `<option value="ALL">គ្រប់គណនី</option>`;
+            window.state.accounts.forEach(a => {
+                sel.innerHTML += `<option value="${a}">${a}</option>`;
+            });
+            sel.value = window.state.accounts.includes(currentVal) ? currentVal : 'ALL';
+        };
+
+        window.saveAccountsToCloud = function() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'accounts'), window.state.accounts);
+            }
+            window.renderFilterAccounts();
+            window.renderTable();
+            window.updateDashboard();
+        };
+
+        window.saveCurrenciesToCloud = function() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'currencies'), window.state.currencies);
+            }
+            window.renderTable();
+            window.updateDashboard();
+        };
+
+        window.saveCategoriesToCloud = function() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'categories'), window.state.categories);
+            }
+            window.renderTable();
+            window.updateDashboard();
+        };
+
+        window.saveBudgetsToCloud = function() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'budgets'), window.state.budgets);
+            }
+            window.updateDashboard();
+        };
+
+        window.saveShortcutsToCloud = function() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'shortcuts'), window.state.shortcuts);
+            }
+            window.renderShortcuts();
+        };
+
+        window.pushTxToFirebase = function(tx) {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'transactions/' + tx.id), tx);
+            }
+        };
+
+        window.removeTxFromFirebase = function(id) {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
+                window.firebaseRemove(window.firebaseRef(window.firebaseDb, 'transactions/' + id));
+            }
+        };
+
+        window.clearAllFromFirebase = function() {
+            if (window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
+                window.firebaseRemove(window.firebaseRef(window.firebaseDb, 'transactions'));
+            }
+        };
+
+        window.switchTab = function(tabId) {
+            ['dashboard', 'entry', 'report'].forEach(t => {
+                const viewEl = document.getElementById('view-' + t);
+                const tabEl = document.getElementById('tab-' + t);
+                if (viewEl) viewEl.classList.add('hidden');
+                if (tabEl) tabEl.classList.remove('active');
+            });
+            const targetView = document.getElementById('view-' + tabId);
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetView) targetView.classList.remove('hidden');
+            if (targetTab) targetTab.classList.add('active');
+
+            if (tabId === 'report') window.renderReports();
+            if (tabId === 'dashboard') window.updateDashboard();
+        };
+
+        window.formatMoney = function(amount, cur) {
+            if (window.state.hideAmounts) return '••••••';
+            if (cur === 'KHR') return amount.toLocaleString('en-US') + ' ៛';
+            if (cur === 'USD') return amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' $';
+            return amount.toLocaleString('en-US', {maximumFractionDigits: 2}) + ' ' + cur;
+        };
+
+        window.updateExchangeRate = function() {
+            window.state.exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 4100;
+            window.renderTable();
+            window.updateDashboard();
+        };
+
+        window.filterByAccountFromCard = function(accName) {
+            const sel = document.getElementById('filterAccount');
+            if (sel) {
+                sel.value = accName;
+                window.switchTab('entry');
+                window.renderTable();
+                window.showToast(`បង្ហាញប្រតិបត្តិការរបស់៖ ${accName}`, 'info');
+            }
+        };
+
+        window.renderTable = function() {
+            const tbody = document.getElementById('tableBody');
+            if (!tbody) return;
+            const searchQ = (document.getElementById('searchInput')?.value || '').toLowerCase();
+            const filterAcc = document.getElementById('filterAccount')?.value || 'ALL';
+            
+            tbody.innerHTML = '';
+            let totals = {}; 
+            window.state.currencies.forEach(c => totals[c] = { in: 0, out: 0 });
+
+            let rowCount = 1;
+
+            window.state.transactions.forEach(tx => {
+                if (filterAcc !== 'ALL' && tx.acc !== filterAcc) return;
+                const matchStr = `${tx.cat} ${tx.desc}`.toLowerCase();
+                if (searchQ && !matchStr.includes(searchQ)) return;
+
+                const curKey = tx.cur || 'USD';
+                if (!totals[curKey]) totals[curKey] = { in: 0, out: 0 };
+                totals[curKey].in += (tx.inc || 0);
+                totals[curKey].out += (tx.exp || 0);
+
+                let accOptsHtml = window.state.accounts.map(a => `<option value="${a}" ${tx.acc===a?'selected':''}>${a}</option>`).join('');
+                let curOptsHtml = window.state.currencies.map(c => `<option value="${c}" ${tx.cur===c?'selected':''}>${c}</option>`).join('');
+                let catOptsHtml = window.state.categories.map(c => `<option value="${c}" ${tx.cat===c?'selected':''}>${c}</option>`).join('');
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-blue-50/50 dark:hover:bg-zinc-800/50 transition-colors group";
+                
+                tr.innerHTML = `
+                    <td class="px-3 py-2 text-sm text-gray-500 dark:text-gray-300 text-center">${rowCount++}</td>
+                    <td class="px-3 py-2"><input type="datetime-local" step="1" value="${window.formatForDateTimeInput(tx.date)}" onchange="updateTx('${tx.id}', 'date', this.value)" class="editable-input text-xs font-mono text-slate-800 dark:text-slate-100"></td>
+                    <td class="px-3 py-2">
+                        <select onchange="updateTx('${tx.id}', 'cat', this.value)" class="editable-input text-sm font-medium text-slate-800 dark:text-slate-100">
+                            ${catOptsHtml}
+                        </select>
+                    </td>
+                    <td class="px-3 py-2"><input type="text" value="${tx.desc}" onchange="updateTx('${tx.id}', 'desc', this.value)" class="editable-input text-sm text-slate-800 dark:text-slate-100"></td>
+                    <td class="px-3 py-2">
+                        <select onchange="updateTx('${tx.id}', 'acc', this.value)" class="editable-input text-sm font-medium text-slate-800 dark:text-slate-100">
+                            ${accOptsHtml}
+                        </select>
+                    </td>
+                    <td class="px-3 py-2">
+                        <select onchange="updateTx('${tx.id}', 'cur', this.value)" class="editable-input text-sm font-bold text-amber-700 dark:text-amber-400">
+                            ${curOptsHtml}
+                        </select>
+                    </td>
+                    <td class="px-3 py-2"><input type="${window.state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${window.state.hideAmounts ? '••••••' : (tx.inc||0)}" onchange="updateTx('${tx.id}', 'inc', this.value)" class="editable-input text-sm font-semibold text-green-600 dark:text-emerald-400 text-right"></td>
+                    <td class="px-3 py-2"><input type="${window.state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${window.state.hideAmounts ? '••••••' : (tx.exp||0)}" onchange="updateTx('${tx.id}', 'exp', this.value)" class="editable-input text-sm font-semibold text-red-500 dark:text-rose-400 text-right"></td>
+                    <td class="px-3 py-2 text-center">
+                        <button onclick="confirmDelete('${tx.id}')" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 opacity-0 group-hover:opacity-100 transition">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Table Footer Totals
+            let incText = '', expText = '';
+            Object.keys(totals).forEach(c => {
+                if (totals[c].in > 0) incText += `<div class="font-bold text-green-600 dark:text-emerald-400">${window.formatMoney(totals[c].in, c)}</div>`;
+                if (totals[c].out > 0) expText += `<div class="font-bold text-red-500 dark:text-rose-400">${window.formatMoney(totals[c].out, c)}</div>`;
+            });
+            document.getElementById('totIncCell').innerHTML = incText || '<div class="font-bold text-green-600 dark:text-emerald-400">$ 0.00</div>';
+            document.getElementById('totExpCell').innerHTML = expText || '<div class="font-bold text-red-500 dark:text-rose-400">$ 0.00</div>';
+        };
+
+        window.updateTx = function(id, field, val) {
+            const tx = window.state.transactions.find(t => t.id === id);
+            if (tx) {
+                if (field === 'inc' || field === 'exp') tx[field] = parseFloat(val) || 0;
+                else tx[field] = val;
+                window.pushTxToFirebase(tx);
+                window.renderTable();
+                window.updateDashboard();
+            }
+        };
+
+        window.addRow = function() {
+            window.playChimeSound();
+            const now = new Date();
+            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+            const newTx = {
+                id: window.generateId(),
+                date: nowIso,
+                cat: window.state.categories[0] || 'ផ្សេងៗ',
+                desc: 'ចំណាយថ្មី',
+                acc: window.state.accounts[0] || '🏦 ABA',
+                cur: 'USD',
+                inc: 0,
+                exp: 0
+            };
+            window.state.transactions.push(newTx);
+            window.pushTxToFirebase(newTx);
+            window.renderTable();
+            window.updateDashboard();
+        };
+
+        window.renderShortcuts = function() {
+            const container = document.getElementById('shortcutsContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            window.state.shortcuts.forEach(sc => {
+                container.innerHTML += `
+                    <button onclick="executeShortcut('${sc.id}')" class="px-3 py-1.5 bg-blue-50 dark:bg-zinc-800 hover:bg-blue-100 dark:hover:bg-zinc-700 text-blue-700 dark:text-amber-300 border border-blue-200 dark:border-zinc-700 text-xs font-bold rounded-lg transition whitespace-nowrap flex items-center gap-1 shadow-sm">
+                        ⚡ ${sc.name}
+                    </button>
+                `;
+            });
+        };
+
+        window.executeShortcut = function(shortcutId) {
+            window.playChimeSound();
+            const sc = window.state.shortcuts.find(s => s.id === shortcutId);
+            if (!sc) return;
+            const now = new Date();
+            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+            const newTx = {
+                id: window.generateId(),
+                date: nowIso, cat: sc.cat, desc: sc.desc || sc.name, acc: sc.acc, cur: sc.cur, inc: sc.inc||0, exp: sc.exp||0
+            };
+            window.state.transactions.push(newTx);
+            window.pushTxToFirebase(newTx);
+            window.renderTable();
+            window.updateDashboard();
+            window.showToast(`បានកត់ត្រា ${sc.name} រួចរាល់!`, 'success');
+        };
+
+        window.renderSavingsGoals = function() {
+            const container = document.getElementById('goalsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            window.state.goals.forEach(g => {
+                const pct = g.target > 0 ? Math.min(Math.round((g.current / g.target) * 100), 100) : 0;
+                container.innerHTML += `
+                    <div class="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
+                        <div class="flex justify-between items-center mb-1 text-xs font-bold">
+                            <span class="text-slate-800 dark:text-slate-100">${g.name}</span>
+                            <span class="text-emerald-600 dark:text-emerald-400">${window.formatMoney(g.current, 'USD')} / ${window.formatMoney(g.target, 'USD')} (${pct}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
+                            <div class="bg-emerald-500 h-2 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (window.state.goals.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់មានគោលដៅសន្សំ។ ចុច "+ បន្ថែមគោលដៅ" ដើម្បីកំណត់។</p>`;
+            }
+        };
+
+        window.openGoalModal = function() {
+            window.renderGoalList();
+            document.getElementById('goalModal').classList.remove('hidden');
+        };
+        window.closeGoalModal = function() { document.getElementById('goalModal').classList.add('hidden'); };
+
+        window.saveSavingsGoal = function() {
+            const name = document.getElementById('glName').value.trim();
+            const target = parseFloat(document.getElementById('glTarget').value) || 0;
+            const current = parseFloat(document.getElementById('glCurrent').value) || 0;
+
+            if (!name || target <= 0) return;
+            window.state.goals.push({ id: window.generateId(), name, target, current });
+            window.saveGoalsToCloud();
+            window.renderGoalList();
+            document.getElementById('glName').value = '';
+            document.getElementById('glTarget').value = '';
+            document.getElementById('glCurrent').value = '';
+            window.showToast('បានរក្សាទុកគោលដៅសន្សំប្រាក់', 'success');
+        };
+
+        window.deleteGoal = function(id) {
+            window.state.goals = window.state.goals.filter(g => g.id !== id);
+            window.saveGoalsToCloud();
+            window.renderGoalList();
+            window.showToast('បានលុបគោលដៅសន្សំ', 'info');
+        };
+
+        window.renderGoalList = function() {
+            const container = document.getElementById('goalListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            window.state.goals.forEach(g => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-2 bg-emerald-50/50 rounded border text-xs">
+                        <span class="font-bold modal-label-text">${g.name}: ${window.formatMoney(g.current, 'USD')} / ${window.formatMoney(g.target, 'USD')}</span>
+                        <button onclick="deleteGoal('${g.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
+                    </div>
+                `;
+            });
+        };
+
+        window.renderBudgetWidget = function() {
+            const container = document.getElementById('budgetProgressContainer');
+            if(!container) return;
+            container.innerHTML = '';
+
+            const currentMonth = new Date().toISOString().substring(0, 7);
+            
+            window.state.budgets.forEach(b => {
+                let spent = 0;
+                window.state.transactions.forEach(tx => {
+                    if (tx.date && tx.date.substring(0, 7) === currentMonth && tx.cat === b.cat && tx.cur === b.cur) {
+                        spent += (tx.exp || 0);
+                    }
+                });
+
+                const pct = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
+                let colorClass = "bg-emerald-500";
+                let textClass = "text-emerald-600 dark:text-emerald-400";
+                if (pct >= 80 && pct < 100) { colorClass = "bg-amber-500"; textClass = "text-amber-600 dark:text-amber-400"; }
+                if (pct >= 100) { colorClass = "bg-red-500"; textClass = "text-red-600 dark:text-rose-400"; }
+
+                container.innerHTML += `
+                    <div class="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
+                        <div class="flex justify-between items-center mb-1 text-xs font-bold">
+                            <span class="text-slate-800 dark:text-slate-100">${b.cat} (${b.cur})</span>
+                            <span class="${textClass}">${window.formatMoney(spent, b.cur)} / ${window.formatMoney(b.limit, b.cur)} (${pct}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
+                            <div class="${colorClass} h-2 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (window.state.budgets.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់បានកំណត់ថវិកា។ ចុច "⚙️ កំណត់ថវិកា" ដើម្បីកំណត់។</p>`;
+            }
+        };
+
+        window.openBudgetModal = function() {
+            const catSel = document.getElementById('bgCategory');
+            const curSel = document.getElementById('bgCurrency');
+            catSel.innerHTML = window.state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
+            curSel.innerHTML = window.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+            window.renderBudgetList();
+            document.getElementById('budgetModal').classList.remove('hidden');
+        };
+        window.closeBudgetModal = function() { document.getElementById('budgetModal').classList.add('hidden'); };
+
+        window.saveBudgetLimit = function() {
+            const cat = document.getElementById('bgCategory').value;
+            const limit = parseFloat(document.getElementById('bgLimit').value) || 0;
+            const cur = document.getElementById('bgCurrency').value;
+
+            if (limit <= 0) return;
+            window.state.budgets = window.state.budgets.filter(b => !(b.cat === cat && b.cur === cur));
+            window.state.budgets.push({ id: window.generateId(), cat, limit, cur });
+            window.saveBudgetsToCloud();
+            window.renderBudgetList();
+            document.getElementById('bgLimit').value = '';
+            window.showToast('បានរក្សាទុកថវិកា', 'success');
+        };
+
+        window.deleteBudget = function(id) {
+            window.state.budgets = window.state.budgets.filter(b => b.id !== id);
+            window.saveBudgetsToCloud();
+            window.renderBudgetList();
+            window.showToast('បានលុបថវិកា', 'info');
+        };
+
+        window.renderBudgetList = function() {
+            const container = document.getElementById('budgetListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            window.state.budgets.forEach(b => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-2 bg-indigo-50/50 rounded border text-xs">
+                        <span class="font-bold modal-label-text">${b.cat}: ${window.formatMoney(b.limit, b.cur)}</span>
+                        <button onclick="deleteBudget('${b.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
+                    </div>
+                `;
+            });
+        };
+
+        window.openShortcutModal = function() {
+            document.getElementById('scCategory').innerHTML = window.state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
+            document.getElementById('scAccount').innerHTML = window.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
+            document.getElementById('scCurrency').innerHTML = window.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+            window.renderShortcutList();
+            document.getElementById('shortcutModal').classList.remove('hidden');
+        };
+        window.closeShortcutModal = function() { document.getElementById('shortcutModal').classList.add('hidden'); };
+
+        window.addNewShortcut = function() {
+            const name = document.getElementById('scName').value.trim();
+            const cat = document.getElementById('scCategory').value;
+            const acc = document.getElementById('scAccount').value;
+            const amount = parseFloat(document.getElementById('scAmount').value) || 0;
+            const cur = document.getElementById('scCurrency').value;
+
+            if (!name || amount <= 0) return;
+            window.state.shortcuts.push({ id: window.generateId(), name, cat, acc, cur, inc: 0, exp: amount, desc: name });
+            window.saveShortcutsToCloud();
+            window.renderShortcutList();
+            document.getElementById('scName').value = '';
+            document.getElementById('scAmount').value = '';
+            window.showToast('បានបន្ថែមប៊ូតុងរហ័ស', 'success');
+        };
+
+        window.deleteShortcut = function(id) {
+            window.state.shortcuts = window.state.shortcuts.filter(s => s.id !== id);
+            window.saveShortcutsToCloud();
+            window.renderShortcutList();
+            window.showToast('បានលុបប៊ូតុងរហ័ស', 'info');
+        };
+
+        window.renderShortcutList = function() {
+            const container = document.getElementById('shortcutListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            window.state.shortcuts.forEach(s => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-2 bg-blue-50/50 rounded border text-xs">
+                        <span class="font-bold modal-label-text">${s.name} (${window.formatMoney(s.exp, s.cur)})</span>
+                        <button onclick="deleteShortcut('${s.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
+                    </div>
+                `;
+            });
+        };
+
+        window.openAccountsModal = function() { window.renderAccountsList(); document.getElementById('accountsModal').classList.remove('hidden'); };
+        window.closeAccountsModal = function() { document.getElementById('accountsModal').classList.add('hidden'); };
+        window.renderAccountsList = function() {
+            const c = document.getElementById('accountsListContainer'); if(!c) return; c.innerHTML = '';
+            if (!window.state.hiddenAccounts) window.state.hiddenAccounts = [];
+            window.state.accounts.forEach((acc, i) => {
+                const isHidden = window.state.hiddenAccounts.includes(acc);
+                c.innerHTML += `
+                    <div class="flex items-center justify-between p-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-sm gap-2">
+                        <button onclick="toggleAccountVisibility('${acc}')" class="px-2 py-1.5 rounded-lg border text-xs font-bold transition flex items-center gap-1 ${isHidden ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-emerald-100 text-emerald-800 border-emerald-300'}" title="${isHidden ? 'ចុចដើម្បីបង្ហាញលើ Dashboard' : 'ចុចដើម្បីលាក់ពី Dashboard'}">
+                            ${isHidden ? '🙈 លាក់' : '👁️ បង្ហាញ'}
+                        </button>
+                        <input type="text" value="${acc}" onchange="editAccountName(${i}, this.value)" class="modal-item-input flex-1 outline-none">
+                        <button onclick="deleteAccount(${i})" class="text-red-500 hover:text-red-600 font-bold text-xs bg-red-50 dark:bg-red-950/50 px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900">🗑️ លុប</button>
+                    </div>`;
+            });
+        };
+
+        window.toggleAccountVisibility = function(accName) {
+            if (!window.state.hiddenAccounts) window.state.hiddenAccounts = [];
+            if (window.state.hiddenAccounts.includes(accName)) {
+                window.state.hiddenAccounts = window.state.hiddenAccounts.filter(a => a !== accName);
+                window.showToast(`បានបង្ហាញ៖ ${accName} លើ Dashboard`, 'success');
+            } else {
+                window.state.hiddenAccounts.push(accName);
+                window.showToast(`បានលាក់៖ ${accName} ពី Dashboard`, 'info');
+            }
+            window.saveUiConfigToLocal();
+            window.saveUiConfigToCloud();
+            window.renderAccountsList();
+            window.updateDashboard();
+        };
+
+        window.addNewAccount = function() { const name = document.getElementById('newAccountName').value.trim(); if(!name || window.state.accounts.includes(name)) return; window.state.accounts.push(name); window.saveAccountsToCloud(); window.renderAccountsList(); document.getElementById('newAccountName').value = ''; window.showToast('បានបន្ថែមគណនីថ្មី', 'success'); };
+        window.editAccountName = function(i, val) { val = val.trim(); if(!val) return; window.state.accounts[i] = val; window.saveAccountsToCloud(); window.renderAccountsList(); };
+        window.deleteAccount = function(i) { window.state.accounts.splice(i, 1); window.saveAccountsToCloud(); window.renderAccountsList(); window.showToast('បានលុបគណនី', 'info'); };
+
+        window.openCurrenciesModal = function() { window.renderCurrenciesList(); document.getElementById('currenciesModal').classList.remove('hidden'); };
+        window.closeCurrenciesModal = function() { document.getElementById('currenciesModal').classList.add('hidden'); };
+        window.renderCurrenciesList = function() {
+            const c = document.getElementById('currenciesListContainer'); if(!c) return; c.innerHTML = '';
+            window.state.currencies.forEach((cur, i) => {
+                c.innerHTML += `<div class="flex items-center justify-between p-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-sm gap-2"><input type="text" value="${cur}" onchange="editCurrencyName(${i}, this.value)" class="modal-item-input flex-1 outline-none"><button onclick="deleteCurrency(${i})" class="text-red-500 hover:text-red-600 font-bold text-xs bg-red-50 dark:bg-red-950/50 px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900">🗑️ លុប</button></div>`;
+            });
+        };
+        window.addNewCurrency = function() { const name = document.getElementById('newCurrencyName').value.trim(); if(!name || window.state.currencies.includes(name)) return; window.state.currencies.push(name); window.saveCurrenciesToCloud(); window.renderCurrenciesList(); document.getElementById('newCurrencyName').value = ''; window.showToast('បានបន្ថែមខ្នាតថ្មី', 'success'); };
+        window.editCurrencyName = function(i, val) { val = val.trim(); if(!val) return; window.state.currencies[i] = val; window.saveCurrenciesToCloud(); window.renderCurrenciesList(); };
+        window.deleteCurrency = function(i) { window.state.currencies.splice(i, 1); window.saveCurrenciesToCloud(); window.renderCurrenciesList(); window.showToast('បានលុបខ្នាត', 'info'); };
+
+        window.openCategoriesModal = function() { window.renderCategoriesList(); document.getElementById('categoriesModal').classList.remove('hidden'); };
+        window.closeCategoriesModal = function() { document.getElementById('categoriesModal').classList.add('hidden'); };
+        window.renderCategoriesList = function() {
+            const c = document.getElementById('categoriesListContainer'); if(!c) return; c.innerHTML = '';
+            window.state.categories.forEach((cat, i) => {
+                c.innerHTML += `<div class="flex items-center justify-between p-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-sm gap-2"><input type="text" value="${cat}" onchange="editCategoryName(${i}, this.value)" class="modal-item-input flex-1 outline-none"><button onclick="deleteCategory(${i})" class="text-red-500 hover:text-red-600 font-bold text-xs bg-red-50 dark:bg-red-950/50 px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900">🗑️ លុប</button></div>`;
+            });
+        };
+        window.addNewCategory = function() { const name = document.getElementById('newCategoryName').value.trim(); if(!name || window.state.categories.includes(name)) return; window.state.categories.push(name); window.saveCategoriesToCloud(); window.renderCategoriesList(); document.getElementById('newCategoryName').value = ''; window.showToast('បានបន្ថែមប្រភេទថ្មី', 'success'); };
+        window.editCategoryName = function(i, val) { val = val.trim(); if(!val) return; window.state.categories[i] = val; window.saveCategoriesToCloud(); window.renderCategoriesList(); };
+        window.deleteCategory = function(i) { window.state.categories.splice(i, 1); window.saveCategoriesToCloud(); window.renderCategoriesList(); window.showToast('បានលុបប្រភេទ', 'info'); };
+
+        window.openTransferModal = function() {
+            document.getElementById('transferFromAcc').innerHTML = window.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
+            document.getElementById('transferToAcc').innerHTML = window.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
+            if(window.state.accounts.length > 1) document.getElementById('transferToAcc').selectedIndex = 1;
+            document.getElementById('transferCurrency').innerHTML = window.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+            document.getElementById('transferModal').classList.remove('hidden');
+        };
+        window.closeTransferModal = function() { document.getElementById('transferModal').classList.add('hidden'); };
+        
+        window.executeTransfer = function() {
+            window.playChimeSound();
+            const fromAcc = document.getElementById('transferFromAcc').value;
+            const toAcc = document.getElementById('transferToAcc').value;
+            const amount = parseFloat(document.getElementById('transferAmount').value) || 0;
+            const cur = document.getElementById('transferCurrency').value;
+            const desc = document.getElementById('transferDesc').value || 'ផ្ទេរប្រាក់រវាងគណនី';
+            if (fromAcc === toAcc || amount <= 0) return;
+
+            const now = new Date();
+            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+            const outTx = { id: window.generateId(), date: nowIso, cat: 'ផ្ទេរប្រាក់', desc: `${desc} -> ទៅ ${toAcc}`, acc: fromAcc, cur, inc: 0, exp: amount };
+            const inTx = { id: window.generateId(), date: nowIso, cat: 'ផ្ទេរប្រាក់', desc: `${desc} <- ពី ${fromAcc}`, acc: toAcc, cur, inc: amount, exp: 0 };
+
+            window.state.transactions.push(outTx, inTx);
+            window.pushTxToFirebase(outTx); window.pushTxToFirebase(inTx);
+            window.renderTable(); window.updateDashboard(); window.closeTransferModal();
+            window.showToast(`បានផ្ទេរប្រាក់ពី ${fromAcc} ទៅ ${toAcc}`, 'success');
+        };
+
+        // Confirmation & Modal Delete Target
+        window.deleteTargetId = null; 
+        window.isClearAll = false;
+        
+        window.confirmDelete = function(id) { window.deleteTargetId = id; window.isClearAll = false; document.getElementById('modalTitle').textContent = "លុបប្រតិបត្តិការ"; document.getElementById('confirmModal').classList.remove('hidden'); };
+        window.confirmClearData = function() { window.isClearAll = true; document.getElementById('modalTitle').textContent = "លុបទិន្នន័យទាំងអស់"; document.getElementById('confirmModal').classList.remove('hidden'); };
+        window.executeDelete = function() {
+            if (window.isClearAll) { window.state.transactions = []; window.clearAllFromFirebase(); window.showToast('បានលុបទិន្នន័យទាំងអស់', 'info'); }
+            else if (window.deleteTargetId) { window.state.transactions = window.state.transactions.filter(t => t.id !== window.deleteTargetId); window.removeTxFromFirebase(window.deleteTargetId); window.showToast('បានលុបប្រតិបត្តិការ', 'info'); }
+            window.renderTable(); window.updateDashboard(); window.closeModal();
+        };
+        window.closeModal = function() { document.getElementById('confirmModal').classList.add('hidden'); window.deleteTargetId = null; };
+
+        window.updateDashboard = function() {
+            let accBalances = {};
+            window.state.accounts.forEach(acc => accBalances[acc] = {});
+            let totalUSD = 0, totalKHR = 0;
+
+            window.state.transactions.forEach(tx => {
+                if (!accBalances[tx.acc]) accBalances[tx.acc] = {};
+                const cur = tx.cur || 'USD';
+                if (!accBalances[tx.acc][cur]) accBalances[tx.acc][cur] = 0;
+                const bal = (tx.inc || 0) - (tx.exp || 0);
+                accBalances[tx.acc][cur] += bal;
+                if (cur === 'USD') totalUSD += bal;
+                else if (cur === 'KHR') totalKHR += bal;
+            });
+
+            const combinedNet = totalUSD + (totalKHR / window.state.exchangeRate);
+            const netWorthEl = document.getElementById('globalNetWorth');
+            if (netWorthEl) netWorthEl.textContent = window.formatMoney(combinedNet, 'USD');
+
+            const cardGrid = document.getElementById('dashboardCards');
+            if (!cardGrid) return;
+            cardGrid.innerHTML = '';
+            
+            const isDark = window.state.themeStyle === 'aba-dark' || window.state.themeStyle === 'slate';
+            const cardBg = isDark ? 'bg-slate-900/90 border-slate-700' : 'bg-white border-slate-200 shadow-md';
+            const textMain = isDark ? 'text-slate-100' : 'text-slate-900';
+
+            if (!window.state.hiddenAccounts) window.state.hiddenAccounts = [];
+
+            Object.keys(accBalances).forEach(key => {
+                if (window.state.hiddenAccounts.includes(key)) return;
+                const bObj = accBalances[key];
+                let cardContent = ''; let hasData = false;
+                Object.keys(bObj).forEach(c => {
+                    if (bObj[c] !== 0) {
+                        hasData = true;
+                        cardContent += `<div class="text-base font-extrabold ${bObj[c] < 0 ? 'text-red-500' : textMain}">${window.formatMoney(bObj[c], c)}</div>`;
+                    }
+                });
+                if (!hasData) cardContent = `<div class="text-base font-extrabold text-slate-400">${window.formatMoney(0, 'USD')}</div>`;
+                cardGrid.innerHTML += `
+                    <div class="${cardBg} backdrop-blur-md p-5 rounded-2xl border flex flex-col justify-between ${!hasData ? 'opacity-85' : ''}">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="p-1.5 bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-amber-400 rounded-lg text-xs font-bold">💳</span>
+                                <span class="font-black ${textMain} text-sm">${key}</span>
+                            </div>
+                            <button onclick="filterByAccountFromCard('${key}')" class="text-slate-400 hover:text-blue-600 dark:hover:text-amber-300 p-1 rounded transition" title="មើលប្រតិបត្តិការកុងនេះ">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-1">${cardContent}</div>
+                    </div>
+                `;
+            });
+
+            window.renderBudgetWidget();
+            window.renderSavingsGoals();
+            window.drawCharts();
+        };
+
+        window.drawCharts = function() {
+            const currentMonth = new Date().toISOString().substring(0, 7);
+            let catExpenses = {}; let monthTrend = {}; 
+
+            for(let i=5; i>=0; i--) {
+                const d = new Date(); d.setMonth(d.getMonth() - i);
+                monthTrend[d.toISOString().substring(0,7)] = { inc: 0, exp: 0 };
+            }
+
+            window.state.transactions.forEach(tx => {
+                if(!tx.date) return;
+                const mKey = tx.date.substring(0,7);
+                const isUSD = tx.cur === 'USD';
+                const incConverted = isUSD ? tx.inc : tx.inc / window.state.exchangeRate;
+                const expConverted = isUSD ? tx.exp : tx.exp / window.state.exchangeRate;
+
+                if(mKey === currentMonth && expConverted > 0) {
+                    catExpenses[tx.cat] = (catExpenses[tx.cat] || 0) + expConverted;
+                }
+                if(monthTrend[mKey]) {
+                    monthTrend[mKey].inc += incConverted;
+                    monthTrend[mKey].exp += expConverted;
+                }
+            });
+
+            if(window.charts.expense) window.charts.expense.destroy();
+            if(window.charts.trend) window.charts.trend.destroy();
+
+            const expCanvas = document.getElementById('expenseChart');
+            if (expCanvas) {
+                const ctxPie = expCanvas.getContext('2d');
+                window.charts.expense = new Chart(ctxPie, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(catExpenses).length ? Object.keys(catExpenses) : ['គ្មានចំណាយ'],
+                        datasets: [{
+                            data: Object.keys(catExpenses).length ? Object.values(catExpenses) : [1],
+                            backgroundColor: ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#d946ef', '#f43f5e'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+                });
+            }
+
+            const trendCanvas = document.getElementById('trendChart');
+            if (trendCanvas) {
+                const ctxBar = trendCanvas.getContext('2d');
+                window.charts.trend = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(monthTrend).map(m => m.split('-')[1] + '/' + m.split('-')[0].substring(2)),
+                        datasets: [
+                            { label: 'ចំណូល ($)', data: Object.values(monthTrend).map(m=>m.inc), backgroundColor: '#10b981', borderRadius: 4 },
+                            { label: 'ចំណាយ ($)', data: Object.values(monthTrend).map(m=>m.exp), backgroundColor: '#ef4444', borderRadius: 4 }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+                });
+            }
+        };
+
+        window.toggleCustomPeriod = function() {
+            const periodType = document.getElementById('reportPeriod').value;
+            const container = document.getElementById('customPeriodContainer');
+            if (periodType === 'custom') container.classList.remove('hidden');
+            else container.classList.add('hidden');
+            window.renderReports();
+        };
+
+        window.getPeriodKey = function(dateStr, period) {
+            if(!dateStr) return 'គ្មានកាលបរិច្ឆេទ';
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) return dateStr;
+            const year = d.getFullYear(), month = d.getMonth();
+
+            switch(period) {
+                case 'daily': return dateStr.split('T')[0] || dateStr;
+                case 'weekly': 
+                    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+                    const w = Math.ceil((((d - new Date(Date.UTC(d.getUTCFullYear(),0,1)))/86400000)+1)/7);
+                    return `${year} សប្តាហ៍ទី ${w}`;
+                case 'monthly': return `${year}-${(month+1).toString().padStart(2,'0')}`;
+                case 'quarterly':
+                    return `${year} ត្រីមាសទី ${Math.floor(month / 3) + 1} (Q${Math.floor(month / 3) + 1})`;
+                case 'yearly': return `${year}`;
+                default: return dateStr;
+            }
+        };
+
+        window.renderReports = function() {
+            const periodType = document.getElementById('reportPeriod')?.value || 'monthly';
+            let pData = {}, cData = {};
+
+            window.state.transactions.forEach(r => {
+                if(!r.date && r.inc === 0 && r.exp === 0) return; 
+                const pKey = window.getPeriodKey(r.date, periodType);
+                const cat = r.cat || 'ផ្សេងៗ'; const cur = r.cur || 'USD';
+
+                if(!pData[pKey]) pData[pKey] = {};
+                if(!pData[pKey][cur]) pData[pKey][cur] = { in: 0, out: 0 };
+                pData[pKey][cur].in += r.inc; pData[pKey][cur].out += r.exp;
+
+                if(!cData[cat]) cData[cat] = {};
+                if(!cData[cat][cur]) cData[cat][cur] = { in: 0, out: 0 };
+                cData[cat][cur].in += r.inc; cData[cat][cur].out += r.exp;
+            });
+
+            function buildRows(dataObj, showBal = true) {
+                let html = '';
+                Object.keys(dataObj).sort().reverse().forEach(key => {
+                    const d = dataObj[key];
+                    Object.keys(d).forEach(cur => {
+                        if(d[cur].in > 0 || d[cur].out > 0) {
+                            const bal = d[cur].in - d[cur].out;
+                            html += `
+                            <tr class="hover:bg-slate-50 dark:hover:bg-zinc-800 border-b border-gray-100 dark:border-zinc-800">
+                                <td class="px-4 py-2.5 text-sm font-bold text-slate-900 dark:text-slate-100">${key}</td>
+                                <td class="px-4 py-2.5 text-sm text-right font-medium text-gray-700 dark:text-slate-300">${cur}</td>
+                                <td class="px-4 py-2.5 text-sm text-right font-bold text-green-600 dark:text-emerald-400">${window.formatMoney(d[cur].in, cur)}</td>
+                                <td class="px-4 py-2.5 text-sm text-right font-bold text-red-500 dark:text-rose-400">${window.formatMoney(d[cur].out, cur)}</td>
+                                ${showBal ? `<td class="px-4 py-2.5 text-sm text-right font-black ${bal<0?'text-red-500 dark:text-rose-400':'text-blue-600 dark:text-sky-400'}">${window.formatMoney(bal, cur)}</td>` : ''}
+                            </tr>`;
+                        }
+                    });
+                });
+                return html || `<tr><td colspan="5" class="text-center py-4 text-sm text-gray-500 dark:text-slate-400">គ្មានទិន្នន័យ</td></tr>`;
+            }
+
+            const pBody = document.getElementById('repPeriodBody');
+            const cBody = document.getElementById('repCatBody');
+            if (pBody) pBody.innerHTML = buildRows(pData, true);
+            if (cBody) cBody.innerHTML = buildRows(cData, false);
+        };
+
+        window.exportToPDF = function() {
+            const element = document.getElementById('reportPrintArea');
+            const opt = {
+                margin:       0.5,
+                filename:     `Financial_Report_${new Date().toISOString().split('T')[0]}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+            html2pdf().set(opt).from(element).save();
+            window.showToast('កំពុងទាញយកឯកសារ PDF...', 'info');
+        };
+
+        window.exportToJSON = function() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.state, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `Finance_Backup_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            window.showToast('បានទាញយក Backup JSON', 'success');
+        };
+
+        window.importFromJSON = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported) {
+                        if (imported.appTitle) window.state.appTitle = imported.appTitle;
+                        if (imported.appSubtitle) window.state.appSubtitle = imported.appSubtitle;
+                        if (imported.accounts) window.state.accounts = imported.accounts;
+                        if (imported.currencies) window.state.currencies = imported.currencies;
+                        if (imported.categories) window.state.categories = imported.categories;
+                        if (imported.budgets) window.state.budgets = imported.budgets;
+                        if (imported.goals) window.state.goals = imported.goals;
+                        if (imported.shortcuts) window.state.shortcuts = imported.shortcuts;
+                        if (imported.transactions) window.state.transactions = imported.transactions;
+
+                        window.applyUiConfig();
+                        window.saveAccountsToCloud();
+                        window.saveCurrenciesToCloud();
+                        window.saveCategoriesToCloud();
+                        window.saveBudgetsToCloud();
+                        window.saveGoalsToCloud();
+                        window.saveShortcutsToCloud();
+                        window.saveUiConfigToCloud();
+
+                        if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                            const txMap = {};
+                            window.state.transactions.forEach(tx => txMap[tx.id] = tx);
+                            window.firebaseSet(window.firebaseRef(window.firebaseDb, 'transactions'), txMap);
+                        }
+                        window.renderTable();
+                        window.updateDashboard();
+                        window.showToast('បាន Restore ទិន្នន័យជោគជ័យ!', 'success');
+                    }
+                } catch (err) {
+                    window.showToast('ឯកសារ JSON មិនត្រឹមត្រូវ', 'error');
+                }
+            };
+            reader.readAsText(file);
+        };
+
+        window.exportToExcel = function() {
+            const expData = window.state.transactions.map(t => ({
+                'កាលបរិច្ឆេទ': t.date, 'ផ្នែក/ប្រភេទ': t.cat, 'ការពិពណ៌នា': t.desc,
+                'គណនី': t.acc, 'រូបិយប័ណ្ណ': t.cur, 'ចំណូល': t.inc, 'ចំណាយ': t.exp
+            }));
+            const ws = XLSX.utils.json_to_sheet(expData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "ទិន្នន័យ");
+            XLSX.writeFile(wb, 'បញ្ជីចំណូលចំណាយ.xlsx');
+            window.showToast('បានទាញយកឯកសារ Excel', 'success');
+        };
+
+        window.importData = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
+                let start = (rows.length > 0 && isNaN(parseFloat(rows[0][5]))) ? 1 : 0;
+                
+                for(let i=start; i<rows.length; i++) {
+                    const r = rows[i];
+                    if(!r || r.length===0 || r.every(c=>!c)) continue;
+                    let dateStr = r[0] || new Date().toISOString().split('T')[0];
+                    const newTx = {
+                        id: window.generateId(), date: dateStr, cat: r[1]||'ផ្សេងៗ', desc: r[2]||'',
+                        acc: window.state.accounts.includes(r[3]) ? r[3] : window.state.accounts[0],
+                        cur: window.state.currencies.includes(r[4]) ? r[4] : 'USD',
+                        inc: parseFloat(r[5]) || 0, exp: parseFloat(r[6]) || 0
+                    };
+                    window.state.transactions.push(newTx);
+                    window.pushTxToFirebase(newTx);
+                }
+                event.target.value = '';
+                window.renderTable(); window.updateDashboard();
+                window.showToast('បាននាំចូលទិន្នន័យ Excel ជោគជ័យ!', 'success');
+            };
+            reader.readAsArrayBuffer(file);
+        };
+
+        // Window Onload initialization
+        window.onload = () => {
+            const savedUi = localStorage.getItem('finance_ui_config');
+            if (savedUi) {
+                try {
+                    const parsed = JSON.parse(savedUi);
+                    window.state.appTitle = parsed.appTitle || window.state.appTitle;
+                    window.state.appSubtitle = parsed.appSubtitle || window.state.appSubtitle;
+                    window.state.themeStyle = parsed.themeStyle || window.state.themeStyle;
+                    window.state.bgImageUrl = parsed.bgImageUrl || '';
+                    window.state.hideAmounts = parsed.hideAmounts || false;
+                    window.state.hiddenAccounts = parsed.hiddenAccounts || [];
+                    window.state.titleColor = parsed.titleColor || '#ffffff';
+                    window.state.subtitleColor = parsed.subtitleColor || '#bfdbfe';
+                    window.state.pinCode = parsed.pinCode || '';
+                } catch(e) {}
+            }
+
+            window.checkPinLock();
+            window.applyUiConfig();
+            window.renderFilterAccounts();
+            window.renderShortcuts();
+            window.renderTable();
+            window.updateDashboard();
+
+            window.fetchLiveExchangeRate(true);
+        };
+    </script>
 
     <!-- Firebase SDK Modules -->
     <script type="module">
@@ -1025,1275 +2202,85 @@
             }
 
             // Realtime Sync Listener for Transactions
-            const txRef = ref(db, 'transactions');
-            onValue(txRef, (snapshot) => {
+            onValue(ref(db, 'transactions'), (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
                     const loadedTxs = [];
                     Object.keys(data).forEach(key => {
                         loadedTxs.push({ id: key, ...data[key] });
                     });
-                    state.transactions = loadedTxs;
+                    window.state.transactions = loadedTxs;
                 } else {
-                    state.transactions = [];
+                    window.state.transactions = [];
                 }
-                renderTable();
-                updateDashboard();
+                if (typeof window.renderTable === 'function') window.renderTable();
+                if (typeof window.updateDashboard === 'function') window.updateDashboard();
             });
 
             // Sync Accounts
             onValue(ref(db, 'accounts'), (snapshot) => {
                 const data = snapshot.val();
-                if (data) state.accounts = Array.isArray(data) ? data : Object.values(data);
-                renderFilterAccounts();
-                renderTable();
-                updateDashboard();
+                if (data) window.state.accounts = Array.isArray(data) ? data : Object.values(data);
+                if (typeof window.renderFilterAccounts === 'function') window.renderFilterAccounts();
+                if (typeof window.renderTable === 'function') window.renderTable();
+                if (typeof window.updateDashboard === 'function') window.updateDashboard();
             });
 
             // Sync Currencies
             onValue(ref(db, 'currencies'), (snapshot) => {
                 const data = snapshot.val();
-                if (data) state.currencies = Array.isArray(data) ? data : Object.values(data);
-                renderTable();
-                updateDashboard();
+                if (data) window.state.currencies = Array.isArray(data) ? data : Object.values(data);
+                if (typeof window.renderTable === 'function') window.renderTable();
+                if (typeof window.updateDashboard === 'function') window.updateDashboard();
             });
 
             // Sync Categories
             onValue(ref(db, 'categories'), (snapshot) => {
                 const data = snapshot.val();
-                if (data) state.categories = Array.isArray(data) ? data : Object.values(data);
-                renderTable();
-                updateDashboard();
+                if (data) window.state.categories = Array.isArray(data) ? data : Object.values(data);
+                if (typeof window.renderTable === 'function') window.renderTable();
+                if (typeof window.updateDashboard === 'function') window.updateDashboard();
             });
 
             // Sync Budgets
             onValue(ref(db, 'budgets'), (snapshot) => {
                 const data = snapshot.val();
-                if (data) state.budgets = Array.isArray(data) ? data : Object.values(data);
-                updateDashboard();
+                if (data) window.state.budgets = Array.isArray(data) ? data : Object.values(data);
+                if (typeof window.updateDashboard === 'function') window.updateDashboard();
             });
 
             // Sync Savings Goals
             onValue(ref(db, 'goals'), (snapshot) => {
                 const data = snapshot.val();
-                if (data) state.goals = Array.isArray(data) ? data : Object.values(data);
-                updateDashboard();
+                if (data) window.state.goals = Array.isArray(data) ? data : Object.values(data);
+                if (typeof window.updateDashboard === 'function') window.updateDashboard();
             });
 
             // Sync Shortcuts
             onValue(ref(db, 'shortcuts'), (snapshot) => {
                 const data = snapshot.val();
-                if (data) state.shortcuts = Array.isArray(data) ? data : Object.values(data);
-                renderShortcuts();
+                if (data) window.state.shortcuts = Array.isArray(data) ? data : Object.values(data);
+                if (typeof window.renderShortcuts === 'function') window.renderShortcuts();
             });
 
             // Sync UI Config
             onValue(ref(db, 'uiConfig'), (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
-                    if (data.appTitle) state.appTitle = data.appTitle;
-                    if (data.appSubtitle) state.appSubtitle = data.appSubtitle;
-                    if (data.themeStyle) state.themeStyle = data.themeStyle;
-                    if (data.bgImageUrl !== undefined) state.bgImageUrl = data.bgImageUrl;
-                    if (data.titleColor) state.titleColor = data.titleColor;
-                    if (data.subtitleColor) state.subtitleColor = data.subtitleColor;
-                    if (data.pinCode) state.pinCode = data.pinCode;
-                    applyUiConfig();
+                    if (data.appTitle) window.state.appTitle = data.appTitle;
+                    if (data.appSubtitle) window.state.appSubtitle = data.appSubtitle;
+                    if (data.themeStyle) window.state.themeStyle = data.themeStyle;
+                    if (data.bgImageUrl !== undefined) window.state.bgImageUrl = data.bgImageUrl;
+                    if (data.titleColor) window.state.titleColor = data.titleColor;
+                    if (data.subtitleColor) window.state.subtitleColor = data.subtitleColor;
+                    if (data.pinCode) window.state.pinCode = data.pinCode;
+                    if (data.hiddenAccounts) window.state.hiddenAccounts = data.hiddenAccounts;
+                    if (typeof window.applyUiConfig === 'function') window.applyUiConfig();
                 }
             });
 
         } catch (e) {
             console.error("Firebase Init Error:", e);
-        }
-    </script>
-
-    <!-- JavaScript Logic & Handlers -->
-    <script>
-        /* === STATE MANAGEMENT === */
-        let state = {
-            exchangeRate: 4100,
-            hideAmounts: false, 
-            themeStyle: 'default',
-            bgImageUrl: '',
-            titleColor: '#ffffff',
-            subtitleColor: '#bfdbfe',
-            pinCode: '',
-            enteredPin: '',
-            appTitle: 'ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន (Pro Cloud)',
-            appSubtitle: 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️',
-            accounts: ['🏦 ABA', '💳 AC', '👛 Wallet', '🐖 Savings', '⛽ កាតសាំង'],
-            currencies: ['USD', 'KHR', 'L (លីត្រ)'],
-            categories: ['ប្រាក់ខែ', 'អាហារ', 'សាំង', 'បង់ថ្លៃភ្លើង/ទឹក', 'ទិញទំនិញ', 'ផ្ទេរប្រាក់', 'ផ្សេងៗ'],
-            budgets: [
-                { id: 'b1', cat: 'អាហារ', limit: 200, cur: 'USD' },
-                { id: 'b2', cat: 'សាំង', limit: 50, cur: 'L (លីត្រ)' }
-            ],
-            goals: [
-                { id: 'g1', name: '🛵 ទិញម៉ូតូ', target: 1500, current: 400 },
-                { id: 'g2', name: '🏖️ ដើរលេងសៀមរាប', target: 300, current: 180 }
-            ],
-            shortcuts: [
-                { id: 's1', name: '🍔 បាយថ្ងៃត្រង់ ($2.50)', cat: 'អាហារ', acc: '👛 Wallet', cur: 'USD', inc: 0, exp: 2.5, desc: 'បាយថ្ងៃត្រង់' },
-                { id: 's2', name: '☕ កាហ្វេ ($1.50)', cat: 'អាហារ', acc: '👛 Wallet', cur: 'USD', inc: 0, exp: 1.5, desc: 'ទិញកាហ្វេ' },
-                { id: 's3', name: '⛽ ចាក់សាំង (10L)', cat: 'សាំង', acc: '⛽ កាតសាំង', cur: 'L (លីត្រ)', inc: 0, exp: 10, desc: 'ចាក់សាំង' }
-            ],
-            transactions: []
-        };
-        let charts = { expense: null, trend: null };
-
-        /* === WEB AUDIO SOUND EFFECT SYNTHESIZER === */
-        function playChimeSound() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
-                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
-                gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.25);
-            } catch(e) {}
-        }
-
-        /* === TOAST NOTIFICATIONS === */
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            if (!container) return;
-            const toast = document.createElement('div');
-            let bg = 'bg-slate-800 text-white';
-            if (type === 'success') bg = 'bg-emerald-600 text-white';
-            if (type === 'error') bg = 'bg-rose-600 text-white';
-            
-            toast.className = `toast-msg ${bg} px-4 py-2.5 rounded-xl shadow-lg text-xs font-bold flex items-center gap-2 border border-white/10`;
-            toast.innerHTML = `<span>${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transition = 'opacity 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        /* === PIN SECURITY LOCK SCREEN LOGIC === */
-        function checkPinLock() {
-            if (state.pinCode && state.pinCode.length === 4) {
-                document.getElementById('pinLockOverlay').classList.remove('hidden');
-                updatePinDots();
-            } else {
-                document.getElementById('pinLockOverlay').classList.add('hidden');
-            }
-        }
-
-        function pressPin(digit) {
-            if (state.enteredPin.length < 4) {
-                state.enteredPin += digit;
-                updatePinDots();
-                if (state.enteredPin.length === 4) {
-                    setTimeout(() => {
-                        if (state.enteredPin === state.pinCode) {
-                            playChimeSound();
-                            document.getElementById('pinLockOverlay').classList.add('hidden');
-                            state.enteredPin = '';
-                            showToast('ស្វាគមន៍! បានដោះសោររៀងរាល់ជោគជ័យ', 'success');
-                        } else {
-                            showToast('លេខកូដ PIN មិនត្រឹមត្រូវទេ!', 'error');
-                            state.enteredPin = '';
-                            updatePinDots();
-                        }
-                    }, 150);
-                }
-            }
-        }
-
-        function clearPin() {
-            state.enteredPin = state.enteredPin.slice(0, -1);
-            updatePinDots();
-        }
-
-        function updatePinDots() {
-            for (let i = 0; i < 4; i++) {
-                const dot = document.getElementById(`dot-${i}`);
-                if (dot) {
-                    if (i < state.enteredPin.length) dot.classList.add('filled');
-                    else dot.classList.remove('filled');
-                }
-            }
-        }
-
-        function savePinCode() {
-            const val = document.getElementById('cfgPinInput').value.trim();
-            if (val.length === 4 && !isNaN(val)) {
-                state.pinCode = val;
-                saveUiConfigToLocal();
-                saveUiConfigToCloud();
-                showToast('បានរក្សាទុក PIN Code ៤ ខ្ទង់!', 'success');
-            } else {
-                showToast('សូមបញ្ចូលលេខកូដ PIN ៤ ខ្ទង់!', 'error');
-            }
-        }
-
-        function clearPinCode() {
-            state.pinCode = '';
-            document.getElementById('cfgPinInput').value = '';
-            saveUiConfigToLocal();
-            saveUiConfigToCloud();
-            showToast('បានលុបសោរ PIN Code', 'info');
-        }
-
-        function formatForDateTimeInput(dStr) {
-            if (!dStr) return '';
-            if (dStr.length === 10) return dStr + 'T00:00:00';
-            if (dStr.includes('T')) return dStr.slice(0, 19);
-            const d = new Date(dStr);
-            if (isNaN(d.getTime())) return dStr;
-            const now = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-            return now.toISOString().slice(0, 19);
-        }
-
-        function generateId() {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-        }
-
-        function appendEmoji(inputId, emoji) {
-            const input = document.getElementById(inputId);
-            if (input) {
-                input.value += emoji;
-                input.focus();
-            }
-        }
-
-        /* === INITIALIZATION & STORAGE === */
-        window.onload = () => {
-            const savedUi = localStorage.getItem('finance_ui_config');
-            if (savedUi) {
-                try {
-                    const parsed = JSON.parse(savedUi);
-                    state.appTitle = parsed.appTitle || state.appTitle;
-                    state.appSubtitle = parsed.appSubtitle || state.appSubtitle;
-                    state.themeStyle = parsed.themeStyle || state.themeStyle;
-                    state.bgImageUrl = parsed.bgImageUrl || '';
-                    state.hideAmounts = parsed.hideAmounts || false;
-                    state.titleColor = parsed.titleColor || '#ffffff';
-                    state.subtitleColor = parsed.subtitleColor || '#bfdbfe';
-                    state.pinCode = parsed.pinCode || '';
-                } catch(e) {}
-            }
-
-            checkPinLock();
-            applyUiConfig();
-            renderFilterAccounts();
-            renderShortcuts();
-            renderTable();
-            updateDashboard();
-
-            fetchLiveExchangeRate(true);
-        };
-
-        /* === EYE TOGGLE (HIDE / UNHIDE AMOUNTS) === */
-        function toggleHideAmounts() {
-            state.hideAmounts = !state.hideAmounts;
-            const eyeIcon = document.getElementById('eyeIcon');
-            const eyeBtnText = document.getElementById('eyeBtnText');
-            
-            if (state.hideAmounts) {
-                if (eyeIcon) eyeIcon.className = 'fa-solid fa-eye-slash';
-                if (eyeBtnText) eyeBtnText.textContent = 'បង្ហាញសមតុល្យ';
-            } else {
-                if (eyeIcon) eyeIcon.className = 'fa-solid fa-eye';
-                if (eyeBtnText) eyeBtnText.textContent = 'បាំងសមតុល្យ';
-            }
-
-            saveUiConfigToLocal();
-            renderTable();
-            updateDashboard();
-        }
-
-        /* === STREAMING_CHUNK:Handling live exchange rate, theme styles, and cloud database sync... === */
-        /* === LIVE EXCHANGE RATE FETCHING === */
-        async function fetchLiveExchangeRate(isSilent = false) {
-            const rateSpin = document.getElementById('rateSyncSpin');
-            if (rateSpin) rateSpin.classList.add('animate-spin');
-
-            try {
-                const response = await fetch('https://open.er-api.com/v6/latest/USD');
-                const data = await response.json();
-                if (data && data.rates && data.rates.KHR) {
-                    const liveRate = Math.round(data.rates.KHR);
-                    const rateInput = document.getElementById('exchangeRate');
-                    if (rateInput) rateInput.value = liveRate;
-                    updateExchangeRate();
-                    if (!isSilent) {
-                        showToast(`អត្រាប្តូរប្រាក់៖ 1$ = ${liveRate.toLocaleString()} ៛`, 'success');
-                    }
-                }
-            } catch (err) {
-                if (!isSilent) showToast('មិនអាចទាញយកអត្រាប្តូរប្រាក់បានទេ', 'error');
-            } finally {
-                if (rateSpin) rateSpin.classList.remove('animate-spin');
-            }
-        }
-
-        /* === THEME & UI CUSTOMIZATION === */
-        function openCustomizeModal() {
-            document.getElementById('cfgAppTitle').value = state.appTitle || '';
-            document.getElementById('cfgAppSubtitle').value = state.appSubtitle || '';
-            document.getElementById('cfgBgImageUrl').value = state.bgImageUrl || '';
-            document.getElementById('cfgTitleColor').value = state.titleColor || '#ffffff';
-            document.getElementById('cfgSubtitleColor').value = state.subtitleColor || '#bfdbfe';
-            document.getElementById('cfgPinInput').value = state.pinCode || '';
-            document.getElementById('customizeModal').classList.remove('hidden');
-        }
-
-        function closeCustomizeModal() {
-            document.getElementById('customizeModal').classList.add('hidden');
-        }
-
-        function handleLocalBgUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                state.bgImageUrl = e.target.result;
-                document.getElementById('cfgBgImageUrl').value = '';
-                applyUiConfig();
-                saveUiConfigToLocal();
-                saveUiConfigToCloud();
-                showToast('បានអាប់ដេត Background រក្សាទុក!', 'success');
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function clearBgImage() {
-            document.getElementById('cfgBgImageUrl').value = '';
-            document.getElementById('cfgBgFileInput').value = '';
-            state.bgImageUrl = '';
-            document.body.style.backgroundImage = 'none';
-            saveUiConfigToLocal();
-            saveUiConfigToCloud();
-            showToast('បានលុបរូប', 'info');
-        }
-
-        function saveUiCustomizations() {
-            state.appTitle = document.getElementById('cfgAppTitle').value.trim() || 'ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន (Pro Cloud)';
-            state.appSubtitle = document.getElementById('cfgAppSubtitle').value.trim() || 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️';
-            const urlVal = document.getElementById('cfgBgImageUrl').value.trim();
-            if (urlVal) state.bgImageUrl = urlVal;
-            state.titleColor = document.getElementById('cfgTitleColor').value || '#ffffff';
-            state.subtitleColor = document.getElementById('cfgSubtitleColor').value || '#bfdbfe';
-
-            applyUiConfig();
-            saveUiConfigToLocal();
-            saveUiConfigToCloud();
-            closeCustomizeModal();
-            showToast('បានរក្សាទុកការកំណត់អេក្រង់', 'success');
-        }
-
-        function setThemeStyle(theme) {
-            state.themeStyle = theme;
-            applyUiConfig();
-            saveUiConfigToLocal();
-            saveUiConfigToCloud();
-        }
-
-        function applyUiConfig() {
-            const titleEl = document.getElementById('displayAppTitle');
-            const subTitleEl = document.getElementById('displayAppSubtitle');
-            
-            if (titleEl) {
-                titleEl.textContent = state.appTitle;
-                titleEl.style.color = state.titleColor || '#ffffff';
-            }
-            if (subTitleEl) {
-                subTitleEl.textContent = state.appSubtitle;
-                subTitleEl.style.color = state.subtitleColor || '#bfdbfe';
-            }
-
-            const body = document.getElementById('appBody');
-            const hero = document.getElementById('heroCard');
-
-            if (state.bgImageUrl) {
-                body.style.backgroundImage = `url('${state.bgImageUrl}')`;
-            } else {
-                body.style.backgroundImage = 'none';
-            }
-
-            body.className = "text-slate-800 antialiased min-h-screen pb-10";
-            if (state.themeStyle === 'aba-dark') {
-                body.classList.add('theme-aba-dark');
-                if (hero) hero.className = "bg-gradient-to-br from-neutral-900 via-amber-950 to-neutral-950 rounded-2xl shadow-xl p-6 mb-6 text-white relative overflow-hidden border border-amber-500/30";
-            } else if (state.themeStyle === 'slate') {
-                body.style.backgroundColor = '#0f172a';
-                if (hero) hero.className = "bg-gradient-to-br from-slate-800 to-slate-950 rounded-2xl shadow-xl p-6 mb-6 text-white relative overflow-hidden border border-slate-700";
-            } else {
-                body.style.backgroundColor = '#f1f5f9';
-                if (hero) hero.className = "bg-gradient-to-br from-blue-800 to-indigo-900 rounded-2xl shadow-xl p-6 mb-6 text-white relative overflow-hidden";
-            }
-            
-            updateDashboard();
-        }
-
-        function saveUiConfigToLocal() {
-            localStorage.setItem('finance_ui_config', JSON.stringify({
-                appTitle: state.appTitle,
-                appSubtitle: state.appSubtitle,
-                themeStyle: state.themeStyle,
-                bgImageUrl: state.bgImageUrl,
-                titleColor: state.titleColor,
-                subtitleColor: state.subtitleColor,
-                hideAmounts: state.hideAmounts,
-                pinCode: state.pinCode
-            }));
-        }
-
-        function saveUiConfigToCloud() {
-            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'uiConfig'), {
-                    appTitle: state.appTitle,
-                    appSubtitle: state.appSubtitle,
-                    themeStyle: state.themeStyle,
-                    bgImageUrl: state.bgImageUrl,
-                    titleColor: state.titleColor,
-                    subtitleColor: state.subtitleColor,
-                    pinCode: state.pinCode
-                });
-            }
-        }
-
-        function saveGoalsToCloud() {
-            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'goals'), state.goals);
-            }
-            updateDashboard();
-        }
-
-        function toggleSection(secId, isVisible) {
-            const el = document.getElementById(secId);
-            if (el) {
-                if (isVisible) el.classList.remove('hidden');
-                else el.classList.add('hidden');
-            }
-        }
-
-        function renderFilterAccounts() {
-            const sel = document.getElementById('filterAccount');
-            if (!sel) return;
-            const currentVal = sel.value || 'ALL';
-            sel.innerHTML = `<option value="ALL">គ្រប់គណនី</option>`;
-            state.accounts.forEach(a => {
-                sel.innerHTML += `<option value="${a}">${a}</option>`;
-            });
-            sel.value = state.accounts.includes(currentVal) ? currentVal : 'ALL';
-        }
-
-        /* === STREAMING_CHUNK:Rendering table rows, shortcuts and interactive card filters... === */
-        /* === FIREBASE SAVE HELPERS === */
-        function saveAccountsToCloud() {
-            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'accounts'), state.accounts);
-            }
-            renderFilterAccounts();
-            renderTable();
-            updateDashboard();
-        }
-
-        function saveCurrenciesToCloud() {
-            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'currencies'), state.currencies);
-            }
-            renderTable();
-            updateDashboard();
-        }
-
-        function saveCategoriesToCloud() {
-            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'categories'), state.categories);
-            }
-            renderTable();
-            updateDashboard();
-        }
-
-        function saveBudgetsToCloud() {
-            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'budgets'), state.budgets);
-            }
-            updateDashboard();
-        }
-
-        function saveShortcutsToCloud() {
-            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'shortcuts'), state.shortcuts);
-            }
-            renderShortcuts();
-        }
-
-        function pushTxToFirebase(tx) {
-            if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                window.firebaseSet(window.firebaseRef(window.firebaseDb, 'transactions/' + tx.id), tx);
-            }
-        }
-
-        function removeTxFromFirebase(id) {
-            if (window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
-                window.firebaseRemove(window.firebaseRef(window.firebaseDb, 'transactions/' + id));
-            }
-        }
-
-        function clearAllFromFirebase() {
-            if (window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
-                window.firebaseRemove(window.firebaseRef(window.firebaseDb, 'transactions'));
-            }
-        }
-
-        /* === TAB SWITCHING === */
-        function switchTab(tabId) {
-            ['dashboard', 'entry', 'report'].forEach(t => {
-                const viewEl = document.getElementById('view-' + t);
-                const tabEl = document.getElementById('tab-' + t);
-                if (viewEl) viewEl.classList.add('hidden');
-                if (tabEl) tabEl.classList.remove('active');
-            });
-            const targetView = document.getElementById('view-' + tabId);
-            const targetTab = document.getElementById('tab-' + tabId);
-            if (targetView) targetView.classList.remove('hidden');
-            if (targetTab) targetTab.classList.add('active');
-
-            if (tabId === 'report') renderReports();
-            if (tabId === 'dashboard') updateDashboard();
-        }
-
-        function formatMoney(amount, cur) {
-            if (state.hideAmounts) return '••••••';
-            if (cur === 'KHR') return amount.toLocaleString('en-US') + ' ៛';
-            if (cur === 'USD') return amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' $';
-            return amount.toLocaleString('en-US', {maximumFractionDigits: 2}) + ' ' + cur;
-        }
-
-        function updateExchangeRate() {
-            state.exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 4100;
-            renderTable();
-            updateDashboard();
-        }
-
-        /* === CARD OPTION ACTION (FILTER BY ACCOUNT) === */
-        function filterByAccountFromCard(accName) {
-            const sel = document.getElementById('filterAccount');
-            if (sel) {
-                sel.value = accName;
-                switchTab('entry');
-                renderTable();
-                showToast(`បង្ហាញប្រតិបត្តិការរបស់៖ ${accName}`, 'info');
-            }
-        }
-
-        /* === TABLE RENDERING & LOGIC === */
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            const searchQ = document.getElementById('searchInput').value.toLowerCase();
-            const filterAcc = document.getElementById('filterAccount').value;
-            
-            tbody.innerHTML = '';
-            let totals = {}; 
-            state.currencies.forEach(c => totals[c] = { in: 0, out: 0 });
-
-            let rowCount = 1;
-
-            state.transactions.forEach(tx => {
-                if (filterAcc !== 'ALL' && tx.acc !== filterAcc) return;
-                const matchStr = `${tx.cat} ${tx.desc}`.toLowerCase();
-                if (searchQ && !matchStr.includes(searchQ)) return;
-
-                const curKey = tx.cur || 'USD';
-                if (!totals[curKey]) totals[curKey] = { in: 0, out: 0 };
-                totals[curKey].in += (tx.inc || 0);
-                totals[curKey].out += (tx.exp || 0);
-
-                let accOptsHtml = state.accounts.map(a => `<option value="${a}" ${tx.acc===a?'selected':''}>${a}</option>`).join('');
-                let curOptsHtml = state.currencies.map(c => `<option value="${c}" ${tx.cur===c?'selected':''}>${c}</option>`).join('');
-                let catOptsHtml = state.categories.map(c => `<option value="${c}" ${tx.cat===c?'selected':''}>${c}</option>`).join('');
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-blue-50/50 dark:hover:bg-zinc-800/50 transition-colors group";
-                
-                tr.innerHTML = `
-                    <td class="px-3 py-2 text-sm text-gray-500 dark:text-gray-300 text-center">${rowCount++}</td>
-                    <td class="px-3 py-2"><input type="datetime-local" step="1" value="${formatForDateTimeInput(tx.date)}" onchange="updateTx('${tx.id}', 'date', this.value)" class="editable-input text-xs font-mono text-slate-800 dark:text-slate-100"></td>
-                    <td class="px-3 py-2">
-                        <select onchange="updateTx('${tx.id}', 'cat', this.value)" class="editable-input text-sm font-medium text-slate-800 dark:text-slate-100">
-                            ${catOptsHtml}
-                        </select>
-                    </td>
-                    <td class="px-3 py-2"><input type="text" value="${tx.desc}" onchange="updateTx('${tx.id}', 'desc', this.value)" class="editable-input text-sm text-slate-800 dark:text-slate-100"></td>
-                    <td class="px-3 py-2">
-                        <select onchange="updateTx('${tx.id}', 'acc', this.value)" class="editable-input text-sm font-medium text-slate-800 dark:text-slate-100">
-                            ${accOptsHtml}
-                        </select>
-                    </td>
-                    <td class="px-3 py-2">
-                        <select onchange="updateTx('${tx.id}', 'cur', this.value)" class="editable-input text-sm font-bold text-amber-700 dark:text-amber-400">
-                            ${curOptsHtml}
-                        </select>
-                    </td>
-                    <td class="px-3 py-2"><input type="${state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${state.hideAmounts ? '••••••' : (tx.inc||0)}" onchange="updateTx('${tx.id}', 'inc', this.value)" class="editable-input text-sm font-semibold text-green-600 dark:text-emerald-400 text-right"></td>
-                    <td class="px-3 py-2"><input type="${state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${state.hideAmounts ? '••••••' : (tx.exp||0)}" onchange="updateTx('${tx.id}', 'exp', this.value)" class="editable-input text-sm font-semibold text-red-500 dark:text-rose-400 text-right"></td>
-                    <td class="px-3 py-2 text-center">
-                        <button onclick="confirmDelete('${tx.id}')" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 opacity-0 group-hover:opacity-100 transition">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            if(tbody.innerHTML === '') {
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-gray-400 text-sm">មិនមានទិន្នន័យ។ ចុច "បន្ថែមជួរដេកថ្មី" ឬចុចប៊ូតុងកត់ត្រារហ័ស។</td></tr>`;
-            }
-
-            const incCell = document.getElementById('totIncCell');
-            const expCell = document.getElementById('totExpCell');
-            incCell.innerHTML = ''; expCell.innerHTML = '';
-
-            Object.keys(totals).forEach(c => {
-                if (totals[c].in > 0 || totals[c].out > 0) {
-                    incCell.innerHTML += `<div class="text-sm font-bold text-green-600 dark:text-emerald-400 mb-0.5">${formatMoney(totals[c].in, c)}</div>`;
-                    expCell.innerHTML += `<div class="text-sm font-bold text-red-500 dark:text-rose-400 mb-0.5">${formatMoney(totals[c].out, c)}</div>`;
-                }
-            });
-            if (incCell.innerHTML === '') incCell.innerHTML = `<div class="text-sm font-bold text-green-600 dark:text-emerald-400">${formatMoney(0, 'USD')}</div>`;
-            if (expCell.innerHTML === '') expCell.innerHTML = `<div class="text-sm font-bold text-red-500 dark:text-rose-400">${formatMoney(0, 'USD')}</div>`;
-        }
-
-        function addRow() {
-            playChimeSound();
-            const now = new Date();
-            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
-            const newTx = {
-                id: generateId(),
-                date: nowIso, cat: state.categories[0]||'ផ្សេងៗ', desc: '', acc: state.accounts[0]||'👛 Wallet', cur: state.currencies[0]||'USD', inc: 0, exp: 0
-            };
-            state.transactions.push(newTx);
-            pushTxToFirebase(newTx);
-            renderTable();
-            showToast('បានបន្ថែមជួរដេកថ្មី', 'success');
-        }
-
-        function updateTx(id, field, value) {
-            const tx = state.transactions.find(t => t.id === id);
-            if (tx) {
-                if(field === 'inc' || field === 'exp') tx[field] = parseFloat(value) || 0;
-                else tx[field] = value;
-                pushTxToFirebase(tx);
-                renderTable();
-                updateDashboard();
-            }
-        }
-
-        /* === STREAMING_CHUNK:Rendering shortcuts, budget, and savings goals widgets... === */
-        /* === QUICK SHORTCUTS === */
-        function renderShortcuts() {
-            const container = document.getElementById('shortcutsContainer');
-            if(!container) return;
-            container.innerHTML = '';
-            state.shortcuts.forEach(sc => {
-                container.innerHTML += `
-                    <button onclick="executeShortcut('${sc.id}')" class="px-3 py-1.5 bg-blue-50 dark:bg-zinc-800 hover:bg-blue-100 dark:hover:bg-zinc-700 text-blue-700 dark:text-amber-300 border border-blue-200 dark:border-zinc-700 text-xs font-bold rounded-lg transition whitespace-nowrap flex items-center gap-1 shadow-sm">
-                        ⚡ ${sc.name}
-                    </button>
-                `;
-            });
-        }
-
-        function executeShortcut(shortcutId) {
-            playChimeSound();
-            const sc = state.shortcuts.find(s => s.id === shortcutId);
-            if (!sc) return;
-            const now = new Date();
-            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
-            const newTx = {
-                id: generateId(),
-                date: nowIso, cat: sc.cat, desc: sc.desc || sc.name, acc: sc.acc, cur: sc.cur, inc: sc.inc||0, exp: sc.exp||0
-            };
-            state.transactions.push(newTx);
-            pushTxToFirebase(newTx);
-            renderTable();
-            updateDashboard();
-            showToast(`បានកត់ត្រា ${sc.name} រួចរាល់!`, 'success');
-        }
-
-        /* === SAVINGS GOALS CALCULATOR === */
-        function renderSavingsGoals() {
-            const container = document.getElementById('goalsContainer');
-            if (!container) return;
-            container.innerHTML = '';
-
-            state.goals.forEach(g => {
-                const pct = g.target > 0 ? Math.min(Math.round((g.current / g.target) * 100), 100) : 0;
-                container.innerHTML += `
-                    <div class="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
-                        <div class="flex justify-between items-center mb-1 text-xs font-bold">
-                            <span class="text-slate-800 dark:text-slate-100">${g.name}</span>
-                            <span class="text-emerald-600 dark:text-emerald-400">${formatMoney(g.current, 'USD')} / ${formatMoney(g.target, 'USD')} (${pct}%)</span>
-                        </div>
-                        <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
-                            <div class="bg-emerald-500 h-2 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            if (state.goals.length === 0) {
-                container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់មានគោលដៅសន្សំ។ ចុច "+ បន្ថែមគោលដៅ" ដើម្បីកំណត់។</p>`;
-            }
-        }
-
-        function openGoalModal() {
-            renderGoalList();
-            document.getElementById('goalModal').classList.remove('hidden');
-        }
-        function closeGoalModal() { document.getElementById('goalModal').classList.add('hidden'); }
-
-        function saveSavingsGoal() {
-            const name = document.getElementById('glName').value.trim();
-            const target = parseFloat(document.getElementById('glTarget').value) || 0;
-            const current = parseFloat(document.getElementById('glCurrent').value) || 0;
-
-            if (!name || target <= 0) return;
-            state.goals.push({ id: generateId(), name, target, current });
-            saveGoalsToCloud();
-            renderGoalList();
-            document.getElementById('glName').value = '';
-            document.getElementById('glTarget').value = '';
-            document.getElementById('glCurrent').value = '';
-            showToast('បានរក្សាទុកគោលដៅសន្សំប្រាក់', 'success');
-        }
-
-        function deleteGoal(id) {
-            state.goals = state.goals.filter(g => g.id !== id);
-            saveGoalsToCloud();
-            renderGoalList();
-            showToast('បានលុបគោលដៅសន្សំ', 'info');
-        }
-
-        function renderGoalList() {
-            const container = document.getElementById('goalListContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            state.goals.forEach(g => {
-                container.innerHTML += `
-                    <div class="flex items-center justify-between p-2 bg-emerald-50/50 rounded border text-xs">
-                        <span class="font-bold text-gray-800">${g.name}: ${formatMoney(g.current, 'USD')} / ${formatMoney(g.target, 'USD')}</span>
-                        <button onclick="deleteGoal('${g.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
-                    </div>
-                `;
-            });
-        }
-
-        /* === BUDGET CALCULATOR === */
-        function renderBudgetWidget() {
-            const container = document.getElementById('budgetProgressContainer');
-            if(!container) return;
-            container.innerHTML = '';
-
-            const currentMonth = new Date().toISOString().substring(0, 7);
-            
-            state.budgets.forEach(b => {
-                let spent = 0;
-                state.transactions.forEach(tx => {
-                    if (tx.date && tx.date.substring(0, 7) === currentMonth && tx.cat === b.cat && tx.cur === b.cur) {
-                        spent += (tx.exp || 0);
-                    }
-                });
-
-                const pct = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
-                let colorClass = "bg-emerald-500";
-                let textClass = "text-emerald-600 dark:text-emerald-400";
-                if (pct >= 80 && pct < 100) { colorClass = "bg-amber-500"; textClass = "text-amber-600 dark:text-amber-400"; }
-                if (pct >= 100) { colorClass = "bg-red-500"; textClass = "text-red-600 dark:text-rose-400"; }
-
-                container.innerHTML += `
-                    <div class="bg-gray-50 dark:bg-zinc-800 p-3 rounded-lg border border-gray-200 dark:border-zinc-700">
-                        <div class="flex justify-between items-center mb-1 text-xs font-bold">
-                            <span class="text-slate-800 dark:text-slate-100">${b.cat} (${b.cur})</span>
-                            <span class="${textClass}">${formatMoney(spent, b.cur)} / ${formatMoney(b.limit, b.cur)} (${pct}%)</span>
-                        </div>
-                        <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
-                            <div class="${colorClass} h-2 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            if (state.budgets.length === 0) {
-                container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់បានកំណត់ថវិកា។ ចុច "⚙️ កំណត់ថវិកា" ដើម្បីកំណត់។</p>`;
-            }
-        }
-
-        /* === MODALS FOR BUDGET & SHORTCUTS === */
-        function openBudgetModal() {
-            const catSel = document.getElementById('bgCategory');
-            const curSel = document.getElementById('bgCurrency');
-            catSel.innerHTML = state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
-            curSel.innerHTML = state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
-            renderBudgetList();
-            document.getElementById('budgetModal').classList.remove('hidden');
-        }
-        function closeBudgetModal() { document.getElementById('budgetModal').classList.add('hidden'); }
-
-        function saveBudgetLimit() {
-            const cat = document.getElementById('bgCategory').value;
-            const limit = parseFloat(document.getElementById('bgLimit').value) || 0;
-            const cur = document.getElementById('bgCurrency').value;
-
-            if (limit <= 0) return;
-            state.budgets = state.budgets.filter(b => !(b.cat === cat && b.cur === cur));
-            state.budgets.push({ id: generateId(), cat, limit, cur });
-            saveBudgetsToCloud();
-            renderBudgetList();
-            document.getElementById('bgLimit').value = '';
-            showToast('បានរក្សាទុកថវិកា', 'success');
-        }
-
-        function deleteBudget(id) {
-            state.budgets = state.budgets.filter(b => b.id !== id);
-            saveBudgetsToCloud();
-            renderBudgetList();
-            showToast('បានលុបថវិកា', 'info');
-        }
-
-        function renderBudgetList() {
-            const container = document.getElementById('budgetListContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            state.budgets.forEach(b => {
-                container.innerHTML += `
-                    <div class="flex items-center justify-between p-2 bg-indigo-50/50 rounded border text-xs">
-                        <span class="font-bold text-gray-800">${b.cat}: ${formatMoney(b.limit, b.cur)}</span>
-                        <button onclick="deleteBudget('${b.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
-                    </div>
-                `;
-            });
-        }
-
-        function openShortcutModal() {
-            document.getElementById('scCategory').innerHTML = state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
-            document.getElementById('scAccount').innerHTML = state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
-            document.getElementById('scCurrency').innerHTML = state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
-            renderShortcutList();
-            document.getElementById('shortcutModal').classList.remove('hidden');
-        }
-        function closeShortcutModal() { document.getElementById('shortcutModal').classList.add('hidden'); }
-
-        function addNewShortcut() {
-            const name = document.getElementById('scName').value.trim();
-            const cat = document.getElementById('scCategory').value;
-            const acc = document.getElementById('scAccount').value;
-            const amount = parseFloat(document.getElementById('scAmount').value) || 0;
-            const cur = document.getElementById('scCurrency').value;
-
-            if (!name || amount <= 0) return;
-            state.shortcuts.push({ id: generateId(), name, cat, acc, cur, inc: 0, exp: amount, desc: name });
-            saveShortcutsToCloud();
-            renderShortcutList();
-            document.getElementById('scName').value = '';
-            document.getElementById('scAmount').value = '';
-            showToast('បានបន្ថែមប៊ូតុងរហ័ស', 'success');
-        }
-
-        function deleteShortcut(id) {
-            state.shortcuts = state.shortcuts.filter(s => s.id !== id);
-            saveShortcutsToCloud();
-            renderShortcutList();
-            showToast('បានលុបប៊ូតុងរហ័ស', 'info');
-        }
-
-        function renderShortcutList() {
-            const container = document.getElementById('shortcutListContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            state.shortcuts.forEach(s => {
-                container.innerHTML += `
-                    <div class="flex items-center justify-between p-2 bg-blue-50/50 rounded border text-xs">
-                        <span class="font-bold text-gray-800">${s.name} (${formatMoney(s.exp, s.cur)})</span>
-                        <button onclick="deleteShortcut('${s.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
-                    </div>
-                `;
-            });
-        }
-
-        /* === STREAMING_CHUNK:Implementing custom categories, currencies, accounts, and inter-account transfers... === */
-        /* === ACCOUNTS, CURRENCIES, CATEGORIES & TRANSFER MODALS === */
-        function openAccountsModal() { renderAccountsList(); document.getElementById('accountsModal').classList.remove('hidden'); }
-        function closeAccountsModal() { document.getElementById('accountsModal').classList.add('hidden'); }
-        function renderAccountsList() {
-            const c = document.getElementById('accountsListContainer'); if(!c) return; c.innerHTML = '';
-            state.accounts.forEach((acc, i) => {
-                c.innerHTML += `<div class="flex items-center justify-between p-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-sm gap-2"><input type="text" value="${acc}" onchange="editAccountName(${i}, this.value)" class="modal-item-input flex-1 outline-none"><button onclick="deleteAccount(${i})" class="text-red-500 hover:text-red-600 font-bold text-xs bg-red-50 dark:bg-red-950/50 px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900">🗑️ លុប</button></div>`;
-            });
-        }
-        function addNewAccount() { const name = document.getElementById('newAccountName').value.trim(); if(!name || state.accounts.includes(name)) return; state.accounts.push(name); saveAccountsToCloud(); renderAccountsList(); document.getElementById('newAccountName').value = ''; showToast('បានបន្ថែមគណនីថ្មី', 'success'); }
-        function editAccountName(i, val) { val = val.trim(); if(!val) return; state.accounts[i] = val; saveAccountsToCloud(); renderAccountsList(); }
-        function deleteAccount(i) { state.accounts.splice(i, 1); saveAccountsToCloud(); renderAccountsList(); showToast('បានលុបគណនី', 'info'); }
-
-        function openCurrenciesModal() { renderCurrenciesList(); document.getElementById('currenciesModal').classList.remove('hidden'); }
-        function closeCurrenciesModal() { document.getElementById('currenciesModal').classList.add('hidden'); }
-        function renderCurrenciesList() {
-            const c = document.getElementById('currenciesListContainer'); if(!c) return; c.innerHTML = '';
-            state.currencies.forEach((cur, i) => {
-                c.innerHTML += `<div class="flex items-center justify-between p-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-sm gap-2"><input type="text" value="${cur}" onchange="editCurrencyName(${i}, this.value)" class="modal-item-input flex-1 outline-none"><button onclick="deleteCurrency(${i})" class="text-red-500 hover:text-red-600 font-bold text-xs bg-red-50 dark:bg-red-950/50 px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900">🗑️ លុប</button></div>`;
-            });
-        }
-        function addNewCurrency() { const name = document.getElementById('newCurrencyName').value.trim(); if(!name || state.currencies.includes(name)) return; state.currencies.push(name); saveCurrenciesToCloud(); renderCurrenciesList(); document.getElementById('newCurrencyName').value = ''; showToast('បានបន្ថែមខ្នាតថ្មី', 'success'); }
-        function editCurrencyName(i, val) { val = val.trim(); if(!val) return; state.currencies[i] = val; saveCurrenciesToCloud(); renderCurrenciesList(); }
-        function deleteCurrency(i) { state.currencies.splice(i, 1); saveCurrenciesToCloud(); renderCurrenciesList(); showToast('បានលុបខ្នាត', 'info'); }
-
-        function openCategoriesModal() { renderCategoriesList(); document.getElementById('categoriesModal').classList.remove('hidden'); }
-        function closeCategoriesModal() { document.getElementById('categoriesModal').classList.add('hidden'); }
-        function renderCategoriesList() {
-            const c = document.getElementById('categoriesListContainer'); if(!c) return; c.innerHTML = '';
-            state.categories.forEach((cat, i) => {
-                c.innerHTML += `<div class="flex items-center justify-between p-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-sm gap-2"><input type="text" value="${cat}" onchange="editCategoryName(${i}, this.value)" class="modal-item-input flex-1 outline-none"><button onclick="deleteCategory(${i})" class="text-red-500 hover:text-red-600 font-bold text-xs bg-red-50 dark:bg-red-950/50 px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900">🗑️ លុប</button></div>`;
-            });
-        }
-        function addNewCategory() { const name = document.getElementById('newCategoryName').value.trim(); if(!name || state.categories.includes(name)) return; state.categories.push(name); saveCategoriesToCloud(); renderCategoriesList(); document.getElementById('newCategoryName').value = ''; showToast('បានបន្ថែមប្រភេទថ្មី', 'success'); }
-        function editCategoryName(i, val) { val = val.trim(); if(!val) return; state.categories[i] = val; saveCategoriesToCloud(); renderCategoriesList(); }
-        function deleteCategory(i) { state.categories.splice(i, 1); saveCategoriesToCloud(); renderCategoriesList(); showToast('បានលុបប្រភេទ', 'info'); }
-
-        function openTransferModal() {
-            document.getElementById('transferFromAcc').innerHTML = state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
-            document.getElementById('transferToAcc').innerHTML = state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
-            if(state.accounts.length > 1) document.getElementById('transferToAcc').selectedIndex = 1;
-            document.getElementById('transferCurrency').innerHTML = state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
-            document.getElementById('transferModal').classList.remove('hidden');
-        }
-        function closeTransferModal() { document.getElementById('transferModal').classList.add('hidden'); }
-        function executeTransfer() {
-            playChimeSound();
-            const fromAcc = document.getElementById('transferFromAcc').value;
-            const toAcc = document.getElementById('transferToAcc').value;
-            const amount = parseFloat(document.getElementById('transferAmount').value) || 0;
-            const cur = document.getElementById('transferCurrency').value;
-            const desc = document.getElementById('transferDesc').value || 'ផ្ទេរប្រាក់រវាងគណនី';
-            if (fromAcc === toAcc || amount <= 0) return;
-
-            const now = new Date();
-            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
-            const outTx = { id: generateId(), date: nowIso, cat: 'ផ្ទេរប្រាក់', desc: `${desc} -> ទៅ ${toAcc}`, acc: fromAcc, cur, inc: 0, exp: amount };
-            const inTx = { id: generateId(), date: nowIso, cat: 'ផ្ទេរប្រាក់', desc: `${desc} <- ពី ${fromAcc}`, acc: toAcc, cur, inc: amount, exp: 0 };
-
-            state.transactions.push(outTx, inTx);
-            pushTxToFirebase(outTx); pushTxToFirebase(inTx);
-            renderTable(); updateDashboard(); closeTransferModal();
-            showToast(`បានផ្ទេរប្រាក់ពី ${fromAcc} ទៅ ${toAcc}`, 'success');
-        }
-
-        /* === DELETE CONFIRMATION === */
-        let deleteTargetId = null; let isClearAll = false;
-        function confirmDelete(id) { deleteTargetId = id; isClearAll = false; document.getElementById('modalTitle').textContent = "លុបប្រតិបត្តិការ"; document.getElementById('confirmModal').classList.remove('hidden'); }
-        function confirmClearData() { isClearAll = true; document.getElementById('modalTitle').textContent = "លុបទិន្នន័យទាំងអស់"; document.getElementById('confirmModal').classList.remove('hidden'); }
-        function executeDelete() {
-            if (isClearAll) { state.transactions = []; clearAllFromFirebase(); showToast('បានលុបទិន្នន័យទាំងអស់', 'info'); }
-            else if (deleteTargetId) { state.transactions = state.transactions.filter(t => t.id !== deleteTargetId); removeTxFromFirebase(deleteTargetId); showToast('បានលុបប្រតិបត្តិការ', 'info'); }
-            renderTable(); updateDashboard(); closeModal();
-        }
-        function closeModal() { document.getElementById('confirmModal').classList.add('hidden'); deleteTargetId = null; }
-
-        /* === STREAMING_CHUNK:Updating Dashboard calculations and rendering Chart.js visualizations... === */
-        /* === DASHBOARD & CHARTS === */
-        function updateDashboard() {
-            let accBalances = {};
-            state.accounts.forEach(acc => accBalances[acc] = {});
-            let totalUSD = 0, totalKHR = 0;
-
-            state.transactions.forEach(tx => {
-                if (!accBalances[tx.acc]) accBalances[tx.acc] = {};
-                const cur = tx.cur || 'USD';
-                if (!accBalances[tx.acc][cur]) accBalances[tx.acc][cur] = 0;
-                const bal = (tx.inc || 0) - (tx.exp || 0);
-                accBalances[tx.acc][cur] += bal;
-                if (cur === 'USD') totalUSD += bal;
-                else if (cur === 'KHR') totalKHR += bal;
-            });
-
-            const combinedNet = totalUSD + (totalKHR / state.exchangeRate);
-            document.getElementById('globalNetWorth').textContent = formatMoney(combinedNet, 'USD');
-
-            const cardGrid = document.getElementById('dashboardCards');
-            cardGrid.innerHTML = '';
-            
-            const isDark = state.themeStyle === 'aba-dark' || state.themeStyle === 'slate';
-            const cardBg = isDark ? 'bg-slate-900/90 border-slate-700' : 'bg-white border-slate-200 shadow-md';
-            const textMain = isDark ? 'text-slate-100' : 'text-slate-900';
-
-            Object.keys(accBalances).forEach(key => {
-                const bObj = accBalances[key];
-                let cardContent = ''; let hasData = false;
-                Object.keys(bObj).forEach(c => {
-                    if (bObj[c] !== 0) {
-                        hasData = true;
-                        cardContent += `<div class="text-base font-extrabold ${bObj[c] < 0 ? 'text-red-500' : textMain}">${formatMoney(bObj[c], c)}</div>`;
-                    }
-                });
-                if (!hasData) cardContent = `<div class="text-base font-extrabold text-slate-400">${formatMoney(0, 'USD')}</div>`;
-                cardGrid.innerHTML += `
-                    <div class="${cardBg} backdrop-blur-md p-5 rounded-2xl border flex flex-col justify-between ${!hasData ? 'opacity-85' : ''}">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center gap-2">
-                                <span class="p-1.5 bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-amber-400 rounded-lg text-xs font-bold">💳</span>
-                                <span class="font-black ${textMain} text-sm">${key}</span>
-                            </div>
-                            <button onclick="filterByAccountFromCard('${key}')" class="text-slate-400 hover:text-blue-600 dark:hover:text-amber-300 p-1 rounded transition" title="មើលប្រតិបត្តិការកុងនេះ">
-                                <i class="fa-solid fa-ellipsis-vertical"></i>
-                            </button>
-                        </div>
-                        <div class="space-y-1">${cardContent}</div>
-                    </div>
-                `;
-            });
-
-            renderBudgetWidget();
-            renderSavingsGoals();
-            drawCharts();
-        }
-
-        function drawCharts() {
-            const currentMonth = new Date().toISOString().substring(0, 7);
-            let catExpenses = {}; let monthTrend = {}; 
-
-            for(let i=5; i>=0; i--) {
-                const d = new Date(); d.setMonth(d.getMonth() - i);
-                monthTrend[d.toISOString().substring(0,7)] = { inc: 0, exp: 0 };
-            }
-
-            state.transactions.forEach(tx => {
-                if(!tx.date) return;
-                const mKey = tx.date.substring(0,7);
-                const isUSD = tx.cur === 'USD';
-                const incConverted = isUSD ? tx.inc : tx.inc / state.exchangeRate;
-                const expConverted = isUSD ? tx.exp : tx.exp / state.exchangeRate;
-
-                if(mKey === currentMonth && expConverted > 0) {
-                    catExpenses[tx.cat] = (catExpenses[tx.cat] || 0) + expConverted;
-                }
-                if(monthTrend[mKey]) {
-                    monthTrend[mKey].inc += incConverted;
-                    monthTrend[mKey].exp += expConverted;
-                }
-            });
-
-            if(charts.expense) charts.expense.destroy();
-            if(charts.trend) charts.trend.destroy();
-
-            const ctxPie = document.getElementById('expenseChart').getContext('2d');
-            charts.expense = new Chart(ctxPie, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(catExpenses).length ? Object.keys(catExpenses) : ['គ្មានចំណាយ'],
-                    datasets: [{
-                        data: Object.keys(catExpenses).length ? Object.values(catExpenses) : [1],
-                        backgroundColor: ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#d946ef', '#f43f5e'],
-                        borderWidth: 0
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
-            });
-
-            const ctxBar = document.getElementById('trendChart').getContext('2d');
-            charts.trend = new Chart(ctxBar, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(monthTrend).map(m => m.split('-')[1] + '/' + m.split('-')[0].substring(2)),
-                    datasets: [
-                        { label: 'ចំណូល ($)', data: Object.values(monthTrend).map(m=>m.inc), backgroundColor: '#10b981', borderRadius: 4 },
-                        { label: 'ចំណាយ ($)', data: Object.values(monthTrend).map(m=>m.exp), backgroundColor: '#ef4444', borderRadius: 4 }
-                    ]
-                },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
-            });
-        }
-
-        /* === STREAMING_CHUNK:Finalizing reporting engines and data import/export handlers... === */
-        /* === REPORTING & EXPORTS === */
-        function toggleCustomPeriod() {
-            const periodType = document.getElementById('reportPeriod').value;
-            const container = document.getElementById('customPeriodContainer');
-            if (periodType === 'custom') container.classList.remove('hidden');
-            else container.classList.add('hidden');
-            renderReports();
-        }
-
-        function getPeriodKey(dateStr, period) {
-            if(!dateStr) return 'គ្មានកាលបរិច្ឆេទ';
-            const d = new Date(dateStr);
-            if (isNaN(d.getTime())) return dateStr;
-            const year = d.getFullYear(), month = d.getMonth();
-
-            switch(period) {
-                case 'daily': return dateStr.split('T')[0] || dateStr;
-                case 'weekly': 
-                    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
-                    const w = Math.ceil((((d - new Date(Date.UTC(d.getUTCFullYear(),0,1)))/86400000)+1)/7);
-                    return `${year} សប្តាហ៍ទី ${w}`;
-                case 'monthly': return `${year}-${(month+1).toString().padStart(2,'0')}`;
-                case 'quarterly':
-                    return `${year} ត្រីមាសទី ${Math.floor(month / 3) + 1} (Q${Math.floor(month / 3) + 1})`;
-                case 'yearly': return `${year}`;
-                default: return dateStr;
-            }
-        }
-
-        function renderReports() {
-            const periodType = document.getElementById('reportPeriod').value;
-            let pData = {}, cData = {};
-
-            state.transactions.forEach(r => {
-                if(!r.date && r.inc === 0 && r.exp === 0) return; 
-                const pKey = getPeriodKey(r.date, periodType);
-                const cat = r.cat || 'ផ្សេងៗ'; const cur = r.cur || 'USD';
-
-                if(!pData[pKey]) pData[pKey] = {};
-                if(!pData[pKey][cur]) pData[pKey][cur] = { in: 0, out: 0 };
-                pData[pKey][cur].in += r.inc; pData[pKey][cur].out += r.exp;
-
-                if(!cData[cat]) cData[cat] = {};
-                if(!cData[cat][cur]) cData[cat][cur] = { in: 0, out: 0 };
-                cData[cat][cur].in += r.inc; cData[cat][cur].out += r.exp;
-            });
-
-            function buildRows(dataObj, showBal = true) {
-                let html = '';
-                Object.keys(dataObj).sort().reverse().forEach(key => {
-                    const d = dataObj[key];
-                    Object.keys(d).forEach(cur => {
-                        if(d[cur].in > 0 || d[cur].out > 0) {
-                            const bal = d[cur].in - d[cur].out;
-                            html += `
-                            <tr class="hover:bg-slate-50 dark:hover:bg-zinc-800 border-b border-gray-100 dark:border-zinc-800">
-                                <td class="px-4 py-2.5 text-sm font-bold text-slate-900 dark:text-slate-100">${key}</td>
-                                <td class="px-4 py-2.5 text-sm text-right font-medium text-gray-700 dark:text-slate-300">${cur}</td>
-                                <td class="px-4 py-2.5 text-sm text-right font-bold text-green-600 dark:text-emerald-400">${formatMoney(d[cur].in, cur)}</td>
-                                <td class="px-4 py-2.5 text-sm text-right font-bold text-red-500 dark:text-rose-400">${formatMoney(d[cur].out, cur)}</td>
-                                ${showBal ? `<td class="px-4 py-2.5 text-sm text-right font-black ${bal<0?'text-red-500 dark:text-rose-400':'text-blue-600 dark:text-sky-400'}">${formatMoney(bal, cur)}</td>` : ''}
-                            </tr>`;
-                        }
-                    });
-                });
-                return html || `<tr><td colspan="5" class="text-center py-4 text-sm text-gray-500 dark:text-slate-400">គ្មានទិន្នន័យ</td></tr>`;
-            }
-
-            document.getElementById('repPeriodBody').innerHTML = buildRows(pData, true);
-            document.getElementById('repCatBody').innerHTML = buildRows(cData, false);
-        }
-
-        function exportToPDF() {
-            const element = document.getElementById('reportPrintArea');
-            const opt = {
-                margin:       0.5,
-                filename:     `Financial_Report_${new Date().toISOString().split('T')[0]}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
-            };
-            html2pdf().set(opt).from(element).save();
-            showToast('កំពុងទាញយកឯកសារ PDF...', 'info');
-        }
-
-        function exportToJSON() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `Finance_Backup_${new Date().toISOString().split('T')[0]}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-            showToast('បានទាញយក Backup JSON', 'success');
-        }
-
-        function importFromJSON(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const imported = JSON.parse(e.target.result);
-                    if (imported) {
-                        if (imported.appTitle) state.appTitle = imported.appTitle;
-                        if (imported.appSubtitle) state.appSubtitle = imported.appSubtitle;
-                        if (imported.accounts) state.accounts = imported.accounts;
-                        if (imported.currencies) state.currencies = imported.currencies;
-                        if (imported.categories) state.categories = imported.categories;
-                        if (imported.budgets) state.budgets = imported.budgets;
-                        if (imported.goals) state.goals = imported.goals;
-                        if (imported.shortcuts) state.shortcuts = imported.shortcuts;
-                        if (imported.transactions) state.transactions = imported.transactions;
-
-                        applyUiConfig();
-                        saveAccountsToCloud();
-                        saveCurrenciesToCloud();
-                        saveCategoriesToCloud();
-                        saveBudgetsToCloud();
-                        saveGoalsToCloud();
-                        saveShortcutsToCloud();
-                        saveUiConfigToCloud();
-
-                        if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                            const txMap = {};
-                            state.transactions.forEach(tx => txMap[tx.id] = tx);
-                            window.firebaseSet(window.firebaseRef(window.firebaseDb, 'transactions'), txMap);
-                        }
-                        renderTable();
-                        updateDashboard();
-                        showToast('បាន Restore ទិន្នន័យជោគជ័យ!', 'success');
-                    }
-                } catch (err) {
-                    showToast('ឯកសារ JSON មិនត្រឹមត្រូវ', 'error');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        function exportToExcel() {
-            const expData = state.transactions.map(t => ({
-                'កាលបរិច្ឆេទ': t.date, 'ផ្នែក/ប្រភេទ': t.cat, 'ការពិពណ៌នា': t.desc,
-                'គណនី': t.acc, 'រូបិយប័ណ្ណ': t.cur, 'ចំណូល': t.inc, 'ចំណាយ': t.exp
-            }));
-            const ws = XLSX.utils.json_to_sheet(expData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "ទិន្នន័យ");
-            XLSX.writeFile(wb, 'បញ្ជីចំណូលចំណាយ.xlsx');
-            showToast('បានទាញយកឯកសារ Excel', 'success');
-        }
-
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, {type: 'array'});
-                const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
-                let start = (rows.length > 0 && isNaN(parseFloat(rows[0][5]))) ? 1 : 0;
-                
-                for(let i=start; i<rows.length; i++) {
-                    const r = rows[i];
-                    if(!r || r.length===0 || r.every(c=>!c)) continue;
-                    let dateStr = r[0] || new Date().toISOString().split('T')[0];
-                    const newTx = {
-                        id: generateId(), date: dateStr, cat: r[1]||'ផ្សេងៗ', desc: r[2]||'',
-                        acc: state.accounts.includes(r[3]) ? r[3] : state.accounts[0],
-                        cur: state.currencies.includes(r[4]) ? r[4] : 'USD',
-                        inc: parseFloat(r[5]) || 0, exp: parseFloat(r[6]) || 0
-                    };
-                    state.transactions.push(newTx);
-                    pushTxToFirebase(newTx);
-                }
-                event.target.value = '';
-                renderTable(); updateDashboard();
-                showToast('បាននាំចូលទិន្នន័យ Excel ជោគជ័យ!', 'success');
-            };
-            reader.readAsArrayBuffer(file);
         }
     </script>
 </body>
