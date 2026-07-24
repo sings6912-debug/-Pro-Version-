@@ -6,35 +6,32 @@
     <title>ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro Cloud</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Kantumruy Pro', sans-serif; background-color: #f1f5f9; }
-        .modal-overlay { background-color: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .modal-overlay { background-color: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body class="text-slate-800 antialiased min-h-screen">
+<body>
 
-    <!-- 🔑 LICENSE MODAL -->
-    <div id="licenseModalOverlay" class="fixed inset-0 z-[150] flex flex-col items-center justify-center p-4 text-white modal-overlay">
+    <!-- 🔑 ប្រអប់ទារ KEY (បង្ហាញតែពេលមិនទាន់មាន Key) -->
+    <div id="licenseModalOverlay" class="fixed inset-0 z-[999] flex flex-col items-center justify-center p-4 text-white modal-overlay">
         <div class="max-w-md w-full bg-slate-900 border border-slate-700 rounded-3xl p-8 shadow-2xl text-center">
             <div class="w-20 h-20 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-400 text-3xl">
                 <i class="fa-solid fa-key"></i>
             </div>
             <h2 class="text-2xl font-black mb-2">បញ្ចូលកូដអាជ្ញាប័ណ្ណ</h2>
-            <input type="text" id="licenseKeyInput" placeholder="ឧ. PRO-001" class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-center text-lg font-bold text-amber-300 mb-4 uppercase">
+            <input type="text" id="licenseKeyInput" placeholder="ឧ. VIP-001" class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-center text-lg font-bold text-amber-300 mb-4 uppercase">
             <button onclick="activateLicenseKey()" class="w-full py-3 bg-blue-600 text-white rounded-xl font-extrabold hover:bg-blue-500 transition">ផ្ទៀងផ្ទាត់</button>
         </div>
     </div>
 
-    <!-- MAIN APP STRUCTURE (ដូចរបស់ដើមបង ១០០%) -->
+    <!-- 🚀 កន្លែងដាក់កូដ APP ពេញលេញរបស់បង (App Container) -->
     <div id="appContainer" class="hidden">
-        <!-- ដាក់កូដ Dashboard/Transaction/Report ដើមរបស់បងនៅទីនេះ -->
-        <div class="p-6 text-center text-2xl font-bold">សូមស្វាគមន៍! App កំពុងដំណើរការ...</div>
+        <div class="p-10 text-center text-xl font-bold">
+            <p>✅ ជោគជ័យ! បងអាចដាក់កូដ App ទាំងមូលរបស់បងនៅទីនេះ</p>
+            <p class="text-sm text-gray-500 mt-2">បងអាចកែសម្រួលកូដក្នុង index.html ឱ្យដូចកូដដើមវិញបាន!</p>
+        </div>
     </div>
 
     <script type="module">
@@ -67,3 +64,8 @@
     </script>
 </body>
 </html>
+```
+
+### ដំណោះស្រាយចុងក្រោយ៖
+បងឃើញកូដផ្នែក `<div id="appContainer" class="hidden">...</div>` ទេ? 
+បងគ្រាន់តែ **Copy កូដ App ចាស់របស់បង** (តាំងពីបន្ទាត់ទី១ ដល់ចុងក្រោយ) ទៅ **Replace ជំនួសកូដនៅក្នុងនោះ** ជាការស្រេច! បើបងចង់ឱ្យខ្ញុំជួយផ្គុំបញ្ចូលតែម្តង សូមបង **ផ្ញើកូដចាស់របស់បងមកទីនេះ** ខ្ញុំនឹងធ្វើជូនភ្លាម!
