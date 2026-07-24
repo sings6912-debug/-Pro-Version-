@@ -217,14 +217,14 @@
             color: #ffffff !important;
         }
         
-        #searchInput, #filterAccount {
+        #searchInput, #filterAccount, #filterDatePeriod {
             background-color: #ffffff;
             color: #0f172a !important;
             border: 1px solid #cbd5e1;
         }
-        body.theme-dark #searchInput, body.theme-dark #filterAccount,
-        body.theme-aba-dark #searchInput, body.theme-aba-dark #filterAccount,
-        body.theme-slate #searchInput, body.theme-slate #filterAccount {
+        body.theme-dark #searchInput, body.theme-dark #filterAccount, body.theme-dark #filterDatePeriod,
+        body.theme-aba-dark #searchInput, body.theme-aba-dark #filterAccount, body.theme-aba-dark #filterDatePeriod,
+        body.theme-slate #searchInput, body.theme-slate #filterAccount, body.theme-slate #filterDatePeriod {
             background-color: #27272a !important;
             color: #ffffff !important;
             border-color: #52525b !important;
@@ -489,13 +489,36 @@
 
             <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 
-                <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
-                    <div class="relative w-full sm:w-52">
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-wrap">
+                    <div class="relative w-full sm:w-48">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                             <i class="fa-solid fa-magnifying-glass text-xs"></i>
                         </div>
                         <input type="text" id="searchInput" oninput="renderTable()" placeholder="ស្វែងរក..." class="block w-full pl-9 pr-3 py-2 border rounded-lg text-sm font-bold outline-none">
                     </div>
+                    
+                    <!-- Enhanced Date Filter Dropdown with Custom Date-Time Picker -->
+                    <select id="filterDatePeriod" onchange="toggleCustomDateTimeFilter()" class="block w-44 py-2 px-3 border rounded-lg text-sm shadow-sm focus:outline-none font-bold">
+                        <option value="ALL">📅 គ្រប់កាលបរិច្ឆេទ</option>
+                        <option value="TODAY" selected>☀️ ថ្ងៃនេះ (Today)</option>
+                        <option value="YESTERDAY">🌙 ម្សិលមិញ</option>
+                        <option value="THIS_WEEK">🗓️ សប្តាហ៍នេះ</option>
+                        <option value="THIS_MONTH">📆 ខែនេះ</option>
+                        <option value="CUSTOM_DATETIME">🎯 រើសថ្ងៃ/ម៉ោង/នាទី/វិនាទី</option>
+                    </select>
+
+                    <!-- Exact Custom Date-Time Pickers (Appears when selected) -->
+                    <div id="filterDateTimeContainer" class="hidden flex flex-wrap items-center gap-2 bg-blue-50/80 dark:bg-zinc-800/80 p-1.5 rounded-lg border border-blue-200 dark:border-zinc-700">
+                        <div class="flex items-center gap-1 text-[11px] font-bold">
+                            <span>ចាប់ពី៖</span>
+                            <input type="datetime-local" step="1" id="filterStartDateTime" onchange="renderTable()" class="bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded px-1.5 py-1 text-xs font-mono">
+                        </div>
+                        <div class="flex items-center gap-1 text-[11px] font-bold">
+                            <span>ដល់៖</span>
+                            <input type="datetime-local" step="1" id="filterEndDateTime" onchange="renderTable()" class="bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded px-1.5 py-1 text-xs font-mono">
+                        </div>
+                    </div>
+
                     <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                         <select id="filterAccount" onchange="renderTable()" class="block w-32 py-2 px-3 border rounded-lg text-sm shadow-sm focus:outline-none font-bold">
                         </select>
@@ -537,6 +560,19 @@
                 </div>
             </div>
 
+            <!-- Today's Summary Banner + Savings Rate % -->
+            <div id="todaySummaryBanner" class="bg-blue-50 dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 p-3 rounded-xl flex flex-wrap items-center justify-between text-xs font-bold gap-2">
+                <span class="text-blue-900 dark:text-blue-300 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-day text-blue-600 dark:text-amber-400"></i>
+                    <span>សង្ខេបចំណូលចំណាយ (Summary)៖</span>
+                </span>
+                <div class="flex items-center gap-4 flex-wrap">
+                    <span class="text-emerald-600 dark:text-emerald-400">ចំណូល៖ <span id="todayIncText">$0.00</span></span>
+                    <span class="text-rose-600 dark:text-rose-400">ចំណាយ៖ <span id="todayExpText">$0.00</span></span>
+                    <span class="text-indigo-600 dark:text-amber-300 bg-indigo-50 dark:bg-zinc-700 px-2 py-0.5 rounded border border-indigo-200 dark:border-zinc-600">អត្រាសន្សំ៖ <span id="todaySavingsRate">0%</span></span>
+                </div>
+            </div>
+
             <!-- The Data Table -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div class="overflow-x-auto">
@@ -551,7 +587,7 @@
                                 <th class="px-3 py-3 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-28">ខ្នាត/រូបិយប័ណ្ណ</th>
                                 <th class="px-3 py-3 text-right text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-32">ចំណូល</th>
                                 <th class="px-3 py-3 text-right text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-32">ចំណាយ</th>
-                                <th class="px-3 py-3 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-16">
+                                <th class="px-3 py-3 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase w-20">
                                     <button onclick="addRow()" class="text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded border border-blue-200 font-black" title="បន្ថែមថ្មី">+</button>
                                 </th>
                             </tr>
@@ -889,7 +925,7 @@
                     <button id="scSaveBtn" onclick="addNewShortcut()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition shadow">បន្ថែមប៊ូតុងថ្មី</button>
                 </div>
 
-                <p class="text-xs border-t pt-2 font-bold modal-label-text border-gray-200 dark:border-gray-700">បញ្ជីប៊ូតុងដែលមានស្រាប់៖</p>
+                <p class="text-xs border-t pt-2 font-bold modal-label-text border-gray-200 dark:border-gray-700">បញ្ជីប៊ូតុងដែលមានស្រាប់ (ចុច ⬅️ ➡️ ដើម្បីរំកិលទីតាំង)៖</p>
                 <div class="max-h-48 overflow-y-auto space-y-2 pr-1" id="shortcutListContainer"></div>
             </div>
 
@@ -1041,6 +1077,12 @@
             exchangeRate: 4100,
             hideAmounts: false, 
             hiddenAccounts: [],
+            visibleSections: {
+                'sec-accounts': true,
+                'sec-goals': true,
+                'sec-budgets': true,
+                'sec-charts': true
+            },
             themeStyle: 'default',
             bgImageUrl: '',
             titleColor: '#ffffff',
@@ -1053,8 +1095,8 @@
             currencies: ['USD', 'KHR', 'L (លីត្រ)'],
             categories: ['ប្រាក់ខែ', 'អាហារ', 'សាំង', 'បង់ថ្លៃភ្លើង/ទឹក', 'ទិញទំនិញ', 'ផ្ទេរប្រាក់', 'ផ្សេងៗ'],
             budgets: [
-                { id: 'b1', cat: 'អាហារ', limit: 200, cur: 'USD' },
-                { id: 'b2', cat: 'សាំង', limit: 50, cur: 'L (លីត្រ)' }
+                { id: 'b1', cat: 'អាហារ', limit: 200, cur: 'USD', linkedAcc: 'ALL' },
+                { id: 'b2', cat: 'សាំង', limit: 50, cur: 'L (លីត្រ)', linkedAcc: 'ALL' }
             ],
             goals: [
                 { id: 'g1', name: '🛵 ទិញម៉ូតូ', target: 1500, current: 400, linkedAcc: 'NONE' },
@@ -1070,7 +1112,7 @@
 
         window.charts = { expense: null, trend: null };
 
-        // Define formatMoney globally
+        // Helper Money Formatter
         function formatMoney(amount, cur) {
             if (window.state && window.state.hideAmounts) return '••••••';
             if (cur === 'KHR') return (amount || 0).toLocaleString('en-US') + ' ៛';
@@ -1251,6 +1293,15 @@
             document.getElementById('cfgTitleColor').value = window.state.titleColor || '#ffffff';
             document.getElementById('cfgSubtitleColor').value = window.state.subtitleColor || '#bfdbfe';
             document.getElementById('cfgPinInput').value = window.state.pinCode || '';
+            
+            // Checkboxes state
+            if (window.state.visibleSections) {
+                if (document.getElementById('chkAccounts')) document.getElementById('chkAccounts').checked = !!window.state.visibleSections['sec-accounts'];
+                if (document.getElementById('chkGoals')) document.getElementById('chkGoals').checked = !!window.state.visibleSections['sec-goals'];
+                if (document.getElementById('chkBudgets')) document.getElementById('chkBudgets').checked = !!window.state.visibleSections['sec-budgets'];
+                if (document.getElementById('chkCharts')) document.getElementById('chkCharts').checked = !!window.state.visibleSections['sec-charts'];
+            }
+
             document.getElementById('customizeModal').classList.remove('hidden');
         };
 
@@ -1305,6 +1356,20 @@
             window.saveUiConfigToCloud();
         };
 
+        window.toggleSection = function(secId, isVisible) {
+            if (!window.state.visibleSections) window.state.visibleSections = {};
+            window.state.visibleSections[secId] = isVisible;
+            
+            const el = document.getElementById(secId);
+            if (el) {
+                if (isVisible) el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            }
+
+            window.saveUiConfigToLocal();
+            window.saveUiConfigToCloud();
+        };
+
         window.applyUiConfig = function() {
             const titleEl = document.getElementById('displayAppTitle');
             const subTitleEl = document.getElementById('displayAppSubtitle');
@@ -1341,6 +1406,22 @@
                 body.style.backgroundColor = '#f1f5f9';
                 if (hero) hero.className = "bg-gradient-to-br from-blue-800 to-indigo-900 rounded-2xl shadow-xl p-6 mb-6 text-white relative overflow-hidden";
             }
+
+            // Apply section visibility states
+            if (window.state.visibleSections) {
+                Object.keys(window.state.visibleSections).forEach(secId => {
+                    const isVis = window.state.visibleSections[secId];
+                    const secEl = document.getElementById(secId);
+                    if (secEl) {
+                        if (isVis) secEl.classList.remove('hidden');
+                        else secEl.classList.add('hidden');
+                    }
+                    if (secId === 'sec-accounts' && document.getElementById('chkAccounts')) document.getElementById('chkAccounts').checked = isVis;
+                    if (secId === 'sec-goals' && document.getElementById('chkGoals')) document.getElementById('chkGoals').checked = isVis;
+                    if (secId === 'sec-budgets' && document.getElementById('chkBudgets')) document.getElementById('chkBudgets').checked = isVis;
+                    if (secId === 'sec-charts' && document.getElementById('chkCharts')) document.getElementById('chkCharts').checked = isVis;
+                });
+            }
             
             window.updateDashboard();
         };
@@ -1355,6 +1436,7 @@
                 subtitleColor: window.state.subtitleColor,
                 hideAmounts: window.state.hideAmounts,
                 hiddenAccounts: window.state.hiddenAccounts || [],
+                visibleSections: window.state.visibleSections || {},
                 pinCode: window.state.pinCode
             }));
         };
@@ -1369,6 +1451,7 @@
                     titleColor: window.state.titleColor,
                     subtitleColor: window.state.subtitleColor,
                     hiddenAccounts: window.state.hiddenAccounts || [],
+                    visibleSections: window.state.visibleSections || {},
                     pinCode: window.state.pinCode
                 });
             }
@@ -1379,14 +1462,6 @@
                 window.firebaseSet(window.firebaseRef(window.firebaseDb, 'goals'), window.state.goals);
             }
             window.updateDashboard();
-        };
-
-        window.toggleSection = function(secId, isVisible) {
-            const el = document.getElementById(secId);
-            if (el) {
-                if (isVisible) el.classList.remove('hidden');
-                else el.classList.add('hidden');
-            }
         };
 
         window.renderFilterAccounts = function() {
@@ -1489,6 +1564,20 @@
             }
         };
 
+        // Custom Date-Time Filter Toggle Handler
+        window.toggleCustomDateTimeFilter = function() {
+            const periodVal = document.getElementById('filterDatePeriod').value;
+            const container = document.getElementById('filterDateTimeContainer');
+            if (container) {
+                if (periodVal === 'CUSTOM_DATETIME') {
+                    container.classList.remove('hidden');
+                } else {
+                    container.classList.add('hidden');
+                }
+            }
+            window.renderTable();
+        };
+
         // Render Shortcuts Toolbar
         window.renderShortcuts = function() {
             const container = document.getElementById('shortcutsContainer');
@@ -1518,6 +1607,17 @@
             window.renderTable();
             window.updateDashboard();
             window.showToast(`បានកត់ត្រា ${sc.name} រួចរាល់!`, 'success');
+        };
+
+        window.moveShortcut = function(index, dir) {
+            const newIndex = index + dir;
+            if (newIndex < 0 || newIndex >= window.state.shortcuts.length) return;
+            const temp = window.state.shortcuts[index];
+            window.state.shortcuts[index] = window.state.shortcuts[newIndex];
+            window.state.shortcuts[newIndex] = temp;
+            window.saveShortcutsToCloud();
+            window.renderShortcutList();
+            window.renderShortcuts();
         };
 
         window.openShortcutModal = function(editId = null) {
@@ -1616,10 +1716,14 @@
             const container = document.getElementById('shortcutListContainer');
             if (!container) return;
             container.innerHTML = '';
-            window.state.shortcuts.forEach(sc => {
+            window.state.shortcuts.forEach((sc, idx) => {
                 container.innerHTML += `
                     <div class="flex items-center justify-between p-2 bg-blue-50/50 dark:bg-zinc-800/50 rounded border border-blue-100 dark:border-zinc-700 text-xs">
-                        <span class="font-bold modal-label-text">${sc.name} (${window.formatMoney(sc.exp, sc.cur)}) <span class="text-[10px] text-gray-500">គិតពី ${sc.acc}</span></span>
+                        <div class="flex items-center gap-1">
+                            <button onclick="moveShortcut(${idx}, -1)" ${idx === 0 ? 'disabled class="opacity-30"' : 'class="hover:text-blue-600 font-bold"'} title="រំកិលទៅឆ្វេង/ឡើងលើ">⬅️</button>
+                            <button onclick="moveShortcut(${idx}, 1)" ${idx === window.state.shortcuts.length - 1 ? 'disabled class="opacity-30"' : 'class="hover:text-blue-600 font-bold"'} title="រំកិលទៅស្ដាំ/ចុះក្រោម">➡️</button>
+                            <span class="font-bold modal-label-text ml-1">${sc.name} (${window.formatMoney(sc.exp, sc.cur)}) <span class="text-[10px] text-gray-500">កាត់ពី ${sc.acc}</span></span>
+                        </div>
                         <div class="flex gap-2">
                             <button onclick="openShortcutModal('${sc.id}')" class="text-blue-500 font-bold hover:underline">✏️ កែ</button>
                             <button onclick="deleteShortcut('${sc.id}')" class="text-red-500 font-bold hover:underline">🗑️ លុប</button>
@@ -2186,23 +2290,85 @@
         };
         window.closeModal = function() { document.getElementById('confirmModal').classList.add('hidden'); window.deleteTargetId = null; };
 
-        // Table renderer & transactions handlers
+        // Duplicate Row Functionality
+        window.duplicateRow = function(id) {
+            window.playChimeSound();
+            const original = window.state.transactions.find(t => t.id === id);
+            if (!original) return;
+
+            const now = new Date();
+            const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+
+            const duplicatedTx = {
+                ...original,
+                id: window.generateId(),
+                date: nowIso,
+                desc: (original.desc || '') + ' (ចម្លង)'
+            };
+
+            window.state.transactions.push(duplicatedTx);
+            window.pushTxToFirebase(duplicatedTx);
+            window.renderTable();
+            window.updateDashboard();
+            window.showToast('បានចម្លងប្រតិបត្តិការ!', 'success');
+        };
+
+        // Table renderer & transactions handlers (with Exact DateTime Filter)
         window.renderTable = function() {
             const tbody = document.getElementById('tableBody');
             if (!tbody) return;
             const searchQ = (document.getElementById('searchInput')?.value || '').toLowerCase();
             const filterAcc = document.getElementById('filterAccount')?.value || 'ALL';
+            const filterDate = document.getElementById('filterDatePeriod')?.value || 'TODAY';
             
             tbody.innerHTML = '';
             let totals = {}; 
             window.state.currencies.forEach(c => totals[c] = { in: 0, out: 0 });
 
+            // Prepare Date Filter thresholds
+            const now = new Date();
+            const todayStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+            
+            const yesterday = new Date(now); yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = new Date(yesterday.getTime() - yesterday.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+            
+            const startOfWeek = new Date(now); startOfWeek.setDate(now.getDate() - now.getDay());
+            const startOfWeekStr = new Date(startOfWeek.getTime() - startOfWeek.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+            
+            const startOfMonthStr = todayStr.substring(0, 7);
+
+            // Custom Start / End Datetime Values
+            const startDTVal = document.getElementById('filterStartDateTime')?.value || '';
+            const endDTVal = document.getElementById('filterEndDateTime')?.value || '';
+
             let rowCount = 1;
+            let summaryIncUSD = 0, summaryExpUSD = 0;
 
             window.state.transactions.forEach(tx => {
+                if(!tx.date) return;
+                const txDateOnly = tx.date.split('T')[0];
+                const txFullDT = tx.date.length === 10 ? tx.date + 'T00:00:00' : tx.date;
+
+                // Apply Account Filter
                 if (filterAcc !== 'ALL' && tx.acc !== filterAcc) return;
+
+                // Apply Date/Time Filters
+                if (filterDate === 'TODAY' && txDateOnly !== todayStr) return;
+                if (filterDate === 'YESTERDAY' && txDateOnly !== yesterdayStr) return;
+                if (filterDate === 'THIS_WEEK' && txDateOnly < startOfWeekStr) return;
+                if (filterDate === 'THIS_MONTH' && !txDateOnly.startsWith(startOfMonthStr)) return;
+                if (filterDate === 'CUSTOM_DATETIME') {
+                    if (startDTVal && txFullDT < startDTVal) return;
+                    if (endDTVal && txFullDT > endDTVal) return;
+                }
+
                 const matchStr = `${tx.cat} ${tx.desc}`.toLowerCase();
                 if (searchQ && !matchStr.includes(searchQ)) return;
+
+                const incVal = tx.cur === 'USD' ? tx.inc : (tx.inc / window.state.exchangeRate);
+                const expVal = tx.cur === 'USD' ? tx.exp : (tx.exp / window.state.exchangeRate);
+                summaryIncUSD += incVal;
+                summaryExpUSD += expVal;
 
                 const curKey = tx.cur || 'USD';
                 if (!totals[curKey]) totals[curKey] = { in: 0, out: 0 };
@@ -2237,14 +2403,29 @@
                     </td>
                     <td class="px-3 py-2"><input type="${window.state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${window.state.hideAmounts ? '••••••' : (tx.inc||0)}" onchange="updateTx('${tx.id}', 'inc', this.value)" class="editable-input text-sm font-semibold text-green-600 dark:text-emerald-400 text-right"></td>
                     <td class="px-3 py-2"><input type="${window.state.hideAmounts ? 'text' : 'number'}" step="any" min="0" value="${window.state.hideAmounts ? '••••••' : (tx.exp||0)}" onchange="updateTx('${tx.id}', 'exp', this.value)" class="editable-input text-sm font-semibold text-red-500 dark:text-rose-400 text-right"></td>
-                    <td class="px-3 py-2 text-center">
-                        <button onclick="confirmDelete('${tx.id}')" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 opacity-0 group-hover:opacity-100 transition">
+                    <td class="px-3 py-2 text-center flex items-center justify-center gap-1">
+                        <button onclick="duplicateRow('${tx.id}')" class="text-blue-500 hover:text-blue-700 p-1 rounded opacity-0 group-hover:opacity-100 transition" title="ចម្លងប្រតិបត្តិការនេះ">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                        <button onclick="confirmDelete('${tx.id}')" class="text-red-400 hover:text-red-600 p-1 rounded hover:bg-red-50 opacity-0 group-hover:opacity-100 transition" title="លុប">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            // Update summary banner text & savings rate %
+            const todayIncEl = document.getElementById('todayIncText');
+            const todayExpEl = document.getElementById('todayExpText');
+            const todaySavingsEl = document.getElementById('todaySavingsRate');
+            
+            if (todayIncEl) todayIncEl.textContent = window.formatMoney(summaryIncUSD, 'USD');
+            if (todayExpEl) todayExpEl.textContent = window.formatMoney(summaryExpUSD, 'USD');
+            if (todaySavingsEl) {
+                const savingsPct = summaryIncUSD > 0 ? Math.max(0, Math.round(((summaryIncUSD - summaryExpUSD) / summaryIncUSD) * 100)) : 0;
+                todaySavingsEl.textContent = savingsPct + '%';
+            }
 
             let incText = '', expText = '';
             Object.keys(totals).forEach(c => {
@@ -2482,6 +2663,7 @@
                     window.state.bgImageUrl = parsed.bgImageUrl || '';
                     window.state.hideAmounts = parsed.hideAmounts || false;
                     window.state.hiddenAccounts = parsed.hiddenAccounts || [];
+                    if (parsed.visibleSections) window.state.visibleSections = parsed.visibleSections;
                     window.state.titleColor = parsed.titleColor || '#ffffff';
                     window.state.subtitleColor = parsed.subtitleColor || '#bfdbfe';
                     window.state.pinCode = parsed.pinCode || '';
@@ -2595,6 +2777,7 @@
                     if (data.subtitleColor) window.state.subtitleColor = data.subtitleColor;
                     if (data.pinCode) window.state.pinCode = data.pinCode;
                     if (data.hiddenAccounts) window.state.hiddenAccounts = data.hiddenAccounts;
+                    if (data.visibleSections) window.state.visibleSections = data.visibleSections;
                     if (typeof window.applyUiConfig === 'function') window.applyUiConfig();
                 }
             });
