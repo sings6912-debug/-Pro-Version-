@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro Cloud</title>
 
+    <!-- Favicon 💰 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -875,7 +878,8 @@
                 <!-- Data renders here -->
             </div>
             
-            <div class="flex justify-end mt-4 border-t pt-3 border-gray-200 dark:border-zinc-700 flex-shrink-0">
+            <div class="flex justify-end mt-4 border-t pt-3 border-gray-200 dark:border-zinc-700 flex-shrink-0 gap-2">
+                <button onclick="ProApp.state.hiddenAccounts = []; ProApp.saveUiConfigToCloud(); ProApp.renderAccountsList(); ProApp.updateDashboard(); ProApp.showToast('បានបង្ហាញគណនីទាំងអស់នៅលើអេក្រង់វិញ', 'success');" class="px-4 py-2 text-sm font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl transition border border-blue-200 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-400">👁️ បង្ហាញទាំងអស់</button>
                 <button onclick="ProApp.closeAccountsModal()" class="px-5 py-2 text-sm font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition">បិទ</button>
             </div>
         </div>
@@ -1818,7 +1822,22 @@
             // ----------------------------------------------------------------------
             // 💳 ACCOUNTS MANAGEMENT (BEAUTIFUL UI)
             // ----------------------------------------------------------------------
-            openAccountsModal: function() { ProApp.renderAccountsList(); document.getElementById('accountsModal').classList.remove('hidden'); },
+            openAccountsModal: function() { 
+                // ទាញយកគណនីដែលបាត់ត្រឡប់មកវិញដោយស្វ័យប្រវត្តិ (Auto-heal missing accounts from transactions)
+                let isModified = false;
+                if (ProApp.state.transactions) {
+                    ProApp.state.transactions.forEach(tx => {
+                        if (tx.acc && !ProApp.state.accounts.includes(tx.acc)) {
+                            ProApp.state.accounts.push(tx.acc);
+                            isModified = true;
+                        }
+                    });
+                    if (isModified) ProApp.saveAccountsToCloud();
+                }
+                
+                ProApp.renderAccountsList(); 
+                document.getElementById('accountsModal').classList.remove('hidden'); 
+            },
             closeAccountsModal: function() { document.getElementById('accountsModal').classList.add('hidden'); },
             moveAccount: function(i, dir) {
                 const newIndex = i + dir;
@@ -1837,15 +1856,15 @@
                     c.innerHTML += `
                         <div class="flex items-center p-2 mb-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm gap-2">
                             <div class="flex flex-col gap-1">
-                                <button onclick="ProApp.moveAccount(${i}, -1)" ${i === 0 ? 'disabled class="opacity-40 bg-blue-50 text-blue-300 p-1 rounded"' : 'class="bg-blue-100 hover:bg-blue-200 text-blue-600 font-bold p-1 rounded transition"'}><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
-                                <button onclick="ProApp.moveAccount(${i}, 1)" ${i === ProApp.state.accounts.length - 1 ? 'disabled class="opacity-40 bg-blue-50 text-blue-300 p-1 rounded"' : 'class="bg-blue-100 hover:bg-blue-200 text-blue-600 font-bold p-1 rounded transition"'}><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
-                            </div>
-                            <button onclick="ProApp.toggleAccountVisibility('${acc}')" class="px-2 py-1.5 rounded-lg text-[10px] font-bold transition flex flex-col items-center justify-center min-w-[50px] ${isHidden ? 'bg-rose-100 text-rose-600' : 'bg-emerald-100 text-emerald-700'}" title="${isHidden ? 'ចុចដើម្បីបង្ហាញ' : 'ចុចដើម្បីលាក់'}">
-                                <i class="fa-solid ${isHidden ? 'fa-eye-slash' : 'fa-eye'} mb-0.5 text-xs"></i>
-                                ${isHidden ? 'បាំង' : 'បង្ហាញ'}
-                            </button>
-                            <div class="flex-1 border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden bg-white dark:bg-slate-900">
-                                <input type="text" value="${acc}" onchange="ProApp.editAccountName(${i}, this.value)" class="w-full bg-transparent outline-none text-sm font-bold text-slate-900 dark:text-white px-3 py-2">
+                        <button onclick="ProApp.moveAccount(${i}, -1)" ${i === 0 ? 'disabled class="opacity-40 bg-blue-50 text-blue-300 p-1 rounded"' : 'class="bg-blue-100 hover:bg-blue-200 text-blue-600 font-bold p-1 rounded transition"'}><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
+                        <button onclick="ProApp.moveAccount(${i}, 1)" ${i === ProApp.state.accounts.length - 1 ? 'disabled class="opacity-40 bg-blue-50 text-blue-300 p-1 rounded"' : 'class="bg-blue-100 hover:bg-blue-200 text-blue-600 font-bold p-1 rounded transition"'}><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
+                    </div>
+                    <button onclick="ProApp.toggleAccountVisibility('${acc}')" class="px-2 py-1.5 rounded-lg text-[10px] font-bold transition flex flex-col items-center justify-center min-w-[55px] ${isHidden ? 'bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-400' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400'}" title="${isHidden ? 'ចុចដើម្បីបង្ហាញវិញ' : 'ចុចដើម្បីលាក់'}">
+                        <i class="fa-solid ${isHidden ? 'fa-eye-slash' : 'fa-eye'} mb-0.5 text-xs"></i>
+                        ${isHidden ? 'កំពុងលាក់' : 'បង្ហាញ'}
+                    </button>
+                    <div class="flex-1 border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden bg-white dark:bg-slate-900">
+                        <input type="text" value="${acc}" onchange="ProApp.editAccountName(${i}, this.value)" class="w-full bg-transparent outline-none text-sm font-bold text-slate-900 dark:text-white px-3 py-2">
                             </div>
                             <button onclick="ProApp.deleteAccount(${i})" class="bg-rose-500 hover:bg-rose-600 text-white p-2.5 rounded-lg shadow-sm transition flex items-center justify-center h-full">
                                 <i class="fa-solid fa-trash-can text-sm"></i>
