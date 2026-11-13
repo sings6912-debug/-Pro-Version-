@@ -59,9 +59,22 @@
         /* 📱 Mobile Smooth Touch Scrolling */
         .scroll-container {
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-x pan-y;
             overflow-x: auto;
             overflow-y: auto;
+        }
+
+        /* 👆 បង្កើនល្បឿនចុច (Touch) និងការពារភាពរអាក់រអួលនៅលើទូរស័ព្ទ */
+        button, input, select, .tab-btn, .emoji-btn, a {
+            touch-action: manipulation;
+        }
+
+        /* 📱 Hide Scrollbar for Tabs */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         /* Column Resizer Styles (Desktop Drag-to-Resize) */
@@ -355,15 +368,15 @@
                 សូមបញ្ចូលកូដអាជ្ញាប័ណ្ណរបស់អ្នក ដើម្បីចូលប្រើប្រាស់ប្រព័ន្ធហិរញ្ញវត្ថុ Pro Cloud។
             </p>
 
-            <div class="space-y-4 mb-6">
+            <form onsubmit="event.preventDefault(); ProApp.activateLicenseKey();" class="space-y-4 mb-6">
                 <div>
-                    <input type="text" id="licenseKeyInput" placeholder="ឧ. PRO-8888-9999" class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-center text-lg font-mono font-bold tracking-widest text-amber-300 focus:outline-none focus:border-blue-500 uppercase transition shadow-inner">
+                    <input type="text" id="licenseKeyInput" placeholder="ឧ. PRO-8888-9999" onclick="this.focus()" class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-center text-lg font-mono font-bold tracking-widest text-amber-300 focus:outline-none focus:border-blue-500 uppercase transition shadow-inner">
                 </div>
-                <button onclick="ProApp.activateLicenseKey()" id="btnActivateKey" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-extrabold text-sm shadow-lg transition active:scale-95 flex items-center justify-center gap-2">
+                <button type="submit" id="btnActivateKey" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-extrabold text-sm shadow-lg transition active:scale-95 flex items-center justify-center gap-2">
                     <i class="fa-solid fa-shield-halved"></i>
                     <span>ផ្ទៀងផ្ទាត់ & ចូលប្រើប្រាស់</span>
                 </button>
-            </div>
+            </form>
 
             <!-- Contact Seller Details -->
             <div class="border-t border-slate-800 pt-4 text-left bg-slate-950/50 p-3 rounded-xl border border-slate-800">
@@ -415,55 +428,55 @@
     <div class="max-w-[1400px] mx-auto pt-4 px-2 md:px-6">
         
         <!-- Header & Global Stats Card -->
-        <div id="heroCard" class="bg-gradient-to-br from-blue-800 to-indigo-900 rounded-2xl shadow-xl p-6 mb-6 text-white relative overflow-hidden transition-all duration-300">
+        <div id="heroCard" class="bg-gradient-to-br from-blue-800 to-indigo-900 rounded-2xl shadow-xl p-4 md:p-6 mb-6 text-white relative overflow-hidden transition-all duration-300">
             <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-10 -mt-10"></div>
             
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10 gap-6">
-                <div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10 gap-5 md:gap-6">
+                <div class="w-full">
                     <div class="flex items-center gap-3">
-                        <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3 cursor-pointer group" onclick="ProApp.openCustomizeModal()" title="ចុចដើម្បីកែឈ្មោះ">
+                        <h1 class="text-xl md:text-3xl font-bold flex items-center gap-2 md:gap-3 cursor-pointer group leading-snug" onclick="ProApp.openCustomizeModal()" title="ចុចដើម្បីកែឈ្មោះ">
                             <i class="fa-solid fa-wallet text-amber-300"></i>
-                            <span id="displayAppTitle">ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro Cloud</span>
+                            <span id="displayAppTitle" class="line-clamp-2">ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro Cloud</span>
                             <i class="fa-solid fa-pen-to-square text-xs opacity-50 group-hover:opacity-100 text-amber-300 transition"></i>
                         </h1>
                     </div>
-                    <div class="flex flex-wrap items-center gap-3 mt-2">
-                        <span id="cloudStatusBadge" class="bg-amber-500/20 text-amber-200 border border-amber-400/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5">
+                    <div class="flex flex-wrap items-center gap-2 mt-3 md:mt-2">
+                        <span id="cloudStatusBadge" class="bg-amber-500/20 text-amber-200 border border-amber-400/30 text-[10px] md:text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                             កំពុងភ្ជាប់ Cloud...
                         </span>
                         
                         <!-- Client License Status Badge -->
-                        <span id="clientLicenseBadge" class="bg-blue-500/20 text-blue-200 border border-blue-400/30 text-xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
+                        <span id="clientLicenseBadge" class="bg-blue-500/20 text-blue-200 border border-blue-400/30 text-[10px] md:text-xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5">
                             🔑 License: <span id="licenseBadgeText" class="font-mono text-amber-300">...</span>
                         </span>
 
-                        <p class="text-blue-200 text-xs md:text-sm font-medium" id="displayAppSubtitle">ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️</p>
+                        <p class="text-blue-200 text-[10px] md:text-sm font-medium w-full md:w-auto mt-1 md:mt-0" id="displayAppSubtitle">ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️</p>
                     </div>
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
-                    <div class="bg-black/40 backdrop-blur-md border border-white/20 p-4 rounded-xl flex items-center justify-between gap-6 min-w-[280px]">
-                        <div>
-                            <div class="text-blue-200 text-xs font-medium uppercase tracking-wider mb-1 flex items-center gap-2">
-                                ទ្រព្យសកម្មសរុបរួម (Net Worth)
-                                <button onclick="ProApp.toggleHideAmounts()" id="eyeBtn" class="text-amber-300 hover:text-white transition text-sm ml-1" title="បិទ/បើកមើលសមតុល្យ">
-                                    <i class="fa-solid fa-eye" id="eyeIcon"></i>
+                    <div class="bg-black/40 backdrop-blur-md border border-white/20 p-3.5 md:p-4 rounded-xl flex items-center justify-between gap-4 w-full md:w-auto min-w-0 md:min-w-[280px]">
+                        <div class="flex-1">
+                            <div class="text-blue-200 text-[10px] md:text-xs font-medium uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                                <span class="truncate">សរុបរួម (NET WORTH)</span>
+                                <button onclick="ProApp.toggleHideAmounts()" id="eyeBtn" class="text-amber-300 hover:text-white transition flex-shrink-0" title="បិទ/បើកមើលសមតុល្យ">
+                                    <i class="fa-solid fa-eye text-sm" id="eyeIcon"></i>
                                 </button>
                             </div>
-                            <div class="text-2xl font-black text-emerald-400 font-mono tracking-tight" id="globalNetWorth">$ 0.00</div>
+                            <div class="text-xl md:text-2xl font-black text-emerald-400 font-mono tracking-tight truncate" id="globalNetWorth">$ 0.00</div>
                         </div>
-                        <div class="h-10 w-px bg-white/20"></div>
-                        <div>
-                            <div class="flex items-center justify-between text-blue-200 text-xs font-medium uppercase tracking-wider mb-1">
-                                <span>អត្រាប្តូរប្រាក់</span>
-                                <button onclick="ProApp.fetchLiveExchangeRate()" class="text-xs text-amber-300 hover:underline flex items-center gap-1" title="ទាញយកអត្រាប្តូរប្រាក់ជាក់ស្តែង">
+                        <div class="h-10 w-px bg-white/20 flex-shrink-0"></div>
+                        <div class="flex-1 text-right md:text-left">
+                            <div class="flex items-center justify-end md:justify-between text-blue-200 text-[10px] md:text-xs font-medium uppercase tracking-wider mb-1">
+                                <span class="hidden md:inline">អត្រាប្តូរប្រាក់</span>
+                                <button onclick="ProApp.fetchLiveExchangeRate()" class="text-amber-300 hover:underline flex items-center gap-1 ml-auto" title="ទាញយកអត្រាប្តូរប្រាក់ជាក់ស្តែង">
                                     <i class="fa-solid fa-rotate text-[10px]" id="rateSyncSpin"></i> <span>Live</span>
                                 </button>
                             </div>
-                            <div class="flex items-center gap-1 bg-white/20 px-2 py-1 rounded text-sm">
+                            <div class="flex items-center justify-end md:justify-start gap-1 bg-white/20 px-2 py-1 rounded text-sm w-fit ml-auto md:ml-0">
                                 <span>៛</span>
-                                <input type="number" id="exchangeRate" value="4100" onchange="ProApp.updateExchangeRate()" class="bg-transparent text-white font-bold w-16 outline-none text-right font-mono">
+                                <input type="number" id="exchangeRate" value="4100" onchange="ProApp.updateExchangeRate()" class="bg-transparent text-white font-bold w-14 outline-none text-right font-mono text-sm">
                             </div>
                         </div>
                     </div>
@@ -482,15 +495,15 @@
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-gray-200 dark:border-zinc-700 overflow-hidden mb-6 flex overflow-x-auto">
-            <button onclick="ProApp.switchTab('dashboard')" id="tab-dashboard" class="tab-btn active flex-1 whitespace-nowrap px-6 py-4 font-bold transition-colors flex items-center justify-center gap-2">
-                <i class="fa-solid fa-gauge"></i> ផ្ទាំងសង្ខេប (Dashboard)
+        <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-gray-200 dark:border-zinc-700 overflow-x-auto hide-scrollbar mb-6 flex flex-nowrap scroll-smooth" style="-webkit-overflow-scrolling: touch;">
+            <button onclick="ProApp.switchTab('dashboard')" id="tab-dashboard" class="tab-btn active shrink-0 w-1/3 min-w-[120px] px-2 py-3.5 md:py-4 font-bold transition-colors flex items-center justify-center gap-1.5 md:gap-2 text-[12px] md:text-sm">
+                <i class="fa-solid fa-gauge"></i> ផ្ទាំងសង្ខេប
             </button>
-            <button onclick="ProApp.switchTab('entry')" id="tab-entry" class="tab-btn flex-1 whitespace-nowrap px-6 py-4 font-bold transition-colors flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400">
-                <i class="fa-solid fa-list-check"></i> ប្រតិបត្តិការ (Transactions)
+            <button onclick="ProApp.switchTab('entry')" id="tab-entry" class="tab-btn shrink-0 w-1/3 min-w-[120px] px-2 py-3.5 md:py-4 font-bold transition-colors flex items-center justify-center gap-1.5 md:gap-2 text-gray-600 dark:text-gray-400 text-[12px] md:text-sm">
+                <i class="fa-solid fa-list-check"></i> ប្រតិបត្តិការ
             </button>
-            <button onclick="ProApp.switchTab('report')" id="tab-report" class="tab-btn flex-1 whitespace-nowrap px-6 py-4 font-bold transition-colors flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400">
-                <i class="fa-solid fa-chart-column"></i> របាយការណ៍លម្អិត
+            <button onclick="ProApp.switchTab('report')" id="tab-report" class="tab-btn shrink-0 w-1/3 min-w-[120px] px-2 py-3.5 md:py-4 font-bold transition-colors flex items-center justify-center gap-1.5 md:gap-2 text-gray-600 dark:text-gray-400 text-[12px] md:text-sm">
+                <i class="fa-solid fa-chart-column"></i> របាយការណ៍
             </button>
         </div>
 
@@ -548,48 +561,80 @@
                 <div class="flex items-center gap-2 overflow-x-auto pb-1" id="shortcutsContainer"></div>
             </div>
 
-            <div class="bg-white dark:bg-zinc-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-zinc-700 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-wrap">
-                    <div class="relative w-full sm:w-48">
+            <div class="bg-white dark:bg-zinc-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-zinc-700 flex flex-col gap-4">
+                
+                <!-- Row 1: Search & Filters -->
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full">
+                    <div class="relative w-full sm:flex-1">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-xs text-gray-400 dark:text-gray-500"></i>
-                        <input type="text" id="searchInput" oninput="ProApp.renderTable()" placeholder="ស្វែងរក..." class="block w-full pl-9 pr-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg text-sm font-bold bg-white dark:bg-zinc-700 text-slate-900 dark:text-white outline-none focus:border-blue-500">
+                        <input type="text" id="searchInput" oninput="ProApp.renderTable()" placeholder="ស្វែងរក..." class="block w-full pl-9 pr-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg text-sm font-bold bg-gray-50 dark:bg-zinc-700 text-slate-900 dark:text-white outline-none focus:border-blue-500 focus:bg-white transition">
                     </div>
                     
-                    <select id="filterDatePeriod" onchange="ProApp.toggleCustomDateTimeFilter()" class="block w-44 py-2 px-3 border border-gray-300 dark:border-zinc-600 rounded-lg text-sm font-bold bg-white dark:bg-zinc-700 text-slate-900 dark:text-white shadow-sm focus:outline-none focus:border-blue-500">
-                        <option value="ALL">📅 គ្រប់កាលបរិច្ឆេទ</option>
-                        <option value="TODAY" selected>☀️ ថ្ងៃនេះ (Today)</option>
-                        <option value="YESTERDAY">🌙 ម្សិលមិញ</option>
-                        <option value="THIS_WEEK">🗓️ សប្តាហ៍នេះ</option>
-                        <option value="THIS_MONTH">📆 ខែនេះ</option>
-                        <option value="CUSTOM_DATETIME">🎯 រើសថ្ងៃ/ម៉ោងផ្ទាល់</option>
-                    </select>
-
-                    <div id="filterDateTimeContainer" class="hidden flex flex-wrap items-center gap-2 bg-blue-50 dark:bg-zinc-900 p-1.5 rounded-lg border border-blue-200 dark:border-zinc-700">
-                        <input type="datetime-local" step="1" id="filterStartDateTime" onchange="ProApp.renderTable()" class="bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded px-1.5 py-1 text-xs font-mono dark:text-white">
-                        <span class="text-xs font-bold dark:text-gray-400">-</span>
-                        <input type="datetime-local" step="1" id="filterEndDateTime" onchange="ProApp.renderTable()" class="bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded px-1.5 py-1 text-xs font-mono dark:text-white">
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                        <select id="filterAccount" onchange="ProApp.renderTable()" class="block w-32 py-2 px-3 border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-slate-900 dark:text-white rounded-lg text-sm font-bold shadow-sm focus:outline-none focus:border-blue-500"></select>
-                        <button onclick="ProApp.openAccountsModal()" class="px-3 py-2 text-xs bg-gray-100 text-gray-700 font-bold rounded-lg border border-gray-200 hover:bg-gray-200 transition shadow-sm flex items-center gap-1.5">⚙️ គណនី</button>
-                        <button onclick="ProApp.openCurrenciesModal()" class="px-3 py-2 text-xs bg-rose-50 text-rose-700 font-bold rounded-lg border border-rose-100 hover:bg-rose-100 transition shadow-sm flex items-center gap-1.5">⛽ ខ្នាត</button>
-                        <button onclick="ProApp.openCategoriesModal()" class="px-3 py-2 text-xs bg-amber-50 text-amber-700 font-bold rounded-lg border border-amber-100 hover:bg-amber-100 transition shadow-sm flex items-center gap-1.5">📁 ប្រភេទ</button>
-                        
-                        <!-- NEW BUTTONS -->
-                        <button onclick="ProApp.openTransferModal()" class="px-3 py-2 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-sm transition flex items-center gap-1.5">🔄 ផ្ទេរប្រាក់</button>
-                        <button onclick="ProApp.openExchangeModal()" class="px-3 py-2 text-xs bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg shadow-sm transition flex items-center gap-1.5">💱 ប្តូរប្រាក់</button>
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <select id="filterDatePeriod" onchange="ProApp.toggleCustomDateTimeFilter()" class="block w-1/2 sm:w-36 py-2 px-2 border border-gray-300 dark:border-zinc-600 rounded-lg text-sm font-bold bg-gray-50 dark:bg-zinc-700 text-slate-900 dark:text-white shadow-sm outline-none focus:border-blue-500 focus:bg-white transition">
+                            <option value="ALL">📅 គ្រប់ពេល</option>
+                            <option value="TODAY" selected>☀️ ថ្ងៃនេះ</option>
+                            <option value="YESTERDAY">🌙 ម្សិលមិញ</option>
+                            <option value="THIS_WEEK">🗓️ សប្តាហ៍នេះ</option>
+                            <option value="THIS_MONTH">📆 ខែនេះ</option>
+                            <option value="CUSTOM_DATETIME">🎯 ថ្ងៃ/ម៉ោង</option>
+                        </select>
+                        <select id="filterAccount" onchange="ProApp.renderTable()" class="block w-1/2 sm:w-32 py-2 px-2 border border-gray-300 dark:border-zinc-600 rounded-lg text-sm font-bold bg-gray-50 dark:bg-zinc-700 text-slate-900 dark:text-white shadow-sm outline-none focus:border-blue-500 focus:bg-white transition"></select>
                     </div>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+                <!-- Custom DateTime -->
+                <div id="filterDateTimeContainer" class="hidden flex flex-wrap items-center gap-2 bg-blue-50 dark:bg-zinc-900 p-2 rounded-lg border border-blue-200 dark:border-zinc-700 w-full">
+                    <input type="datetime-local" step="1" id="filterStartDateTime" onchange="ProApp.renderTable()" class="bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded px-1.5 py-1 text-xs font-mono dark:text-white">
+                    <span class="text-xs font-bold dark:text-gray-400">-</span>
+                    <input type="datetime-local" step="1" id="filterEndDateTime" onchange="ProApp.renderTable()" class="bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded px-1.5 py-1 text-xs font-mono dark:text-white">
+                </div>
+
+                <!-- Row 2: App-like Icon Grid (Scrollable Menu) -->
+                <div class="flex overflow-x-auto hide-scrollbar gap-4 sm:gap-6 py-2 border-t border-gray-100 dark:border-zinc-700/50 pt-4" style="-webkit-overflow-scrolling: touch;">
+                    
+                    <button onclick="ProApp.openAccountsModal()" class="flex flex-col items-center justify-center gap-1.5 shrink-0 w-16 group">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/40 dark:to-blue-800/20 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl shadow-sm border border-blue-200/50 dark:border-blue-700/30 group-hover:scale-105 transition-transform"><i class="fa-solid fa-building-columns"></i></div>
+                        <span class="text-[11px] font-bold text-slate-700 dark:text-slate-300">គណនី</span>
+                    </button>
+                    
+                    <button onclick="ProApp.openCategoriesModal()" class="flex flex-col items-center justify-center gap-1.5 shrink-0 w-16 group">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-50 dark:from-amber-900/40 dark:to-amber-800/20 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl shadow-sm border border-amber-200/50 dark:border-amber-700/30 group-hover:scale-105 transition-transform"><i class="fa-solid fa-icons"></i></div>
+                        <span class="text-[11px] font-bold text-slate-700 dark:text-slate-300">ប្រភេទ</span>
+                    </button>
+
+                    <button onclick="ProApp.openCurrenciesModal()" class="flex flex-col items-center justify-center gap-1.5 shrink-0 w-16 group">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-100 to-rose-50 dark:from-rose-900/40 dark:to-rose-800/20 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl shadow-sm border border-rose-200/50 dark:border-rose-700/30 group-hover:scale-105 transition-transform"><i class="fa-solid fa-coins"></i></div>
+                        <span class="text-[11px] font-bold text-slate-700 dark:text-slate-300">ខ្នាត</span>
+                    </button>
+
+                    <button onclick="ProApp.openTransferModal()" class="flex flex-col items-center justify-center gap-1.5 shrink-0 w-16 group">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/40 dark:to-emerald-800/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl shadow-sm border border-emerald-200/50 dark:border-emerald-700/30 group-hover:scale-105 transition-transform"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                        <span class="text-[11px] font-bold text-slate-700 dark:text-slate-300">ផ្ទេរប្រាក់</span>
+                    </button>
+
+                    <button onclick="ProApp.openExchangeModal()" class="flex flex-col items-center justify-center gap-1.5 shrink-0 w-16 group">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-100 to-purple-50 dark:from-purple-900/40 dark:to-purple-800/20 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl shadow-sm border border-purple-200/50 dark:border-purple-700/30 group-hover:scale-105 transition-transform"><i class="fa-solid fa-right-left"></i></div>
+                        <span class="text-[11px] font-bold text-slate-700 dark:text-slate-300">ប្តូរប្រាក់</span>
+                    </button>
+                    
+                    <div class="w-px h-10 bg-gray-200 dark:bg-zinc-700 my-auto mx-1 shrink-0"></div>
+                    
+                    <button onclick="ProApp.confirmClearData()" class="flex flex-col items-center justify-center gap-1.5 shrink-0 w-16 group">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 dark:from-zinc-800 dark:to-zinc-900 text-gray-500 dark:text-gray-400 flex items-center justify-center text-xl shadow-sm border border-gray-200/50 dark:border-zinc-700/50 group-hover:scale-105 transition-transform"><i class="fa-solid fa-trash-can"></i></div>
+                        <span class="text-[11px] font-bold text-gray-500 dark:text-gray-400">លុបទាំងស្រុង</span>
+                    </button>
+                </div>
+
+                <!-- Row 3: Data Tools -->
+                <div class="flex overflow-x-auto hide-scrollbar gap-2 w-full pt-3 border-t border-gray-100 dark:border-zinc-700/50" style="-webkit-overflow-scrolling: touch;">
                     <input type="file" id="fileInput" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="hidden" onchange="ProApp.importData(event)">
-                    <button onclick="document.getElementById('fileInput').click()" class="px-3 py-2 text-xs bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-lg hover:bg-indigo-100 transition font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-file-import"></i> នាំចូល Excel</button>
-                    <button onclick="ProApp.exportToExcel()" class="px-3 py-2 text-xs bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition font-bold shadow-sm">Export Excel</button>
-                    <button onclick="ProApp.exportToJSON()" class="px-3 py-2 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-save"></i> Backup JSON</button>
+                    <button onclick="document.getElementById('fileInput').click()" class="px-3 py-2 shrink-0 text-[11px] md:text-xs bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-lg hover:bg-indigo-100 transition font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-file-import"></i> នាំចូល Excel</button>
+                    <button onclick="ProApp.exportToExcel()" class="px-3 py-2 shrink-0 text-[11px] md:text-xs bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+                    
                     <input type="file" id="jsonFileInput" accept=".json" class="hidden" onchange="ProApp.importFromJSON(event)">
-                    <button onclick="document.getElementById('jsonFileInput').click()" class="px-3 py-2 text-xs bg-amber-50 text-amber-700 border border-amber-100 rounded-lg hover:bg-amber-100 transition font-bold shadow-sm flex items-center gap-1.5">📂 Restore JSON</button>
-                    <button onclick="ProApp.confirmClearData()" class="px-3 py-2 text-xs bg-rose-50 text-rose-600 border border-rose-100 rounded-lg hover:bg-rose-100 transition font-bold shadow-sm ml-auto">លុបទិន្នន័យ</button>
+                    <button onclick="document.getElementById('jsonFileInput').click()" class="px-3 py-2 shrink-0 text-[11px] md:text-xs bg-amber-50 text-amber-700 border border-amber-100 rounded-lg hover:bg-amber-100 transition font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-folder-open"></i> Restore JSON</button>
+                    <button onclick="ProApp.exportToJSON()" class="px-3 py-2 shrink-0 text-[11px] md:text-xs bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-save"></i> Backup JSON</button>
                 </div>
             </div>
 
@@ -861,16 +906,16 @@
             
             <div class="pb-3 border-b border-gray-100 dark:border-slate-800 flex-shrink-0">
                 <div class="flex gap-2">
-                    <input type="text" id="newAccountName" placeholder="ឈ្មោះគណនីថ្មី (ឧ. 🏦 ABA, 💳 Wing...)" class="modal-item-input flex-1 px-4 py-2 text-sm font-bold text-slate-900 dark:text-white shadow-sm border-slate-300">
-                    <button onclick="ProApp.addNewAccount()" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition shadow-md active:scale-95">បន្ថែម</button>
+                    <input type="text" id="newAccountName" placeholder="ឈ្មោះគណនីថ្មី..." class="modal-item-input flex-1 min-w-0 px-3 py-2 text-sm font-bold text-slate-900 dark:text-white shadow-sm border-slate-300">
+                    <button onclick="ProApp.addNewAccount()" class="px-4 py-2 shrink-0 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition shadow-md active:scale-95">បន្ថែម</button>
                 </div>
-                <div class="flex items-center gap-3 mt-3 text-xs overflow-x-auto py-1 modal-label-text">
-                    <span class="text-[11px] font-bold text-slate-600 dark:text-slate-400">ចុចរើស Emoji៖</span>
-                    <span class="emoji-btn text-lg" onclick="ProApp.appendEmoji('newAccountName', '🏦')">🏦</span>
-                    <span class="emoji-btn text-lg" onclick="ProApp.appendEmoji('newAccountName', '💳')">💳</span>
-                    <span class="emoji-btn text-lg" onclick="ProApp.appendEmoji('newAccountName', '👛')">👛</span>
-                    <span class="emoji-btn text-lg" onclick="ProApp.appendEmoji('newAccountName', '⛽')">⛽</span>
-                    <span class="emoji-btn text-lg" onclick="ProApp.appendEmoji('newAccountName', '💰')">💰</span>
+                <div class="flex items-center gap-3 mt-3 text-xs overflow-x-auto py-1 modal-label-text hide-scrollbar">
+                    <span class="text-[11px] font-bold text-slate-600 dark:text-slate-400 shrink-0">ចុចរើស Emoji៖</span>
+                    <span class="emoji-btn text-lg shrink-0" onclick="ProApp.appendEmoji('newAccountName', '🏦')">🏦</span>
+                    <span class="emoji-btn text-lg shrink-0" onclick="ProApp.appendEmoji('newAccountName', '💳')">💳</span>
+                    <span class="emoji-btn text-lg shrink-0" onclick="ProApp.appendEmoji('newAccountName', '👛')">👛</span>
+                    <span class="emoji-btn text-lg shrink-0" onclick="ProApp.appendEmoji('newAccountName', '⛽')">⛽</span>
+                    <span class="emoji-btn text-lg shrink-0" onclick="ProApp.appendEmoji('newAccountName', '💰')">💰</span>
                 </div>
             </div>
             
@@ -894,8 +939,8 @@
             </div>
             
             <div class="flex gap-2 pb-3 border-b border-gray-100 dark:border-slate-800 flex-shrink-0">
-                <input type="text" id="newCurrencyName" placeholder="ឈ្មោះខ្នាតថ្មី (ឧ. THB, L...)" class="modal-item-input flex-1 px-4 py-2 text-sm font-bold text-slate-900 dark:text-white shadow-sm border-slate-300">
-                <button onclick="ProApp.addNewCurrency()" class="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-xl transition shadow-md active:scale-95">បន្ថែម</button>
+                <input type="text" id="newCurrencyName" placeholder="ឈ្មោះខ្នាតថ្មី..." class="modal-item-input flex-1 min-w-0 px-3 py-2 text-sm font-bold text-slate-900 dark:text-white shadow-sm border-slate-300">
+                <button onclick="ProApp.addNewCurrency()" class="px-4 py-2 shrink-0 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-xl transition shadow-md active:scale-95">បន្ថែម</button>
             </div>
             
             <div class="overflow-y-auto pr-2 mt-3 flex-1 space-y-2 custom-scrollbar max-h-[50vh]" id="currenciesListContainer">
@@ -917,8 +962,8 @@
             </div>
             
             <div class="flex gap-2 pb-3 border-b border-gray-100 dark:border-slate-800 flex-shrink-0">
-                <input type="text" id="newCategoryName" placeholder="ឈ្មោះប្រភេទថ្មី..." class="modal-item-input flex-1 px-4 py-2 text-sm font-bold text-slate-900 dark:text-white shadow-sm border-slate-300">
-                <button onclick="ProApp.addNewCategory()" class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold rounded-xl transition shadow-md active:scale-95">បន្ថែម</button>
+                <input type="text" id="newCategoryName" placeholder="ឈ្មោះប្រភេទថ្មី..." class="modal-item-input flex-1 min-w-0 px-3 py-2 text-sm font-bold text-slate-900 dark:text-white shadow-sm border-slate-300">
+                <button onclick="ProApp.addNewCategory()" class="px-4 py-2 shrink-0 bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold rounded-xl transition shadow-md active:scale-95">បន្ថែម</button>
             </div>
             
             <div class="overflow-y-auto pr-2 mt-3 flex-1 space-y-2 custom-scrollbar max-h-[50vh]" id="categoriesListContainer">
@@ -1544,14 +1589,14 @@
 
                 if (ProApp.state.themeStyle === 'aba-dark') {
                     body.classList.add('theme-aba-dark', 'theme-dark', 'dark');
-                    if (hero) hero.className = "bg-gradient-to-br from-neutral-900 via-amber-950 to-neutral-950 rounded-2xl shadow-xl p-6 mb-6 text-white relative overflow-hidden border border-amber-500/30";
+                    if (hero) hero.className = "bg-gradient-to-br from-neutral-900 via-amber-950 to-neutral-950 rounded-2xl shadow-xl p-4 md:p-6 mb-6 text-white relative overflow-hidden border border-amber-500/30";
                 } else if (ProApp.state.themeStyle === 'slate') {
                     body.classList.add('theme-slate', 'theme-dark', 'dark');
                     body.style.backgroundColor = '#0f172a';
-                    if (hero) hero.className = "bg-gradient-to-br from-slate-800 to-slate-950 rounded-2xl shadow-xl p-6 mb-6 text-white relative overflow-hidden border border-slate-700";
+                    if (hero) hero.className = "bg-gradient-to-br from-slate-800 to-slate-950 rounded-2xl shadow-xl p-4 md:p-6 mb-6 text-white relative overflow-hidden border border-slate-700";
                 } else {
                     body.style.backgroundColor = '#f1f5f9';
-                    if (hero) hero.className = "bg-gradient-to-br from-blue-800 to-indigo-900 rounded-2xl shadow-xl p-6 mb-6 text-white relative overflow-hidden";
+                    if (hero) hero.className = "bg-gradient-to-br from-blue-800 to-indigo-900 rounded-2xl shadow-xl p-4 md:p-6 mb-6 text-white relative overflow-hidden";
                 }
 
                 if (ProApp.state.visibleSections) {
@@ -1856,17 +1901,18 @@
                     c.innerHTML += `
                         <div class="flex items-center p-2 mb-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm gap-2">
                             <div class="flex flex-col gap-1">
-                        <button onclick="ProApp.moveAccount(${i}, -1)" ${i === 0 ? 'disabled class="opacity-40 bg-blue-50 text-blue-300 p-1 rounded"' : 'class="bg-blue-100 hover:bg-blue-200 text-blue-600 font-bold p-1 rounded transition"'}><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
-                        <button onclick="ProApp.moveAccount(${i}, 1)" ${i === ProApp.state.accounts.length - 1 ? 'disabled class="opacity-40 bg-blue-50 text-blue-300 p-1 rounded"' : 'class="bg-blue-100 hover:bg-blue-200 text-blue-600 font-bold p-1 rounded transition"'}><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
-                    </div>
-                    <button onclick="ProApp.toggleAccountVisibility('${acc}')" class="px-2 py-1.5 rounded-lg text-[10px] font-bold transition flex flex-col items-center justify-center min-w-[55px] ${isHidden ? 'bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-400' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400'}" title="${isHidden ? 'ចុចដើម្បីបង្ហាញវិញ' : 'ចុចដើម្បីលាក់'}">
-                        <i class="fa-solid ${isHidden ? 'fa-eye-slash' : 'fa-eye'} mb-0.5 text-xs"></i>
-                        ${isHidden ? 'កំពុងលាក់' : 'បង្ហាញ'}
-                    </button>
-                    <div class="flex-1 border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden bg-white dark:bg-slate-900">
-                        <input type="text" value="${acc}" onchange="ProApp.editAccountName(${i}, this.value)" class="w-full bg-transparent outline-none text-sm font-bold text-slate-900 dark:text-white px-3 py-2">
+                                <button onclick="ProApp.moveAccount(${i}, -1)" ${i === 0 ? 'disabled class="opacity-40 bg-blue-50 text-blue-300 p-1 rounded"' : 'class="bg-blue-100 hover:bg-blue-200 text-blue-600 font-bold p-1 rounded transition"'}><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
+                                <button onclick="ProApp.moveAccount(${i}, 1)" ${i === ProApp.state.accounts.length - 1 ? 'disabled class="opacity-40 bg-blue-50 text-blue-300 p-1 rounded"' : 'class="bg-blue-100 hover:bg-blue-200 text-blue-600 font-bold p-1 rounded transition"'}><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
                             </div>
-                            <button onclick="ProApp.deleteAccount(${i})" class="bg-rose-500 hover:bg-rose-600 text-white p-2.5 rounded-lg shadow-sm transition flex items-center justify-center h-full">
+                            
+                            <button onclick="ProApp.toggleAccountVisibility('${acc}')" class="w-10 h-10 flex-shrink-0 rounded-lg transition flex items-center justify-center shadow-sm border ${isHidden ? 'bg-slate-100 text-slate-400 border-slate-200 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-500 hover:bg-slate-200' : 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-400 hover:bg-blue-100'}" title="${isHidden ? 'ចុចដើម្បីបង្ហាញវិញ' : 'ចុចដើម្បីលាក់'}">
+                                <i class="fa-solid ${isHidden ? 'fa-eye-slash' : 'fa-eye'} text-[16px]"></i>
+                            </button>
+                            
+                            <div class="flex-1 border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden bg-white dark:bg-slate-900">
+                                <input type="text" value="${acc}" onchange="ProApp.editAccountName(${i}, this.value)" class="w-full bg-transparent outline-none text-sm font-bold text-slate-900 dark:text-white px-3 py-2">
+                            </div>
+                            <button onclick="ProApp.deleteAccount(${i})" class="bg-rose-500 hover:bg-rose-600 text-white w-10 h-10 flex-shrink-0 rounded-lg shadow-sm transition flex items-center justify-center">
                                 <i class="fa-solid fa-trash-can text-sm"></i>
                             </button>
                         </div>`;
