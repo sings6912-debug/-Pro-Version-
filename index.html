@@ -502,6 +502,7 @@
                         <i class="fa-solid fa-eye-slash"></i> <span id="eyeBtnText">បាំង/បង្ហាញសមតុល្យ</span>
                     </button>
                 </div>
+                <!-- UPDATED DASHBOARD CARDS AREA -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboardCards"></div>
             </div>
 
@@ -571,7 +572,10 @@
                         <button onclick="ProApp.openAccountsModal()" class="px-3 py-2 text-xs bg-gray-100 text-gray-700 font-bold rounded-lg border border-gray-200 hover:bg-gray-200 transition shadow-sm flex items-center gap-1.5">⚙️ គណនី</button>
                         <button onclick="ProApp.openCurrenciesModal()" class="px-3 py-2 text-xs bg-rose-50 text-rose-700 font-bold rounded-lg border border-rose-100 hover:bg-rose-100 transition shadow-sm flex items-center gap-1.5">⛽ ខ្នាត</button>
                         <button onclick="ProApp.openCategoriesModal()" class="px-3 py-2 text-xs bg-amber-50 text-amber-700 font-bold rounded-lg border border-amber-100 hover:bg-amber-100 transition shadow-sm flex items-center gap-1.5">📁 ប្រភេទ</button>
+                        
+                        <!-- NEW BUTTONS -->
                         <button onclick="ProApp.openTransferModal()" class="px-3 py-2 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-sm transition flex items-center gap-1.5">🔄 ផ្ទេរប្រាក់</button>
+                        <button onclick="ProApp.openExchangeModal()" class="px-3 py-2 text-xs bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg shadow-sm transition flex items-center gap-1.5">💱 ប្តូរប្រាក់</button>
                     </div>
                 </div>
 
@@ -1062,6 +1066,32 @@
             <div class="flex justify-end gap-3">
                 <button onclick="ProApp.closeTransferModal()" class="px-5 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បោះបង់</button>
                 <button onclick="ProApp.executeTransfer()" class="px-5 py-2 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow transition">ផ្ទេរប្រាក់ឥឡូវនេះ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 💱 Exchange Modal -->
+    <div id="exchangeModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-card rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
+            <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold flex items-center gap-2 modal-label-text"><span>💱</span> ប្តូរប្រាក់ (Exchange)</h3>
+                <button onclick="ProApp.closeExchangeModal()" class="text-gray-400 hover:text-gray-200 font-bold text-xl px-2">&times;</button>
+            </div>
+            <div class="space-y-4 mb-6">
+                <div><label class="block text-xs font-bold mb-1 modal-label-text">ក្នុងគណនីតែមួយ៖</label><select id="exAccount" class="modal-item-input w-full p-2 text-sm font-medium text-slate-900 dark:text-white"></select></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-xs font-bold mb-1 modal-label-text">ប្តូរពី (ខ្នាត)៖</label><select id="exFromCur" onchange="ProApp.calculateExchange()" class="modal-item-input w-full p-2 text-sm font-bold text-amber-700 dark:text-amber-400"></select></div>
+                    <div><label class="block text-xs font-bold mb-1 modal-label-text">ទៅជា (ខ្នាត)៖</label><select id="exToCur" onchange="ProApp.calculateExchange()" class="modal-item-input w-full p-2 text-sm font-bold text-amber-700 dark:text-amber-400"></select></div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-xs font-bold mb-1 modal-label-text">ចំនួនប្តូរចេញ៖</label><input type="number" step="any" id="exFromAmount" placeholder="0.00" oninput="ProApp.calculateExchange()" class="modal-item-input w-full p-2 text-sm font-bold text-red-600 dark:text-rose-400"></div>
+                    <div><label class="block text-xs font-bold mb-1 modal-label-text">អត្រាប្តូរប្រាក់៖</label><input type="number" step="any" id="exRate" placeholder="4100" oninput="ProApp.calculateExchange()" class="modal-item-input w-full p-2 text-sm font-bold text-blue-600 dark:text-blue-400"></div>
+                </div>
+                <div><label class="block text-xs font-bold mb-1 modal-label-text">ចំនួនទទួលបាន៖</label><input type="number" step="any" id="exToAmount" readonly class="modal-item-input w-full p-2 text-sm font-bold text-emerald-600 dark:text-emerald-400 bg-gray-50 dark:bg-zinc-800"></div>
+            </div>
+            <div class="flex justify-end gap-3">
+                <button onclick="ProApp.closeExchangeModal()" class="px-5 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg">បោះបង់</button>
+                <button onclick="ProApp.executeExchange()" class="px-5 py-2 text-sm font-bold text-white bg-purple-600 hover:bg-purple-700 rounded-lg shadow transition">ប្តូរប្រាក់ឥឡូវនេះ</button>
             </div>
         </div>
     </div>
@@ -1727,32 +1757,54 @@
                 if (cardGrid) {
                     cardGrid.innerHTML = '';
                     const isDark = ProApp.state.themeStyle === 'aba-dark' || ProApp.state.themeStyle === 'slate' || document.body.classList.contains('dark');
-                    const cardBg = isDark ? 'bg-slate-900/90 border-slate-700' : 'bg-white border-slate-200 shadow-md';
+                    const cardBg = isDark ? 'bg-slate-900/90 border-slate-700' : 'bg-white border-slate-200 shadow-sm';
                     const textMain = isDark ? 'text-slate-100' : 'text-slate-900';
 
                     Object.keys(accBalances).forEach(key => {
                         if (ProApp.state.hiddenAccounts.includes(key)) return;
                         const bObj = accBalances[key];
-                        let cardContent = ''; let hasData = false;
+                        
+                        let cardContent = ''; 
+                        let hasData = false;
+                        let netUSD = 0;
+                        
                         Object.keys(bObj).forEach(c => {
                             if (bObj[c] !== 0) {
                                 hasData = true;
-                                cardContent += `<div class="text-base font-extrabold ${bObj[c] < 0 ? 'text-red-500' : textMain}">${ProApp.formatMoney(bObj[c], c)}</div>`;
+                                cardContent += `
+                                    <div class="flex justify-between items-center text-xs font-medium border-t border-gray-200 dark:border-slate-700/50 pt-1 mt-1 first:border-0 first:pt-0 first:mt-0">
+                                        <span class="text-slate-500 dark:text-slate-400">លុយ ${c}:</span>
+                                        <span class="${bObj[c] < 0 ? 'text-red-500 font-bold' : textMain}">${ProApp.formatMoney(bObj[c], c)}</span>
+                                    </div>
+                                `;
                             }
+                            // Calculate net per account in USD
+                            if (c === 'USD') netUSD += bObj[c];
+                            else if (c === 'KHR') netUSD += (bObj[c] / (ProApp.state.exchangeRate || 4100));
                         });
-                        if (!hasData) cardContent = `<div class="text-base font-extrabold text-slate-400">${ProApp.formatMoney(0, 'USD')}</div>`;
+                        
+                        if (!hasData) cardContent = `<div class="text-xs font-medium text-slate-400">គ្មានទិន្នន័យ (0.00 $)</div>`;
+                        
                         cardGrid.innerHTML += `
-                            <div class="${cardBg} backdrop-blur-md p-5 rounded-2xl border flex flex-col justify-between ${!hasData ? 'opacity-85' : ''}">
+                            <div class="${cardBg} backdrop-blur-md p-4 rounded-2xl border flex flex-col justify-between hover:shadow-md transition duration-200 ${!hasData ? 'opacity-85' : ''}">
                                 <div class="flex items-center justify-between mb-3">
                                     <div class="flex items-center gap-2">
-                                        <span class="p-1.5 bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-amber-400 rounded-lg text-xs font-bold">💳</span>
-                                        <span class="font-black ${textMain} text-sm">${key}</span>
+                                        <span class="p-1.5 bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-amber-400 rounded-lg text-[10px] font-bold">💳</span>
+                                        <span class="font-black ${textMain} text-sm truncate max-w-[120px]" title="${key}">${key}</span>
                                     </div>
                                     <button onclick="ProApp.filterByAccountFromCard('${key}')" class="text-slate-400 hover:text-blue-600 dark:hover:text-amber-300 p-1 rounded transition" title="មើលប្រតិបត្តិការកុងនេះ">
-                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
                                     </button>
                                 </div>
-                                <div class="space-y-1">${cardContent}</div>
+                                
+                                <div class="mb-4">
+                                    <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">សរុបរួម (Net Balance)</div>
+                                    <div class="text-2xl font-black ${netUSD < 0 ? 'text-red-500' : 'text-emerald-500'} tracking-tight">${ProApp.formatMoney(netUSD, 'USD')}</div>
+                                </div>
+                                
+                                <div class="space-y-1 bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700/50">
+                                    ${cardContent}
+                                </div>
                             </div>
                         `;
                     });
@@ -2445,6 +2497,70 @@
                     ProApp.state.transactions.push(outTx, inTx);
                     ProApp.renderTable(); ProApp.updateDashboard(); ProApp.closeTransferModal();
                     ProApp.showToast(`បានផ្ទេរប្រាក់ពី ${fromAcc} ទៅ ${toAcc}`, 'success');
+                }
+            },
+
+            // ----------------------------------------------------------------------
+            // 💱 EXCHANGE MONEY (NEW)
+            // ----------------------------------------------------------------------
+            openExchangeModal: function() {
+                document.getElementById('exAccount').innerHTML = ProApp.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
+                document.getElementById('exFromCur').innerHTML = ProApp.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+                document.getElementById('exToCur').innerHTML = ProApp.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+                if(ProApp.state.currencies.length > 1) document.getElementById('exToCur').selectedIndex = 1;
+                document.getElementById('exRate').value = ProApp.state.exchangeRate || 4100;
+                document.getElementById('exFromAmount').value = '';
+                document.getElementById('exToAmount').value = '';
+                document.getElementById('exchangeModal').classList.remove('hidden');
+            },
+            closeExchangeModal: function() { document.getElementById('exchangeModal').classList.add('hidden'); },
+            calculateExchange: function() {
+                const amount = parseFloat(document.getElementById('exFromAmount').value) || 0;
+                const rate = parseFloat(document.getElementById('exRate').value) || 4100;
+                const fromCur = document.getElementById('exFromCur').value;
+                const toCur = document.getElementById('exToCur').value;
+                
+                let result = 0;
+                if (fromCur === 'USD' && toCur === 'KHR') result = amount * rate;
+                else if (fromCur === 'KHR' && toCur === 'USD') result = amount / rate;
+                else result = amount; // fallback for same currency
+                
+                document.getElementById('exToAmount').value = result > 0 ? result.toFixed(2) : '';
+            },
+            executeExchange: function() {
+                ProApp.playChimeSound();
+                const acc = document.getElementById('exAccount').value;
+                const fromCur = document.getElementById('exFromCur').value;
+                const toCur = document.getElementById('exToCur').value;
+                const fromAmt = parseFloat(document.getElementById('exFromAmount').value) || 0;
+                const toAmt = parseFloat(document.getElementById('exToAmount').value) || 0;
+                const rate = parseFloat(document.getElementById('exRate').value) || 4100;
+                
+                if (fromCur === toCur || fromAmt <= 0 || toAmt <= 0) {
+                    ProApp.showToast('សូមពិនិត្យមើលរូបិយប័ណ្ណ និងចំនួនទឹកប្រាក់ឡើងវិញ!', 'error');
+                    return;
+                }
+
+                const now = new Date();
+                const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
+                
+                // Tx 1: Deduct fromCur
+                const outTx = { id: ProApp.generateId(), date: nowIso, cat: 'ប្តូរប្រាក់', desc: `ប្តូរចេញទៅ ${toCur} (Rate: ${rate})`, acc: acc, cur: fromCur, inc: 0, exp: fromAmt };
+                // Tx 2: Add toCur
+                const inTx = { id: ProApp.generateId(), date: nowIso, cat: 'ប្តូរប្រាក់', desc: `ប្តូរចូលពី ${fromCur} (Rate: ${rate})`, acc: acc, cur: toCur, inc: toAmt, exp: 0 };
+
+                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                    Promise.all([
+                        window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + outTx.id)), outTx),
+                        window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + inTx.id)), inTx)
+                    ]).then(() => {
+                        ProApp.closeExchangeModal();
+                        ProApp.showToast(`បានប្តូរប្រាក់ក្នុងគណនី ${acc} ជោគជ័យ`, 'success');
+                    }).catch(() => ProApp.showToast('មានបញ្ហាក្នុងការភ្ជាប់ទៅកាន់ Cloud', 'error'));
+                } else {
+                    ProApp.state.transactions.push(outTx, inTx);
+                    ProApp.renderTable(); ProApp.updateDashboard(); ProApp.closeExchangeModal();
+                    ProApp.showToast(`បានប្តូរប្រាក់ក្នុងគណនី ${acc} ជោគជ័យ`, 'success');
                 }
             },
 
