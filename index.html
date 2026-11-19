@@ -849,14 +849,17 @@
                             <span id="syncLastTime" class="font-mono font-bold text-slate-800 dark:text-slate-200">--</span>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
-                            <button type="button" onclick="ProApp.vibrate(); ProApp.manualCloudSync('auto')" class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-sm active:scale-95 transition cursor-pointer flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-rotate"></i> Sync
+                            <button type="button" onclick="ProApp.vibrate(); ProApp.manualCloudSync('auto')" class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-sm active:scale-95 transition cursor-pointer flex flex-col items-center justify-center gap-0.5">
+                                <span class="flex items-center gap-1"><i class="fa-solid fa-rotate"></i> Sync</span>
+                                <span class="text-[8px] font-medium opacity-85">បញ្ចូលគ្នា</span>
                             </button>
-                            <button type="button" onclick="ProApp.vibrate(); ProApp.manualCloudSync('push')" class="py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-xl shadow-sm active:scale-95 transition cursor-pointer flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-cloud-arrow-up"></i> រុញឡើង
+                            <button type="button" onclick="ProApp.vibrate(); ProApp.manualCloudSync('push')" class="py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-xl shadow-sm active:scale-95 transition cursor-pointer flex flex-col items-center justify-center gap-0.5">
+                                <span class="flex items-center gap-1"><i class="fa-solid fa-cloud-arrow-up"></i> រុញឡើង</span>
+                                <span class="text-[8px] font-medium opacity-85">ម៉ាស៊ីន → Cloud</span>
                             </button>
-                            <button type="button" onclick="ProApp.vibrate(); ProApp.manualCloudSync('pull')" class="py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold rounded-xl shadow-sm active:scale-95 transition cursor-pointer flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-cloud-arrow-down"></i> ទាញចុះ
+                            <button type="button" onclick="ProApp.vibrate(); ProApp.manualCloudSync('pull')" class="py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold rounded-xl shadow-sm active:scale-95 transition cursor-pointer flex flex-col items-center justify-center gap-0.5">
+                                <span class="flex items-center gap-1"><i class="fa-solid fa-cloud-arrow-down"></i> ទាញចុះ</span>
+                                <span class="text-[8px] font-medium opacity-85">Cloud → ម៉ាស៊ីន</span>
                             </button>
                         </div>
                     </div>
@@ -1350,7 +1353,11 @@
             currentEditMobileId: null,
             deferredPrompt: null,
 
-            // ☁️ REAL-TIME CLOUD SYNC & OFFLINE-FIRST ENGINE
+            // ☁️ REAL-TIME CLOUD SYNC & OFFLINE-FIRST ENGINE (ZERO DATA LOSS)
+            sanitizeForCloud: function(val) {
+                try { return JSON.parse(JSON.stringify(val)); }
+                catch (e) { return val; }
+            },
             getCacheKey: function(lKey) {
                 const key = lKey || ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key') || 'GUEST';
                 return `finance_tenant_cache_${key}`;
@@ -1466,35 +1473,80 @@
                     if (modalStatus) modalStatus.textContent = 'ស្ថានភាព៖ 🟠 កំពុងប្រើ Offline (ទិន្នន័យរក្សាក្នុងម៉ាស៊ីន និង Sync អូតូពេលមានអ៊ីនធឺណិត)';
                 }
             },
+            // Unified safe writer for ALL cloud nodes (transactions, categories, accounts, budgets, goals, shortcuts, recurrings, uiConfig)
+            writeCloudNode: function(subPath, rawData) {
+                ProApp.saveLocalCache();
+                const lKey = ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key');
+                if (lKey && !ProApp.state.licenseKey) ProApp.state.licenseKey = lKey;
+                if (!lKey || !window.firebaseDb || !window.firebaseRef || !window.firebaseSet) {
+                    ProApp.markPendingSync();
+                    return Promise.resolve(false);
+                }
+                const cleanData = ProApp.sanitizeForCloud(rawData);
+                if (!navigator.onLine) {
+                    ProApp.markPendingSync();
+                }
+                return window.firebaseSet(window.firebaseRef(window.firebaseDb, `tenant_data/${lKey}/${subPath}`), cleanData)
+                    .then(() => {
+                        ProApp.clearPendingSync();
+                        return true;
+                    })
+                    .catch((err) => {
+                        console.error(`Cloud write failed (${subPath}):`, err);
+                        ProApp.markPendingSync();
+                        return false;
+                    });
+            },
+            buildUiConfigPayload: function() {
+                return ProApp.sanitizeForCloud({
+                    appTitle: ProApp.state.appTitle || 'ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro Cloud',
+                    appSubtitle: ProApp.state.appSubtitle || 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️',
+                    themeStyle: ProApp.state.themeStyle || 'default',
+                    bgImageUrl: ProApp.state.bgImageUrl || '',
+                    hideAmounts: !!ProApp.state.hideAmounts,
+                    hiddenAccounts: ProApp.state.hiddenAccounts || [],
+                    visibleSections: ProApp.state.visibleSections || { 'sec-accounts': true, 'sec-goals': true, 'sec-budgets': true, 'sec-charts': true },
+                    pinCode: ProApp.state.pinCode || '',
+                    exchangeRate: ProApp.state.exchangeRate || 4100,
+                    language: ProApp.state.language || 'km',
+                    servicesGridMode: ProApp.state.servicesGridMode || 'full',
+                    tgBotToken: ProApp.state.tgBotToken || '',
+                    tgChatId: ProApp.state.tgChatId || '',
+                    tgAutoNotify: !!ProApp.state.tgAutoNotify
+                });
+            },
             syncTxWrite: function(tx, notifyTelegram = false) {
-                const idx = ProApp.state.transactions.findIndex(t => t.id === tx.id);
-                if (idx >= 0) ProApp.state.transactions[idx] = tx;
-                else ProApp.state.transactions.push(tx);
+                const cleanTx = ProApp.sanitizeForCloud({
+                    id: tx.id || ProApp.generateId(),
+                    date: tx.date || new Date().toISOString().slice(0, 19),
+                    cat: tx.cat || (ProApp.state.categories[0] || 'ផ្សេងៗ'),
+                    desc: tx.desc || '',
+                    acc: tx.acc || (ProApp.state.accounts[0] || '🏦 ABA'),
+                    cur: tx.cur || 'USD',
+                    inc: Number(tx.inc) || 0,
+                    exp: Number(tx.exp) || 0
+                });
+                const idx = ProApp.state.transactions.findIndex(t => t.id === cleanTx.id);
+                if (idx >= 0) ProApp.state.transactions[idx] = cleanTx;
+                else ProApp.state.transactions.push(cleanTx);
                 ProApp.saveLocalCache();
                 ProApp.renderTable();
                 ProApp.updateDashboard();
 
                 if (notifyTelegram && ProApp.state.tgAutoNotify && ProApp.state.tgBotToken && ProApp.state.tgChatId) {
-                    const isInc = tx.inc > 0;
-                    const amt = isInc ? tx.inc : tx.exp;
+                    const isInc = cleanTx.inc > 0;
+                    const amt = isInc ? cleanTx.inc : cleanTx.exp;
                     const msg = `${isInc ? '🟢 ចំណូលថ្មី' : '🔴 ចំណាយថ្មី'} (Pro Cloud)
 ━━━━━━━━━━━━━━
-📁 ប្រភេទ៖ ${tx.cat}
-📝 ពិពណ៌នា៖ ${tx.desc || '-'}
-🏦 គណនី៖ ${tx.acc}
-💵 ទឹកប្រាក់៖ ${isInc ? '+' : '-'}${ProApp.formatMoney(amt, tx.cur)}
-📅 ពេលវេលា៖ ${(tx.date || '').replace('T', ' ')}`;
+📁 ប្រភេទ៖ ${cleanTx.cat}
+📝 ពិពណ៌នា៖ ${cleanTx.desc || '-'}
+🏦 គណនី៖ ${cleanTx.acc}
+💵 ទឹកប្រាក់៖ ${isInc ? '+' : '-'}${ProApp.formatMoney(amt, cleanTx.cur)}
+📅 ពេលវេលា៖ ${(cleanTx.date || '').replace('T', ' ')}`;
                     ProApp.sendTelegramMessage(msg, false);
                 }
 
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet && ProApp.state.licenseKey && ProApp.isCloudConnected) {
-                    return window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + tx.id)), tx)
-                        .then(() => { ProApp.clearPendingSync(); })
-                        .catch(() => { ProApp.markPendingSync(); });
-                } else {
-                    ProApp.markPendingSync();
-                    return Promise.resolve();
-                }
+                return ProApp.writeCloudNode('transactions/' + cleanTx.id, cleanTx);
             },
             syncTxDelete: function(idOrAll) {
                 if (idOrAll === 'ALL') {
@@ -1506,8 +1558,10 @@
                 ProApp.renderTable();
                 ProApp.updateDashboard();
 
-                if (window.firebaseDb && window.firebaseRef && window.firebaseRemove && ProApp.state.licenseKey && ProApp.isCloudConnected) {
-                    const targetPath = idOrAll === 'ALL' ? ProApp.getCloudPath('transactions') : ProApp.getCloudPath('transactions/' + idOrAll);
+                const lKey = ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key');
+                if (lKey && !ProApp.state.licenseKey) ProApp.state.licenseKey = lKey;
+                if (lKey && window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
+                    const targetPath = idOrAll === 'ALL' ? `tenant_data/${lKey}/transactions` : `tenant_data/${lKey}/transactions/${idOrAll}`;
                     return window.firebaseRemove(window.firebaseRef(window.firebaseDb, targetPath))
                         .then(() => { ProApp.clearPendingSync(); })
                         .catch(() => { ProApp.markPendingSync(); });
@@ -1517,6 +1571,8 @@
                 }
             },
             manualCloudSync: async function(mode = 'auto', isSilent = false) {
+                const lKey = ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key');
+                if (lKey && !ProApp.state.licenseKey) ProApp.state.licenseKey = lKey;
                 if (!ProApp.state.licenseKey) {
                     if (!isSilent) ProApp.showToast('សូមបញ្ចូល License Key ជាមុនសិន!', 'error');
                     return;
@@ -1530,35 +1586,33 @@
                 ProApp.isSyncingNow = true;
                 ProApp.updateSyncUI();
 
-                const resolvedMode = mode === 'auto' ? (ProApp.pendingSync ? 'push' : 'pull') : mode;
+                const pushAllLocalToCloud = async () => {
+                    const txMap = {};
+                    (ProApp.state.transactions || []).forEach(tx => {
+                        if (tx && tx.id) txMap[tx.id] = ProApp.sanitizeForCloud(tx);
+                    });
+                    const fullTenantData = ProApp.sanitizeForCloud({
+                        transactions: txMap,
+                        accounts: ProApp.state.accounts || [],
+                        currencies: ProApp.state.currencies || [],
+                        categories: ProApp.state.categories || [],
+                        shortcuts: ProApp.state.shortcuts || [],
+                        goals: ProApp.state.goals || [],
+                        budgets: ProApp.state.budgets || [],
+                        recurrings: ProApp.state.recurrings || [],
+                        uiConfig: ProApp.buildUiConfigPayload()
+                    });
+                    await window.firebaseSet(window.firebaseRef(window.firebaseDb, `tenant_data/${ProApp.state.licenseKey}`), fullTenantData);
+                };
+
                 try {
-                    if (resolvedMode === 'push') {
-                        const txMap = {};
-                        (ProApp.state.transactions || []).forEach(tx => { if (tx && tx.id) txMap[tx.id] = tx; });
-                        const uiPayload = {
-                            appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle,
-                            bgImageUrl: ProApp.state.bgImageUrl, hiddenAccounts: ProApp.state.hiddenAccounts || [],
-                            visibleSections: ProApp.state.visibleSections || {}, pinCode: ProApp.state.pinCode,
-                            exchangeRate: ProApp.state.exchangeRate, language: ProApp.state.language,
-                            servicesGridMode: ProApp.state.servicesGridMode,
-                            tgBotToken: ProApp.state.tgBotToken || '', tgChatId: ProApp.state.tgChatId || '', tgAutoNotify: !!ProApp.state.tgAutoNotify
-                        };
-                        await Promise.all([
-                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions')), txMap),
-                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('accounts')), ProApp.state.accounts),
-                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('currencies')), ProApp.state.currencies),
-                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('categories')), ProApp.state.categories),
-                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('shortcuts')), ProApp.state.shortcuts),
-                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('goals')), ProApp.state.goals),
-                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('budgets')), ProApp.state.budgets),
-                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('recurrings')), ProApp.state.recurrings),
-                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('uiConfig')), uiPayload)
-                        ]);
+                    if (mode === 'push') {
+                        await pushAllLocalToCloud();
                         ProApp.clearPendingSync();
                         ProApp.playChimeSound();
-                        if (!isSilent) ProApp.showToast('☁️ បាន Sync ទិន្នន័យឡើង Cloud ជោគជ័យ ១០០%!', 'success');
-                        else ProApp.showToast('☁️ ភ្ជាប់អ៊ីនធឺណិតវិញហើយ! បាន Sync ទិន្នន័យ Offline ឡើង Cloud រួចរាល់!', 'success');
-                    } else {
+                        if (!isSilent) ProApp.showToast('☁️ បានរុញទិន្នន័យទាំងអស់ឡើង Cloud ជោគជ័យ ១០០%!', 'success');
+                        else ProApp.showToast('☁️ ភ្ជាប់អ៊ីនធឺណិតវិញហើយ! បាន Sync ទិន្នន័យទាំងអស់ឡើង Cloud រួចរាល់!', 'success');
+                    } else if (mode === 'pull') {
                         const snap = await window.firebaseGet(window.firebaseRef(window.firebaseDb, `tenant_data/${ProApp.state.licenseKey}`));
                         if (snap.exists()) {
                             const d = snap.val();
@@ -1567,16 +1621,53 @@
                             if (d.accounts) ProApp.state.accounts = Array.isArray(d.accounts) ? d.accounts : Object.values(d.accounts);
                             if (d.currencies) ProApp.state.currencies = Array.isArray(d.currencies) ? d.currencies : Object.values(d.currencies);
                             if (d.categories) ProApp.state.categories = Array.isArray(d.categories) ? d.categories : Object.values(d.categories);
-                            if (d.shortcuts) ProApp.state.shortcuts = Array.isArray(d.shortcuts) ? d.shortcuts : Object.values(d.shortcuts);
-                            if (d.goals) ProApp.state.goals = Array.isArray(d.goals) ? d.goals : Object.values(d.goals);
-                            if (d.budgets) ProApp.state.budgets = Array.isArray(d.budgets) ? d.budgets : Object.values(d.budgets);
-                            if (d.recurrings) ProApp.state.recurrings = Array.isArray(d.recurrings) ? d.recurrings : Object.values(d.recurrings);
+                            ProApp.state.shortcuts = d.shortcuts ? (Array.isArray(d.shortcuts) ? d.shortcuts : Object.values(d.shortcuts)) : [];
+                            ProApp.state.goals = d.goals ? (Array.isArray(d.goals) ? d.goals : Object.values(d.goals)) : [];
+                            ProApp.state.budgets = d.budgets ? (Array.isArray(d.budgets) ? d.budgets : Object.values(d.budgets)) : [];
+                            ProApp.state.recurrings = d.recurrings ? (Array.isArray(d.recurrings) ? d.recurrings : Object.values(d.recurrings)) : [];
                             if (d.uiConfig) ProApp.applyCloudUiConfig(d.uiConfig);
+                            ProApp.renderAccountsList(); ProApp.renderCurrenciesList(); ProApp.renderCategoriesList();
                             ProApp.renderFilterAccounts(); ProApp.renderShortcuts(); ProApp.renderTable(); ProApp.updateDashboard();
                         }
                         ProApp.clearPendingSync();
                         ProApp.playChimeSound();
                         if (!isSilent) ProApp.showToast('⬇️ បានទាញទិន្នន័យចុងក្រោយពី Cloud ជោគជ័យ!', 'success');
+                    } else {
+                        // 🔄 SMART TWO-WAY SYNC (Merge Cloud + Local so NOTHING is lost, then push everything to Cloud)
+                        const snap = await window.firebaseGet(window.firebaseRef(window.firebaseDb, `tenant_data/${ProApp.state.licenseKey}`));
+                        if (snap.exists()) {
+                            const d = snap.val();
+                            const mergeList = (localArr, cloudRaw) => {
+                                const cloudArr = cloudRaw ? (Array.isArray(cloudRaw) ? cloudRaw : Object.values(cloudRaw)) : [];
+                                return [...new Set([...(localArr || []), ...cloudArr])].filter(Boolean);
+                            };
+                            const mergeById = (localArr, cloudRaw) => {
+                                const cloudArr = cloudRaw ? (Array.isArray(cloudRaw) ? cloudRaw : Object.values(cloudRaw)) : [];
+                                const map = new Map();
+                                cloudArr.forEach(item => { if (item && item.id) map.set(item.id, item); });
+                                (localArr || []).forEach(item => { if (item && item.id) map.set(item.id, item); });
+                                return Array.from(map.values());
+                            };
+                            // Merge transactions by id (keep both cloud and any new local)
+                            const txMap = new Map();
+                            if (d.transactions) Object.keys(d.transactions).forEach(k => txMap.set(k, { id: k, ...d.transactions[k] }));
+                            (ProApp.state.transactions || []).forEach(tx => { if (tx && tx.id) txMap.set(tx.id, tx); });
+                            ProApp.state.transactions = Array.from(txMap.values());
+
+                            ProApp.state.accounts = mergeList(ProApp.state.accounts, d.accounts);
+                            ProApp.state.currencies = mergeList(ProApp.state.currencies, d.currencies);
+                            ProApp.state.categories = mergeList(ProApp.state.categories, d.categories);
+                            ProApp.state.shortcuts = mergeById(ProApp.state.shortcuts, d.shortcuts);
+                            ProApp.state.goals = mergeById(ProApp.state.goals, d.goals);
+                            ProApp.state.budgets = mergeById(ProApp.state.budgets, d.budgets);
+                            ProApp.state.recurrings = mergeById(ProApp.state.recurrings, d.recurrings);
+                        }
+                        await pushAllLocalToCloud();
+                        ProApp.renderAccountsList(); ProApp.renderCurrenciesList(); ProApp.renderCategoriesList();
+                        ProApp.renderFilterAccounts(); ProApp.renderShortcuts(); ProApp.renderTable(); ProApp.updateDashboard();
+                        ProApp.clearPendingSync();
+                        ProApp.playChimeSound();
+                        if (!isSilent) ProApp.showToast('🔄 Sync ទ្វេទិសជោគជ័យ! ទិន្នន័យទាំងអស់ឡើង Cloud ១០០%!', 'success');
                     }
                 } catch (err) {
                     console.error('Sync error:', err);
@@ -1592,6 +1683,11 @@
                 if (data.appSubtitle) ProApp.state.appSubtitle = data.appSubtitle;
                 if (data.themeStyle) ProApp.state.themeStyle = data.themeStyle;
                 if (data.bgImageUrl !== undefined) ProApp.state.bgImageUrl = data.bgImageUrl;
+                if (data.hideAmounts !== undefined) {
+                    ProApp.state.hideAmounts = !!data.hideAmounts;
+                    const eyeIcon = document.getElementById('eyeIcon');
+                    if (eyeIcon) eyeIcon.className = ProApp.state.hideAmounts ? 'fa-solid fa-eye-slash text-[14px]' : 'fa-solid fa-eye text-[14px]';
+                }
                 if (data.pinCode !== undefined) ProApp.state.pinCode = data.pinCode;
                 if (data.hiddenAccounts) ProApp.state.hiddenAccounts = data.hiddenAccounts;
                 if (data.visibleSections) ProApp.state.visibleSections = data.visibleSections;
@@ -2249,10 +2345,7 @@
                             const txDate = new Date(today.getFullYear(), today.getMonth(), targetDay, 8, 0, 0);
                             const nowIso = new Date(txDate.getTime() - txDate.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
                             const newTx = { id: expectedId, date: nowIso, cat: rec.cat, desc: rec.desc || 'ចំណាយស្វ័យប្រវត្តិ', acc: rec.acc, cur: rec.cur, inc: rec.inc, exp: rec.exp };
-                            ProApp.state.transactions.push(newTx);
-                            if (window.firebaseDb && window.firebaseSet && window.firebaseRef) {
-                                window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + newTx.id)), newTx);
-                            }
+                            ProApp.syncTxWrite(newTx, false);
                             addedCount++;
                         }
                     }
@@ -2623,10 +2716,23 @@
                 const file = event.target.files[0]; if (!file) return;
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    ProApp.state.bgImageUrl = e.target.result;
-                    document.getElementById('cfgBgImageUrl').value = '';
-                    ProApp.applyUiConfig(); ProApp.saveUiConfigToCloud();
-                    ProApp.showToast('អាប់ដេត Background រួចរាល់!', 'success');
+                    const img = new Image();
+                    img.onload = function() {
+                        const maxDim = 1280;
+                        let w = img.width, h = img.height;
+                        if (w > maxDim || h > maxDim) {
+                            const ratio = Math.min(maxDim / w, maxDim / h);
+                            w = Math.round(w * ratio); h = Math.round(h * ratio);
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        ProApp.state.bgImageUrl = canvas.toDataURL('image/jpeg', 0.78);
+                        document.getElementById('cfgBgImageUrl').value = '';
+                        ProApp.applyUiConfig(); ProApp.saveUiConfigToCloud();
+                        ProApp.showToast('អាប់ដេត Background & Sync ឡើង Cloud រួចរាល់!', 'success');
+                    };
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             },
@@ -2700,19 +2806,7 @@
             },
             saveUiConfigToCloud: function() {
                 ProApp.saveUiConfigToLocal();
-                ProApp.saveLocalCache();
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet && ProApp.state.licenseKey && ProApp.isCloudConnected) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('uiConfig')), {
-                        appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle,
-                        bgImageUrl: ProApp.state.bgImageUrl, hiddenAccounts: ProApp.state.hiddenAccounts || [],
-                        visibleSections: ProApp.state.visibleSections || {}, pinCode: ProApp.state.pinCode,
-                        exchangeRate: ProApp.state.exchangeRate, language: ProApp.state.language,
-                        servicesGridMode: ProApp.state.servicesGridMode,
-                        tgBotToken: ProApp.state.tgBotToken || '', tgChatId: ProApp.state.tgChatId || '', tgAutoNotify: !!ProApp.state.tgAutoNotify
-                    }).then(() => ProApp.clearPendingSync()).catch(() => ProApp.markPendingSync());
-                } else if (ProApp.state.licenseKey) {
-                    ProApp.markPendingSync();
-                }
+                ProApp.writeCloudNode('uiConfig', ProApp.buildUiConfigPayload());
             },
 
             // 🧭 SMOOTH TAB SWITCHING
@@ -2907,9 +3001,12 @@
             openMobileEditModal: function(id) {
                 const tx = ProApp.state.transactions.find(t => t.id === id); if (!tx) return;
                 ProApp.currentEditMobileId = id;
-                document.getElementById('meCat').innerHTML = ProApp.state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
-                document.getElementById('meAcc').innerHTML = ProApp.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
-                document.getElementById('meCur').innerHTML = ProApp.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+                const cats = ProApp.state.categories.includes(tx.cat) ? ProApp.state.categories : [...ProApp.state.categories, tx.cat].filter(Boolean);
+                const accs = ProApp.state.accounts.includes(tx.acc) ? ProApp.state.accounts : [...ProApp.state.accounts, tx.acc].filter(Boolean);
+                const curs = ProApp.state.currencies.includes(tx.cur) ? ProApp.state.currencies : [...ProApp.state.currencies, tx.cur].filter(Boolean);
+                document.getElementById('meCat').innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join('');
+                document.getElementById('meAcc').innerHTML = accs.map(a => `<option value="${a}">${a}</option>`).join('');
+                document.getElementById('meCur').innerHTML = curs.map(c => `<option value="${c}">${c}</option>`).join('');
                 document.getElementById('meDate').value = ProApp.formatForDateTimeInput(tx.date);
                 document.getElementById('meCat').value = tx.cat;
                 document.getElementById('meAcc').value = tx.acc;
@@ -3001,12 +3098,8 @@
             editAccountName: function(i, val) { val = val.trim(); if (!val) return; ProApp.state.accounts[i] = val; ProApp.saveAccountsToCloud(); ProApp.renderAccountsList(); },
             deleteAccount: function(i) { ProApp.state.accounts.splice(i, 1); ProApp.saveAccountsToCloud(); ProApp.renderAccountsList(); ProApp.showToast('បានលុបគណនី', 'info'); },
             saveAccountsToCloud: function() {
-                ProApp.saveLocalCache();
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('accounts')), ProApp.state.accounts).then(() => {
-                        ProApp.renderFilterAccounts(); ProApp.renderTable(); ProApp.updateDashboard();
-                    });
-                } else { ProApp.renderFilterAccounts(); ProApp.renderTable(); ProApp.updateDashboard(); }
+                ProApp.renderFilterAccounts(); ProApp.renderTable(); ProApp.updateDashboard();
+                ProApp.writeCloudNode('accounts', ProApp.state.accounts);
             },
             renderFilterAccounts: function() {
                 const sel = document.getElementById('filterAccount'); if (!sel) return;
@@ -3044,10 +3137,8 @@
             editCurrencyName: function(i, val) { val = val.trim(); if (!val) return; ProApp.state.currencies[i] = val; ProApp.saveCurrenciesToCloud(); ProApp.renderCurrenciesList(); },
             deleteCurrency: function(i) { ProApp.state.currencies.splice(i, 1); ProApp.saveCurrenciesToCloud(); ProApp.renderCurrenciesList(); ProApp.showToast('បានលុបខ្នាត', 'info'); },
             saveCurrenciesToCloud: function() {
-                ProApp.saveLocalCache();
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('currencies')), ProApp.state.currencies).then(() => { ProApp.renderTable(); ProApp.updateDashboard(); });
-                } else { ProApp.renderTable(); ProApp.updateDashboard(); }
+                ProApp.renderTable(); ProApp.updateDashboard();
+                ProApp.writeCloudNode('currencies', ProApp.state.currencies);
             },
 
             // 📁 CATEGORIES MANAGEMENT
@@ -3079,10 +3170,8 @@
             editCategoryName: function(i, val) { val = val.trim(); if (!val) return; ProApp.state.categories[i] = val; ProApp.saveCategoriesToCloud(); ProApp.renderCategoriesList(); },
             deleteCategory: function(i) { ProApp.state.categories.splice(i, 1); ProApp.saveCategoriesToCloud(); ProApp.renderCategoriesList(); ProApp.showToast('បានលុបប្រភេទ', 'info'); },
             saveCategoriesToCloud: function() {
-                ProApp.saveLocalCache();
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('categories')), ProApp.state.categories).then(() => { ProApp.renderTable(); ProApp.updateDashboard(); });
-                } else { ProApp.renderTable(); ProApp.updateDashboard(); }
+                ProApp.renderTable(); ProApp.updateDashboard();
+                ProApp.writeCloudNode('categories', ProApp.state.categories);
             },
 
             // ⚡ SHORTCUTS MANAGEMENT
@@ -3166,10 +3255,8 @@
                 ProApp.saveShortcutsToCloud(); ProApp.renderShortcutList(); ProApp.showToast('បានលុបប៊ូតុងរហ័ស', 'info');
             },
             saveShortcutsToCloud: function() {
-                ProApp.saveLocalCache();
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('shortcuts')), ProApp.state.shortcuts).then(() => { ProApp.renderShortcuts(); });
-                } else { ProApp.renderShortcuts(); }
+                ProApp.renderShortcuts();
+                ProApp.writeCloudNode('shortcuts', ProApp.state.shortcuts);
             },
             renderShortcutList: function() {
                 const container = document.getElementById('shortcutListContainer'); if (!container) return;
@@ -3224,10 +3311,7 @@
                 ProApp.saveRecurringsToCloud(); ProApp.renderRecurringList(); ProApp.showToast('បានលុបការកំណត់ស្វ័យប្រវត្តិ', 'info');
             },
             saveRecurringsToCloud: function() {
-                ProApp.saveLocalCache();
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('recurrings')), ProApp.state.recurrings);
-                }
+                ProApp.writeCloudNode('recurrings', ProApp.state.recurrings);
             },
             renderRecurringList: function() {
                 const c = document.getElementById('recurringListContainer'); if (!c) return;
@@ -3331,10 +3415,8 @@
                 ProApp.saveGoalsToCloud(); ProApp.renderGoalList(); ProApp.showToast('បានលុបគោលដៅសន្សំ', 'info');
             },
             saveGoalsToCloud: function() {
-                ProApp.saveLocalCache();
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('goals')), ProApp.state.goals).then(() => { ProApp.updateDashboard(); });
-                } else { ProApp.updateDashboard(); }
+                ProApp.updateDashboard();
+                ProApp.writeCloudNode('goals', ProApp.state.goals);
             },
             renderGoalList: function() {
                 const container = document.getElementById('goalListContainer'); if (!container) return;
@@ -3456,10 +3538,8 @@
                 ProApp.saveBudgetsToCloud(); ProApp.renderBudgetList(); ProApp.showToast('បានលុបថវិកា', 'info');
             },
             saveBudgetsToCloud: function() {
-                ProApp.saveLocalCache();
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('budgets')), ProApp.state.budgets).then(() => { ProApp.updateDashboard(); });
-                } else { ProApp.updateDashboard(); }
+                ProApp.updateDashboard();
+                ProApp.writeCloudNode('budgets', ProApp.state.budgets);
             },
             renderBudgetList: function() {
                 const container = document.getElementById('budgetListContainer'); if (!container) return;
@@ -3637,11 +3717,9 @@
                         const imported = JSON.parse(e.target.result);
                         if (imported) {
                             Object.assign(ProApp.state, imported);
-                            ProApp.applyUiConfig(); ProApp.saveAccountsToCloud(); ProApp.saveCurrenciesToCloud(); ProApp.saveCategoriesToCloud(); ProApp.saveBudgetsToCloud(); ProApp.saveGoalsToCloud(); ProApp.saveShortcutsToCloud(); ProApp.saveRecurringsToCloud(); ProApp.saveUiConfigToCloud();
-                            if (window.firebaseDb && window.firebaseRef && window.firebaseSet && ProApp.state.transactions) {
-                                const txMap = {}; ProApp.state.transactions.forEach(tx => txMap[tx.id] = tx);
-                                window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions')), txMap);
-                            }
+                            ProApp.applyUiConfig();
+                            ProApp.saveLocalCache();
+                            ProApp.manualCloudSync('push', true);
                             ProApp.renderTable(); ProApp.updateDashboard(); ProApp.showToast('បាន Restore ទិន្នន័យជោគជ័យ!', 'success');
                         }
                     } catch (err) { ProApp.showToast('ឯកសារ JSON មិនត្រឹមត្រូវ', 'error'); }
@@ -3669,12 +3747,11 @@
                             acc: r[3] || ProApp.state.accounts[0] || '🏦 ABA', cur: r[4] || 'USD', inc: parseFloat(r[5]) || 0, exp: parseFloat(r[6]) || 0
                         };
                         ProApp.state.transactions.push(newTx);
-                        if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + newTx.id)), newTx);
-                        }
+                        ProApp.writeCloudNode('transactions/' + newTx.id, newTx);
                     }
                     event.target.value = '';
-                    ProApp.renderTable(); ProApp.updateDashboard(); ProApp.showToast('បាននាំចូលទិន្នន័យ Excel ជោគជ័យ!', 'success');
+                    ProApp.saveLocalCache();
+                    ProApp.renderTable(); ProApp.updateDashboard(); ProApp.showToast('បាននាំចូលទិន្នន័យ Excel & ឡើង Cloud ជោគជ័យ!', 'success');
                 };
                 reader.readAsArrayBuffer(file);
             },
@@ -4105,62 +4182,74 @@
                 });
             } else { document.getElementById('licenseModalOverlay').classList.remove('hidden'); }
 
+            let activeListenerKey = null;
             window.attachFirebaseListenersForLicense = function(lKey) {
+                if (activeListenerKey === lKey) return;
+                activeListenerKey = lKey;
+                const shouldSkipOverwrite = () => window.ProApp.pendingSync || window.ProApp.isSyncingNow;
                 const markSynced = () => {
                     window.ProApp.lastSyncedAt = new Date().toLocaleTimeString('km-KH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                     window.ProApp.saveLocalCache();
                     window.ProApp.updateSyncUI();
                 };
                 onValue(ref(db, `tenant_data/${lKey}/transactions`), (snapshot) => {
-                    if (window.ProApp.pendingSync && !window.ProApp.isCloudConnected) return;
+                    if (shouldSkipOverwrite()) return;
                     const data = snapshot.val(); window.ProApp.state.transactions = [];
                     if (data) Object.keys(data).forEach(key => window.ProApp.state.transactions.push({ id: key, ...data[key] }));
                     window.ProApp.renderTable(); window.ProApp.updateDashboard(); window.ProApp.checkRecurringTransactions();
                     markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/accounts`), (snapshot) => {
+                    if (shouldSkipOverwrite()) return;
                     const data = snapshot.val();
                     if (data) window.ProApp.state.accounts = Array.isArray(data) ? data : Object.values(data);
                     window.ProApp.renderAccountsList(); window.ProApp.renderFilterAccounts(); window.ProApp.renderTable(); window.ProApp.updateDashboard();
                     markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/currencies`), (snapshot) => {
+                    if (shouldSkipOverwrite()) return;
                     const data = snapshot.val();
                     if (data) window.ProApp.state.currencies = Array.isArray(data) ? data : Object.values(data);
                     window.ProApp.renderCurrenciesList(); window.ProApp.renderTable(); window.ProApp.updateDashboard();
                     markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/categories`), (snapshot) => {
+                    if (shouldSkipOverwrite()) return;
                     const data = snapshot.val();
                     if (data) window.ProApp.state.categories = Array.isArray(data) ? data : Object.values(data);
                     window.ProApp.renderCategoriesList(); window.ProApp.renderTable(); window.ProApp.updateDashboard();
                     markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/shortcuts`), (snapshot) => {
+                    if (shouldSkipOverwrite()) return;
                     const data = snapshot.val();
-                    if (data) window.ProApp.state.shortcuts = Array.isArray(data) ? data : Object.values(data);
+                    window.ProApp.state.shortcuts = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
                     window.ProApp.renderShortcutList(); window.ProApp.renderShortcuts();
                     markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/goals`), (snapshot) => {
+                    if (shouldSkipOverwrite()) return;
                     const data = snapshot.val();
-                    if (data) window.ProApp.state.goals = Array.isArray(data) ? data : Object.values(data);
+                    window.ProApp.state.goals = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
                     window.ProApp.renderGoalList(); window.ProApp.updateDashboard();
                     markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/budgets`), (snapshot) => {
+                    if (shouldSkipOverwrite()) return;
                     const data = snapshot.val();
-                    if (data) window.ProApp.state.budgets = Array.isArray(data) ? data : Object.values(data);
+                    window.ProApp.state.budgets = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
                     window.ProApp.renderBudgetList(); window.ProApp.updateDashboard();
                     markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/recurrings`), (snapshot) => {
+                    if (shouldSkipOverwrite()) return;
                     const data = snapshot.val();
-                    if (data) window.ProApp.state.recurrings = Array.isArray(data) ? data : Object.values(data);
+                    window.ProApp.state.recurrings = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
                     window.ProApp.renderRecurringList(); window.ProApp.checkRecurringTransactions();
                     markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/uiConfig`), (snapshot) => {
+                    if (shouldSkipOverwrite()) return;
                     const data = snapshot.val();
                     if (data) {
                         window.ProApp.applyCloudUiConfig(data);
