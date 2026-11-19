@@ -192,6 +192,44 @@
         body.theme-dark .settings-card, body.theme-aba-dark .settings-card, body.theme-slate .settings-card {
             background: rgba(39, 39, 42, 0.55); border-color: rgba(255, 255, 255, 0.08);
         }
+
+        /* 📊 Excel-Style Sort & Filter Header Controls */
+        .excel-th-wrap {
+            display: flex; align-items: center; justify-content: space-between; gap: 4px;
+            padding-right: 10px; width: 100%; user-select: none;
+        }
+        .excel-th-wrap.justify-end { justify-content: flex-end; }
+        .excel-th-label {
+            display: inline-flex; align-items: center; gap: 4px; cursor: pointer;
+            transition: color 0.15s;
+        }
+        .excel-th-label:hover { color: #2563eb; }
+        body.theme-aba-dark .excel-th-label:hover { color: #fbbf24; }
+        .excel-filter-btn {
+            width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0;
+            display: inline-flex; align-items: center; justify-content: center;
+            background: rgba(148, 163, 184, 0.16); border: 1px solid rgba(148, 163, 184, 0.35);
+            color: #64748b; font-size: 9px; cursor: pointer; transition: all 0.15s;
+        }
+        .excel-filter-btn:hover { background: rgba(37, 99, 235, 0.15); border-color: #3b82f6; color: #2563eb; }
+        .excel-filter-btn.active {
+            background: #2563eb !important; border-color: #2563eb !important; color: #ffffff !important;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+        }
+        body.theme-aba-dark .excel-filter-btn.active {
+            background: #f59e0b !important; border-color: #f59e0b !important; color: #000000 !important;
+        }
+        .excel-filters-hidden .excel-filter-btn { display: none !important; }
+        .excel-menu-item {
+            width: 100%; display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+            font-size: 12px; font-weight: 700; border-radius: 10px; transition: background 0.15s;
+            text-align: left; cursor: pointer;
+        }
+        .excel-menu-item:hover:not(:disabled) { background: rgba(59, 130, 246, 0.12); color: #2563eb; }
+        body.theme-dark .excel-menu-item:hover:not(:disabled),
+        body.theme-aba-dark .excel-menu-item:hover:not(:disabled),
+        body.theme-slate .excel-menu-item:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: #fbbf24; }
+        .excel-menu-item:disabled { opacity: 0.4; cursor: not-allowed; }
     </style>
 </head>
 <body class="text-slate-800 antialiased min-h-screen pt-safe" id="appBody">
@@ -514,11 +552,18 @@
                 </div>
 
                 <!-- Action Bar (Positioned Above Table/Cards) -->
-                <div class="flex flex-wrap gap-2 pt-1 relative z-30">
+                <div class="flex flex-wrap gap-2 pt-1 relative z-40">
                     <input type="file" id="fileInput" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="hidden" onchange="ProApp.importData(event)">
                     <input type="file" id="jsonFileInput" accept=".json" class="hidden" onchange="ProApp.importFromJSON(event)">
                     <button onclick="ProApp.vibrate(); ProApp.addRow()" class="flex-1 min-w-[140px] py-3.5 glass-panel border border-dashed border-blue-400 dark:border-blue-500/60 text-blue-600 dark:text-blue-400 rounded-2xl hover:border-blue-600 transition font-bold text-[13px] flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-95">
                         <i class="fa-solid fa-plus"></i> <span data-i18n="btnAddRow">បន្ថែមជួរថ្មី</span>
+                    </button>
+                    <!-- 📊 EXCEL-STYLE SORT & FILTER MASTER BUTTON -->
+                    <button id="excelSortFilterBtn" onclick="ProApp.vibrate(); ProApp.toggleExcelToolbarMenu(event)" class="px-3.5 py-3 glass-panel rounded-2xl text-blue-600 dark:text-amber-400 border border-blue-200/80 dark:border-amber-500/30 font-extrabold text-xs shadow-sm cursor-pointer active:scale-95 flex items-center gap-1.5 relative" title="តម្រៀប &amp; ច្រោះទិន្នន័យដូច Excel (Sort &amp; Filter)">
+                        <i class="fa-solid fa-arrow-down-a-z text-sm"></i>
+                        <span>Sort &amp; Filter</span>
+                        <span id="excelActiveFilterCount" class="hidden px-1.5 py-0.5 rounded-full bg-blue-600 dark:bg-amber-500 text-white dark:text-black text-[9px] font-black leading-none">0</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-70"></i>
                     </button>
                     <button onclick="ProApp.vibrate(); ProApp.openSmartAddModal(); ProApp.startVoiceRecognition()" class="px-3.5 py-3 glass-panel rounded-2xl text-rose-500 font-bold text-xs shadow-sm cursor-pointer active:scale-95 flex items-center gap-1.5" title="កត់ត្រាដោយសម្លេង"><i class="fa-solid fa-microphone"></i> <span class="hidden sm:inline">សម្លេង</span></button>
                     <button onclick="document.getElementById('fileInput').click()" class="px-3.5 py-3 glass-panel rounded-2xl text-indigo-600 dark:text-indigo-400 font-bold text-xs shadow-sm cursor-pointer active:scale-95 flex items-center gap-1.5" title="នាំចូល Excel"><i class="fa-solid fa-file-import"></i> <span class="hidden sm:inline">Import</span></button>
@@ -528,24 +573,77 @@
                     <button onclick="ProApp.confirmClearData()" class="px-3.5 py-3 glass-panel rounded-2xl text-rose-500 font-bold text-xs shadow-sm cursor-pointer active:scale-95" title="លុបទាំងអស់"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
 
+                <!-- 🏷️ ACTIVE EXCEL SORT & FILTER CHIPS BAR -->
+                <div id="excelActiveFilterBar" class="hidden glass-panel px-3.5 py-2.5 rounded-2xl flex flex-wrap items-center justify-between gap-2 text-[11px] font-bold relative z-30 border border-blue-200/70 dark:border-amber-500/30">
+                    <div class="flex flex-wrap items-center gap-1.5" id="excelFilterChips"></div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span id="excelRowCountInfo" class="text-[10px] text-slate-500 dark:text-slate-400 font-mono"></span>
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.clearAllExcelFilters()" class="px-2.5 py-1 bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-300 rounded-lg text-[10px] font-extrabold hover:bg-rose-200 transition cursor-pointer flex items-center gap-1">
+                            <i class="fa-solid fa-filter-circle-xmark"></i> សម្អាតទាំងអស់
+                        </button>
+                    </div>
+                </div>
+
                 <!-- 📱 MOBILE CARDS VIEW (Swipe Right = Edit, Swipe Left = Delete, Tap = Action Sheet) -->
                 <div class="md:hidden text-[10px] text-slate-400 text-center font-bold">💡 គន្លឹះ៖ អូសកាតទៅស្ដាំដើម្បីកែប្រែ • អូសទៅឆ្វេងដើម្បីលុប • ចុចលើកាតដើម្បីបើកម៉ឺនុយ</div>
                 <div class="md:hidden space-y-3 relative z-30 mt-1" id="mobileCardsContainer"></div>
 
-                <!-- 💻 DESKTOP TABLE VIEW (Resizable Columns & Drag-to-Scroll) -->
+                <!-- 💻 DESKTOP TABLE VIEW (Excel Sort & Filter + Resizable Columns & Drag-to-Scroll) -->
                 <div class="hidden md:block glass-panel rounded-2xl overflow-hidden relative z-30 mt-2">
                     <div class="scroll-container w-full max-h-[550px] relative rounded-2xl z-40" id="tableScrollContainer">
                         <table class="w-full min-w-[1250px] divide-y divide-gray-100 dark:divide-white/5 border-collapse relative z-50" id="mainTable">
                             <thead class="bg-slate-50/95 dark:bg-zinc-900/90 sticky top-0 z-50 shadow-sm border-b border-gray-200/50 dark:border-white/10 backdrop-blur-md">
                                 <tr>
                                     <th class="relative px-3 py-3 text-left text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-12">ល.រ<div class="resizer hidden md:block"></div></th>
-                                    <th class="relative px-3 py-3 text-left text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-48">កាលបរិច្ឆេទ<div class="resizer hidden md:block"></div></th>
-                                    <th class="relative px-3 py-3 text-left text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-40">ប្រភេទ<div class="resizer hidden md:block"></div></th>
-                                    <th class="relative px-3 py-3 text-left text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap min-w-[160px]">ការពិពណ៌នា<div class="resizer hidden md:block"></div></th>
-                                    <th class="relative px-3 py-3 text-left text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-32">គណនី<div class="resizer hidden md:block"></div></th>
-                                    <th class="relative px-3 py-3 text-left text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-24">ខ្នាត<div class="resizer hidden md:block"></div></th>
-                                    <th class="relative px-3 py-3 text-right text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-28">ចំណូល (10k+5$)<div class="resizer hidden md:block"></div></th>
-                                    <th class="relative px-3 py-3 text-right text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-28">ចំណាយ (10k+5$)<div class="resizer hidden md:block"></div></th>
+                                    <th class="relative px-3 py-3 text-left text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-48" data-col="date">
+                                        <div class="excel-th-wrap">
+                                            <span class="excel-th-label" onclick="ProApp.toggleColumnSort('date')" title="ចុចដើម្បីតម្រៀបកាលបរិច្ឆេទ">កាលបរិច្ឆេទ <i id="sortIcon-date" class="fa-solid fa-arrow-down text-[9px] text-blue-600 dark:text-amber-400"></i></span>
+                                            <button type="button" id="filterBtn-date" class="excel-filter-btn" onclick="ProApp.openColumnFilterMenu(event, 'date')" title="តម្រៀប &amp; ច្រោះកាលបរិច្ឆេទ"><i class="fa-solid fa-caret-down"></i></button>
+                                        </div>
+                                        <div class="resizer hidden md:block"></div>
+                                    </th>
+                                    <th class="relative px-3 py-3 text-left text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-44" data-col="cat">
+                                        <div class="excel-th-wrap">
+                                            <span class="excel-th-label" onclick="ProApp.toggleColumnSort('cat')" title="ចុចដើម្បីតម្រៀបប្រភេទ">ប្រភេទ <i id="sortIcon-cat" class="fa-solid text-[9px] hidden"></i></span>
+                                            <button type="button" id="filterBtn-cat" class="excel-filter-btn" onclick="ProApp.openColumnFilterMenu(event, 'cat')" title="តម្រៀប &amp; ច្រោះប្រភេទ"><i class="fa-solid fa-caret-down"></i></button>
+                                        </div>
+                                        <div class="resizer hidden md:block"></div>
+                                    </th>
+                                    <th class="relative px-3 py-3 text-left text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap min-w-[175px]" data-col="desc">
+                                        <div class="excel-th-wrap">
+                                            <span class="excel-th-label" onclick="ProApp.toggleColumnSort('desc')" title="ចុចដើម្បីតម្រៀបការពិពណ៌នា">ការពិពណ៌នា <i id="sortIcon-desc" class="fa-solid text-[9px] hidden"></i></span>
+                                            <button type="button" id="filterBtn-desc" class="excel-filter-btn" onclick="ProApp.openColumnFilterMenu(event, 'desc')" title="តម្រៀប &amp; ច្រោះការពិពណ៌នា"><i class="fa-solid fa-caret-down"></i></button>
+                                        </div>
+                                        <div class="resizer hidden md:block"></div>
+                                    </th>
+                                    <th class="relative px-3 py-3 text-left text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-36" data-col="acc">
+                                        <div class="excel-th-wrap">
+                                            <span class="excel-th-label" onclick="ProApp.toggleColumnSort('acc')" title="ចុចដើម្បីតម្រៀបគណនី">គណនី <i id="sortIcon-acc" class="fa-solid text-[9px] hidden"></i></span>
+                                            <button type="button" id="filterBtn-acc" class="excel-filter-btn" onclick="ProApp.openColumnFilterMenu(event, 'acc')" title="តម្រៀប &amp; ច្រោះគណនី"><i class="fa-solid fa-caret-down"></i></button>
+                                        </div>
+                                        <div class="resizer hidden md:block"></div>
+                                    </th>
+                                    <th class="relative px-3 py-3 text-left text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-28" data-col="cur">
+                                        <div class="excel-th-wrap">
+                                            <span class="excel-th-label" onclick="ProApp.toggleColumnSort('cur')" title="ចុចដើម្បីតម្រៀបខ្នាត">ខ្នាត <i id="sortIcon-cur" class="fa-solid text-[9px] hidden"></i></span>
+                                            <button type="button" id="filterBtn-cur" class="excel-filter-btn" onclick="ProApp.openColumnFilterMenu(event, 'cur')" title="តម្រៀប &amp; ច្រោះខ្នាត"><i class="fa-solid fa-caret-down"></i></button>
+                                        </div>
+                                        <div class="resizer hidden md:block"></div>
+                                    </th>
+                                    <th class="relative px-3 py-3 text-right text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-32" data-col="inc">
+                                        <div class="excel-th-wrap justify-end">
+                                            <span class="excel-th-label" onclick="ProApp.toggleColumnSort('inc')" title="ចុចដើម្បីតម្រៀបចំណូល"><i id="sortIcon-inc" class="fa-solid text-[9px] hidden"></i> ចំណូល (10k+5$)</span>
+                                            <button type="button" id="filterBtn-inc" class="excel-filter-btn" onclick="ProApp.openColumnFilterMenu(event, 'inc')" title="តម្រៀប &amp; ច្រោះចំណូល"><i class="fa-solid fa-caret-down"></i></button>
+                                        </div>
+                                        <div class="resizer hidden md:block"></div>
+                                    </th>
+                                    <th class="relative px-3 py-3 text-right text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase whitespace-nowrap w-32" data-col="exp">
+                                        <div class="excel-th-wrap justify-end">
+                                            <span class="excel-th-label" onclick="ProApp.toggleColumnSort('exp')" title="ចុចដើម្បីតម្រៀបចំណាយ"><i id="sortIcon-exp" class="fa-solid text-[9px] hidden"></i> ចំណាយ (10k+5$)</span>
+                                            <button type="button" id="filterBtn-exp" class="excel-filter-btn" onclick="ProApp.openColumnFilterMenu(event, 'exp')" title="តម្រៀប &amp; ច្រោះចំណាយ"><i class="fa-solid fa-caret-down"></i></button>
+                                        </div>
+                                        <div class="resizer hidden md:block"></div>
+                                    </th>
                                     <th class="relative px-3 py-3 text-center text-xs font-bold min-w-[145px]">សកម្មភាព</th>
                                 </tr>
                             </thead>
@@ -1305,6 +1403,119 @@
         </div>
     </div>
 
+    <!-- 📊 EXCEL-STYLE TOOLBAR SORT & FILTER DROPDOWN -->
+    <div id="excelToolbarMenu" class="fixed hidden z-[185] w-60 glass-modal rounded-2xl shadow-2xl p-2 border border-slate-200 dark:border-zinc-700">
+        <div class="px-2.5 py-1.5 text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center justify-between">
+            <span>Sort &amp; Filter (Excel)</span>
+            <span id="excelMenuColLabel" class="text-blue-600 dark:text-amber-400"></span>
+        </div>
+        <button type="button" onclick="ProApp.excelQuickSort('asc')" class="excel-menu-item">
+            <i class="fa-solid fa-arrow-down-a-z text-blue-500 w-4 text-center"></i>
+            <span>Sort A to Z (តូច → ធំ)</span>
+        </button>
+        <button type="button" onclick="ProApp.excelQuickSort('desc')" class="excel-menu-item">
+            <i class="fa-solid fa-arrow-down-z-a text-indigo-500 w-4 text-center"></i>
+            <span>Sort Z to A (ធំ → តូច)</span>
+        </button>
+        <button type="button" onclick="ProApp.openCustomSortModal()" class="excel-menu-item">
+            <i class="fa-solid fa-arrow-up-wide-short text-purple-500 w-4 text-center"></i>
+            <span>Custom Sort... (តម្រៀបច្រើនជាន់)</span>
+        </button>
+        <div class="my-1.5 border-t border-slate-200/70 dark:border-white/10"></div>
+        <button type="button" onclick="ProApp.toggleExcelFilterButtons()" class="excel-menu-item justify-between">
+            <span class="flex items-center gap-2.5"><i class="fa-solid fa-filter text-emerald-500 w-4 text-center"></i> <span>Filter (បើក/បិទ ព្រួញតម្រង)</span></span>
+            <i id="excelFilterToggleCheck" class="fa-solid fa-check text-emerald-500 text-xs"></i>
+        </button>
+        <button type="button" id="btnExcelMenuClear" onclick="ProApp.clearAllExcelFilters(); ProApp.closeAllExcelMenus();" class="excel-menu-item">
+            <i class="fa-solid fa-filter-circle-xmark text-rose-500 w-4 text-center"></i>
+            <span>Clear (សម្អាតតម្រងទាំងអស់)</span>
+        </button>
+        <button type="button" onclick="ProApp.reapplyExcelFilters()" class="excel-menu-item">
+            <i class="fa-solid fa-rotate text-amber-500 w-4 text-center"></i>
+            <span>Reapply (អនុវត្តម្តងទៀត)</span>
+        </button>
+    </div>
+
+    <!-- 📊 EXCEL-STYLE PER-COLUMN FILTER & SORT POPOVER -->
+    <div id="excelFilterPopover" class="fixed hidden z-[190] w-72 max-w-[92vw] glass-modal rounded-2xl shadow-2xl p-3 border border-slate-200 dark:border-zinc-700 space-y-2.5">
+        <div class="flex items-center justify-between border-b border-slate-200/70 dark:border-white/10 pb-2">
+            <span class="text-xs font-black flex items-center gap-1.5">
+                <i class="fa-solid fa-filter text-blue-500"></i>
+                <span id="efpTitle">តម្រងជួរឈរ</span>
+            </span>
+            <button type="button" onclick="ProApp.closeColumnFilterMenu()" class="w-6 h-6 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 flex items-center justify-center text-sm cursor-pointer">&times;</button>
+        </div>
+        <div class="space-y-1">
+            <button type="button" onclick="ProApp.applyColumnSortFromMenu('asc')" class="excel-menu-item !py-1.5">
+                <i class="fa-solid fa-arrow-down-a-z text-blue-500 w-4 text-center"></i>
+                <span id="efpSortAscLabel">Sort A to Z</span>
+            </button>
+            <button type="button" onclick="ProApp.applyColumnSortFromMenu('desc')" class="excel-menu-item !py-1.5">
+                <i class="fa-solid fa-arrow-down-z-a text-indigo-500 w-4 text-center"></i>
+                <span id="efpSortDescLabel">Sort Z to A</span>
+            </button>
+            <button type="button" id="efpClearColBtn" onclick="ProApp.clearSingleColumnFilter()" class="excel-menu-item !py-1.5 text-rose-600 dark:text-rose-400">
+                <i class="fa-solid fa-filter-circle-xmark w-4 text-center"></i>
+                <span id="efpClearColLabel">Clear Filter</span>
+            </button>
+        </div>
+
+        <!-- Numeric Range Filter (Visible only for inc / exp) -->
+        <div id="efpNumFilterBox" class="hidden pt-2 border-t border-slate-200/70 dark:border-white/10 space-y-2">
+            <div class="flex items-center justify-between text-[10px] font-bold text-slate-500">
+                <span>🔢 ច្រោះតាមចំនួនទឹកប្រាក់ (Number Filter)</span>
+                <button type="button" onclick="ProApp.setNumFilterGreaterZero()" class="text-blue-600 dark:text-amber-400 hover:underline cursor-pointer">&gt; 0 ប៉ុណ្ណោះ</button>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5">
+                <input type="number" step="any" id="efpNumMin" placeholder="ចាប់ពី (Min)" class="glass-input w-full px-2 py-1.5 text-xs font-mono rounded-lg outline-none">
+                <input type="number" step="any" id="efpNumMax" placeholder="ដល់ (Max)" class="glass-input w-full px-2 py-1.5 text-xs font-mono rounded-lg outline-none">
+            </div>
+        </div>
+
+        <!-- Search & Checklist (Excel AutoFilter Style) -->
+        <div class="pt-2 border-t border-slate-200/70 dark:border-white/10 space-y-2">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-[10px] text-slate-400"></i>
+                <input type="text" id="efpSearchInput" oninput="ProApp.filterPopoverChecklist()" placeholder="ស្វែងរកក្នុងជួរឈរ..." class="glass-input w-full pl-7 pr-2.5 py-1.5 text-xs rounded-xl outline-none">
+            </div>
+            <div class="max-h-48 overflow-y-auto custom-scrollbar space-y-1 bg-slate-50/80 dark:bg-black/20 p-2 rounded-xl border border-slate-200/70 dark:border-white/10">
+                <label class="flex items-center gap-2 px-1.5 py-1 rounded-lg hover:bg-white/70 dark:hover:bg-white/5 cursor-pointer text-xs font-extrabold border-b border-slate-200/60 dark:border-white/10 pb-1.5 mb-1">
+                    <input type="checkbox" id="efpSelectAll" checked onchange="ProApp.toggleSelectAllPopover(this.checked)" class="w-3.5 h-3.5 rounded accent-blue-600">
+                    <span>(ជ្រើសទាំងអស់ / Select All)</span>
+                </label>
+                <div id="efpValuesList" class="space-y-0.5"></div>
+            </div>
+        </div>
+
+        <div class="flex gap-2 pt-1">
+            <button type="button" onclick="ProApp.closeColumnFilterMenu()" class="flex-1 py-2 text-xs font-bold bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300 rounded-xl cursor-pointer">បោះបង់</button>
+            <button type="button" onclick="ProApp.applyColumnFilterMenu()" class="flex-1 py-2 text-xs font-extrabold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow cursor-pointer active:scale-95 transition">យល់ព្រម (OK)</button>
+        </div>
+    </div>
+
+    <!-- 📊 EXCEL CUSTOM SORT MODAL (MULTI-LEVEL SORT) -->
+    <div id="customSortModal" class="fixed inset-0 modal-overlay hidden z-[175] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeCustomSortModal()">
+        <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto">
+            <div class="flex justify-between items-center mb-4 border-b pb-3 border-slate-200/70 dark:border-white/10">
+                <h3 class="text-[15px] font-black flex items-center gap-2 modal-label-text">
+                    <i class="fa-solid fa-arrow-up-wide-short text-purple-500"></i> Custom Sort (តម្រៀបច្រើនជាន់ដូច Excel)
+                </h3>
+                <button type="button" onclick="ProApp.closeCustomSortModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 flex items-center justify-center cursor-pointer">&times;</button>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-[11px] font-bold text-slate-500">បន្ថែមលំដាប់តម្រៀបតាមជួរឈរ៖</span>
+                <button type="button" onclick="ProApp.addCustomSortLevel()" class="px-3 py-1.5 bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-300 text-[11px] font-bold rounded-xl cursor-pointer active:scale-95 transition">
+                    <i class="fa-solid fa-plus"></i> បន្ថែមជាន់ (Add Level)
+                </button>
+            </div>
+            <div id="customSortLevelsContainer" class="space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar mb-4"></div>
+            <div class="flex gap-2.5 pt-2 border-t border-slate-200/70 dark:border-white/10">
+                <button type="button" onclick="ProApp.resetCustomSort()" class="px-4 py-2.5 bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer">លំនាំដើម</button>
+                <button type="button" onclick="ProApp.applyCustomSort()" class="flex-1 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-extrabold rounded-xl shadow active:scale-95 transition cursor-pointer">យល់ព្រមតម្រៀប (OK)</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MAIN JAVASCRIPT LOGIC (CLEAN NAMESPACE `ProApp`) -->
     <script>
         const ProApp = {
@@ -1352,6 +1563,11 @@
             currentSplitObj: null,
             currentEditMobileId: null,
             deferredPrompt: null,
+            excelFilterEnabled: true,
+            excelSortLevels: [{ col: 'date', dir: 'desc' }],
+            excelColumnFilters: {}, // { col: { values: Set|null, min: number|null, max: number|null } }
+            excelActiveCol: null,
+            excelDraftSortLevels: [],
 
             // ☁️ REAL-TIME CLOUD SYNC & OFFLINE-FIRST ENGINE (ZERO DATA LOSS)
             sanitizeForCloud: function(val) {
@@ -3808,22 +4024,39 @@
                 });
             },
 
-            // ➕ MAIN TABLE & MOBILE SWIPE CARDS RENDERING (Using DocumentFragment for High Performance)
-            renderTable: function() {
-                const tbody = document.getElementById('tableBody');
-                const mobileContainer = document.getElementById('mobileCardsContainer');
-                if (!tbody || !mobileContainer) return;
-
+            // 📊 EXCEL-STYLE SORT & FILTER ENGINE
+            excelColumnsMeta: {
+                date: { label: 'កាលបរិច្ឆេទ', type: 'date', ascLabel: 'ចាស់ → ថ្មី (Oldest to Newest)', descLabel: 'ថ្មី → ចាស់ (Newest to Oldest)' },
+                cat:  { label: 'ប្រភេទ', type: 'text', ascLabel: 'Sort A to Z (ក → អ)', descLabel: 'Sort Z to A (អ → ក)' },
+                desc: { label: 'ការពិពណ៌នា', type: 'text', ascLabel: 'Sort A to Z (ក → អ)', descLabel: 'Sort Z to A (អ → ក)' },
+                acc:  { label: 'គណនី', type: 'text', ascLabel: 'Sort A to Z (ក → អ)', descLabel: 'Sort Z to A (អ → ក)' },
+                cur:  { label: 'ខ្នាត', type: 'text', ascLabel: 'Sort A to Z', descLabel: 'Sort Z to A' },
+                inc:  { label: 'ចំណូល', type: 'number', ascLabel: 'តូច → ធំ (Smallest to Largest)', descLabel: 'ធំ → តូច (Largest to Smallest)' },
+                exp:  { label: 'ចំណាយ', type: 'number', ascLabel: 'តូច → ធំ (Smallest to Largest)', descLabel: 'ធំ → តូច (Largest to Smallest)' }
+            },
+            escapeHtml: function(str) {
+                return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            },
+            getTxColValue: function(tx, col) {
+                if (!tx) return '';
+                if (col === 'date') return (tx.date || '').split('T')[0] || '';
+                if (col === 'inc') return Number(tx.inc) || 0;
+                if (col === 'exp') return Number(tx.exp) || 0;
+                return String(tx[col] ?? '').trim();
+            },
+            getTxColDisplay: function(tx, col) {
+                if (col === 'inc' || col === 'exp') {
+                    const num = Number(tx[col]) || 0;
+                    return num === 0 ? '0' : ProApp.formatMoney(num, tx.cur);
+                }
+                const v = ProApp.getTxColValue(tx, col);
+                return v === '' ? '(ទទេ / Blanks)' : v;
+            },
+            getBaseFilteredTransactions: function() {
                 const searchQ = (document.getElementById('searchInput')?.value || '').toLowerCase();
                 const filterAcc = document.getElementById('filterAccount')?.value || 'ALL';
                 const filterDate = document.getElementById('filterDatePeriod')?.value || 'TODAY';
                 const filterType = document.getElementById('filterTxType')?.value || 'ALL';
-
-                const deskFrag = document.createDocumentFragment();
-                const mobFrag = document.createDocumentFragment();
-
-                let totals = {};
-                ProApp.state.currencies.forEach(c => totals[c] = { in: 0, out: 0 });
 
                 const now = new Date();
                 const todayStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
@@ -3835,24 +4068,433 @@
                 const startDTVal = document.getElementById('filterStartDateTime')?.value || '';
                 const endDTVal = document.getElementById('filterEndDateTime')?.value || '';
 
-                let rowCount = 1, summaryIncUSD = 0, summaryExpUSD = 0, renderedCount = 0;
+                return (ProApp.state.transactions || []).filter(tx => {
+                    if (!tx || !tx.date) return false;
+                    const txDateOnly = tx.date.split('T')[0];
+                    const txFullDT = tx.date.length === 10 ? tx.date + 'T00:00:00' : tx.date;
+                    if (filterAcc !== 'ALL' && tx.acc !== filterAcc) return false;
+                    if (filterType === 'INC' && !(tx.inc > 0)) return false;
+                    if (filterType === 'EXP' && !(tx.exp > 0)) return false;
+                    if (filterDate === 'TODAY' && txDateOnly !== todayStr) return false;
+                    if (filterDate === 'YESTERDAY' && txDateOnly !== yesterdayStr) return false;
+                    if (filterDate === 'THIS_WEEK' && txDateOnly < startOfWeekStr) return false;
+                    if (filterDate === 'THIS_MONTH' && !txDateOnly.startsWith(startOfMonthStr)) return false;
+                    if (filterDate === 'CUSTOM_DATETIME') {
+                        if (startDTVal && txFullDT < startDTVal) return false;
+                        if (endDTVal && txFullDT > endDTVal) return false;
+                    }
+                    const matchStr = `${tx.cat || ''} ${tx.desc || ''} ${tx.acc || ''} ${tx.cur || ''}`.toLowerCase();
+                    if (searchQ && !matchStr.includes(searchQ)) return false;
+                    return true;
+                });
+            },
+            matchesExcelColumnFilters: function(tx, ignoreCol = null) {
+                const filters = ProApp.excelColumnFilters || {};
+                for (const col of Object.keys(filters)) {
+                    if (col === ignoreCol) continue;
+                    const f = filters[col];
+                    if (!f) continue;
+                    const rawVal = ProApp.getTxColValue(tx, col);
+                    if (f.values instanceof Set) {
+                        if (!f.values.has(String(rawVal))) return false;
+                    }
+                    if (col === 'inc' || col === 'exp') {
+                        const num = Number(rawVal) || 0;
+                        if (f.min !== null && f.min !== undefined && num < f.min) return false;
+                        if (f.max !== null && f.max !== undefined && num > f.max) return false;
+                    }
+                }
+                return true;
+            },
+            compareTxByLevels: function(a, b) {
+                const levels = (ProApp.excelSortLevels && ProApp.excelSortLevels.length) ? ProApp.excelSortLevels : [{ col: 'date', dir: 'desc' }];
+                for (const lvl of levels) {
+                    const col = lvl.col;
+                    const dirMul = lvl.dir === 'asc' ? 1 : -1;
+                    let cmp = 0;
+                    if (col === 'inc' || col === 'exp') {
+                        cmp = (Number(a[col]) || 0) - (Number(b[col]) || 0);
+                    } else if (col === 'date') {
+                        cmp = String(a.date || '').localeCompare(String(b.date || ''));
+                    } else {
+                        cmp = String(a[col] || '').localeCompare(String(b[col] || ''), 'km', { numeric: true, sensitivity: 'base' });
+                    }
+                    if (cmp !== 0) return cmp * dirMul;
+                }
+                return 0;
+            },
+            closeAllExcelMenus: function() {
+                document.getElementById('excelToolbarMenu')?.classList.add('hidden');
+                document.getElementById('excelFilterPopover')?.classList.add('hidden');
+            },
+            toggleExcelToolbarMenu: function(e) {
+                if (e) e.stopPropagation();
+                const menu = document.getElementById('excelToolbarMenu');
+                const btn = document.getElementById('excelSortFilterBtn');
+                if (!menu || !btn) return;
+                const isOpen = !menu.classList.contains('hidden');
+                ProApp.closeAllExcelMenus();
+                if (isOpen) return;
 
-                if (ProApp.state && ProApp.state.transactions) {
-                    const sortedTx = [...ProApp.state.transactions].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+                const primarySort = (ProApp.excelSortLevels && ProApp.excelSortLevels[0]) ? ProApp.excelSortLevels[0] : { col: 'date', dir: 'desc' };
+                const colMeta = ProApp.excelColumnsMeta[primarySort.col] || ProApp.excelColumnsMeta.date;
+                const lbl = document.getElementById('excelMenuColLabel');
+                if (lbl) lbl.textContent = colMeta.label;
+
+                const hasAnyFilter = ProApp.getActiveExcelFilterCount() > 0;
+                const clearBtn = document.getElementById('btnExcelMenuClear');
+                if (clearBtn) clearBtn.disabled = !hasAnyFilter;
+
+                const chk = document.getElementById('excelFilterToggleCheck');
+                if (chk) chk.classList.toggle('hidden', !ProApp.excelFilterEnabled);
+
+                const rect = btn.getBoundingClientRect();
+                menu.classList.remove('hidden');
+                const mw = menu.offsetWidth || 240;
+                const mh = menu.offsetHeight || 260;
+                const left = Math.max(8, Math.min(rect.left, window.innerWidth - mw - 8));
+                const top = (rect.bottom + mh + 8 > window.innerHeight) ? Math.max(8, rect.top - mh - 6) : rect.bottom + 6;
+                menu.style.left = left + 'px';
+                menu.style.top = top + 'px';
+            },
+            excelQuickSort: function(dir) {
+                const col = (ProApp.excelSortLevels && ProApp.excelSortLevels[0]) ? ProApp.excelSortLevels[0].col : 'date';
+                ProApp.excelSortLevels = [{ col: col, dir: dir }];
+                ProApp.closeAllExcelMenus();
+                ProApp.renderTable();
+                const meta = ProApp.excelColumnsMeta[col] || { label: col };
+                ProApp.showToast(`📊 បានតម្រៀប «${meta.label}» (${dir === 'asc' ? 'A → Z' : 'Z → A'})`, 'success');
+            },
+            toggleColumnSort: function(col) {
+                ProApp.vibrate(10);
+                const cur = ProApp.excelSortLevels && ProApp.excelSortLevels[0];
+                const nextDir = (cur && cur.col === col && cur.dir === 'asc') ? 'desc' : 'asc';
+                ProApp.excelSortLevels = [{ col: col, dir: nextDir }];
+                ProApp.renderTable();
+            },
+            toggleExcelFilterButtons: function() {
+                ProApp.excelFilterEnabled = !ProApp.excelFilterEnabled;
+                const tbl = document.getElementById('mainTable');
+                if (tbl) tbl.classList.toggle('excel-filters-hidden', !ProApp.excelFilterEnabled);
+                if (!ProApp.excelFilterEnabled) {
+                    ProApp.excelColumnFilters = {};
+                    ProApp.renderTable();
+                    ProApp.showToast('បានបិទតម្រងជួរឈរ (Filter Off)', 'info');
+                } else {
+                    ProApp.showToast('បានបើកតម្រងជួរឈរ (Filter On)', 'success');
+                }
+                ProApp.closeAllExcelMenus();
+            },
+            reapplyExcelFilters: function() {
+                ProApp.closeAllExcelMenus();
+                ProApp.renderTable();
+                ProApp.showToast('🔄 បានអនុវត្តតម្រៀប & តម្រងឡើងវិញ!', 'success');
+            },
+            getActiveExcelFilterCount: function() {
+                let cnt = Object.keys(ProApp.excelColumnFilters || {}).length;
+                const isCustomSort = ProApp.excelSortLevels.length > 1 || (ProApp.excelSortLevels[0] && (ProApp.excelSortLevels[0].col !== 'date' || ProApp.excelSortLevels[0].dir !== 'desc'));
+                if (isCustomSort) cnt += 1;
+                return cnt;
+            },
+            clearAllExcelFilters: function() {
+                ProApp.excelColumnFilters = {};
+                ProApp.excelSortLevels = [{ col: 'date', dir: 'desc' }];
+                ProApp.renderTable();
+                ProApp.showToast('🧹 បានសម្អាតតម្រង & លំដាប់តម្រៀបទាំងអស់!', 'info');
+            },
+            removeColumnFilter: function(col) {
+                delete ProApp.excelColumnFilters[col];
+                ProApp.renderTable();
+            },
+            openColumnFilterMenu: function(e, col) {
+                if (e) e.stopPropagation();
+                const pop = document.getElementById('excelFilterPopover');
+                if (!pop) return;
+                const isSameOpen = !pop.classList.contains('hidden') && ProApp.excelActiveCol === col;
+                ProApp.closeAllExcelMenus();
+                if (isSameOpen) return;
+
+                ProApp.excelActiveCol = col;
+                const meta = ProApp.excelColumnsMeta[col] || { label: col, type: 'text', ascLabel: 'Sort A to Z', descLabel: 'Sort Z to A' };
+                document.getElementById('efpTitle').textContent = `តម្រង៖ ${meta.label}`;
+                document.getElementById('efpSortAscLabel').textContent = meta.ascLabel;
+                document.getElementById('efpSortDescLabel').textContent = meta.descLabel;
+                document.getElementById('efpClearColLabel').textContent = `សម្អាតតម្រង «${meta.label}»`;
+
+                const existingFilter = ProApp.excelColumnFilters[col];
+                const clearBtn = document.getElementById('efpClearColBtn');
+                if (clearBtn) clearBtn.disabled = !existingFilter;
+
+                // Show/hide Number Filter box
+                const numBox = document.getElementById('efpNumFilterBox');
+                const minInp = document.getElementById('efpNumMin');
+                const maxInp = document.getElementById('efpNumMax');
+                if (meta.type === 'number') {
+                    numBox?.classList.remove('hidden');
+                    if (minInp) minInp.value = (existingFilter && existingFilter.min !== null && existingFilter.min !== undefined) ? existingFilter.min : '';
+                    if (maxInp) maxInp.value = (existingFilter && existingFilter.max !== null && existingFilter.max !== undefined) ? existingFilter.max : '';
+                } else {
+                    numBox?.classList.add('hidden');
+                }
+
+                // Collect unique values from base-filtered rows (ignoring this column's own filter, like Excel!)
+                const baseRows = ProApp.getBaseFilteredTransactions().filter(tx => ProApp.matchesExcelColumnFilters(tx, col));
+                const counts = new Map();
+                const displayMap = new Map();
+                baseRows.forEach(tx => {
+                    const rawKey = String(ProApp.getTxColValue(tx, col));
+                    counts.set(rawKey, (counts.get(rawKey) || 0) + 1);
+                    if (!displayMap.has(rawKey)) displayMap.set(rawKey, ProApp.getTxColDisplay(tx, col));
+                });
+
+                const sortedKeys = Array.from(counts.keys()).sort((a, b) => {
+                    if (meta.type === 'number') return (parseFloat(a) || 0) - (parseFloat(b) || 0);
+                    if (meta.type === 'date') return b.localeCompare(a);
+                    return a.localeCompare(b, 'km', { numeric: true, sensitivity: 'base' });
+                });
+
+                const listEl = document.getElementById('efpValuesList');
+                const searchInp = document.getElementById('efpSearchInput');
+                if (searchInp) searchInp.value = '';
+
+                if (sortedKeys.length === 0) {
+                    listEl.innerHTML = `<div class="text-center py-3 text-[11px] text-slate-400">គ្មានទិន្នន័យ</div>`;
+                } else {
+                    listEl.innerHTML = sortedKeys.map(k => {
+                        const isChecked = !(existingFilter && existingFilter.values instanceof Set) || existingFilter.values.has(k);
+                        const disp = ProApp.escapeHtml(displayMap.get(k));
+                        const safeKey = ProApp.escapeHtml(k);
+                        return `
+                            <label class="efp-val-row flex items-center justify-between gap-2 px-1.5 py-1 rounded-lg hover:bg-white/70 dark:hover:bg-white/5 cursor-pointer text-xs" data-search="${disp.toLowerCase()} ${safeKey.toLowerCase()}">
+                                <span class="flex items-center gap-2 min-w-0">
+                                    <input type="checkbox" class="efp-val-chk w-3.5 h-3.5 rounded accent-blue-600 shrink-0" value="${safeKey}" ${isChecked ? 'checked' : ''} onchange="ProApp.syncSelectAllCheckbox()">
+                                    <span class="truncate font-medium">${disp}</span>
+                                </span>
+                                <span class="text-[10px] text-slate-400 font-mono shrink-0">(${counts.get(k)})</span>
+                            </label>`;
+                    }).join('');
+                }
+                ProApp.syncSelectAllCheckbox();
+
+                // Position popover anchored cleanly under the clicked button
+                const targetRect = e.currentTarget.getBoundingClientRect();
+                pop.classList.remove('hidden');
+                const pw = pop.offsetWidth || 288;
+                const ph = pop.offsetHeight || 360;
+                const left = Math.max(8, Math.min(targetRect.right - pw, window.innerWidth - pw - 8));
+                const top = (targetRect.bottom + ph + 8 > window.innerHeight) ? Math.max(8, targetRect.top - ph - 6) : targetRect.bottom + 6;
+                pop.style.left = left + 'px';
+                pop.style.top = top + 'px';
+            },
+            closeColumnFilterMenu: function() {
+                document.getElementById('excelFilterPopover')?.classList.add('hidden');
+                ProApp.excelActiveCol = null;
+            },
+            filterPopoverChecklist: function() {
+                const q = (document.getElementById('efpSearchInput')?.value || '').toLowerCase().trim();
+                document.querySelectorAll('#efpValuesList .efp-val-row').forEach(row => {
+                    const hay = row.getAttribute('data-search') || '';
+                    row.classList.toggle('hidden', !!q && !hay.includes(q));
+                });
+                ProApp.syncSelectAllCheckbox();
+            },
+            toggleSelectAllPopover: function(checked) {
+                document.querySelectorAll('#efpValuesList .efp-val-row:not(.hidden) .efp-val-chk').forEach(chk => {
+                    chk.checked = checked;
+                });
+            },
+            syncSelectAllCheckbox: function() {
+                const allChks = Array.from(document.querySelectorAll('#efpValuesList .efp-val-row:not(.hidden) .efp-val-chk'));
+                const selAll = document.getElementById('efpSelectAll');
+                if (!selAll) return;
+                if (allChks.length === 0) { selAll.checked = false; selAll.indeterminate = false; return; }
+                const checkedCnt = allChks.filter(c => c.checked).length;
+                selAll.checked = checkedCnt === allChks.length;
+                selAll.indeterminate = checkedCnt > 0 && checkedCnt < allChks.length;
+            },
+            setNumFilterGreaterZero: function() {
+                const minInp = document.getElementById('efpNumMin');
+                const maxInp = document.getElementById('efpNumMax');
+                if (minInp) minInp.value = '0.01';
+                if (maxInp) maxInp.value = '';
+            },
+            applyColumnSortFromMenu: function(dir) {
+                const col = ProApp.excelActiveCol; if (!col) return;
+                ProApp.excelSortLevels = [{ col: col, dir: dir }];
+                ProApp.closeColumnFilterMenu();
+                ProApp.renderTable();
+            },
+            clearSingleColumnFilter: function() {
+                const col = ProApp.excelActiveCol; if (!col) return;
+                delete ProApp.excelColumnFilters[col];
+                ProApp.closeColumnFilterMenu();
+                ProApp.renderTable();
+            },
+            applyColumnFilterMenu: function() {
+                const col = ProApp.excelActiveCol; if (!col) return;
+                const meta = ProApp.excelColumnsMeta[col] || { type: 'text' };
+                const allChks = Array.from(document.querySelectorAll('#efpValuesList .efp-val-chk'));
+                const checkedVals = new Set(allChks.filter(c => c.checked).map(c => c.value));
+                const isAllSelected = checkedVals.size === allChks.length;
+
+                let minVal = null, maxVal = null;
+                if (meta.type === 'number') {
+                    const rawMin = document.getElementById('efpNumMin')?.value;
+                    const rawMax = document.getElementById('efpNumMax')?.value;
+                    if (rawMin !== '' && rawMin !== undefined) minVal = parseFloat(rawMin);
+                    if (rawMax !== '' && rawMax !== undefined) maxVal = parseFloat(rawMax);
+                }
+
+                if (isAllSelected && minVal === null && maxVal === null) {
+                    delete ProApp.excelColumnFilters[col];
+                } else {
+                    ProApp.excelColumnFilters[col] = {
+                        values: isAllSelected ? null : checkedVals,
+                        min: minVal,
+                        max: maxVal
+                    };
+                }
+                ProApp.closeColumnFilterMenu();
+                ProApp.renderTable();
+            },
+
+            // 📊 EXCEL CUSTOM SORT MODAL (MULTI-LEVEL)
+            openCustomSortModal: function() {
+                ProApp.closeAllExcelMenus();
+                ProApp.excelDraftSortLevels = (ProApp.excelSortLevels && ProApp.excelSortLevels.length)
+                    ? ProApp.excelSortLevels.map(l => ({ ...l }))
+                    : [{ col: 'date', dir: 'desc' }];
+                ProApp.renderCustomSortLevels();
+                document.getElementById('customSortModal')?.classList.remove('hidden');
+            },
+            closeCustomSortModal: function() {
+                document.getElementById('customSortModal')?.classList.add('hidden');
+            },
+            addCustomSortLevel: function() {
+                const used = new Set(ProApp.excelDraftSortLevels.map(l => l.col));
+                const allCols = Object.keys(ProApp.excelColumnsMeta);
+                const nextCol = allCols.find(c => !used.has(c)) || 'cat';
+                ProApp.excelDraftSortLevels.push({ col: nextCol, dir: 'asc' });
+                ProApp.renderCustomSortLevels();
+            },
+            removeCustomSortLevel: function(idx) {
+                if (ProApp.excelDraftSortLevels.length <= 1) return;
+                ProApp.excelDraftSortLevels.splice(idx, 1);
+                ProApp.renderCustomSortLevels();
+            },
+            updateCustomSortLevel: function(idx, key, val) {
+                if (ProApp.excelDraftSortLevels[idx]) {
+                    ProApp.excelDraftSortLevels[idx][key] = val;
+                    if (key === 'col') ProApp.renderCustomSortLevels();
+                }
+            },
+            renderCustomSortLevels: function() {
+                const c = document.getElementById('customSortLevelsContainer'); if (!c) return;
+                const cols = Object.keys(ProApp.excelColumnsMeta);
+                c.innerHTML = ProApp.excelDraftSortLevels.map((lvl, i) => {
+                    const meta = ProApp.excelColumnsMeta[lvl.col] || ProApp.excelColumnsMeta.date;
+                    const colOpts = cols.map(ck => `<option value="${ck}" ${lvl.col === ck ? 'selected' : ''}>${ProApp.excelColumnsMeta[ck].label}</option>`).join('');
+                    return `
+                        <div class="flex items-center gap-2 p-2.5 glass-input rounded-xl">
+                            <span class="text-[10px] font-black text-slate-400 w-14 shrink-0">${i === 0 ? 'Sort by' : 'Then by'}</span>
+                            <select onchange="ProApp.updateCustomSortLevel(${i}, 'col', this.value)" class="flex-1 min-w-0 bg-transparent text-xs font-bold outline-none cursor-pointer">${colOpts}</select>
+                            <select onchange="ProApp.updateCustomSortLevel(${i}, 'dir', this.value)" class="w-32 bg-transparent text-[11px] font-bold text-blue-600 dark:text-amber-400 outline-none cursor-pointer">
+                                <option value="asc" ${lvl.dir === 'asc' ? 'selected' : ''}>${meta.type === 'number' ? 'តូច → ធំ' : (meta.type === 'date' ? 'ចាស់ → ថ្មី' : 'A → Z')}</option>
+                                <option value="desc" ${lvl.dir === 'desc' ? 'selected' : ''}>${meta.type === 'number' ? 'ធំ → តូច' : (meta.type === 'date' ? 'ថ្មី → ចាស់' : 'Z → A')}</option>
+                            </select>
+                            <button type="button" onclick="ProApp.removeCustomSortLevel(${i})" ${ProApp.excelDraftSortLevels.length <= 1 ? 'disabled class="opacity-25 text-slate-400 p-1"' : 'class="text-rose-500 hover:text-rose-700 p-1 cursor-pointer"'}><i class="fa-solid fa-xmark text-xs"></i></button>
+                        </div>`;
+                }).join('');
+            },
+            resetCustomSort: function() {
+                ProApp.excelSortLevels = [{ col: 'date', dir: 'desc' }];
+                ProApp.closeCustomSortModal();
+                ProApp.renderTable();
+                ProApp.showToast('បានត្រឡប់ទៅលំដាប់លំនាំដើម', 'info');
+            },
+            applyCustomSort: function() {
+                ProApp.excelSortLevels = ProApp.excelDraftSortLevels.length ? ProApp.excelDraftSortLevels.map(l => ({ ...l })) : [{ col: 'date', dir: 'desc' }];
+                ProApp.closeCustomSortModal();
+                ProApp.renderTable();
+                ProApp.showToast('📊 បានតម្រៀបទិន្នន័យតាមជម្រើសជោគជ័យ!', 'success');
+            },
+            updateExcelHeaderIndicators: function(renderedCount, totalBaseCount) {
+                const cols = Object.keys(ProApp.excelColumnsMeta);
+                const primarySort = ProApp.excelSortLevels && ProApp.excelSortLevels[0];
+
+                cols.forEach(col => {
+                    const icon = document.getElementById('sortIcon-' + col);
+                    const fbtn = document.getElementById('filterBtn-' + col);
+                    if (icon) {
+                        if (primarySort && primarySort.col === col) {
+                            icon.className = `fa-solid ${primarySort.dir === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down'} text-[9px] text-blue-600 dark:text-amber-400`;
+                        } else {
+                            icon.className = 'fa-solid text-[9px] hidden';
+                        }
+                    }
+                    if (fbtn) {
+                        const isFiltered = !!ProApp.excelColumnFilters[col];
+                        fbtn.classList.toggle('active', isFiltered);
+                        fbtn.innerHTML = isFiltered ? '<i class="fa-solid fa-filter"></i>' : '<i class="fa-solid fa-caret-down"></i>';
+                    }
+                });
+
+                const activeCnt = ProApp.getActiveExcelFilterCount();
+                const badge = document.getElementById('excelActiveFilterCount');
+                if (badge) {
+                    badge.textContent = activeCnt;
+                    badge.classList.toggle('hidden', activeCnt === 0);
+                }
+
+                const bar = document.getElementById('excelActiveFilterBar');
+                const chipsEl = document.getElementById('excelFilterChips');
+                const rowInfo = document.getElementById('excelRowCountInfo');
+                if (bar && chipsEl) {
+                    if (activeCnt === 0) {
+                        bar.classList.add('hidden');
+                    } else {
+                        bar.classList.remove('hidden');
+                        let chipsHtml = '';
+                        const isCustomSort = ProApp.excelSortLevels.length > 1 || (primarySort && (primarySort.col !== 'date' || primarySort.dir !== 'desc'));
+                        if (isCustomSort) {
+                            const sortText = ProApp.excelSortLevels.map(l => `${ProApp.excelColumnsMeta[l.col]?.label || l.col} (${l.dir === 'asc' ? '↑' : '↓'})`).join(' → ');
+                            chipsHtml += `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-[10px] font-bold"><i class="fa-solid fa-arrow-up-wide-short"></i> ${ProApp.escapeHtml(sortText)}</span>`;
+                        }
+                        Object.keys(ProApp.excelColumnFilters).forEach(col => {
+                            const f = ProApp.excelColumnFilters[col];
+                            const meta = ProApp.excelColumnsMeta[col] || { label: col };
+                            let detail = '';
+                            if (f.values instanceof Set) detail = `${f.values.size} ជម្រើស`;
+                            if (f.min !== null && f.min !== undefined) detail += (detail ? ', ' : '') + `≥${f.min}`;
+                            if (f.max !== null && f.max !== undefined) detail += (detail ? ', ' : '') + `≤${f.max}`;
+                            chipsHtml += `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-[10px] font-bold"><i class="fa-solid fa-filter text-[9px]"></i> ${meta.label}: ${ProApp.escapeHtml(detail)} <button type="button" onclick="ProApp.removeColumnFilter('${col}')" class="hover:text-rose-500 ml-0.5 cursor-pointer">&times;</button></span>`;
+                        });
+                        chipsEl.innerHTML = chipsHtml;
+                        if (rowInfo) rowInfo.textContent = `${renderedCount} / ${totalBaseCount} ជួរ`;
+                    }
+                }
+            },
+
+            // ➕ MAIN TABLE & MOBILE SWIPE CARDS RENDERING (Using DocumentFragment for High Performance)
+            renderTable: function() {
+                const tbody = document.getElementById('tableBody');
+                const mobileContainer = document.getElementById('mobileCardsContainer');
+                if (!tbody || !mobileContainer) return;
+
+                const deskFrag = document.createDocumentFragment();
+                const mobFrag = document.createDocumentFragment();
+
+                let totals = {};
+                ProApp.state.currencies.forEach(c => totals[c] = { in: 0, out: 0 });
+
+                let rowCount = 1, summaryIncUSD = 0, summaryExpUSD = 0, renderedCount = 0;
+                const baseRows = ProApp.getBaseFilteredTransactions();
+                const filteredRows = baseRows.filter(tx => ProApp.matchesExcelColumnFilters(tx, null));
+                const sortedTx = [...filteredRows].sort((a, b) => ProApp.compareTxByLevels(a, b));
+
+                if (sortedTx.length > 0) {
                     sortedTx.forEach(tx => {
-                        if (!tx.date) return;
-                        const txDateOnly = tx.date.split('T')[0];
-                        const txFullDT = tx.date.length === 10 ? tx.date + 'T00:00:00' : tx.date;
-                        if (filterAcc !== 'ALL' && tx.acc !== filterAcc) return;
-                        if (filterType === 'INC' && !(tx.inc > 0)) return;
-                        if (filterType === 'EXP' && !(tx.exp > 0)) return;
-                        if (filterDate === 'TODAY' && txDateOnly !== todayStr) return;
-                        if (filterDate === 'YESTERDAY' && txDateOnly !== yesterdayStr) return;
-                        if (filterDate === 'THIS_WEEK' && txDateOnly < startOfWeekStr) return;
-                        if (filterDate === 'THIS_MONTH' && !txDateOnly.startsWith(startOfMonthStr)) return;
-                        if (filterDate === 'CUSTOM_DATETIME') { if (startDTVal && txFullDT < startDTVal) return; if (endDTVal && txFullDT > endDTVal) return; }
-                        const matchStr = `${tx.cat} ${tx.desc}`.toLowerCase();
-                        if (searchQ && !matchStr.includes(searchQ)) return;
+                        const txDateOnly = (tx.date || '').split('T')[0];
 
                         renderedCount++;
                         const incVal = tx.cur === 'USD' ? tx.inc : (tx.inc / (ProApp.state.exchangeRate || 4100));
@@ -3923,12 +4565,14 @@
 
                 tbody.innerHTML = '';
                 mobileContainer.innerHTML = '';
-                tbody.appendChild(deskFrag);
                 if (renderedCount === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" class="text-center py-10 text-gray-400 font-bold text-xs">មិនមានទិន្នន័យត្រូវនឹងតម្រងទេ (សាកល្បងសម្អាតតម្រង ឬប្តូរកាលបរិច្ឆេទ)</td></tr>`;
                     mobileContainer.innerHTML = `<div class="text-center p-8 text-gray-400 font-bold text-xs glass-panel rounded-2xl">មិនទាន់មានប្រតិបត្តិការទេ</div>`;
                 } else {
+                    tbody.appendChild(deskFrag);
                     mobileContainer.appendChild(mobFrag);
                 }
+                ProApp.updateExcelHeaderIndicators(renderedCount, baseRows.length);
 
                 const todayIncEl = document.getElementById('todayIncText');
                 const todayExpEl = document.getElementById('todayExpText');
@@ -4008,7 +4652,7 @@
                 const container = document.getElementById('tableScrollContainer'); if (!container) return;
                 let isDown = false, startX = 0, scrollLeft = 0;
                 container.addEventListener('mousedown', (e) => {
-                    if (['INPUT', 'SELECT', 'BUTTON', 'A', 'I', 'OPTION'].includes(e.target.tagName) || e.target.classList.contains('resizer')) return;
+                    if (['INPUT', 'SELECT', 'BUTTON', 'A', 'I', 'OPTION'].includes(e.target.tagName) || e.target.classList.contains('resizer') || e.target.closest('.excel-filter-btn, .excel-th-label')) return;
                     isDown = true; container.classList.add('cursor-grabbing');
                     startX = e.pageX - container.offsetLeft; scrollLeft = container.scrollLeft;
                 });
@@ -4113,6 +4757,22 @@
             ProApp.initShakeDetection();
             ProApp.initPWA();
             if (window.innerWidth > 768) { ProApp.initResizers(); ProApp.initDesktopDragScroll(); }
+
+            // Close Excel Sort & Filter popovers when clicking outside or pressing Escape
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#excelFilterPopover, #excelToolbarMenu, #excelSortFilterBtn, .excel-filter-btn')) {
+                    ProApp.closeAllExcelMenus();
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    ProApp.closeAllExcelMenus();
+                    ProApp.closeCustomSortModal();
+                }
+            });
+            document.getElementById('tableScrollContainer')?.addEventListener('scroll', () => {
+                ProApp.closeAllExcelMenus();
+            });
         };
     </script>
 
