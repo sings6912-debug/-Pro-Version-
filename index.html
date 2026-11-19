@@ -1604,6 +1604,7 @@
                 ProApp.state.language = lang === 'en' ? 'en' : 'km';
                 localStorage.setItem('finance_language', ProApp.state.language);
                 ProApp.applyLanguage();
+                ProApp.renderBudgetWidget();
                 ProApp.saveUiConfigToCloud();
                 ProApp.showToast(ProApp.state.language === 'en' ? '🌍 Switched to English' : '🌍 បានប្តូរមកភាសាខ្មែរ', 'success');
             },
@@ -3181,28 +3182,50 @@
                     return;
                 }
                 const currentMonth = new Date().toISOString().substring(0, 7);
+                const isEn = ProApp.state.language === 'en';
                 container.innerHTML = ProApp.state.budgets.map(b => {
                     let spent = 0;
                     ProApp.state.transactions.forEach(tx => {
                         const matchAcc = (!b.linkedAcc || b.linkedAcc === 'ALL' || tx.acc === b.linkedAcc);
                         if (tx.date && tx.date.substring(0, 7) === currentMonth && tx.cat === b.cat && tx.cur === b.cur && matchAcc) { spent += (tx.exp || 0); }
                     });
-                    const pct = b.limit > 0 ? Math.min(Math.round((spent / b.limit) * 100), 100) : 0;
+                    const rawPct = b.limit > 0 ? Math.round((spent / b.limit) * 100) : 0;
+                    const pct = Math.min(rawPct, 100);
+                    const remaining = Math.round(((b.limit || 0) - spent) * 100) / 100;
+                    const isOver = remaining < 0;
+                    const remainPct = Math.max(0, 100 - rawPct);
+
                     let colorClass = "bg-emerald-500", textClass = "text-emerald-600 dark:text-emerald-400";
                     if (pct >= 80 && pct < 100) { colorClass = "bg-amber-500"; textClass = "text-amber-600 dark:text-amber-400"; }
                     if (pct >= 100) { colorClass = "bg-red-500"; textClass = "text-red-600 dark:text-rose-400"; }
+
+                    const remainLabel = isOver
+                        ? (isEn ? `⚠️ Over budget:` : `⚠️ លើសថវិកា៖`)
+                        : (isEn ? `Remaining:` : `នៅសល់៖`);
+                    const remainAmtStr = ProApp.formatMoney(Math.abs(remaining), b.cur);
+                    const remainRightStr = isOver
+                        ? (isEn ? `+${Math.max(1, rawPct - 100)}% over` : `លើស ${Math.max(1, rawPct - 100)}%`)
+                        : (isEn ? `${remainPct}% left` : `នៅសល់ ${remainPct}%`);
+                    const remainColorClass = isOver
+                        ? 'text-rose-600 dark:text-rose-400'
+                        : (pct >= 80 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400');
+
                     const isLinked = b.linkedAcc && b.linkedAcc !== 'ALL';
                     return `
                         <div class="glass-input p-3.5 rounded-2xl">
-                            <div class="flex justify-between items-center mb-1.5 text-xs font-bold">
-                                <span class="flex items-center gap-1">
-                                    ${b.cat} (${b.cur})
-                                    ${isLinked ? `<span class="text-[9px] bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 px-1.5 py-0.5 rounded">🔗 ${b.linkedAcc}</span>` : ''}
+                            <div class="flex justify-between items-center mb-1.5 text-xs font-bold gap-2">
+                                <span class="flex items-center gap-1 min-w-0">
+                                    <span class="truncate">${b.cat} (${b.cur})</span>
+                                    ${isLinked ? `<span class="text-[9px] bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 px-1.5 py-0.5 rounded shrink-0">🔗 ${b.linkedAcc}</span>` : ''}
                                 </span>
-                                <span class="${textClass}">${ProApp.formatMoney(spent, b.cur)} / ${ProApp.formatMoney(b.limit, b.cur)} (${pct}%)</span>
+                                <span class="${textClass} whitespace-nowrap">${ProApp.formatMoney(spent, b.cur)} / ${ProApp.formatMoney(b.limit, b.cur)} (${rawPct}%)</span>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2.5 overflow-hidden">
                                 <div class="${colorClass} h-2.5 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                            </div>
+                            <div class="flex justify-between items-center mt-2 text-[11px] font-bold">
+                                <span class="${remainColorClass}">${remainLabel} <span class="font-mono">${remainAmtStr}</span></span>
+                                <span class="text-[10px] text-slate-400 dark:text-slate-400">${remainRightStr}</span>
                             </div>
                         </div>`;
                 }).join('');
