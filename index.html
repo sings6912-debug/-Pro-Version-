@@ -245,13 +245,19 @@
                     </div>
                     <div>
                         <h1 class="text-[15px] font-black text-white line-clamp-1 tracking-wide" id="displayAppTitle">ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro Cloud</h1>
-                        <p class="text-[10px] text-blue-200 flex items-center gap-1.5 mt-0.5 font-medium">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_5px_#34d399]"></span>
+                        <p class="text-[10px] text-blue-200 flex items-center flex-wrap gap-1.5 mt-0.5 font-medium">
+                            <span id="cloudStatusDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_5px_#fbbf24]"></span>
+                            <span id="cloudStatusText">កំពុងភ្ជាប់ Cloud...</span>
+                            <span class="opacity-40">•</span>
                             <span id="licenseBadgeText">License Active</span>
                         </p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2 z-30">
+                <div class="flex items-center gap-1.5 z-30">
+                    <button onclick="ProApp.vibrate(); ProApp.manualCloudSync('auto')" class="w-10 h-10 bg-white/10 backdrop-blur-md text-emerald-300 rounded-full flex items-center justify-center border border-white/20 hover:bg-emerald-500/30 hover:text-white active:scale-95 transition cursor-pointer relative" title="Sync ទិន្នន័យជាមួយ Cloud">
+                        <i id="headerSyncIcon" class="fa-solid fa-cloud-arrow-up text-sm"></i>
+                        <span id="headerPendingDot" class="hidden absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-amber-400 border border-blue-900"></span>
+                    </button>
                     <button onclick="ProApp.vibrate(); ProApp.openSmartAddModal(); ProApp.startVoiceRecognition()" class="w-10 h-10 bg-white/10 backdrop-blur-md text-amber-300 rounded-full flex items-center justify-center border border-white/20 hover:bg-rose-500/40 hover:text-white active:scale-95 transition cursor-pointer" title="និយាយដើម្បីកត់ត្រា">
                         <i class="fa-solid fa-microphone text-sm"></i>
                     </button>
@@ -269,8 +275,24 @@
                     </button>
                 </div>
                 <div class="text-4xl md:text-5xl font-black text-white font-mono tracking-tight drop-shadow-md" id="globalNetWorth">$ 0.00</div>
+
+                <!-- 📅 Monthly Quick Summary Strip -->
+                <div class="grid grid-cols-3 gap-2 max-w-md mx-auto mt-3.5 bg-black/20 backdrop-blur-md border border-white/10 rounded-2xl p-2.5 text-center">
+                    <div>
+                        <div class="text-[9px] text-emerald-200/80 font-bold uppercase" data-i18n="monthInc">ចំណូលខែនេះ</div>
+                        <div class="text-xs sm:text-sm font-black text-emerald-300 font-mono mt-0.5" id="heroMonthInc">$0.00</div>
+                    </div>
+                    <div class="border-x border-white/10 px-1">
+                        <div class="text-[9px] text-rose-200/80 font-bold uppercase" data-i18n="monthExp">ចំណាយខែនេះ</div>
+                        <div class="text-xs sm:text-sm font-black text-rose-300 font-mono mt-0.5" id="heroMonthExp">$0.00</div>
+                    </div>
+                    <div>
+                        <div class="text-[9px] text-amber-200/80 font-bold uppercase" data-i18n="monthNet">សល់ខែនេះ</div>
+                        <div class="text-xs sm:text-sm font-black text-amber-300 font-mono mt-0.5" id="heroMonthNet">$0.00</div>
+                    </div>
+                </div>
                 
-                <div class="flex items-center justify-center gap-2 mt-4">
+                <div class="flex items-center justify-center gap-2 mt-3.5">
                     <span class="text-[10px] text-blue-200/70 font-bold uppercase">Rate ៛</span>
                     <input type="number" id="exchangeRate" value="4100" onchange="ProApp.updateExchangeRate()" class="bg-black/20 backdrop-blur-sm border border-white/10 text-white font-bold w-16 px-1.5 py-1 rounded-lg outline-none text-center font-mono text-[13px] shadow-inner transition focus:bg-black/40">
                     <button onclick="ProApp.vibrate(); ProApp.fetchLiveExchangeRate()" class="text-amber-400 hover:text-white transition p-1 bg-white/10 rounded-full w-7 h-7 flex items-center justify-center border border-white/10 cursor-pointer shadow-sm active:scale-90" title="ទាញយកអត្រាប្តូរប្រាក់ជាក់ស្តែង">
@@ -429,7 +451,7 @@
                         </div>
                         
                         <div class="flex gap-2 w-full sm:w-auto relative z-50">
-                            <select id="filterDatePeriod" onchange="ProApp.toggleCustomDateTimeFilter()" class="block w-1/2 sm:w-36 py-2.5 px-3 glass-input rounded-xl text-[11px] font-bold outline-none transition cursor-pointer relative z-50">
+                            <select id="filterDatePeriod" onchange="ProApp.toggleCustomDateTimeFilter()" class="block w-1/3 sm:w-36 py-2.5 px-3 glass-input rounded-xl text-[11px] font-bold outline-none transition cursor-pointer relative z-50">
                                 <option value="ALL">📅 គ្រប់ពេល</option>
                                 <option value="TODAY" selected>☀️ ថ្ងៃនេះ</option>
                                 <option value="YESTERDAY">🌙 ម្សិលមិញ</option>
@@ -437,7 +459,12 @@
                                 <option value="THIS_MONTH">📆 ខែនេះ</option>
                                 <option value="CUSTOM_DATETIME">🎯 ថ្ងៃ/ម៉ោង</option>
                             </select>
-                            <select id="filterAccount" onchange="ProApp.renderTable()" class="block w-1/2 sm:w-32 py-2.5 px-3 glass-input rounded-xl text-[11px] font-bold outline-none transition cursor-pointer relative z-50"></select>
+                            <select id="filterAccount" onchange="ProApp.renderTable()" class="block w-1/3 sm:w-32 py-2.5 px-2.5 glass-input rounded-xl text-[11px] font-bold outline-none transition cursor-pointer relative z-50"></select>
+                            <select id="filterTxType" onchange="ProApp.renderTable()" class="block w-1/3 sm:w-28 py-2.5 px-2.5 glass-input rounded-xl text-[11px] font-bold outline-none transition cursor-pointer relative z-50">
+                                <option value="ALL">📊 ទាំងអស់</option>
+                                <option value="INC">🟢 ចំណូល</option>
+                                <option value="EXP">🔴 ចំណាយ</option>
+                            </select>
                         </div>
                     </div>
 
@@ -645,6 +672,34 @@
                     <button onclick="ProApp.installPWA()" class="px-4 py-2 bg-white text-blue-600 font-black text-xs rounded-xl shadow-sm active:scale-90 transition cursor-pointer"><i class="fa-solid fa-download"></i> ដំឡើង</button>
                 </div>
 
+                <!-- ☁️ CLOUD & OFFLINE SYNC CENTER -->
+                <div class="bg-slate-50 dark:bg-zinc-800/60 border border-emerald-300/70 dark:border-emerald-700/50 p-3.5 rounded-2xl space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-xs font-black flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                                <i class="fa-solid fa-cloud"></i> ប្រព័ន្ធ Cloud Sync & Offline
+                            </div>
+                            <div class="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5" id="syncModalStatus">ស្ថានភាព៖ កំពុងពិនិត្យ...</div>
+                        </div>
+                        <span id="syncPendingBadge" class="hidden px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">រង់ចាំ Sync</span>
+                    </div>
+                    <div class="text-[10px] text-gray-500 dark:text-gray-400 flex items-center justify-between bg-white/70 dark:bg-black/20 px-2.5 py-1.5 rounded-xl border border-slate-200/70 dark:border-white/5">
+                        <span>Sync ចុងក្រោយ៖</span>
+                        <span id="syncLastTime" class="font-mono font-bold text-slate-700 dark:text-slate-300">--</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.manualCloudSync('auto')" class="py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow active:scale-95 transition cursor-pointer flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-rotate"></i> Sync ឥឡូវ
+                        </button>
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.manualCloudSync('push')" class="py-2 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-xl shadow active:scale-95 transition cursor-pointer flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> រុញឡើង
+                        </button>
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.manualCloudSync('pull')" class="py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold rounded-xl shadow active:scale-95 transition cursor-pointer flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-cloud-arrow-down"></i> ទាញចុះ
+                        </button>
+                    </div>
+                </div>
+
                 <!-- 🌍 Language Toggle (Khmer / English) -->
                 <div class="bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700 p-3.5 rounded-2xl flex items-center justify-between">
                     <span class="text-xs font-bold flex items-center gap-2"><i class="fa-solid fa-globe text-blue-500"></i> ភាសាប្រព័ន្ធ (Language)</span>
@@ -692,6 +747,22 @@
                         <button onclick="ProApp.setThemeStyle('aba-dark')" class="p-3 border rounded-2xl text-[10px] font-bold text-center transition bg-black text-amber-400 border-amber-500 cursor-pointer">Dark Gold 🖤</button>
                         <button onclick="ProApp.setThemeStyle('slate')" class="p-3 border rounded-2xl text-[10px] font-bold text-center transition bg-slate-900 text-sky-400 border-sky-500 cursor-pointer">Navy Slate 🟦</button>
                     </div>
+                </div>
+
+                <!-- ✈️ TELEGRAM BOT NOTIFICATION (OPTIONAL) -->
+                <div class="bg-slate-50 dark:bg-zinc-800/60 border border-sky-200 dark:border-sky-800/50 p-3.5 rounded-2xl space-y-2.5">
+                    <label class="block text-[11px] font-bold text-sky-600 dark:text-sky-400 uppercase flex items-center gap-1.5">
+                        <i class="fa-brands fa-telegram text-sm"></i> ជូនដំណឹង & របាយការណ៍ Telegram (ស្រេចចិត្ត)៖
+                    </label>
+                    <input type="password" id="cfgTgToken" placeholder="Telegram Bot Token..." class="glass-input w-full p-2 text-xs font-mono rounded-xl outline-none">
+                    <input type="text" id="cfgTgChatId" placeholder="Telegram Chat ID..." class="glass-input w-full p-2 text-xs font-mono rounded-xl outline-none">
+                    <label class="flex items-center justify-between text-[11px] font-bold cursor-pointer pt-1">
+                        <span>🔔 ផ្ញើសារអូតូពេលកត់ត្រាចំណូល/ចំណាយថ្មី</span>
+                        <input type="checkbox" id="cfgTgAuto" class="w-4 h-4">
+                    </label>
+                    <button type="button" onclick="ProApp.vibrate(); ProApp.sendTelegramSummary()" class="w-full py-2 bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold rounded-xl shadow active:scale-95 transition cursor-pointer flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-paper-plane"></i> ផ្ញើរបាយការណ៍សង្ខេបថ្ងៃនេះទៅ Telegram
+                    </button>
                 </div>
 
                 <!-- 👑 ADMIN LICENSE GENERATOR SECTION (LOCKED BY 'tang sopheng') -->
@@ -1117,14 +1188,344 @@
                 shortcuts: [],
                 transactions: [],
                 recurrings: [],
-                servicesGridMode: 'full'
+                servicesGridMode: 'full',
+                tgBotToken: '',
+                tgChatId: '',
+                tgAutoNotify: false
             },
+            isCloudConnected: false,
+            pendingSync: false,
+            lastSyncedAt: '',
+            isSyncingNow: false,
             charts: { expense: null, trend: null },
             deleteTargetId: null,
             isClearAll: false,
             currentSplitObj: null,
             currentEditMobileId: null,
             deferredPrompt: null,
+
+            // ☁️ REAL-TIME CLOUD SYNC & OFFLINE-FIRST ENGINE
+            getCacheKey: function(lKey) {
+                const key = lKey || ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key') || 'GUEST';
+                return `finance_tenant_cache_${key}`;
+            },
+            getPendingKey: function(lKey) {
+                const key = lKey || ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key') || 'GUEST';
+                return `finance_pending_sync_${key}`;
+            },
+            saveLocalCache: function() {
+                try {
+                    const lKey = ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key');
+                    if (!lKey) return;
+                    const payload = {
+                        licenseInfo: ProApp.state.licenseInfo,
+                        exchangeRate: ProApp.state.exchangeRate,
+                        accounts: ProApp.state.accounts,
+                        currencies: ProApp.state.currencies,
+                        categories: ProApp.state.categories,
+                        budgets: ProApp.state.budgets,
+                        goals: ProApp.state.goals,
+                        shortcuts: ProApp.state.shortcuts,
+                        transactions: ProApp.state.transactions,
+                        recurrings: ProApp.state.recurrings,
+                        lastSyncedAt: ProApp.lastSyncedAt
+                    };
+                    localStorage.setItem(ProApp.getCacheKey(lKey), JSON.stringify(payload));
+                } catch (e) { console.warn('Local cache save warning:', e); }
+            },
+            loadLocalCache: function(lKey) {
+                try {
+                    const raw = localStorage.getItem(ProApp.getCacheKey(lKey));
+                    ProApp.pendingSync = localStorage.getItem(ProApp.getPendingKey(lKey)) === '1';
+                    if (!raw) return false;
+                    const data = JSON.parse(raw);
+                    if (data.licenseInfo) ProApp.state.licenseInfo = data.licenseInfo;
+                    if (data.exchangeRate) {
+                        ProApp.state.exchangeRate = data.exchangeRate;
+                        const rateEl = document.getElementById('exchangeRate');
+                        if (rateEl) rateEl.value = data.exchangeRate;
+                    }
+                    if (Array.isArray(data.accounts) && data.accounts.length) ProApp.state.accounts = data.accounts;
+                    if (Array.isArray(data.currencies) && data.currencies.length) ProApp.state.currencies = data.currencies;
+                    if (Array.isArray(data.categories) && data.categories.length) ProApp.state.categories = data.categories;
+                    if (Array.isArray(data.budgets)) ProApp.state.budgets = data.budgets;
+                    if (Array.isArray(data.goals)) ProApp.state.goals = data.goals;
+                    if (Array.isArray(data.shortcuts)) ProApp.state.shortcuts = data.shortcuts;
+                    if (Array.isArray(data.transactions)) ProApp.state.transactions = data.transactions;
+                    if (Array.isArray(data.recurrings)) ProApp.state.recurrings = data.recurrings;
+                    if (data.lastSyncedAt) ProApp.lastSyncedAt = data.lastSyncedAt;
+                    ProApp.renderFilterAccounts();
+                    ProApp.renderShortcuts();
+                    ProApp.renderTable();
+                    ProApp.updateDashboard();
+                    ProApp.updateSyncUI();
+                    return true;
+                } catch (e) { return false; }
+            },
+            markPendingSync: function() {
+                ProApp.pendingSync = true;
+                const lKey = ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key');
+                if (lKey) localStorage.setItem(ProApp.getPendingKey(lKey), '1');
+                ProApp.updateSyncUI();
+            },
+            clearPendingSync: function() {
+                ProApp.pendingSync = false;
+                ProApp.lastSyncedAt = new Date().toLocaleTimeString('km-KH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const lKey = ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key');
+                if (lKey) localStorage.removeItem(ProApp.getPendingKey(lKey));
+                ProApp.saveLocalCache();
+                ProApp.updateSyncUI();
+            },
+            setCloudConnectionState: function(connected) {
+                const wasOffline = !ProApp.isCloudConnected;
+                ProApp.isCloudConnected = !!connected && navigator.onLine;
+                ProApp.updateSyncUI();
+                if (ProApp.isCloudConnected && ProApp.pendingSync && ProApp.state.licenseKey && !ProApp.isSyncingNow) {
+                    ProApp.manualCloudSync('push', true);
+                } else if (wasOffline && ProApp.isCloudConnected && ProApp.state.licenseKey) {
+                    ProApp.lastSyncedAt = new Date().toLocaleTimeString('km-KH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    ProApp.updateSyncUI();
+                }
+            },
+            updateSyncUI: function() {
+                const dot = document.getElementById('cloudStatusDot');
+                const txt = document.getElementById('cloudStatusText');
+                const modalStatus = document.getElementById('syncModalStatus');
+                const lastTimeEl = document.getElementById('syncLastTime');
+                const pendingBadge = document.getElementById('syncPendingBadge');
+                const headerPendingDot = document.getElementById('headerPendingDot');
+                const headerIcon = document.getElementById('headerSyncIcon');
+
+                if (lastTimeEl) lastTimeEl.textContent = ProApp.lastSyncedAt || '--';
+                if (pendingBadge) pendingBadge.classList.toggle('hidden', !ProApp.pendingSync);
+                if (headerPendingDot) headerPendingDot.classList.toggle('hidden', !ProApp.pendingSync);
+
+                if (ProApp.isSyncingNow) {
+                    if (dot) dot.className = 'w-2 h-2 rounded-full bg-sky-400 animate-ping';
+                    if (txt) txt.textContent = 'កំពុង Sync...';
+                    if (modalStatus) modalStatus.textContent = 'ស្ថានភាព៖ ⏳ កំពុង Sync ទិន្នន័យជាមួយ Cloud...';
+                    if (headerIcon) headerIcon.className = 'fa-solid fa-rotate fa-spin text-sm';
+                    return;
+                }
+
+                if (headerIcon) headerIcon.className = ProApp.isCloudConnected ? 'fa-solid fa-cloud-arrow-up text-sm' : 'fa-solid fa-cloud-slash text-sm text-amber-300';
+
+                if (ProApp.isCloudConnected) {
+                    if (dot) dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_5px_#34d399]';
+                    if (txt) txt.textContent = ProApp.pendingSync ? 'Online (រង់ចាំ Sync)' : 'Cloud Synced';
+                    if (modalStatus) modalStatus.textContent = ProApp.pendingSync ? 'ស្ថានភាព៖ 🟡 មានទិន្នន័យថ្មីមិនទាន់ Sync' : 'ស្ថានភាព៖ 🟢 ភ្ជាប់ Cloud ជោគជ័យ (Real-Time)';
+                } else {
+                    if (dot) dot.className = 'w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_5px_#fbbf24]';
+                    if (txt) txt.textContent = 'Offline Mode';
+                    if (modalStatus) modalStatus.textContent = 'ស្ថានភាព៖ 🟠 កំពុងប្រើ Offline (ទិន្នន័យរក្សាក្នុងម៉ាស៊ីន និង Sync អូតូពេលមានអ៊ីនធឺណិត)';
+                }
+            },
+            syncTxWrite: function(tx, notifyTelegram = false) {
+                const idx = ProApp.state.transactions.findIndex(t => t.id === tx.id);
+                if (idx >= 0) ProApp.state.transactions[idx] = tx;
+                else ProApp.state.transactions.push(tx);
+                ProApp.saveLocalCache();
+                ProApp.renderTable();
+                ProApp.updateDashboard();
+
+                if (notifyTelegram && ProApp.state.tgAutoNotify && ProApp.state.tgBotToken && ProApp.state.tgChatId) {
+                    const isInc = tx.inc > 0;
+                    const amt = isInc ? tx.inc : tx.exp;
+                    const msg = `${isInc ? '🟢 ចំណូលថ្មី' : '🔴 ចំណាយថ្មី'} (Pro Cloud)
+━━━━━━━━━━━━━━
+📁 ប្រភេទ៖ ${tx.cat}
+📝 ពិពណ៌នា៖ ${tx.desc || '-'}
+🏦 គណនី៖ ${tx.acc}
+💵 ទឹកប្រាក់៖ ${isInc ? '+' : '-'}${ProApp.formatMoney(amt, tx.cur)}
+📅 ពេលវេលា៖ ${(tx.date || '').replace('T', ' ')}`;
+                    ProApp.sendTelegramMessage(msg, false);
+                }
+
+                if (window.firebaseDb && window.firebaseRef && window.firebaseSet && ProApp.state.licenseKey && ProApp.isCloudConnected) {
+                    return window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + tx.id)), tx)
+                        .then(() => { ProApp.clearPendingSync(); })
+                        .catch(() => { ProApp.markPendingSync(); });
+                } else {
+                    ProApp.markPendingSync();
+                    return Promise.resolve();
+                }
+            },
+            syncTxDelete: function(idOrAll) {
+                if (idOrAll === 'ALL') {
+                    ProApp.state.transactions = [];
+                } else {
+                    ProApp.state.transactions = ProApp.state.transactions.filter(t => t.id !== idOrAll);
+                }
+                ProApp.saveLocalCache();
+                ProApp.renderTable();
+                ProApp.updateDashboard();
+
+                if (window.firebaseDb && window.firebaseRef && window.firebaseRemove && ProApp.state.licenseKey && ProApp.isCloudConnected) {
+                    const targetPath = idOrAll === 'ALL' ? ProApp.getCloudPath('transactions') : ProApp.getCloudPath('transactions/' + idOrAll);
+                    return window.firebaseRemove(window.firebaseRef(window.firebaseDb, targetPath))
+                        .then(() => { ProApp.clearPendingSync(); })
+                        .catch(() => { ProApp.markPendingSync(); });
+                } else {
+                    ProApp.markPendingSync();
+                    return Promise.resolve();
+                }
+            },
+            manualCloudSync: async function(mode = 'auto', isSilent = false) {
+                if (!ProApp.state.licenseKey) {
+                    if (!isSilent) ProApp.showToast('សូមបញ្ចូល License Key ជាមុនសិន!', 'error');
+                    return;
+                }
+                if (!navigator.onLine || !window.firebaseDb || !window.firebaseRef || !window.firebaseSet || !window.firebaseGet) {
+                    ProApp.setCloudConnectionState(false);
+                    if (!isSilent) ProApp.showToast('⚠️ គ្មានអ៊ីនធឺណិតទេ! ទិន្នន័យត្រូវបានរក្សាទុកក្នុងម៉ាស៊ីន ហើយនឹង Sync អូតូពេលភ្ជាប់វិញ។', 'error');
+                    return;
+                }
+                if (ProApp.isSyncingNow) return;
+                ProApp.isSyncingNow = true;
+                ProApp.updateSyncUI();
+
+                const resolvedMode = mode === 'auto' ? (ProApp.pendingSync ? 'push' : 'pull') : mode;
+                try {
+                    if (resolvedMode === 'push') {
+                        const txMap = {};
+                        (ProApp.state.transactions || []).forEach(tx => { if (tx && tx.id) txMap[tx.id] = tx; });
+                        const uiPayload = {
+                            appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle,
+                            bgImageUrl: ProApp.state.bgImageUrl, hiddenAccounts: ProApp.state.hiddenAccounts || [],
+                            visibleSections: ProApp.state.visibleSections || {}, pinCode: ProApp.state.pinCode,
+                            exchangeRate: ProApp.state.exchangeRate, language: ProApp.state.language,
+                            servicesGridMode: ProApp.state.servicesGridMode,
+                            tgBotToken: ProApp.state.tgBotToken || '', tgChatId: ProApp.state.tgChatId || '', tgAutoNotify: !!ProApp.state.tgAutoNotify
+                        };
+                        await Promise.all([
+                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions')), txMap),
+                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('accounts')), ProApp.state.accounts),
+                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('currencies')), ProApp.state.currencies),
+                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('categories')), ProApp.state.categories),
+                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('shortcuts')), ProApp.state.shortcuts),
+                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('goals')), ProApp.state.goals),
+                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('budgets')), ProApp.state.budgets),
+                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('recurrings')), ProApp.state.recurrings),
+                            window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('uiConfig')), uiPayload)
+                        ]);
+                        ProApp.clearPendingSync();
+                        ProApp.playChimeSound();
+                        if (!isSilent) ProApp.showToast('☁️ បាន Sync ទិន្នន័យឡើង Cloud ជោគជ័យ ១០០%!', 'success');
+                        else ProApp.showToast('☁️ ភ្ជាប់អ៊ីនធឺណិតវិញហើយ! បាន Sync ទិន្នន័យ Offline ឡើង Cloud រួចរាល់!', 'success');
+                    } else {
+                        const snap = await window.firebaseGet(window.firebaseRef(window.firebaseDb, `tenant_data/${ProApp.state.licenseKey}`));
+                        if (snap.exists()) {
+                            const d = snap.val();
+                            ProApp.state.transactions = [];
+                            if (d.transactions) Object.keys(d.transactions).forEach(k => ProApp.state.transactions.push({ id: k, ...d.transactions[k] }));
+                            if (d.accounts) ProApp.state.accounts = Array.isArray(d.accounts) ? d.accounts : Object.values(d.accounts);
+                            if (d.currencies) ProApp.state.currencies = Array.isArray(d.currencies) ? d.currencies : Object.values(d.currencies);
+                            if (d.categories) ProApp.state.categories = Array.isArray(d.categories) ? d.categories : Object.values(d.categories);
+                            if (d.shortcuts) ProApp.state.shortcuts = Array.isArray(d.shortcuts) ? d.shortcuts : Object.values(d.shortcuts);
+                            if (d.goals) ProApp.state.goals = Array.isArray(d.goals) ? d.goals : Object.values(d.goals);
+                            if (d.budgets) ProApp.state.budgets = Array.isArray(d.budgets) ? d.budgets : Object.values(d.budgets);
+                            if (d.recurrings) ProApp.state.recurrings = Array.isArray(d.recurrings) ? d.recurrings : Object.values(d.recurrings);
+                            if (d.uiConfig) ProApp.applyCloudUiConfig(d.uiConfig);
+                            ProApp.renderFilterAccounts(); ProApp.renderShortcuts(); ProApp.renderTable(); ProApp.updateDashboard();
+                        }
+                        ProApp.clearPendingSync();
+                        ProApp.playChimeSound();
+                        if (!isSilent) ProApp.showToast('⬇️ បានទាញទិន្នន័យចុងក្រោយពី Cloud ជោគជ័យ!', 'success');
+                    }
+                } catch (err) {
+                    console.error('Sync error:', err);
+                    if (!isSilent) ProApp.showToast('❌ Sync មានបញ្ហា សូមពិនិត្យអ៊ីនធឺណិត!', 'error');
+                } finally {
+                    ProApp.isSyncingNow = false;
+                    ProApp.updateSyncUI();
+                }
+            },
+            applyCloudUiConfig: function(data) {
+                if (!data) return;
+                if (data.appTitle) ProApp.state.appTitle = data.appTitle;
+                if (data.appSubtitle) ProApp.state.appSubtitle = data.appSubtitle;
+                if (data.themeStyle) ProApp.state.themeStyle = data.themeStyle;
+                if (data.bgImageUrl !== undefined) ProApp.state.bgImageUrl = data.bgImageUrl;
+                if (data.pinCode !== undefined) ProApp.state.pinCode = data.pinCode;
+                if (data.hiddenAccounts) ProApp.state.hiddenAccounts = data.hiddenAccounts;
+                if (data.visibleSections) ProApp.state.visibleSections = data.visibleSections;
+                if (data.exchangeRate) {
+                    ProApp.state.exchangeRate = parseFloat(data.exchangeRate) || 4100;
+                    const rateEl = document.getElementById('exchangeRate');
+                    if (rateEl) rateEl.value = ProApp.state.exchangeRate;
+                }
+                if (data.language === 'en' || data.language === 'km') {
+                    ProApp.state.language = data.language;
+                    localStorage.setItem('finance_language', data.language);
+                    ProApp.applyLanguage();
+                }
+                if (data.servicesGridMode === '1row' || data.servicesGridMode === 'full') {
+                    ProApp.state.servicesGridMode = data.servicesGridMode;
+                    localStorage.setItem('finance_services_grid_mode', data.servicesGridMode);
+                    ProApp.applyServicesGridMode();
+                }
+                if (data.tgBotToken !== undefined) ProApp.state.tgBotToken = data.tgBotToken;
+                if (data.tgChatId !== undefined) ProApp.state.tgChatId = data.tgChatId;
+                if (data.tgAutoNotify !== undefined) ProApp.state.tgAutoNotify = !!data.tgAutoNotify;
+                ProApp.saveUiConfigToLocal();
+                ProApp.applyUiConfig();
+            },
+
+            // ✈️ TELEGRAM BOT NOTIFICATION & SUMMARY
+            sendTelegramMessage: async function(text, showStatus = false) {
+                const token = (ProApp.state.tgBotToken || '').trim();
+                const chatId = (ProApp.state.tgChatId || '').trim();
+                if (!token || !chatId) {
+                    if (showStatus) ProApp.showToast('សូមបញ្ចូល Telegram Bot Token និង Chat ID ជាមុនសិន!', 'error');
+                    return false;
+                }
+                try {
+                    const resp = await fetch(`https://api.telegram.org/bot${encodeURIComponent(token)}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: chatId, text: text })
+                    });
+                    const data = await resp.json();
+                    if (data && data.ok) {
+                        if (showStatus) ProApp.showToast('✈️ បានផ្ញើរបាយការណ៍ទៅ Telegram ជោគជ័យ!', 'success');
+                        return true;
+                    } else {
+                        if (showStatus) ProApp.showToast('❌ ផ្ញើមិនជោគជ័យ! សូមពិនិត្យ Token ឬ Chat ID', 'error');
+                        return false;
+                    }
+                } catch (e) {
+                    if (showStatus) ProApp.showToast('❌ មិនអាចភ្ជាប់ទៅ Telegram បានទេ!', 'error');
+                    return false;
+                }
+            },
+            sendTelegramSummary: function() {
+                const tokenEl = document.getElementById('cfgTgToken');
+                const chatEl = document.getElementById('cfgTgChatId');
+                const autoEl = document.getElementById('cfgTgAuto');
+                if (tokenEl) ProApp.state.tgBotToken = tokenEl.value.trim();
+                if (chatEl) ProApp.state.tgChatId = chatEl.value.trim();
+                if (autoEl) ProApp.state.tgAutoNotify = autoEl.checked;
+                ProApp.saveUiConfigToCloud();
+
+                const now = new Date();
+                const todayStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+                const rate = ProApp.state.exchangeRate || 4100;
+                let tInc = 0, tExp = 0, totalNet = 0;
+                (ProApp.state.transactions || []).forEach(tx => {
+                    const incU = tx.cur === 'USD' ? (tx.inc || 0) : ((tx.inc || 0) / rate);
+                    const expU = tx.cur === 'USD' ? (tx.exp || 0) : ((tx.exp || 0) / rate);
+                    if (!ProApp.state.hiddenAccounts.includes(tx.acc)) totalNet += (incU - expU);
+                    if (tx.date && tx.date.split('T')[0] === todayStr) { tInc += incU; tExp += expU; }
+                });
+                const msg = `📊 របាយការណ៍សង្ខេបប្រចាំថ្ងៃ (${todayStr})
+🏦 ${ProApp.state.appTitle}
+━━━━━━━━━━━━━━
+🟢 ចំណូលថ្ងៃនេះ៖ $${tInc.toFixed(2)}
+🔴 ចំណាយថ្ងៃនេះ៖ $${tExp.toFixed(2)}
+💎 សមតុល្យសរុប (Net Worth)៖ $${totalNet.toFixed(2)}
+💱 អត្រាប្តូរប្រាក់៖ 1$ = ${rate.toLocaleString()} ៛`;
+                ProApp.sendTelegramMessage(msg, true);
+            },
 
             // 🌍 MULTI-LANGUAGE DICTIONARY (KHMER / ENGLISH)
             i18n: {
@@ -1157,7 +1558,10 @@
                     navHome: 'ទំព័រដើម',
                     navEntry: 'ប្រតិបត្តិការ',
                     navReport: 'របាយការណ៍',
-                    settingsTitle: 'ការកំណត់ប្រព័ន្ធ'
+                    settingsTitle: 'ការកំណត់ប្រព័ន្ធ',
+                    monthInc: 'ចំណូលខែនេះ',
+                    monthExp: 'ចំណាយខែនេះ',
+                    monthNet: 'សល់ខែនេះ'
                 },
                 en: {
                     netWorth: 'TOTAL NET WORTH',
@@ -1188,7 +1592,10 @@
                     navHome: 'Home',
                     navEntry: 'Activity',
                     navReport: 'Reports',
-                    settingsTitle: 'System Settings'
+                    settingsTitle: 'System Settings',
+                    monthInc: 'Month In',
+                    monthExp: 'Month Out',
+                    monthNet: 'Month Net'
                 }
             },
 
@@ -1197,6 +1604,7 @@
                 ProApp.state.language = lang === 'en' ? 'en' : 'km';
                 localStorage.setItem('finance_language', ProApp.state.language);
                 ProApp.applyLanguage();
+                ProApp.saveUiConfigToCloud();
                 ProApp.showToast(ProApp.state.language === 'en' ? '🌍 Switched to English' : '🌍 បានប្តូរមកភាសាខ្មែរ', 'success');
             },
             applyLanguage: function() {
@@ -1331,6 +1739,7 @@
                 ProApp.state.servicesGridMode = mode === '1row' ? '1row' : 'full';
                 localStorage.setItem('finance_services_grid_mode', ProApp.state.servicesGridMode);
                 ProApp.applyServicesGridMode();
+                ProApp.saveUiConfigToCloud();
             },
             toggleServicesGridMode: function() {
                 const nextMode = ProApp.state.servicesGridMode === '1row' ? 'full' : '1row';
@@ -1750,14 +2159,9 @@
                 const newTx = { id: ProApp.generateId(), date: nowIso, cat: matchedCat, desc: desc, acc: acc, cur: cur, inc: isInc ? amountObj.amount : 0, exp: isInc ? 0 : amountObj.amount };
 
                 ProApp.playChimeSound();
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + newTx.id)), newTx).then(() => {
-                        ProApp.showToast(`បានកត់ត្រា ${ProApp.formatMoney(amountObj.amount, cur)} ជោគជ័យ!`, 'success');
-                    });
-                } else {
-                    ProApp.state.transactions.push(newTx); ProApp.renderTable(); ProApp.updateDashboard();
+                ProApp.syncTxWrite(newTx, true).then(() => {
                     ProApp.showToast(`បានកត់ត្រា ${ProApp.formatMoney(amountObj.amount, cur)} ជោគជ័យ!`, 'success');
-                }
+                });
                 ProApp.closeSmartAddModal();
             },
 
@@ -2022,6 +2426,10 @@
                 document.getElementById('cfgAppSubtitle').value = ProApp.state.appSubtitle || '';
                 document.getElementById('cfgBgImageUrl').value = ProApp.state.bgImageUrl || '';
                 document.getElementById('cfgPinInput').value = ProApp.state.pinCode || '';
+                if (document.getElementById('cfgTgToken')) document.getElementById('cfgTgToken').value = ProApp.state.tgBotToken || '';
+                if (document.getElementById('cfgTgChatId')) document.getElementById('cfgTgChatId').value = ProApp.state.tgChatId || '';
+                if (document.getElementById('cfgTgAuto')) document.getElementById('cfgTgAuto').checked = !!ProApp.state.tgAutoNotify;
+                ProApp.updateSyncUI();
                 if (ProApp.state.visibleSections) {
                     if (document.getElementById('chkAccounts')) document.getElementById('chkAccounts').checked = !!ProApp.state.visibleSections['sec-accounts'];
                     if (document.getElementById('chkGoals')) document.getElementById('chkGoals').checked = !!ProApp.state.visibleSections['sec-goals'];
@@ -2058,6 +2466,9 @@
                 ProApp.state.appSubtitle = document.getElementById('cfgAppSubtitle').value.trim() || 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️';
                 const urlVal = document.getElementById('cfgBgImageUrl').value.trim();
                 if (urlVal) ProApp.state.bgImageUrl = urlVal;
+                if (document.getElementById('cfgTgToken')) ProApp.state.tgBotToken = document.getElementById('cfgTgToken').value.trim();
+                if (document.getElementById('cfgTgChatId')) ProApp.state.tgChatId = document.getElementById('cfgTgChatId').value.trim();
+                if (document.getElementById('cfgTgAuto')) ProApp.state.tgAutoNotify = document.getElementById('cfgTgAuto').checked;
                 ProApp.applyUiConfig(); ProApp.saveUiConfigToCloud(); ProApp.closeCustomizeModal();
                 ProApp.showToast('បានរក្សាទុកការកំណត់', 'success');
             },
@@ -2105,17 +2516,24 @@
                     appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle,
                     bgImageUrl: ProApp.state.bgImageUrl, hideAmounts: ProApp.state.hideAmounts,
                     hiddenAccounts: ProApp.state.hiddenAccounts || [], visibleSections: ProApp.state.visibleSections || {},
-                    pinCode: ProApp.state.pinCode
+                    pinCode: ProApp.state.pinCode, exchangeRate: ProApp.state.exchangeRate,
+                    tgBotToken: ProApp.state.tgBotToken || '', tgChatId: ProApp.state.tgChatId || '', tgAutoNotify: !!ProApp.state.tgAutoNotify
                 }));
             },
             saveUiConfigToCloud: function() {
                 ProApp.saveUiConfigToLocal();
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
+                ProApp.saveLocalCache();
+                if (window.firebaseDb && window.firebaseRef && window.firebaseSet && ProApp.state.licenseKey && ProApp.isCloudConnected) {
                     window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('uiConfig')), {
                         appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle,
                         bgImageUrl: ProApp.state.bgImageUrl, hiddenAccounts: ProApp.state.hiddenAccounts || [],
-                        visibleSections: ProApp.state.visibleSections || {}, pinCode: ProApp.state.pinCode
-                    });
+                        visibleSections: ProApp.state.visibleSections || {}, pinCode: ProApp.state.pinCode,
+                        exchangeRate: ProApp.state.exchangeRate, language: ProApp.state.language,
+                        servicesGridMode: ProApp.state.servicesGridMode,
+                        tgBotToken: ProApp.state.tgBotToken || '', tgChatId: ProApp.state.tgChatId || '', tgAutoNotify: !!ProApp.state.tgAutoNotify
+                    }).then(() => ProApp.clearPendingSync()).catch(() => ProApp.markPendingSync());
+                } else if (ProApp.state.licenseKey) {
+                    ProApp.markPendingSync();
                 }
             },
 
@@ -2160,9 +2578,32 @@
                         if (accBalances[key]['KHR']) totalKHR += accBalances[key]['KHR'];
                     }
                 });
-                const combinedNet = totalUSD + (totalKHR / (ProApp.state.exchangeRate || 4100));
+                const rateVal = ProApp.state.exchangeRate || 4100;
+                const combinedNet = totalUSD + (totalKHR / rateVal);
                 const netWorthEl = document.getElementById('globalNetWorth');
                 if (netWorthEl) netWorthEl.textContent = ProApp.formatMoney(combinedNet, 'USD');
+
+                // Populate Monthly Mini Summary Strip in Header
+                const curM = new Date().toISOString().substring(0, 7);
+                let mInc = 0, mExp = 0;
+                if (ProApp.state && ProApp.state.transactions) {
+                    ProApp.state.transactions.forEach(tx => {
+                        if (!tx.date || tx.date.substring(0, 7) !== curM) return;
+                        if (ProApp.state.hiddenAccounts.includes(tx.acc)) return;
+                        mInc += tx.cur === 'USD' ? (tx.inc || 0) : ((tx.inc || 0) / rateVal);
+                        mExp += tx.cur === 'USD' ? (tx.exp || 0) : ((tx.exp || 0) / rateVal);
+                    });
+                }
+                const elMInc = document.getElementById('heroMonthInc');
+                const elMExp = document.getElementById('heroMonthExp');
+                const elMNet = document.getElementById('heroMonthNet');
+                if (elMInc) elMInc.textContent = ProApp.formatMoney(mInc, 'USD');
+                if (elMExp) elMExp.textContent = ProApp.formatMoney(mExp, 'USD');
+                if (elMNet) {
+                    const mNet = mInc - mExp;
+                    elMNet.textContent = (mNet >= 0 ? '+' : '') + ProApp.formatMoney(mNet, 'USD');
+                    elMNet.className = `text-xs sm:text-sm font-black font-mono mt-0.5 ${mNet < 0 ? 'text-rose-300' : 'text-amber-300'}`;
+                }
 
                 const cardGrid = document.getElementById('dashboardCards');
                 if (cardGrid) {
@@ -2245,6 +2686,8 @@
             },
             updateExchangeRate: function() {
                 ProApp.state.exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 4100;
+                ProApp.saveLocalCache();
+                ProApp.saveUiConfigToCloud();
                 ProApp.renderTable(); ProApp.updateDashboard();
             },
             fetchLiveExchangeRate: async function(isSilent = false) {
@@ -2312,13 +2755,9 @@
                 tx.inc = incParsed.amount; tx.exp = expParsed.amount;
                 if (incParsed.hasCurrencyStr) tx.cur = incParsed.isUSD ? 'USD' : 'KHR';
                 else if (expParsed.hasCurrencyStr) tx.cur = expParsed.isUSD ? 'USD' : 'KHR';
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + tx.id)), tx).then(() => {
-                        ProApp.showToast('បានកែប្រែដោយជោគជ័យ!', 'success');
-                    });
-                } else {
-                    ProApp.renderTable(); ProApp.updateDashboard(); ProApp.showToast('បានកែប្រែដោយជោគជ័យ!', 'success');
-                }
+                ProApp.syncTxWrite(tx, false).then(() => {
+                    ProApp.showToast('បានកែប្រែដោយជោគជ័យ!', 'success');
+                });
                 ProApp.closeMobileEditModal();
             },
 
@@ -2384,6 +2823,7 @@
             editAccountName: function(i, val) { val = val.trim(); if (!val) return; ProApp.state.accounts[i] = val; ProApp.saveAccountsToCloud(); ProApp.renderAccountsList(); },
             deleteAccount: function(i) { ProApp.state.accounts.splice(i, 1); ProApp.saveAccountsToCloud(); ProApp.renderAccountsList(); ProApp.showToast('បានលុបគណនី', 'info'); },
             saveAccountsToCloud: function() {
+                ProApp.saveLocalCache();
                 if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
                     window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('accounts')), ProApp.state.accounts).then(() => {
                         ProApp.renderFilterAccounts(); ProApp.renderTable(); ProApp.updateDashboard();
@@ -2426,6 +2866,7 @@
             editCurrencyName: function(i, val) { val = val.trim(); if (!val) return; ProApp.state.currencies[i] = val; ProApp.saveCurrenciesToCloud(); ProApp.renderCurrenciesList(); },
             deleteCurrency: function(i) { ProApp.state.currencies.splice(i, 1); ProApp.saveCurrenciesToCloud(); ProApp.renderCurrenciesList(); ProApp.showToast('បានលុបខ្នាត', 'info'); },
             saveCurrenciesToCloud: function() {
+                ProApp.saveLocalCache();
                 if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
                     window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('currencies')), ProApp.state.currencies).then(() => { ProApp.renderTable(); ProApp.updateDashboard(); });
                 } else { ProApp.renderTable(); ProApp.updateDashboard(); }
@@ -2460,6 +2901,7 @@
             editCategoryName: function(i, val) { val = val.trim(); if (!val) return; ProApp.state.categories[i] = val; ProApp.saveCategoriesToCloud(); ProApp.renderCategoriesList(); },
             deleteCategory: function(i) { ProApp.state.categories.splice(i, 1); ProApp.saveCategoriesToCloud(); ProApp.renderCategoriesList(); ProApp.showToast('បានលុបប្រភេទ', 'info'); },
             saveCategoriesToCloud: function() {
+                ProApp.saveLocalCache();
                 if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
                     window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('categories')), ProApp.state.categories).then(() => { ProApp.renderTable(); ProApp.updateDashboard(); });
                 } else { ProApp.renderTable(); ProApp.updateDashboard(); }
@@ -2479,11 +2921,9 @@
                 const now = new Date();
                 const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
                 const newTx = { id: ProApp.generateId(), date: nowIso, cat: sc.cat, desc: sc.desc || sc.name, acc: sc.acc, cur: sc.cur, inc: sc.inc || 0, exp: sc.exp || 0 };
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + newTx.id)), newTx).then(() => {
-                        ProApp.showToast(`បានកត់ត្រា ${sc.name} រួចរាល់!`, 'success');
-                    });
-                } else { ProApp.state.transactions.push(newTx); ProApp.renderTable(); ProApp.updateDashboard(); }
+                ProApp.syncTxWrite(newTx, true).then(() => {
+                    ProApp.showToast(`បានកត់ត្រា ${sc.name} រួចរាល់!`, 'success');
+                });
             },
             openShortcutModal: function(editId = null) {
                 const catSel = document.getElementById('newScCat'), accSel = document.getElementById('newScAcc'), curSel = document.getElementById('newScCur'), typeSel = document.getElementById('newScType'), saveBtn = document.getElementById('scSaveBtn');
@@ -2548,6 +2988,7 @@
                 ProApp.saveShortcutsToCloud(); ProApp.renderShortcutList(); ProApp.showToast('បានលុបប៊ូតុងរហ័ស', 'info');
             },
             saveShortcutsToCloud: function() {
+                ProApp.saveLocalCache();
                 if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
                     window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('shortcuts')), ProApp.state.shortcuts).then(() => { ProApp.renderShortcuts(); });
                 } else { ProApp.renderShortcuts(); }
@@ -2605,6 +3046,7 @@
                 ProApp.saveRecurringsToCloud(); ProApp.renderRecurringList(); ProApp.showToast('បានលុបការកំណត់ស្វ័យប្រវត្តិ', 'info');
             },
             saveRecurringsToCloud: function() {
+                ProApp.saveLocalCache();
                 if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
                     window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('recurrings')), ProApp.state.recurrings);
                 }
@@ -2711,6 +3153,7 @@
                 ProApp.saveGoalsToCloud(); ProApp.renderGoalList(); ProApp.showToast('បានលុបគោលដៅសន្សំ', 'info');
             },
             saveGoalsToCloud: function() {
+                ProApp.saveLocalCache();
                 if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
                     window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('goals')), ProApp.state.goals).then(() => { ProApp.updateDashboard(); });
                 } else { ProApp.updateDashboard(); }
@@ -2813,6 +3256,7 @@
                 ProApp.saveBudgetsToCloud(); ProApp.renderBudgetList(); ProApp.showToast('បានលុបថវិកា', 'info');
             },
             saveBudgetsToCloud: function() {
+                ProApp.saveLocalCache();
                 if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
                     window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('budgets')), ProApp.state.budgets).then(() => { ProApp.updateDashboard(); });
                 } else { ProApp.updateDashboard(); }
@@ -2856,15 +3300,10 @@
                 const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
                 const outTx = { id: ProApp.generateId(), date: nowIso, cat: 'ផ្ទេរប្រាក់', desc: `${desc} -> ទៅ ${toAcc}`, acc: fromAcc, cur, inc: 0, exp: amount };
                 const inTx = { id: ProApp.generateId(), date: nowIso, cat: 'ផ្ទេរប្រាក់', desc: `${desc} <- ពី ${fromAcc}`, acc: toAcc, cur, inc: amount, exp: 0 };
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    Promise.all([
-                        window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + outTx.id)), outTx),
-                        window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + inTx.id)), inTx)
-                    ]).then(() => { ProApp.closeTransferModal(); ProApp.showToast(`បានផ្ទេរប្រាក់ពី ${fromAcc} ទៅ ${toAcc}`, 'success'); });
-                } else {
-                    ProApp.state.transactions.push(outTx, inTx); ProApp.renderTable(); ProApp.updateDashboard(); ProApp.closeTransferModal();
+                Promise.all([ProApp.syncTxWrite(outTx, false), ProApp.syncTxWrite(inTx, false)]).then(() => {
+                    ProApp.closeTransferModal();
                     ProApp.showToast(`បានផ្ទេរប្រាក់ពី ${fromAcc} ទៅ ${toAcc}`, 'success');
-                }
+                });
             },
             openExchangeModal: function() {
                 document.getElementById('exAccount').innerHTML = ProApp.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
@@ -2901,15 +3340,10 @@
                 const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
                 const outTx = { id: ProApp.generateId(), date: nowIso, cat: 'ប្តូរប្រាក់', desc: `ប្តូរចេញទៅ ${toCur} (Rate: ${rate})`, acc, cur: fromCur, inc: 0, exp: fromAmt };
                 const inTx = { id: ProApp.generateId(), date: nowIso, cat: 'ប្តូរប្រាក់', desc: `ប្តូរចូលពី ${fromCur} (Rate: ${rate})`, acc, cur: toCur, inc: toAmt, exp: 0 };
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    Promise.all([
-                        window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + outTx.id)), outTx),
-                        window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + inTx.id)), inTx)
-                    ]).then(() => { ProApp.closeExchangeModal(); ProApp.showToast(`បានប្តូរប្រាក់ក្នុងគណនី ${acc} ជោគជ័យ`, 'success'); });
-                } else {
-                    ProApp.state.transactions.push(outTx, inTx); ProApp.renderTable(); ProApp.updateDashboard(); ProApp.closeExchangeModal();
+                Promise.all([ProApp.syncTxWrite(outTx, false), ProApp.syncTxWrite(inTx, false)]).then(() => {
+                    ProApp.closeExchangeModal();
                     ProApp.showToast(`បានប្តូរប្រាក់ក្នុងគណនី ${acc} ជោគជ័យ`, 'success');
-                }
+                });
             },
 
             // 📑 REPORTS & EXPORT/IMPORT
@@ -3106,6 +3540,7 @@
                 const searchQ = (document.getElementById('searchInput')?.value || '').toLowerCase();
                 const filterAcc = document.getElementById('filterAccount')?.value || 'ALL';
                 const filterDate = document.getElementById('filterDatePeriod')?.value || 'TODAY';
+                const filterType = document.getElementById('filterTxType')?.value || 'ALL';
 
                 const deskFrag = document.createDocumentFragment();
                 const mobFrag = document.createDocumentFragment();
@@ -3132,6 +3567,8 @@
                         const txDateOnly = tx.date.split('T')[0];
                         const txFullDT = tx.date.length === 10 ? tx.date + 'T00:00:00' : tx.date;
                         if (filterAcc !== 'ALL' && tx.acc !== filterAcc) return;
+                        if (filterType === 'INC' && !(tx.inc > 0)) return;
+                        if (filterType === 'EXP' && !(tx.exp > 0)) return;
                         if (filterDate === 'TODAY' && txDateOnly !== todayStr) return;
                         if (filterDate === 'YESTERDAY' && txDateOnly !== yesterdayStr) return;
                         if (filterDate === 'THIS_WEEK' && txDateOnly < startOfWeekStr) return;
@@ -3246,9 +3683,7 @@
                         tx[field] = parsed.amount;
                         if (parsed.hasCurrencyStr) { tx.cur = parsed.isUSD ? 'USD' : 'KHR'; }
                     } else { tx[field] = val; }
-                    if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                        window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + tx.id)), tx).catch(() => ProApp.showToast('បរាជ័យ!', 'error'));
-                    } else { ProApp.renderTable(); ProApp.updateDashboard(); }
+                    ProApp.syncTxWrite(tx, false);
                 }
             },
             confirmDelete: function(id) {
@@ -3263,20 +3698,13 @@
             },
             executeDelete: function() {
                 if (ProApp.isClearAll) {
-                    if (window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
-                        window.firebaseRemove(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions'))).then(() => {
-                            ProApp.showToast('បានលុបទាំងអស់', 'info'); ProApp.closeModal();
-                        });
-                    } else { ProApp.state.transactions = []; ProApp.renderTable(); ProApp.updateDashboard(); ProApp.closeModal(); }
+                    ProApp.syncTxDelete('ALL').then(() => {
+                        ProApp.showToast('បានលុបទាំងអស់', 'info'); ProApp.closeModal();
+                    });
                 } else if (ProApp.deleteTargetId) {
-                    if (window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
-                        window.firebaseRemove(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + ProApp.deleteTargetId))).then(() => {
-                            ProApp.showToast('បានលុប', 'info'); ProApp.closeModal();
-                        });
-                    } else {
-                        ProApp.state.transactions = ProApp.state.transactions.filter(t => t.id !== ProApp.deleteTargetId);
-                        ProApp.renderTable(); ProApp.updateDashboard(); ProApp.closeModal();
-                    }
+                    ProApp.syncTxDelete(ProApp.deleteTargetId).then(() => {
+                        ProApp.showToast('បានលុប', 'info'); ProApp.closeModal();
+                    });
                 }
             },
             closeModal: function() { document.getElementById('confirmModal').classList.add('hidden'); ProApp.deleteTargetId = null; },
@@ -3286,20 +3714,16 @@
                 const now = new Date();
                 const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
                 const duplicatedTx = { ...original, id: ProApp.generateId(), date: nowIso, desc: (original.desc || '') + ' (ចម្លង)' };
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + duplicatedTx.id)), duplicatedTx).then(() => {
-                        ProApp.showToast('បានចម្លង!', 'success');
-                    });
-                } else { ProApp.state.transactions.push(duplicatedTx); ProApp.renderTable(); ProApp.updateDashboard(); ProApp.showToast('បានចម្លង!', 'success'); }
+                ProApp.syncTxWrite(duplicatedTx, false).then(() => {
+                    ProApp.showToast('បានចម្លង!', 'success');
+                });
             },
             addRow: function() {
                 ProApp.playChimeSound();
                 const now = new Date();
                 const nowIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 19);
                 const newTx = { id: ProApp.generateId(), date: nowIso, cat: ProApp.state.categories[0] || 'ផ្សេងៗ', desc: 'ថ្មី', acc: ProApp.state.accounts[0] || '🏦 ABA', cur: 'USD', inc: 0, exp: 0 };
-                if (window.firebaseDb && window.firebaseRef && window.firebaseSet) {
-                    window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + newTx.id)), newTx);
-                } else { ProApp.state.transactions.push(newTx); ProApp.renderTable(); ProApp.updateDashboard(); }
+                ProApp.syncTxWrite(newTx, false);
             },
 
             // 💻 DESKTOP TABLE DRAG-TO-SCROLL & COLUMN RESIZERS
@@ -3369,8 +3793,35 @@
                     ProApp.state.titleColor = parsed.titleColor || '#ffffff';
                     ProApp.state.subtitleColor = parsed.subtitleColor || '#bfdbfe';
                     ProApp.state.pinCode = parsed.pinCode || '';
+                    if (parsed.exchangeRate) {
+                        ProApp.state.exchangeRate = parseFloat(parsed.exchangeRate) || 4100;
+                        const rEl = document.getElementById('exchangeRate');
+                        if (rEl) rEl.value = ProApp.state.exchangeRate;
+                    }
+                    ProApp.state.tgBotToken = parsed.tgBotToken || '';
+                    ProApp.state.tgChatId = parsed.tgChatId || '';
+                    ProApp.state.tgAutoNotify = !!parsed.tgAutoNotify;
                 } catch (e) {}
             }
+
+            const cachedKey = localStorage.getItem('finance_client_license_key');
+            if (cachedKey) {
+                ProApp.state.licenseKey = cachedKey;
+                ProApp.loadLocalCache(cachedKey);
+            }
+
+            window.addEventListener('online', () => {
+                ProApp.setCloudConnectionState(true);
+            });
+            window.addEventListener('offline', () => {
+                ProApp.setCloudConnectionState(false);
+                ProApp.showToast('📶 បាត់អ៊ីនធឺណិត! បានប្តូរទៅ Offline Mode ស្វ័យប្រវត្តិ', 'info');
+            });
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible' && ProApp.state.licenseKey && ProApp.pendingSync && navigator.onLine) {
+                    ProApp.manualCloudSync('push', true);
+                }
+            });
 
             ProApp.applyServicesGridMode();
             ProApp.initServicesDragScroll();
@@ -3408,76 +3859,112 @@
             const db = getDatabase(app);
             window.firebaseDb = db; window.firebaseRef = ref; window.firebaseSet = set; window.firebaseRemove = remove; window.firebaseGet = get;
 
+            // 🟢 Real-time Firebase Connection Monitor (.info/connected)
+            onValue(ref(db, '.info/connected'), (snap) => {
+                const isConnected = snap.val() === true;
+                if (window.ProApp && typeof window.ProApp.setCloudConnectionState === 'function') {
+                    window.ProApp.setCloudConnectionState(isConnected);
+                }
+            });
+
+            const unlockWithValidLicense = (savedKey, licData, attachCloud) => {
+                const check = window.ProApp.checkLicenseValidity(licData);
+                if (!check.valid) return false;
+                window.ProApp.state.licenseKey = savedKey;
+                window.ProApp.state.licenseInfo = licData;
+                document.getElementById('licenseModalOverlay').classList.add('hidden');
+                const badgeText = document.getElementById('licenseBadgeText');
+                if (badgeText) badgeText.textContent = check.remainingDays === 'LIFETIME' ? `${savedKey} (♾️)` : `${savedKey} (សល់ ${check.remainingDays} ថ្ងៃ)`;
+                window.ProApp.saveLocalCache();
+                if (attachCloud) window.attachFirebaseListenersForLicense(savedKey);
+                return true;
+            };
+
             const savedKey = localStorage.getItem('finance_client_license_key');
             if (savedKey) {
+                // Fast offline-first check using cached license so app unlocks even without internet
+                window.ProApp.loadLocalCache(savedKey);
+                if (window.ProApp.state.licenseInfo && window.ProApp.checkLicenseValidity(window.ProApp.state.licenseInfo).valid) {
+                    unlockWithValidLicense(savedKey, window.ProApp.state.licenseInfo, false);
+                }
                 get(ref(db, 'licenses/' + savedKey)).then((snapshot) => {
                     if (snapshot.exists()) {
                         const licData = snapshot.val();
-                        const check = window.ProApp.checkLicenseValidity(licData);
-                        if (check.valid) {
-                            window.ProApp.state.licenseKey = savedKey; window.ProApp.state.licenseInfo = licData;
-                            document.getElementById('licenseModalOverlay').classList.add('hidden');
-                            const badgeText = document.getElementById('licenseBadgeText');
-                            if (badgeText) badgeText.textContent = check.remainingDays === 'LIFETIME' ? `${savedKey} (♾️)` : `${savedKey} (សល់ ${check.remainingDays} ថ្ងៃ)`;
-                            window.attachFirebaseListenersForLicense(savedKey);
-                        } else { document.getElementById('licenseModalOverlay').classList.remove('hidden'); }
+                        if (!unlockWithValidLicense(savedKey, licData, true)) {
+                            document.getElementById('licenseModalOverlay').classList.remove('hidden');
+                        }
                     } else { document.getElementById('licenseModalOverlay').classList.remove('hidden'); }
-                }).catch(() => { document.getElementById('licenseModalOverlay').classList.remove('hidden'); });
+                }).catch(() => {
+                    // If offline and cached license is valid, stay unlocked in Offline Mode & attach listeners for reconnect
+                    if (window.ProApp.state.licenseInfo && window.ProApp.checkLicenseValidity(window.ProApp.state.licenseInfo).valid) {
+                        window.attachFirebaseListenersForLicense(savedKey);
+                        window.ProApp.setCloudConnectionState(false);
+                    } else {
+                        document.getElementById('licenseModalOverlay').classList.remove('hidden');
+                    }
+                });
             } else { document.getElementById('licenseModalOverlay').classList.remove('hidden'); }
 
             window.attachFirebaseListenersForLicense = function(lKey) {
+                const markSynced = () => {
+                    window.ProApp.lastSyncedAt = new Date().toLocaleTimeString('km-KH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    window.ProApp.saveLocalCache();
+                    window.ProApp.updateSyncUI();
+                };
                 onValue(ref(db, `tenant_data/${lKey}/transactions`), (snapshot) => {
+                    if (window.ProApp.pendingSync && !window.ProApp.isCloudConnected) return;
                     const data = snapshot.val(); window.ProApp.state.transactions = [];
                     if (data) Object.keys(data).forEach(key => window.ProApp.state.transactions.push({ id: key, ...data[key] }));
                     window.ProApp.renderTable(); window.ProApp.updateDashboard(); window.ProApp.checkRecurringTransactions();
+                    markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/accounts`), (snapshot) => {
                     const data = snapshot.val();
                     if (data) window.ProApp.state.accounts = Array.isArray(data) ? data : Object.values(data);
                     window.ProApp.renderAccountsList(); window.ProApp.renderFilterAccounts(); window.ProApp.renderTable(); window.ProApp.updateDashboard();
+                    markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/currencies`), (snapshot) => {
                     const data = snapshot.val();
                     if (data) window.ProApp.state.currencies = Array.isArray(data) ? data : Object.values(data);
                     window.ProApp.renderCurrenciesList(); window.ProApp.renderTable(); window.ProApp.updateDashboard();
+                    markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/categories`), (snapshot) => {
                     const data = snapshot.val();
                     if (data) window.ProApp.state.categories = Array.isArray(data) ? data : Object.values(data);
                     window.ProApp.renderCategoriesList(); window.ProApp.renderTable(); window.ProApp.updateDashboard();
+                    markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/shortcuts`), (snapshot) => {
                     const data = snapshot.val();
                     if (data) window.ProApp.state.shortcuts = Array.isArray(data) ? data : Object.values(data);
                     window.ProApp.renderShortcutList(); window.ProApp.renderShortcuts();
+                    markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/goals`), (snapshot) => {
                     const data = snapshot.val();
                     if (data) window.ProApp.state.goals = Array.isArray(data) ? data : Object.values(data);
                     window.ProApp.renderGoalList(); window.ProApp.updateDashboard();
+                    markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/budgets`), (snapshot) => {
                     const data = snapshot.val();
                     if (data) window.ProApp.state.budgets = Array.isArray(data) ? data : Object.values(data);
                     window.ProApp.renderBudgetList(); window.ProApp.updateDashboard();
+                    markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/recurrings`), (snapshot) => {
                     const data = snapshot.val();
                     if (data) window.ProApp.state.recurrings = Array.isArray(data) ? data : Object.values(data);
                     window.ProApp.renderRecurringList(); window.ProApp.checkRecurringTransactions();
+                    markSynced();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/uiConfig`), (snapshot) => {
                     const data = snapshot.val();
                     if (data) {
-                        if (data.appTitle) window.ProApp.state.appTitle = data.appTitle;
-                        if (data.appSubtitle) window.ProApp.state.appSubtitle = data.appSubtitle;
-                        if (data.themeStyle) window.ProApp.state.themeStyle = data.themeStyle;
-                        if (data.bgImageUrl !== undefined) window.ProApp.state.bgImageUrl = data.bgImageUrl;
-                        if (data.pinCode !== undefined) window.ProApp.state.pinCode = data.pinCode;
-                        if (data.hiddenAccounts) window.ProApp.state.hiddenAccounts = data.hiddenAccounts;
-                        if (data.visibleSections) window.ProApp.state.visibleSections = data.visibleSections;
-                        window.ProApp.saveUiConfigToLocal();
-                        window.ProApp.applyUiConfig();
+                        window.ProApp.applyCloudUiConfig(data);
+                        markSynced();
                     }
                 });
             };
