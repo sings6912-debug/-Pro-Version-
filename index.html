@@ -788,10 +788,10 @@
             <!-- 📊 VIEW: REPORTS -->
             <div id="view-report" class="hidden space-y-6 page-view pb-6">
                 <div class="glass-panel p-4 rounded-3xl shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                    <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
                         <div class="flex items-center gap-2 w-full sm:w-auto">
                             <i class="fa-solid fa-filter text-gray-400"></i>
-                            <select id="reportPeriod" onchange="ProApp.toggleCustomPeriod()" class="glass-input text-[13px] rounded-xl outline-none font-bold transition cursor-pointer p-2.5 w-full sm:w-48">
+                            <select id="reportPeriod" onchange="ProApp.toggleCustomPeriod()" class="glass-input text-[13px] rounded-xl outline-none font-bold transition cursor-pointer p-2.5 w-full sm:w-44">
                                 <option value="daily">របាយការណ៍ប្រចាំថ្ងៃ</option>
                                 <option value="weekly">របាយការណ៍ប្រចាំសប្តាហ៍</option>
                                 <option value="monthly" selected>របាយការណ៍ប្រចាំខែ</option>
@@ -800,6 +800,15 @@
                                 <option value="custom">កំណត់ផ្ទាល់ខ្លួន (Custom Range)</option>
                             </select>
                         </div>
+                        <select id="reportAccountFilter" onchange="ProApp.onReportAccountChange()" class="glass-input text-xs rounded-xl outline-none font-bold transition cursor-pointer p-2.5 w-full sm:w-44" title="ជ្រើសគណនីសម្រាប់របាយការណ៍">
+                            <option value="ALL">🏦 គ្រប់គណនី</option>
+                        </select>
+                        <label id="reportIncludeHiddenWrap" class="flex items-center justify-between gap-2 px-3 py-2 glass-input rounded-xl cursor-pointer w-full sm:w-auto select-none" title="បើក ឬ បិទ ការបូកបញ្ចូលគណនីដែលបានលាក់">
+                            <span class="text-[11px] font-bold flex items-center gap-1.5 whitespace-nowrap">
+                                <i class="fa-solid fa-eye-slash text-amber-500 text-[10px]"></i> រួមទាំងគណនីលាក់
+                            </span>
+                            <span class="ios-switch"><input type="checkbox" id="reportIncludeHidden" onchange="ProApp.vibrate(); ProApp.renderReports()"><span class="ios-slider"></span></span>
+                        </label>
                         <div id="customPeriodContainer" class="hidden flex flex-wrap items-center gap-2 glass-input p-2 rounded-xl w-full sm:w-auto">
                             <input type="datetime-local" step="1" id="customStartDate" onchange="ProApp.renderReports()" class="bg-transparent border border-gray-200/50 dark:border-white/10 text-xs rounded-lg p-2 font-mono flex-1 outline-none">
                             <span class="text-xs font-bold text-gray-400">-</span>
@@ -1405,10 +1414,11 @@
                 <div class="md:col-span-5 space-y-3 md:overflow-y-auto md:pr-1 custom-scrollbar">
                     <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ឈ្មោះគោលដៅ៖</label><input type="text" id="glName" placeholder="ឧ. ទិញម៉ូតូ..." class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></div>
                     <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">🔗 ភ្ជាប់ជាមួយគណនី៖</label><select id="glLinkedAcc" onchange="ProApp.toggleGoalCurrentInput()" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-amber-600 outline-none"></select></div>
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ចំនួនដៅសរុប ($)៖</label><input type="text" id="glTarget" placeholder="1500" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-emerald-600 outline-none"></div>
-                        <div id="glCurrentWrapper"><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">សន្សំបានបច្ចុប្បន្ន ($)៖</label><input type="text" id="glCurrent" placeholder="400" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-blue-600 outline-none"></div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="col-span-2"><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ចំនួនដៅសរុប៖</label><input type="text" id="glTarget" placeholder="1500" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-emerald-600 outline-none"></div>
+                        <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ខ្នាត៖</label><select id="glCur" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-amber-600 outline-none"></select></div>
                     </div>
+                    <div id="glCurrentWrapper"><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">សន្សំបានបច្ចុប្បន្ន៖</label><input type="text" id="glCurrent" placeholder="400" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-blue-600 outline-none"></div>
                     <button type="button" id="glSaveBtn" onclick="ProApp.saveSavingsGoal()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[13px] font-bold rounded-xl shadow-md active:scale-95 transition cursor-pointer">រក្សាទុក</button>
                 </div>
                 <div class="md:col-span-7 flex flex-col min-h-[180px] md:min-h-0 md:border-l md:border-slate-200/70 md:dark:border-white/10 md:pl-4 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200/70 dark:border-white/10">
@@ -1476,10 +1486,13 @@
                         <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ប្រភេទ៖</label><select id="recCat" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></select></div>
                         <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">គណនី៖</label><select id="recAcc" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></select></div>
                     </div>
-                    <div class="grid grid-cols-3 gap-2">
+                    <div class="grid grid-cols-2 gap-2">
                         <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">សកម្មភាព៖</label><select id="recType" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold outline-none"><option value="exp">ចំណាយ (-)</option><option value="inc">ចំណូល (+)</option></select></div>
-                        <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">ចំនួនទឹកប្រាក់៖</label><input type="text" id="recAmount" placeholder="0.00" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-blue-600 outline-none"></div>
                         <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">រៀងរាល់ថ្ងៃទី៖</label><input type="number" id="recDay" min="1" max="31" value="1" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-amber-600 outline-none"></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="col-span-2"><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">ចំនួនទឹកប្រាក់៖</label><input type="text" id="recAmount" placeholder="0.00" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-blue-600 outline-none"></div>
+                        <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">ខ្នាត៖</label><select id="recCur" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-amber-600 outline-none"></select></div>
                     </div>
                     <button type="button" id="recSaveBtn" onclick="ProApp.saveRecurring()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[13px] font-bold rounded-xl shadow-md active:scale-95 transition cursor-pointer">បន្ថែមការកំណត់ស្វ័យប្រវត្តិ</button>
                 </div>
@@ -1893,6 +1906,7 @@
                 transactions: [],
                 recurrings: [],
                 debts: [],
+                deletedTxIds: {},
                 servicesGridMode: 'full',
                 tgBotToken: '',
                 tgChatId: '',
@@ -2016,6 +2030,7 @@
                         transactions: ProApp.state.transactions,
                         recurrings: ProApp.state.recurrings,
                         debts: ProApp.state.debts || [],
+                        deletedTxIds: ProApp.pruneDeletedTxIds(ProApp.state.deletedTxIds),
                         currencyRates: ProApp.state.currencyRates || { USD: 1, KHR: 4100 },
                         lastSyncedAt: ProApp.lastSyncedAt
                     };
@@ -2040,6 +2055,7 @@
                             transactions: slimTxs,
                             recurrings: ProApp.state.recurrings,
                             debts: ProApp.state.debts || [],
+                            deletedTxIds: ProApp.pruneDeletedTxIds(ProApp.state.deletedTxIds),
                             currencyRates: ProApp.state.currencyRates || { USD: 1, KHR: 4100 },
                             lastSyncedAt: ProApp.lastSyncedAt
                         };
@@ -2072,6 +2088,7 @@
                     if (Array.isArray(data.transactions)) ProApp.state.transactions = data.transactions;
                     if (Array.isArray(data.recurrings)) ProApp.state.recurrings = data.recurrings;
                     if (Array.isArray(data.debts)) ProApp.state.debts = data.debts;
+                    if (data.deletedTxIds && typeof data.deletedTxIds === 'object') ProApp.state.deletedTxIds = ProApp.pruneDeletedTxIds(data.deletedTxIds);
                     if (data.currencyRates && typeof data.currencyRates === 'object') ProApp.state.currencyRates = Object.assign({ USD: 1, KHR: ProApp.state.exchangeRate || 4100 }, data.currencyRates);
                     if (data.lastSyncedAt) ProApp.lastSyncedAt = data.lastSyncedAt;
                     ProApp.renderFilterAccounts();
@@ -2210,6 +2227,9 @@
                 if (tx.debtInit) cleanObj.debtInit = true;
                 if (tx.receiptImg) cleanObj.receiptImg = tx.receiptImg;
                 const cleanTx = ProApp.sanitizeForCloud(cleanObj);
+                if (ProApp.state.deletedTxIds && ProApp.state.deletedTxIds[cleanTx.id]) {
+                    delete ProApp.state.deletedTxIds[cleanTx.id];
+                }
                 const idx = ProApp.state.transactions.findIndex(t => t.id === cleanTx.id);
                 if (idx >= 0) ProApp.state.transactions[idx] = cleanTx;
                 else ProApp.state.transactions.push(cleanTx);
@@ -2232,10 +2252,29 @@
 
                 return ProApp.writeCloudNode('transactions/' + cleanTx.id, cleanTx);
             },
+            // 🪦 TOMBSTONE ENGINE (Prevents deleted rows from resurrecting after offline 2-way Sync)
+            pruneDeletedTxIds: function(map) {
+                const clean = {};
+                if (!map || typeof map !== 'object') return clean;
+                const cutoff = Date.now() - (30 * 24 * 60 * 60 * 1000); // Keep tombstones 30 days
+                Object.keys(map).forEach(k => {
+                    const ts = Number(map[k]) || 0;
+                    if (ts >= cutoff) clean[k] = ts;
+                });
+                return clean;
+            },
+            recordDeletedTxIds: function(ids) {
+                if (!ProApp.state.deletedTxIds || typeof ProApp.state.deletedTxIds !== 'object') ProApp.state.deletedTxIds = {};
+                const nowTs = Date.now();
+                (ids || []).forEach(id => { if (id) ProApp.state.deletedTxIds[id] = nowTs; });
+                ProApp.state.deletedTxIds = ProApp.pruneDeletedTxIds(ProApp.state.deletedTxIds);
+            },
             syncTxDelete: function(idOrAll) {
                 if (idOrAll === 'ALL') {
+                    ProApp.recordDeletedTxIds((ProApp.state.transactions || []).map(t => t.id));
                     ProApp.state.transactions = [];
                 } else {
+                    ProApp.recordDeletedTxIds([idOrAll]);
                     ProApp.state.transactions = ProApp.state.transactions.filter(t => t.id !== idOrAll);
                 }
                 ProApp.saveLocalCache();
@@ -2246,9 +2285,14 @@
                 if (lKey && !ProApp.state.licenseKey) ProApp.state.licenseKey = lKey;
                 if (lKey && window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
                     const targetPath = idOrAll === 'ALL' ? ProApp.getCloudPath('transactions') : ProApp.getCloudPath('transactions/' + idOrAll);
-                    return window.firebaseRemove(window.firebaseRef(window.firebaseDb, targetPath))
-                        .then(() => { ProApp.clearPendingSync(); })
-                        .catch(() => { ProApp.markPendingSync(); });
+                    const tombWrite = window.firebaseSet
+                        ? window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('deletedTxIds')), ProApp.state.deletedTxIds)
+                        : Promise.resolve();
+                    return Promise.all([
+                        window.firebaseRemove(window.firebaseRef(window.firebaseDb, targetPath)),
+                        tombWrite
+                    ]).then(() => { ProApp.clearPendingSync(); })
+                      .catch(() => { ProApp.markPendingSync(); });
                 } else {
                     ProApp.markPendingSync();
                     return Promise.resolve();
@@ -2285,6 +2329,7 @@
                         budgets: ProApp.state.budgets || [],
                         recurrings: ProApp.state.recurrings || [],
                         debts: ProApp.state.debts || [],
+                        deletedTxIds: ProApp.pruneDeletedTxIds(ProApp.state.deletedTxIds),
                         uiConfig: ProApp.buildUiConfigPayload()
                     });
                     await window.firebaseSet(window.firebaseRef(window.firebaseDb, `tenant_data/${ProApp.state.licenseKey}`), fullTenantData);
@@ -2319,6 +2364,7 @@
                             ProApp.state.budgets = d.budgets ? (Array.isArray(d.budgets) ? d.budgets : Object.values(d.budgets)) : [];
                             ProApp.state.recurrings = d.recurrings ? (Array.isArray(d.recurrings) ? d.recurrings : Object.values(d.recurrings)) : [];
                             ProApp.state.debts = d.debts ? (Array.isArray(d.debts) ? d.debts : Object.values(d.debts)) : [];
+                            ProApp.state.deletedTxIds = ProApp.pruneDeletedTxIds(d.deletedTxIds || {});
                             if (d.uiConfig) ProApp.applyCloudUiConfig(d.uiConfig);
                             ProApp.renderAccountsList(); ProApp.renderCurrenciesList(); ProApp.renderCategoriesList();
                             ProApp.renderFilterAccounts(); ProApp.renderShortcuts(); ProApp.renderTable(); ProApp.updateDashboard();
@@ -2342,10 +2388,18 @@
                                 (localArr || []).forEach(item => { if (item && item.id) map.set(item.id, item); });
                                 return Array.from(map.values());
                             };
-                            // Merge transactions by id (keep both cloud and any new local)
+                            // Merge tombstones from both Cloud and Local so deletions never resurrect
+                            const mergedDeleted = ProApp.pruneDeletedTxIds(Object.assign({}, d.deletedTxIds || {}, ProApp.state.deletedTxIds || {}));
+                            ProApp.state.deletedTxIds = mergedDeleted;
+
+                            // Merge transactions by id while excluding tombstoned deletions
                             const txMap = new Map();
-                            if (d.transactions) Object.keys(d.transactions).forEach(k => txMap.set(k, { id: k, ...d.transactions[k] }));
-                            (ProApp.state.transactions || []).forEach(tx => { if (tx && tx.id) txMap.set(tx.id, tx); });
+                            if (d.transactions) Object.keys(d.transactions).forEach(k => {
+                                if (!mergedDeleted[k]) txMap.set(k, { id: k, ...d.transactions[k] });
+                            });
+                            (ProApp.state.transactions || []).forEach(tx => {
+                                if (tx && tx.id && !mergedDeleted[tx.id]) txMap.set(tx.id, tx);
+                            });
                             ProApp.state.transactions = Array.from(txMap.values());
 
                             ProApp.state.accounts = mergeList(ProApp.state.accounts, d.accounts);
@@ -3074,21 +3128,35 @@
                 const todayDay = today.getDate();
                 const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
                 let addedCount = 0;
+                let recMetaChanged = false;
 
                 ProApp.state.recurrings.forEach(rec => {
                     const targetDay = Math.min(parseInt(rec.day) || 1, daysInMonth);
                     if (todayDay >= targetDay) {
                         const expectedId = `REC_${rec.id}_${currentYearMonth}`;
+                        // Skip if already posted this month (even if user manually deleted the row) or tombstoned
+                        if (rec.lastPostedMonth === currentYearMonth) return;
+                        if (ProApp.state.deletedTxIds && ProApp.state.deletedTxIds[expectedId]) {
+                            rec.lastPostedMonth = currentYearMonth;
+                            recMetaChanged = true;
+                            return;
+                        }
                         const alreadyPosted = ProApp.state.transactions.find(t => t.id === expectedId);
-                        if (!alreadyPosted) {
+                        if (alreadyPosted) {
+                            rec.lastPostedMonth = currentYearMonth;
+                            recMetaChanged = true;
+                        } else {
                             const txDate = new Date(today.getFullYear(), today.getMonth(), targetDay, 8, 0, 0);
                             const nowIso = ProApp.getLocalDateTimeISO(txDate);
-                            const newTx = { id: expectedId, date: nowIso, cat: rec.cat, desc: rec.desc || 'ចំណាយស្វ័យប្រវត្តិ', acc: rec.acc, cur: rec.cur, inc: rec.inc, exp: rec.exp };
+                            const newTx = { id: expectedId, date: nowIso, cat: rec.cat, desc: rec.desc || 'ចំណាយស្វ័យប្រវត្តិ', acc: rec.acc, cur: rec.cur || 'USD', inc: rec.inc, exp: rec.exp };
+                            rec.lastPostedMonth = currentYearMonth;
+                            recMetaChanged = true;
                             ProApp.syncTxWrite(newTx, false);
                             addedCount++;
                         }
                     }
                 });
+                if (recMetaChanged) ProApp.saveRecurringsToCloud();
                 if (addedCount > 0) { ProApp.renderTable(); ProApp.updateDashboard(); ProApp.showToast(`កត់ត្រាស្វ័យប្រវត្តិថ្មីចំនួន ${addedCount}!`, 'success'); }
             },
 
@@ -3678,7 +3746,7 @@
                     targetView.classList.add('page-view');
                 }
                 if (targetNav) targetNav.classList.add('active');
-                if (tabId === 'report') ProApp.renderReports();
+                if (tabId === 'report') { ProApp.renderReportAccountsFilter(); ProApp.renderReports(); }
                 if (tabId === 'dashboard') ProApp.updateDashboard();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             },
@@ -4102,7 +4170,7 @@
                     ProApp.state.hiddenAccounts.push(accName);
                     ProApp.showToast(`បានលាក់៖ ${accName}`, 'info');
                 }
-                ProApp.saveUiConfigToCloud(); ProApp.renderAccountsList(); ProApp.updateDashboard();
+                ProApp.saveUiConfigToCloud(); ProApp.renderAccountsList(); ProApp.renderReportAccountsFilter(); ProApp.updateDashboard();
             },
             addNewAccount: function() {
                 const name = document.getElementById('newAccountName').value.trim();
@@ -4144,10 +4212,33 @@
                 ProApp.writeCloudNode('accounts', ProApp.state.accounts);
             },
             renderFilterAccounts: function() {
-                const sel = document.getElementById('filterAccount'); if (!sel) return;
-                const currentVal = sel.value || 'ALL';
-                sel.innerHTML = `<option value="ALL">គ្រប់គណនី</option>` + ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">${ProApp.escapeHtml(a)}</option>`).join('');
-                sel.value = ProApp.state.accounts.includes(currentVal) ? currentVal : 'ALL';
+                const sel = document.getElementById('filterAccount');
+                if (sel) {
+                    const currentVal = sel.value || 'ALL';
+                    sel.innerHTML = `<option value="ALL">គ្រប់គណនី</option>` + ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">${ProApp.escapeHtml(a)}</option>`).join('');
+                    sel.value = ProApp.state.accounts.includes(currentVal) ? currentVal : 'ALL';
+                }
+                ProApp.renderReportAccountsFilter();
+            },
+            renderReportAccountsFilter: function() {
+                const rSel = document.getElementById('reportAccountFilter'); if (!rSel) return;
+                const prevVal = rSel.value || 'ALL';
+                const hidden = ProApp.state.hiddenAccounts || [];
+                const opts = [`<option value="ALL">🏦 គ្រប់គណនី</option>`];
+                (ProApp.state.accounts || []).forEach(a => {
+                    const isH = hidden.includes(a);
+                    opts.push(`<option value="${ProApp.escapeHtml(a)}">${ProApp.escapeHtml(a)}${isH ? ' (🙈 លាក់)' : ''}</option>`);
+                });
+                rSel.innerHTML = opts.join('');
+                rSel.value = (prevVal === 'ALL' || (ProApp.state.accounts || []).includes(prevVal)) ? prevVal : 'ALL';
+                const wrap = document.getElementById('reportIncludeHiddenWrap');
+                if (wrap) wrap.classList.toggle('opacity-50', rSel.value !== 'ALL');
+            },
+            onReportAccountChange: function() {
+                const rSel = document.getElementById('reportAccountFilter');
+                const wrap = document.getElementById('reportIncludeHiddenWrap');
+                if (wrap && rSel) wrap.classList.toggle('opacity-50', rSel.value !== 'ALL');
+                ProApp.renderReports();
             },
 
             // ⛽ CURRENCIES MANAGEMENT
@@ -4207,6 +4298,7 @@
                 (ProApp.state.shortcuts || []).forEach(s => { if (s.cur === oldVal) s.cur = val; });
                 (ProApp.state.recurrings || []).forEach(r => { if (r.cur === oldVal) r.cur = val; });
                 (ProApp.state.debts || []).forEach(d => { if (d.cur === oldVal) d.cur = val; });
+                (ProApp.state.goals || []).forEach(g => { if ((g.cur || 'USD') === oldVal) g.cur = val; });
                 if (ProApp.state.currencyRates && ProApp.state.currencyRates[oldVal] !== undefined) {
                     ProApp.state.currencyRates[val] = ProApp.state.currencyRates[oldVal];
                     delete ProApp.state.currencyRates[oldVal];
@@ -4409,18 +4501,21 @@
                 const modalEl = document.getElementById('recurringModal');
                 const catSel = document.getElementById('recCat');
                 const accSel = document.getElementById('recAcc');
+                const curSel = document.getElementById('recCur');
                 const typeSel = document.getElementById('recType');
                 const saveBtn = document.getElementById('recSaveBtn');
                 if (catSel) catSel.innerHTML = ProApp.state.categories.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
                 if (accSel) accSel.innerHTML = ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">${ProApp.escapeHtml(a)}</option>`).join('');
+                if (curSel) curSel.innerHTML = ProApp.state.currencies.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
                 if (editId) {
                     const r = (ProApp.state.recurrings || []).find(x => x.id === editId);
                     if (r) {
                         document.getElementById('recDesc').value = r.desc || '';
                         if (catSel) catSel.value = r.cat;
                         if (accSel) accSel.value = r.acc;
+                        if (curSel && ProApp.state.currencies.includes(r.cur)) curSel.value = r.cur;
                         if (typeSel) typeSel.value = r.inc > 0 ? 'inc' : 'exp';
-                        document.getElementById('recAmount').value = (r.inc > 0 ? r.inc : r.exp) + (r.cur === 'KHR' ? '៛' : '$');
+                        document.getElementById('recAmount').value = r.inc > 0 ? r.inc : r.exp;
                         document.getElementById('recDay').value = r.day || 1;
                         modalEl?.setAttribute('data-edit-id', editId);
                         if (saveBtn) saveBtn.textContent = '✏️ រក្សាទុកការកែប្រែ';
@@ -4429,6 +4524,7 @@
                     document.getElementById('recDesc').value = '';
                     document.getElementById('recAmount').value = '';
                     document.getElementById('recDay').value = '1';
+                    if (curSel && ProApp.state.currencies.length) curSel.value = ProApp.state.currencies[0];
                     if (typeSel) typeSel.value = 'exp';
                     modalEl?.removeAttribute('data-edit-id');
                     if (saveBtn) saveBtn.textContent = 'បន្ថែមការកំណត់ស្វ័យប្រវត្តិ';
@@ -4449,7 +4545,11 @@
                 const parsed = ProApp.parseSmartAmount(document.getElementById('recAmount').value);
                 const day = Math.min(31, Math.max(1, parseInt(document.getElementById('recDay').value) || 1));
                 if (!desc || parsed.amount <= 0) { ProApp.showToast('សូមបំពេញការពិពណ៌នា និងចំនួនទឹកប្រាក់!', 'error'); return; }
-                const cur = parsed.isUSD ? 'USD' : (parsed.hasCurrencyStr ? 'KHR' : 'USD');
+                let cur = document.getElementById('recCur')?.value || 'USD';
+                if (parsed.hasCurrencyStr) {
+                    const det = parsed.isUSD ? 'USD' : 'KHR';
+                    if (ProApp.state.currencies.includes(det)) cur = det;
+                }
                 const modalEl = document.getElementById('recurringModal');
                 const editId = modalEl?.getAttribute('data-edit-id');
                 if (editId) {
@@ -4553,14 +4653,19 @@
                     return;
                 }
                 container.innerHTML = visibleGoals.map(g => {
+                    const gCur = g.cur || 'USD';
                     let currentVal = g.current || 0, isLinked = false;
                     if (g.linkedAcc && g.linkedAcc !== 'NONE' && accBalances[g.linkedAcc]) {
                         isLinked = true;
-                        const bObj = accBalances[g.linkedAcc]; let totalUSD = 0;
-                        Object.keys(bObj).forEach(c => {
-                            totalUSD += ProApp.toUSD(bObj[c], c);
-                        });
-                        currentVal = Math.max(0, totalUSD);
+                        const bObj = accBalances[g.linkedAcc];
+                        const targetRate = ProApp.getRateToUSD(gCur);
+                        if (targetRate > 0) {
+                            let totalUSD = 0;
+                            Object.keys(bObj).forEach(c => { totalUSD += ProApp.toUSD(bObj[c], c); });
+                            currentVal = Math.max(0, Math.round(totalUSD * targetRate * 100) / 100);
+                        } else {
+                            currentVal = Math.max(0, Number(bObj[gCur]) || 0);
+                        }
                     }
                     const pct = g.target > 0 ? Math.min(Math.round((currentVal / g.target) * 100), 100) : 0;
                     const cardClick = isLinked ? `onclick="ProApp.vibrate(); ProApp.filterByAccountFromCard('${ProApp.escapeJsStr(g.linkedAcc)}')"` : `onclick="ProApp.vibrate(); ProApp.openGoalModal('${g.id}')"`;
@@ -4572,7 +4677,7 @@
                                     ${isLinked ? `<span class="text-[9px] bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 px-1.5 py-0.5 rounded shrink-0">🔗 ${ProApp.escapeHtml(g.linkedAcc)}</span>` : ''}
                                 </span>
                                 <span class="flex items-center gap-1.5 shrink-0">
-                                    <span class="text-emerald-600 dark:text-emerald-400 font-mono">${ProApp.formatMoney(currentVal, 'USD')} / ${ProApp.formatMoney(g.target, 'USD')} (${pct}%)</span>
+                                    <span class="text-emerald-600 dark:text-emerald-400 font-mono">${ProApp.formatMoney(currentVal, gCur)} / ${ProApp.formatMoney(g.target, gCur)} (${pct}%)</span>
                                     <button type="button" onclick="event.stopPropagation(); ProApp.vibrate(); ProApp.openGoalModal('${g.id}')" class="w-6 h-6 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-500 hover:text-blue-600 flex items-center justify-center cursor-pointer" title="កែប្រែគោលដៅ"><i class="fa-solid fa-pen text-[10px]"></i></button>
                                 </span>
                             </div>
@@ -4584,20 +4689,24 @@
             },
             openGoalModal: function(editId = null) {
                 const modalEl = document.getElementById('goalModal'); if (!modalEl) return;
-                const sel = document.getElementById('glLinkedAcc'), saveBtn = document.getElementById('glSaveBtn');
+                const sel = document.getElementById('glLinkedAcc'), curSel = document.getElementById('glCur'), saveBtn = document.getElementById('glSaveBtn');
                 const glName = document.getElementById('glName'), glTarget = document.getElementById('glTarget'), glCurrent = document.getElementById('glCurrent');
                 if (sel) sel.innerHTML = `<option value="NONE">គ្មាន (កំណត់ចំនួនដោយដៃ)</option>` + ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">🔗 ភ្ជាប់កុង ${ProApp.escapeHtml(a)}</option>`).join('');
+                if (curSel) curSel.innerHTML = ProApp.state.currencies.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
                 if (editId) {
                     const goal = ProApp.state.goals.find(g => g.id === editId);
                     if (goal) {
                         if (glName) glName.value = goal.name; if (sel) sel.value = goal.linkedAcc || 'NONE';
+                        if (curSel && ProApp.state.currencies.includes(goal.cur || 'USD')) curSel.value = goal.cur || 'USD';
                         if (glTarget) glTarget.value = goal.target; if (glCurrent) glCurrent.value = goal.current || 0;
                         modalEl.setAttribute('data-edit-id', editId);
                         if (saveBtn) saveBtn.textContent = '✏️ រក្សាទុកការកែប្រែ';
                     }
                 } else {
                     if (glName) glName.value = ''; if (glTarget) glTarget.value = ''; if (glCurrent) glCurrent.value = '';
-                    if (sel) sel.value = 'NONE'; modalEl.removeAttribute('data-edit-id');
+                    if (sel) sel.value = 'NONE';
+                    if (curSel && ProApp.state.currencies.length) curSel.value = ProApp.state.currencies[0];
+                    modalEl.removeAttribute('data-edit-id');
                     if (saveBtn) saveBtn.textContent = 'រក្សាទុក';
                 }
                 ProApp.toggleGoalCurrentInput(); ProApp.renderGoalList(); modalEl.classList.remove('hidden');
@@ -4625,17 +4734,23 @@
             saveSavingsGoal: function() {
                 const name = document.getElementById('glName').value.trim();
                 const linkedAcc = document.getElementById('glLinkedAcc').value;
-                const target = ProApp.parseSmartAmount(document.getElementById('glTarget').value).amount;
+                const parsedTarget = ProApp.parseSmartAmount(document.getElementById('glTarget').value);
+                const target = parsedTarget.amount;
                 const current = ProApp.parseSmartAmount(document.getElementById('glCurrent').value).amount;
+                let cur = document.getElementById('glCur')?.value || 'USD';
+                if (parsedTarget.hasCurrencyStr) {
+                    const det = parsedTarget.isUSD ? 'USD' : 'KHR';
+                    if (ProApp.state.currencies.includes(det)) cur = det;
+                }
                 const editId = document.getElementById('goalModal').getAttribute('data-edit-id');
                 if (!name || target <= 0) { ProApp.showToast('សូមបញ្ចូលឈ្មោះ និងចំនួនដៅសរុប!', 'error'); return; }
                 if (current >= target) ProApp.fireConfetti();
                 if (editId) {
                     const goal = ProApp.state.goals.find(g => g.id === editId);
-                    if (goal) { goal.name = name; goal.linkedAcc = linkedAcc; goal.target = target; goal.current = current; }
+                    if (goal) { goal.name = name; goal.linkedAcc = linkedAcc; goal.cur = cur; goal.target = target; goal.current = current; }
                     ProApp.showToast('បានកែប្រែគោលដៅសន្សំប្រាក់', 'success');
                 } else {
-                    ProApp.state.goals.push({ id: ProApp.generateId(), name, linkedAcc, target, current });
+                    ProApp.state.goals.push({ id: ProApp.generateId(), name, linkedAcc, cur, target, current });
                     ProApp.showToast('បានបន្ថែមគោលដៅសន្សំប្រាក់ថ្មី', 'success');
                 }
                 ProApp.saveGoalsToCloud(); ProApp.renderGoalList();
@@ -4693,7 +4808,7 @@
                                 </button>
                                 <div class="min-w-0">
                                     <div class="font-bold truncate">${ProApp.escapeHtml(g.name)}${linkLabel}</div>
-                                    <div class="text-[11px] font-mono font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center flex-wrap gap-1 mt-0.5">${ProApp.formatMoney(g.target, 'USD')}${hiddenBadge}</div>
+                                    <div class="text-[11px] font-mono font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center flex-wrap gap-1 mt-0.5">${ProApp.formatMoney(g.target, g.cur || 'USD')}${hiddenBadge}</div>
                                 </div>
                             </div>
                             <div class="flex gap-1.5 shrink-0">
@@ -5473,10 +5588,18 @@
                 const periodType = document.getElementById('reportPeriod')?.value || 'monthly';
                 const startDT = document.getElementById('customStartDate')?.value || '';
                 const endDT = document.getElementById('customEndDate')?.value || '';
+                const accFilter = document.getElementById('reportAccountFilter')?.value || 'ALL';
+                const includeHidden = !!document.getElementById('reportIncludeHidden')?.checked;
+                const hiddenAccs = ProApp.state.hiddenAccounts || [];
                 let pData = {}, cData = {};
                 if (ProApp.state && ProApp.state.transactions) {
                     ProApp.state.transactions.forEach(r => {
                         if (!r.date && r.inc === 0 && r.exp === 0) return;
+                        if (accFilter !== 'ALL') {
+                            if (r.acc !== accFilter) return;
+                        } else if (!includeHidden && hiddenAccs.includes(r.acc)) {
+                            return;
+                        }
                         if (periodType === 'custom') {
                             const fullDT = r.date.length === 10 ? r.date + 'T00:00:00' : r.date;
                             if (startDT && fullDT < startDT) return;
@@ -5565,6 +5688,7 @@
                             if (!Array.isArray(ProApp.state.shortcuts)) ProApp.state.shortcuts = [];
                             if (!Array.isArray(ProApp.state.recurrings)) ProApp.state.recurrings = [];
                             if (!Array.isArray(ProApp.state.debts)) ProApp.state.debts = [];
+                            ProApp.state.deletedTxIds = ProApp.pruneDeletedTxIds(ProApp.state.deletedTxIds || {});
                             const rateEl = document.getElementById('exchangeRate');
                             if (rateEl) rateEl.value = ProApp.state.exchangeRate || 4100;
                             ProApp.applyUiConfig();
@@ -6265,12 +6389,15 @@
                 });
                 const deletedRows = ProApp.state.transactions.filter(tx => toDeleteIds.has(tx.id));
                 ProApp.lastDeletedBatch = deletedRows;
+                ProApp.recordDeletedTxIds(Array.from(toDeleteIds));
                 ProApp.reconcileDebtOnTxChange(deletedRows, -1);
                 ProApp.state.transactions = ProApp.state.transactions.filter(tx => !toDeleteIds.has(tx.id));
                 ProApp.saveLocalCache();
                 const lKey = ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key');
                 if (lKey && window.firebaseDb && window.firebaseRef && window.firebaseRemove) {
-                    Promise.all(Array.from(toDeleteIds).map(id => window.firebaseRemove(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + id))))).then(() => ProApp.clearPendingSync()).catch(() => ProApp.markPendingSync());
+                    const ops = Array.from(toDeleteIds).map(id => window.firebaseRemove(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('transactions/' + id))));
+                    if (window.firebaseSet) ops.push(window.firebaseSet(window.firebaseRef(window.firebaseDb, ProApp.getCloudPath('deletedTxIds')), ProApp.state.deletedTxIds));
+                    Promise.all(ops).then(() => ProApp.clearPendingSync()).catch(() => ProApp.markPendingSync());
                 } else { ProApp.markPendingSync(); }
                 ProApp.clearBulkSelection();
                 ProApp.updateDashboard();
@@ -6281,6 +6408,9 @@
                 const batch = [...ProApp.lastDeletedBatch];
                 ProApp.lastDeletedBatch = null;
                 batch.forEach(tx => {
+                    if (ProApp.state.deletedTxIds && ProApp.state.deletedTxIds[tx.id]) {
+                        delete ProApp.state.deletedTxIds[tx.id];
+                    }
                     if (!ProApp.state.transactions.some(t => t.id === tx.id)) {
                         ProApp.state.transactions.push(tx);
                     }
@@ -6289,7 +6419,9 @@
                 ProApp.saveLocalCache();
                 ProApp.renderTable();
                 ProApp.updateDashboard();
-                Promise.all(batch.map(tx => ProApp.writeCloudNode('transactions/' + tx.id, tx))).then(() => {
+                const restoreOps = batch.map(tx => ProApp.writeCloudNode('transactions/' + tx.id, tx));
+                restoreOps.push(ProApp.writeCloudNode('deletedTxIds', ProApp.state.deletedTxIds || {}));
+                Promise.all(restoreOps).then(() => {
                     ProApp.showToast(`↩️ បានស្តារទិន្នន័យ ${batch.length} ជួរត្រឡប់មកវិញ!`, 'success');
                 });
             },
@@ -6430,6 +6562,17 @@
                         pageInfo.textContent = `កំពុងបង្ហាញ ${visibleTx.length} / ${sortedTx.length} ជួរ (នៅសល់ ${sortedTx.length - visibleTx.length} ជួរ)`;
                     }
                 }
+
+                // ☑️ Auto-sync header Select-All checkbox with currently visible rows & prune deleted IDs
+                const existingIdSet = new Set((ProApp.state.transactions || []).map(t => t.id));
+                Array.from(ProApp.selectedTxIds).forEach(id => { if (!existingIdSet.has(id)) ProApp.selectedTxIds.delete(id); });
+                const allChk = document.getElementById('bulkSelectAllChk');
+                if (allChk) {
+                    const selInView = visibleTx.filter(tx => ProApp.selectedTxIds.has(tx.id)).length;
+                    allChk.checked = visibleTx.length > 0 && selInView === visibleTx.length;
+                    allChk.indeterminate = selInView > 0 && selInView < visibleTx.length;
+                }
+                ProApp.updateBulkBarUI();
 
                 ProApp.updateExcelHeaderIndicators(sortedTx.length, baseRows.length);
 
@@ -6862,6 +7005,12 @@
                     window.ProApp.state.debts = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
                     window.ProApp.renderDebtList(); window.ProApp.scheduleRender(true, false);
                     markSynced();
+                });
+                onValue(ref(db, `tenant_data/${lKey}/deletedTxIds`), (snapshot) => {
+                    if (shouldSkipOverwrite()) return;
+                    const data = snapshot.val();
+                    window.ProApp.state.deletedTxIds = window.ProApp.pruneDeletedTxIds(data || {});
+                    window.ProApp.saveLocalCache();
                 });
                 onValue(ref(db, `tenant_data/${lKey}/uiConfig`), (snapshot) => {
                     if (shouldSkipOverwrite()) return;
