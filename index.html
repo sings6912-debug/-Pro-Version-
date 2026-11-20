@@ -374,6 +374,174 @@
         body.theme-slate .excel-menu-item:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: #fbbf24; }
         .excel-menu-item:disabled { opacity: 0.4; cursor: not-allowed; }
 
+
+        /* 🔥 V11 ULTIMATE THEME MORPHING SKINS, TOUCH BURST & CROPPER */
+        @keyframes cyberScan {
+            0% { transform: translateY(-100%); opacity: 0; }
+            20% { opacity: 0.45; }
+            80% { opacity: 0.45; }
+            100% { transform: translateY(420%); opacity: 0; }
+        }
+        @keyframes themeFlashAnim {
+            0% { opacity: 0; }
+            25% { opacity: 0.42; }
+            100% { opacity: 0; }
+        }
+        @keyframes emblemFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            50% { transform: translateY(-6px) rotate(3deg) scale(1.03); }
+        }
+        @keyframes bannerPop {
+            0% { transform: translate(-50%, -24px) scale(0.92); opacity: 0; }
+            14% { transform: translate(-50%, 0px) scale(1); opacity: 1; }
+            84% { transform: translate(-50%, 0px) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -18px) scale(0.95); opacity: 0; }
+        }
+
+        #touchBurstCanvas {
+            position: fixed; inset: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 9998;
+        }
+        #themeFlashOverlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 9997; opacity: 0;
+            background: radial-gradient(circle at center, var(--t-accent) 0%, transparent 72%);
+        }
+        #themeFlashOverlay.flashing {
+            animation: themeFlashAnim 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        #themeActivationBanner {
+            position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
+            z-index: 9999; pointer-events: none; opacity: 0;
+        }
+        #themeActivationBanner.show-banner {
+            animation: bannerPop 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Hero Emblem Watermark & Scanline */
+        #heroEmblemLayer {
+            position: absolute; right: -14px; bottom: -18px; width: 175px; height: 175px;
+            pointer-events: none; z-index: 2; opacity: 0.14; color: #ffffff;
+            animation: emblemFloat 8s ease-in-out infinite;
+        }
+        #heroScanline {
+            display: none; position: absolute; left: 0; right: 0; top: 0; height: 48px;
+            pointer-events: none; z-index: 3;
+            background: linear-gradient(180deg, transparent 0%, var(--t-accent-soft) 50%, transparent 100%);
+            border-bottom: 1.5px solid var(--t-accent);
+            animation: cyberScan 3.8s linear infinite;
+        }
+        body.skin-cyber:not(.fx-disabled) #heroScanline { display: block; }
+        body.fx-disabled #heroEmblemLayer { animation: none; }
+        body.fx-disabled #touchBurstCanvas { display: none !important; }
+
+        /* Hero Signature Theme Badge & VIP EMV Chip */
+        #heroThemeBadgeRow {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 9999px;
+            background: rgba(0, 0, 0, 0.28); border: 1px solid var(--t-hero-border);
+            backdrop-filter: blur(8px); font-size: 9.5px; font-weight: 800;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        #heroVipChip {
+            display: none; width: 32px; height: 23px; border-radius: 5px;
+            background: linear-gradient(135deg, #fef08a 0%, #eab308 45%, #a16207 100%);
+            border: 1px solid rgba(255,255,255,0.55); position: relative; overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+        #heroVipChip::before {
+            content: ''; position: absolute; inset: 4px; border: 1px solid rgba(113, 63, 18, 0.45); border-radius: 2px;
+        }
+        #heroVipChip::after {
+            content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(113, 63, 18, 0.45);
+        }
+        body.skin-vip #heroVipChip { display: inline-block; }
+
+        /* ⚔️ SKIN 1: CYBER / SYSTEM RPG */
+        body.skin-cyber .glass-panel {
+            border-radius: 14px !important;
+            border: 1.5px solid var(--t-hero-border) !important;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), inset 0 0 18px -8px var(--t-accent-soft) !important;
+        }
+        body.skin-cyber #heroCard {
+            border-bottom-left-radius: 1.4rem !important;
+            border-bottom-right-radius: 1.4rem !important;
+        }
+        body.skin-cyber .service-item-btn > div {
+            border-radius: 11px !important;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(0,0,0,0.35)) !important;
+            border: 1.5px solid var(--t-hero-border) !important;
+            color: var(--t-accent) !important;
+            box-shadow: 0 0 14px -4px var(--t-accent-soft) !important;
+        }
+        body.skin-cyber .fab-dock-btn {
+            border-radius: 16px !important;
+            transform: rotate(45deg);
+        }
+        body.skin-cyber .fab-dock-btn > * {
+            transform: rotate(-45deg);
+        }
+        body.skin-cyber .fab-dock-btn:active {
+            transform: rotate(45deg) scale(0.88);
+        }
+        body.skin-cyber #heroThemeBadgeRow {
+            border-radius: 6px !important;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            color: var(--t-accent);
+        }
+
+        /* 👑 SKIN 2: LUXURY VIP BLACK CARD */
+        body.skin-vip .glass-panel {
+            border: 1.25px solid var(--t-hero-border) !important;
+            box-shadow: 0 14px 36px -10px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+        }
+        body.skin-vip .service-item-btn > div {
+            border-radius: 16px !important;
+            border: 1.25px solid var(--t-hero-border) !important;
+            box-shadow: 0 6px 16px -4px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.22) !important;
+        }
+
+        /* ⛩️ SKIN 3: FAMOUS ANIME EMBLEM */
+        body.skin-anime .glass-panel {
+            border: 1.25px solid var(--t-hero-border) !important;
+            box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.42), 0 0 18px -10px var(--t-accent) !important;
+        }
+        body.skin-anime .service-item-btn > div {
+            border-radius: 20px !important;
+            background: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(0,0,0,0.26)) !important;
+            border: 1.5px solid var(--t-hero-border) !important;
+            color: var(--t-accent) !important;
+            box-shadow: 0 6px 16px -4px var(--t-accent-soft) !important;
+        }
+
+        /* 🌸 SKIN 4: SOFT PASTEL / EXECUTIVE LIGHT */
+        body.skin-soft .glass-panel {
+            border-radius: 1.85rem !important;
+        }
+        body.skin-soft .service-item-btn > div {
+            border-radius: 20px !important;
+            box-shadow: 0 6px 16px -6px var(--t-accent-soft) !important;
+        }
+
+        /* 🖼️ 1:1 Interactive Avatar Cropper Box */
+        #cropViewport {
+            width: 236px; height: 236px; position: relative; overflow: hidden;
+            touch-action: none; user-select: none; cursor: grab;
+            background: repeating-conic-gradient(#1e293b 0% 25%, #0f172a 0% 50%) 50% / 16px 16px;
+            border: 2.5px solid var(--t-accent);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.35), 0 0 0 4px var(--t-accent-soft);
+        }
+        #cropViewport:active { cursor: grabbing; }
+        #cropViewport.shape-circle { border-radius: 9999px; }
+        #cropViewport.shape-rounded { border-radius: 28px; }
+        .crop-grid-overlay {
+            position: absolute; inset: 0; pointer-events: none;
+            background-image:
+                linear-gradient(to right, rgba(255,255,255,0.22) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.22) 1px, transparent 1px);
+            background-size: 33.333% 33.333%;
+        }
+
         /* 🖨️ Clean A4 Print Stylesheet */
         @media print {
             body { background: #ffffff !important; background-image: none !important; color: #0f172a !important; padding: 0 !important; margin: 0 !important; }
@@ -450,8 +618,14 @@
     <!-- TOASTS -->
     <div id="toastContainer"></div>
 
-    <!-- ✨ LIVE AMBIENT THEME FX CANVAS -->
+    <!-- ✨ LIVE AMBIENT THEME FX CANVAS + INTERACTIVE TOUCH BURST + ACTIVATION FLASH -->
     <canvas id="themeAmbientCanvas"></canvas>
+    <canvas id="touchBurstCanvas"></canvas>
+    <div id="themeFlashOverlay"></div>
+    <div id="themeActivationBanner" class="px-4 py-2 rounded-2xl bg-slate-950/88 text-white border border-white/20 backdrop-blur-xl shadow-2xl flex items-center gap-2.5 text-xs font-black whitespace-nowrap">
+        <span id="themeBannerIcon" class="text-base">👑</span>
+        <span id="themeBannerText">Obsidian Gold VIP</span>
+    </div>
 
     <!-- 📱 MAIN APP CONTAINER -->
     <div class="max-w-[1400px] mx-auto relative z-10">
@@ -492,16 +666,21 @@
             <div id="heroCard" class="bg-gradient-to-b from-blue-700 to-blue-900 rounded-b-[2.5rem] shadow-lg p-5 pb-11 text-white relative overflow-hidden transition-all duration-500 pt-7">
                 <div id="heroPatternOverlay"></div>
                 <div id="heroShimmerBeam"></div>
+                <div id="heroScanline"></div>
+                <div id="heroEmblemLayer"></div>
                 <canvas id="heroFxCanvas"></canvas>
                 <div id="heroGlowOrb" class="absolute -top-16 -right-12 w-72 h-72 rounded-full blur-3xl pointer-events-none"></div>
                 <div id="heroGlowOrb2" class="absolute -bottom-20 -left-14 w-64 h-64 rounded-full blur-3xl pointer-events-none"></div>
                 
-                <div class="flex justify-between items-center relative z-10 mb-5 gap-2">
-                    <div class="flex items-center gap-3 cursor-pointer min-w-0" onclick="ProApp.vibrate(); ProApp.openCustomizeModal()" title="ចុចដើម្បីការកំណត់">
-                        <div class="w-11 h-11 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-inner shrink-0">
-                            <i class="fa-solid fa-wallet text-amber-300 text-xl"></i>
-                        </div>
-                        <div class="min-w-0">
+                <div class="flex justify-between items-center relative z-10 mb-4 gap-2">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <button type="button" id="headerAvatarBtn" onclick="event.stopPropagation(); ProApp.vibrate(); ProApp.openAvatarCropperModal()" class="relative w-12 h-12 bg-white/15 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/30 shadow-md shrink-0 cursor-pointer active:scale-90 transition overflow-visible group" title="ចុចដើម្បីដូររូបកាបូប / កាត់រូប 1:1">
+                            <div id="headerAvatarContent" class="w-full h-full rounded-2xl overflow-hidden flex items-center justify-center">
+                                <i class="fa-solid fa-wallet text-amber-300 text-xl"></i>
+                            </div>
+                            <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center text-[8px] shadow border border-white/80"><i class="fa-solid fa-camera"></i></span>
+                        </button>
+                        <div class="min-w-0 cursor-pointer" onclick="ProApp.vibrate(); ProApp.openCustomizeModal()" title="ចុចដើម្បីការកំណត់">
                             <h1 class="text-[15px] font-black text-white truncate tracking-wide" id="displayAppTitle">ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro Cloud</h1>
                             <p class="text-[10px] text-blue-100/80 truncate font-medium" id="displayAppSubtitle">ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️</p>
                             <p class="text-[9px] text-blue-200 flex items-center flex-wrap gap-1.5 mt-0.5 font-medium">
@@ -527,6 +706,13 @@
                 </div>
 
                 <div class="text-center relative z-10 mb-1">
+                    <div class="flex items-center justify-center gap-2 mb-2">
+                        <span id="heroVipChip" title="VIP Luxury Card"></span>
+                        <span id="heroThemeBadgeRow" onclick="ProApp.vibrate(); ProApp.openThemeStudioModal()" class="cursor-pointer hover:scale-105 transition">
+                            <span id="heroThemeBadgeIcon">💎</span>
+                            <span id="heroThemeBadgeText">PRO CLOUD EDITION</span>
+                        </span>
+                    </div>
                     <div class="text-blue-200/80 text-[11px] font-bold uppercase tracking-widest mb-1 flex items-center justify-center gap-2">
                         <span data-i18n="netWorth">សរុបរួម (NET WORTH)</span>
                         <button onclick="ProApp.vibrate(); ProApp.toggleHideAmounts()" class="text-amber-300 hover:text-white transition cursor-pointer p-1">
@@ -1022,8 +1208,8 @@
             <span class="text-[9px] font-bold mt-0.5" data-i18n="navEntry">ប្រតិបត្តិការ</span>
         </button>
         <div class="flex flex-col items-center justify-start flex-1 max-w-[84px]">
-            <button type="button" onclick="ProApp.vibrate(); ProApp.openSmartAddModal()" class="fab-dock-btn cursor-pointer" title="កត់ត្រារហ័ស ឬ ស្រង់សម្លេង (Alt+N)">
-                <i class="fa-solid fa-bolt"></i>
+            <button type="button" onclick="ProApp.vibrate(); ProApp.playThemeSound('tap'); ProApp.openSmartAddModal()" class="fab-dock-btn cursor-pointer" title="កត់ត្រារហ័ស ឬ ស្រង់សម្លេង (Alt+N)">
+                <span id="fabDockIcon" class="flex items-center justify-center leading-none"><i class="fa-solid fa-bolt"></i></span>
             </button>
             <span id="navQuickAddLabel" class="text-[9px] font-extrabold text-blue-600 dark:text-amber-400 mt-0.5" data-i18n="navQuickAdd">កត់ត្រា</span>
         </div>
@@ -1156,6 +1342,20 @@
                             <span class="flex items-center gap-2"><i class="fa-solid fa-palette"></i> បើក Theme Studio ទាំង 28 ម៉ូដ</span>
                             <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">14 Luxury • 14 Anime</span>
                         </button>
+                    </div>
+
+                    <!-- 🖼️ Custom Wallet Avatar & 1:1 Square Cropper -->
+                    <div class="settings-card flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div id="settingsAvatarPreview" class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-amber-300 flex items-center justify-center text-lg shadow-sm overflow-hidden shrink-0 border border-slate-200 dark:border-white/15">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-xs font-black truncate">រូបកាបូប / Avatar (1:1 Cropper)</div>
+                                <div class="text-[10px] text-slate-500 dark:text-slate-400 truncate">កាត់រូបការ៉េ ៤ ជ្រុង • ស្រាលត្រឹម ~6 KB</div>
+                            </div>
+                        </div>
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.openAvatarCropperModal()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-extrabold rounded-xl shadow-sm active:scale-95 transition cursor-pointer shrink-0">ដូររូប</button>
                     </div>
 
                     <!-- ✏️ App Title & Subtitle -->
@@ -1419,7 +1619,7 @@
             <button onclick="ProApp.closeReceiptModal()" class="absolute -top-12 right-0 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition border border-white/20 z-[100] cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             <div id="receiptTicket" class="receipt-paper p-6 relative z-50">
                 <div class="text-center mb-5">
-                    <div class="w-12 h-12 bg-slate-900 text-white rounded-[14px] flex items-center justify-center mx-auto mb-2 text-xl shadow-md"><i class="fa-solid fa-wallet"></i></div>
+                    <div id="rcLogoBox" class="w-12 h-12 bg-slate-900 text-white rounded-[14px] overflow-hidden flex items-center justify-center mx-auto mb-2 text-xl shadow-md"><i class="fa-solid fa-wallet"></i></div>
                     <h2 class="font-black text-xl tracking-wider text-slate-900 uppercase line-clamp-1" id="rcStoreName">PRO CLOUD</h2>
                     <p class="text-[10px] text-gray-500 uppercase mt-1">វិក្កយបត្រ / RECEIPT</p>
                 </div>
@@ -1864,6 +2064,87 @@
         </div>
     </div>
 
+    <!-- 🖼️ V11 INTERACTIVE 1:1 SQUARE AVATAR CROPPER MODAL (ULTRA-LIGHT WEBP ~6KB) -->
+    <div id="avatarCropperModal" class="fixed inset-0 modal-overlay hidden z-[176] flex items-end sm:items-center justify-center sm:p-4" onclick="if(event.target === this) ProApp.closeAvatarCropperModal()">
+        <div class="glass-modal rounded-t-[2rem] sm:rounded-3xl shadow-2xl w-full max-w-md mx-auto max-h-[92vh] flex flex-col overflow-hidden">
+            <div class="w-10 h-1 bg-slate-300 dark:bg-zinc-700 rounded-full mx-auto mt-3 sm:hidden flex-shrink-0"></div>
+            <div class="flex items-center justify-between px-5 pt-3.5 pb-3 border-b border-slate-200/70 dark:border-white/10 flex-shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-sm text-sm"><i class="fa-solid fa-crop-simple"></i></div>
+                    <div>
+                        <h3 class="text-sm font-black modal-label-text">ដូររូបកាបូប &amp; កាត់ការ៉េ ៤ ជ្រុង (1:1)</h3>
+                        <p class="text-[10px] text-slate-400 font-bold">បង្រួមអូតូ 160×160px • មិនស៊ីមេ Cloud ទេ</p>
+                    </div>
+                </div>
+                <button type="button" onclick="ProApp.closeAvatarCropperModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-300 flex items-center justify-center text-lg cursor-pointer">&times;</button>
+            </div>
+
+            <div class="p-5 overflow-y-auto flex-1 custom-scrollbar space-y-4">
+                <div class="flex flex-col items-center gap-3">
+                    <div id="cropViewport" class="shape-rounded">
+                        <canvas id="cropCanvas" width="236" height="236" class="w-full h-full block"></canvas>
+                        <div class="crop-grid-overlay"></div>
+                        <div id="cropEmptyOverlay" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 bg-slate-900/75 text-white gap-2 cursor-pointer" onclick="document.getElementById('avatarFileInput').click()">
+                            <div class="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center text-2xl"><i class="fa-solid fa-cloud-arrow-up text-amber-300"></i></div>
+                            <div class="text-xs font-black">ចុចជ្រើសរូបភាពពីម៉ាស៊ីន</div>
+                            <div class="text-[10px] text-slate-300">អូសរំកិល &amp; ពង្រីកក្នុងការ៉េ ៤ ជ្រុង</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between w-full max-w-[260px] gap-2">
+                        <span id="cropSizeBadge" class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">160×160px • WebP</span>
+                        <input type="file" id="avatarFileInput" accept="image/*" class="hidden" onchange="ProApp.loadAvatarFileForCrop(event)">
+                        <button type="button" onclick="ProApp.vibrate(); document.getElementById('avatarFileInput').click()" class="px-3 py-1 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-[11px] font-extrabold cursor-pointer active:scale-95 transition">
+                            <i class="fa-solid fa-image mr-1"></i> ជ្រើសរូបថ្មី
+                        </button>
+                    </div>
+                </div>
+
+                <div id="cropControlsBox" class="settings-card space-y-3">
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between text-[11px] font-bold">
+                            <span><i class="fa-solid fa-magnifying-glass-plus text-blue-500 mr-1"></i> ពង្រីក / បង្រួម (Zoom)</span>
+                            <span id="cropZoomLabel" class="font-mono text-blue-600 dark:text-amber-400">1.0x</span>
+                        </div>
+                        <input type="range" id="cropZoomRange" min="1" max="3.2" step="0.02" value="1" oninput="ProApp.onCropZoomChange(this.value)" class="w-full accent-blue-600 cursor-pointer">
+                    </div>
+                    <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/70 dark:border-white/10">
+                        <span class="text-[11px] font-bold">រូបរាងស៊ុម៖</span>
+                        <div class="inline-flex bg-slate-200/80 dark:bg-zinc-900 p-0.5 rounded-xl border border-slate-300/50 dark:border-zinc-700">
+                            <button type="button" id="btnShapeRounded" onclick="ProApp.setAvatarShape('rounded')" class="px-3 py-1 rounded-lg text-[10px] font-extrabold bg-white dark:bg-zinc-700 text-blue-600 dark:text-amber-400 shadow-sm cursor-pointer">⬜ ការ៉េជ្រុងមូល</button>
+                            <button type="button" id="btnShapeCircle" onclick="ProApp.setAvatarShape('circle')" class="px-3 py-1 rounded-lg text-[10px] font-bold text-slate-500 cursor-pointer">⚪ រង្វង់មូល</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card space-y-2">
+                    <div class="text-[10.5px] font-extrabold text-slate-500 dark:text-slate-400">ឬជ្រើសរូប Icon ស្អាតៗមានស្រាប់ (0 KB)៖</div>
+                    <div class="grid grid-cols-6 gap-1.5" id="avatarPresetsGrid">
+                        <button type="button" onclick="ProApp.selectPresetAvatar('')" class="h-10 rounded-xl glass-input flex items-center justify-center text-base hover:scale-105 active:scale-90 transition cursor-pointer" title="រូបកាបូបដើម"><i class="fa-solid fa-wallet text-amber-500"></i></button>
+                        <button type="button" onclick="ProApp.selectPresetAvatar('emoji:👑')" class="h-10 rounded-xl glass-input flex items-center justify-center text-lg hover:scale-105 active:scale-90 transition cursor-pointer">👑</button>
+                        <button type="button" onclick="ProApp.selectPresetAvatar('emoji:💎')" class="h-10 rounded-xl glass-input flex items-center justify-center text-lg hover:scale-105 active:scale-90 transition cursor-pointer">💎</button>
+                        <button type="button" onclick="ProApp.selectPresetAvatar('emoji:🐉')" class="h-10 rounded-xl glass-input flex items-center justify-center text-lg hover:scale-105 active:scale-90 transition cursor-pointer">🐉</button>
+                        <button type="button" onclick="ProApp.selectPresetAvatar('emoji:🪷')" class="h-10 rounded-xl glass-input flex items-center justify-center text-lg hover:scale-105 active:scale-90 transition cursor-pointer">🪷</button>
+                        <button type="button" onclick="ProApp.selectPresetAvatar('emoji:🕵️')" class="h-10 rounded-xl glass-input flex items-center justify-center text-lg hover:scale-105 active:scale-90 transition cursor-pointer">🕵️</button>
+                        <button type="button" onclick="ProApp.selectPresetAvatar('emoji:⚔️')" class="h-10 rounded-xl glass-input flex items-center justify-center text-lg hover:scale-105 active:scale-90 transition cursor-pointer">⚔️</button>
+                        <button type="button" onclick="ProApp.selectPresetAvatar('emoji:🦊')" class="h-10 rounded-xl glass-input flex items-center justify-center text-lg hover:scale-105 active:scale-90 transition cursor-pointer">🦊</button>
+                        <button type="button" onclick="ProApp.selectPresetAvatar('emoji:🏴‍☠️')" class="h-10 rounded-xl glass-input flex items-center justify-center text-lg hover:scale-105 active:scale-90 transition cursor-pointer">🏴‍☠️</button>
+                        <button type="button" onclick="ProApp.selectPresetAvatar('emoji:👁️')" class="h-10 rounded-xl glass-input flex items-center justify-center text-lg hover:scale-105 active:scale-90 transition cursor-pointer">👁️</button>
+                        <button type="button" onclick="ProApp.selectPresetAvatar('emoji:🌸')" class="h-10 rounded-xl glass-input flex items-center justify-center text-lg hover:scale-105 active:scale-90 transition cursor-pointer">🌸</button>
+                        <button type="button" onclick="ProApp.selectPresetAvatar('emoji:⚡')" class="h-10 rounded-xl glass-input flex items-center justify-center text-lg hover:scale-105 active:scale-90 transition cursor-pointer">⚡</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-5 py-3 border-t border-slate-200/70 dark:border-white/10 flex items-center gap-2 flex-shrink-0 pb-safe">
+                <button type="button" onclick="ProApp.vibrate(); ProApp.selectPresetAvatar('')" class="px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-white/10 text-xs font-bold cursor-pointer">រូបដើម</button>
+                <button type="button" onclick="ProApp.vibrate(); ProApp.saveCroppedAvatar()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-extrabold shadow-md active:scale-95 transition cursor-pointer">
+                    <i class="fa-solid fa-check mr-1"></i> កាត់ &amp; រក្សាទុករូប
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- 🎨 V10.1 LUXURY & ANIME 28-THEME STUDIO MODAL (FIXED SCROLL + LIVE FX TOGGLE) -->
     <div id="themeStudioModal" class="fixed inset-0 modal-overlay hidden z-[162] flex items-end sm:items-center justify-center sm:p-4" onclick="if(event.target === this) ProApp.closeThemeStudioModal()">
         <div class="glass-modal rounded-t-[2rem] sm:rounded-3xl shadow-2xl w-full max-w-2xl mx-auto h-[88vh] sm:h-auto sm:max-h-[88vh] flex flex-col overflow-hidden">
@@ -1889,13 +2170,22 @@
                     <button type="button" id="tsTab-light" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('light')" class="px-2.5 py-2 rounded-xl text-[11px] font-bold cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-center">💎 Luxury ភ្លឺ (7)</button>
                     <button type="button" id="tsTab-anime" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('anime')" class="px-2.5 py-2 rounded-xl text-[11px] font-bold cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-center">⛩️ Anime ល្បីៗ (14)</button>
                 </div>
-                <label class="flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-100/80 dark:bg-white/5 border border-slate-200/70 dark:border-white/10 cursor-pointer">
-                    <span class="text-[11px] font-extrabold flex items-center gap-1.5">
-                        <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
-                        <span>បើក Live Effects (ភ្លើង • ផ្កា • ផ្កាយ • ពន្លឺរលោង)</span>
-                    </span>
-                    <span class="ios-switch"><input type="checkbox" id="chkThemeFxEnabled" checked onchange="ProApp.vibrate(); ProApp.toggleThemeFx(this.checked)"><span class="ios-slider"></span></span>
-                </label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                    <label class="flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-100/80 dark:bg-white/5 border border-slate-200/70 dark:border-white/10 cursor-pointer gap-2">
+                        <span class="text-[10.5px] font-extrabold flex items-center gap-1.5 truncate">
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
+                            <span class="truncate">Live Effects &amp; ផ្ទុះពេលចុច</span>
+                        </span>
+                        <span class="ios-switch"><input type="checkbox" id="chkThemeFxEnabled" checked onchange="ProApp.vibrate(); ProApp.toggleThemeFx(this.checked)"><span class="ios-slider"></span></span>
+                    </label>
+                    <label class="flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-100/80 dark:bg-white/5 border border-slate-200/70 dark:border-white/10 cursor-pointer gap-2">
+                        <span class="text-[10.5px] font-extrabold flex items-center gap-1.5 truncate">
+                            <i class="fa-solid fa-volume-high text-sky-500"></i>
+                            <span class="truncate">សំឡេង Effect តាម Theme</span>
+                        </span>
+                        <span class="ios-switch"><input type="checkbox" id="chkThemeSoundEnabled" checked onchange="ProApp.vibrate(); ProApp.toggleThemeSound(this.checked)"><span class="ios-slider"></span></span>
+                    </label>
+                </div>
             </div>
 
             <!-- Dedicated Scroll Wrapper -> Inner Grid NEVER gets squashed on mobile Chrome! -->
@@ -2081,6 +2371,9 @@
                 currencyRates: { USD: 1, KHR: 4100 },
                 themeStyle: 'default',
                 themeFxEnabled: true,
+                themeSoundEnabled: true,
+                appAvatar: '',
+                appAvatarShape: 'rounded',
                 bgImageUrl: '',
                 titleColor: '#ffffff',
                 subtitleColor: '#bfdbfe',
@@ -2384,6 +2677,9 @@
                     appSubtitle: ProApp.state.appSubtitle || 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️',
                     themeStyle: ProApp.state.themeStyle || 'default',
                     themeFxEnabled: ProApp.state.themeFxEnabled !== false,
+                    themeSoundEnabled: ProApp.state.themeSoundEnabled !== false,
+                    appAvatar: ProApp.state.appAvatar || '',
+                    appAvatarShape: ProApp.state.appAvatarShape || 'rounded',
                     bgImageUrl: ProApp.state.bgImageUrl || '',
                     hideAmounts: !!ProApp.state.hideAmounts,
                     hiddenAccounts: ProApp.state.hiddenAccounts || [],
@@ -2613,6 +2909,8 @@
                                     appSubtitle: (ProApp.state.appSubtitle && ProApp.state.appSubtitle !== 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️') ? ProApp.state.appSubtitle : (c.appSubtitle || ProApp.state.appSubtitle),
                                     themeStyle: (ProApp.state.themeStyle && ProApp.state.themeStyle !== 'default') ? ProApp.state.themeStyle : (c.themeStyle || ProApp.state.themeStyle),
                                     bgImageUrl: ProApp.state.bgImageUrl || c.bgImageUrl || '',
+                                    appAvatar: ProApp.state.appAvatar || c.appAvatar || '',
+                                    appAvatarShape: ProApp.state.appAvatarShape || c.appAvatarShape || 'rounded',
                                     pinCode: ProApp.state.pinCode || c.pinCode || '',
                                     tgBotToken: ProApp.state.tgBotToken || c.tgBotToken || '',
                                     tgChatId: ProApp.state.tgChatId || c.tgChatId || '',
@@ -2643,6 +2941,9 @@
                 if (data.appSubtitle) ProApp.state.appSubtitle = data.appSubtitle;
                 if (data.themeStyle) ProApp.state.themeStyle = data.themeStyle;
                 if (data.themeFxEnabled !== undefined) ProApp.state.themeFxEnabled = data.themeFxEnabled !== false;
+                if (data.themeSoundEnabled !== undefined) ProApp.state.themeSoundEnabled = data.themeSoundEnabled !== false;
+                if (data.appAvatar !== undefined) ProApp.state.appAvatar = data.appAvatar || '';
+                if (data.appAvatarShape) ProApp.state.appAvatarShape = data.appAvatarShape;
                 if (data.bgImageUrl !== undefined) ProApp.state.bgImageUrl = data.bgImageUrl;
                 if (data.hideAmounts !== undefined) {
                     ProApp.state.hideAmounts = !!data.hideAmounts;
@@ -4288,9 +4589,466 @@
                 };
                 ProApp.themeFxRaf = requestAnimationFrame(loop);
             },
+            // 🔥 V11 THEME MORPHING PROFILES (UI Shape, Emblem Watermark, FAB Icon, Badge, Sound)
+            themeSkinMap: {
+                'aba-dark':          { skin: 'vip',   badge: 'BLACK CARD VIP',      fab: '👑', sound: 'vip',        emblem: 'crown',    banner: '👑 Obsidian Gold • VIP Black Card' },
+                'emerald-wealth':    { skin: 'vip',   badge: 'EMERALD PRIVATE',     fab: '💎', sound: 'vip',        emblem: 'diamond',  banner: '💚 Emerald Wealth • Private Reserve' },
+                'slate':             { skin: 'vip',   badge: 'SAPPHIRE EXECUTIVE',  fab: '🌌', sound: 'vip',        emblem: 'compass',  banner: '🌌 Midnight Sapphire • Executive' },
+                'royal-amethyst':    { skin: 'vip',   badge: 'ROYAL AMETHYST',      fab: '🔮', sound: 'anime-soft', emblem: 'crown',    banner: '🔮 Royal Amethyst • Crown Edition' },
+                'burgundy-velvet':   { skin: 'vip',   badge: 'VELVET PRESTIGE',     fab: '🍷', sound: 'vip',        emblem: 'diamond',  banner: '🍷 Burgundy Velvet • Prestige' },
+                'espresso-copper':   { skin: 'vip',   badge: 'ESPRESSO RESERVE',    fab: '☕', sound: 'vip',        emblem: 'crown',    banner: '☕ Espresso Copper • Reserve' },
+                'carbon-titanium':   { skin: 'cyber', badge: '[ TITANIUM PRO ]',    fab: '🦾', sound: 'cyber',      emblem: 'circuit',  banner: '🦾 [ TITANIUM PRO ] Activated' },
+                'default':           { skin: 'soft',  badge: 'PRO CLOUD ROYAL',     fab: '⚡', sound: 'vip',        emblem: 'diamond',  banner: '💎 Classic Royal Blue' },
+                'champagne-ivory':   { skin: 'vip',   badge: 'CHAMPAGNE 5★ VIP',    fab: '🥂', sound: 'vip',        emblem: 'crown',    banner: '🥂 Champagne Ivory • 5-Star' },
+                'sage-mint':         { skin: 'soft',  badge: 'SAGE FINTECH',        fab: '🌿', sound: 'anime-soft', emblem: 'leaf',     banner: '🌿 Sage Mint Fintech' },
+                'frost-lavender':    { skin: 'soft',  badge: 'FROST LAVENDER',      fab: '🪻', sound: 'anime-soft', emblem: 'sakura',   banner: '🪻 Frost Lavender Glass' },
+                'rose-pearl':        { skin: 'soft',  badge: 'ROSE PEARL EDITION',  fab: '🌸', sound: 'anime-soft', emblem: 'sakura',   banner: '🌸 Rose Pearl Edition' },
+                'ocean-glacier':     { skin: 'soft',  badge: 'GLACIER MINIMAL',     fab: '❄️', sound: 'anime-soft', emblem: 'compass',  banner: '❄️ Ocean Glacier Minimal' },
+                'sunset-amber':      { skin: 'soft',  badge: 'SUNSET CORAL',        fab: '🌅', sound: 'anime-fire', emblem: 'sun',      banner: '🌅 Sunset Amber Energy' },
+                'anime-spyxfamily':  { skin: 'anime', badge: 'OPERATION STRIX ★',   fab: '⭐', sound: 'anime-soft', emblem: 'stella',   banner: '🕵️ Spy x Family • Operation Strix!' },
+                'anime-btth':        { skin: 'anime', badge: 'ដុតភ្លើងទេវតា • BTTH', fab: '🪷', sound: 'anime-fire', emblem: 'lotus',    banner: '🪷 BTTH • Azure Lotus Flame Awakened!' },
+                'anime-demonslayer': { skin: 'anime', badge: 'HINOKAMI KAGURA',     fab: '🌊', sound: 'anime-fire', emblem: 'katana',   banner: '🌊 Demon Slayer • Hinokami Kagura!' },
+                'anime-jjk':         { skin: 'cyber', badge: '[ INFINITE VOID ]',   fab: '👁️', sound: 'cyber',      emblem: 'void',     banner: '👁️ Domain Expansion: Infinite Void!' },
+                'anime-onepiece':    { skin: 'anime', badge: 'GRAND LINE • GEAR 5', fab: '🏴‍☠️', sound: 'anime-fire', emblem: 'helm',     banner: '🏴‍☠️ One Piece • Set Sail!' },
+                'anime-naruto':      { skin: 'anime', badge: 'KURAMA SAGE MODE',    fab: '🦊', sound: 'anime-fire', emblem: 'spiral',   banner: '🦊 Naruto • Kurama Sage Mode!' },
+                'anime-sololeveling':{ skin: 'cyber', badge: '[ SYSTEM • ARISE ]',  fab: '⚔️', sound: 'cyber',      emblem: 'dagger',   banner: '⚔️ [ SYSTEM ] Shadow Monarch Arise!' },
+                'anime-aot':         { skin: 'anime', badge: 'SURVEY CORPS • WINGS',fab: '🦅', sound: 'anime-fire', emblem: 'wings',    banner: '🦅 Attack on Titan • Wings of Freedom!' },
+                'anime-dragonball':  { skin: 'cyber', badge: '[ ULTRA INSTINCT ]',  fab: '⚡', sound: 'cyber',      emblem: 'dragon',   banner: '⚡ Dragon Ball • Ultra Instinct!' },
+                'anime-bleach':      { skin: 'cyber', badge: '[ BANKAI • TENSA ]',  fab: '🌙', sound: 'cyber',      emblem: 'moon',     banner: '🌙 Bleach • Bankai Released!' },
+                'anime-chainsaw':    { skin: 'anime', badge: 'PUBLIC SAFETY • CSM', fab: '🪚', sound: 'anime-fire', emblem: 'gear',     banner: '🪚 Chainsaw Man • Rev It Up!' },
+                'anime-ghibli':      { skin: 'soft',  badge: 'STUDIO GHIBLI SKY',   fab: '🍃', sound: 'anime-soft', emblem: 'leaf',     banner: '🍃 Studio Ghibli • Spirited Breeze' },
+                'anime-yourname':    { skin: 'anime', badge: 'KATAWARE-DOKI ☄️',     fab: '☄️', sound: 'anime-soft', emblem: 'comet',    banner: '☄️ Your Name • Twilight Comet' },
+                'anime-cyberpunk':   { skin: 'cyber', badge: '[ NIGHT CITY 2077 ]', fab: '🌆', sound: 'cyber',      emblem: 'circuit',  banner: '🌆 [ NIGHT CITY ] Edgerunners Online!' }
+            },
+            getHeroEmblemSvg: function(name) {
+                const svgs = {
+                    crown:   `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 86L10 38l28 20L60 22l22 36 28-20-8 48H18z"/><circle cx="60" cy="18" r="4" fill="currentColor"/><circle cx="10" cy="34" r="3.5" fill="currentColor"/><circle cx="110" cy="34" r="3.5" fill="currentColor"/><line x1="20" y1="98" x2="100" y2="98" stroke-width="4"/></svg>`,
+                    diamond: `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.6"><polygon points="60,12 104,46 60,108 16,46"/><polyline points="16,46 104,46"/><polyline points="60,12 42,46 60,108 78,46 60,12"/></svg>`,
+                    lotus:   `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M60 14C46 38 46 64 60 88C74 64 74 38 60 14Z"/><path d="M60 88C34 78 20 56 22 34C40 42 52 60 60 88Z"/><path d="M60 88C86 78 100 56 98 34C80 42 68 60 60 88Z"/><path d="M60 92C26 92 10 76 10 62C28 66 44 76 60 92Z"/><path d="M60 92C94 92 110 76 110 62C92 66 76 76 60 92Z"/></svg>`,
+                    stella:  `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.8"><polygon points="60,10 72,44 108,44 79,65 90,100 60,79 30,100 41,65 12,44 48,44"/><circle cx="60" cy="58" r="14"/></svg>`,
+                    void:    `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="60" cy="60" r="46" stroke-dasharray="10 6"/><circle cx="60" cy="60" r="32"/><circle cx="60" cy="60" r="16" stroke-dasharray="4 4"/><circle cx="60" cy="60" r="5" fill="currentColor"/></svg>`,
+                    dagger:  `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M96 16L48 64L38 54L86 6Z"/><path d="M36 52L68 84"/><path d="M44 72L20 96L24 100L48 76"/><circle cx="60" cy="60" r="46" stroke-dasharray="6 8" stroke-width="1.8"/></svg>`,
+                    helm:    `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.8"><circle cx="60" cy="60" r="34"/><circle cx="60" cy="60" r="12"/><line x1="60" y1="8" x2="60" y2="112"/><line x1="8" y1="60" x2="112" y2="60"/><line x1="23" y1="23" x2="97" y2="97"/><line x1="97" y1="23" x2="23" y2="97"/></svg>`,
+                    spiral:  `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3"><path d="M60 60 m-4 0 a4 4 0 1 1 8 0 a10 10 0 1 1 -20 0 a18 18 0 1 1 36 0 a26 26 0 1 1 -52 0 a34 34 0 1 1 68 0 a42 42 0 1 1 -84 0"/></svg>`,
+                    katana:  `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.8"><circle cx="60" cy="60" r="40"/><path d="M24 96L96 24" stroke-width="4"/><path d="M32 76L44 88"/><path d="M60 16v88M16 60h88" stroke-width="1.5" opacity="0.5"/></svg>`,
+                    wings:   `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M60 95C34 86 16 64 14 26c18 12 34 22 46 38C72 48 88 38 106 26c-2 38-20 60-46 69Z"/><path d="M26 44c14 8 24 18 34 30M94 44c-14 8-24 18-34 30"/></svg>`,
+                    dragon:  `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.8"><circle cx="60" cy="60" r="44"/><polygon points="60,26 65,40 80,40 68,49 72,63 60,54 48,63 52,49 40,40 55,40" fill="currentColor" opacity="0.55"/><circle cx="38" cy="76" r="5" fill="currentColor"/><circle cx="60" cy="84" r="5" fill="currentColor"/><circle cx="82" cy="76" r="5" fill="currentColor"/></svg>`,
+                    moon:    `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3"><path d="M84 22A44 44 0 1 0 98 86A34 34 0 1 1 84 22Z"/></svg>`,
+                    gear:    `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.8"><circle cx="60" cy="60" r="22"/><circle cx="60" cy="60" r="38" stroke-dasharray="10 8" stroke-width="8"/></svg>`,
+                    leaf:    `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M24 96C24 44 58 20 98 22C96 62 72 96 24 96Z"/><path d="M24 96L82 38"/></svg>`,
+                    sakura:  `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="60" cy="60" r="9" fill="currentColor"/><path d="M60 18C72 32 72 48 60 52C48 48 48 32 60 18Z"/><path d="M98 46C92 62 78 68 68 60C70 46 84 40 98 46Z"/><path d="M84 96C68 94 58 82 62 70C74 70 86 80 84 96Z"/><path d="M36 96C34 80 46 70 58 70C62 82 52 94 36 96Z"/><path d="M22 46C36 40 50 46 52 60C42 68 28 62 22 46Z"/></svg>`,
+                    comet:   `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.6"><polygon points="88,32 93,44 106,44 96,52 100,64 88,57 76,64 80,52 70,44 83,44" fill="currentColor"/><path d="M74 58L16 102M64 46L26 74M82 70L44 98" stroke-linecap="round"/></svg>`,
+                    circuit: `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.6"><rect x="34" y="34" width="52" height="52" rx="6"/><path d="M48 34V14M72 34V14M48 86v20M72 86v20M34 48H14M34 72H14M86 48h20M86 72h20"/><circle cx="60" cy="60" r="10"/></svg>`,
+                    compass: `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="60" cy="60" r="44"/><polygon points="60,20 70,60 60,100 50,60"/></svg>`,
+                    sun:     `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.8"><circle cx="60" cy="60" r="24"/><path d="M60 12v14M60 94v14M12 60h14M94 60h14M26 26l10 10M84 84l10 10M94 26L84 36M36 84L26 94"/></svg>`
+                };
+                return svgs[name] || svgs.diamond;
+            },
+            getThemeSkinMeta: function(id) {
+                return ProApp.themeSkinMap[id] || ProApp.themeSkinMap['default'];
+            },
+            toggleThemeSound: function(enabled) {
+                ProApp.state.themeSoundEnabled = !!enabled;
+                ProApp.saveUiConfigToCloud();
+                if (enabled) ProApp.playThemeSound('switch');
+                ProApp.showToast(enabled ? '🔊 បានបើកសំឡេង Effect តាម Theme!' : '🔇 បានបិទសំឡេង Effect', 'info');
+            },
+            playThemeSound: function(kind = 'tap') {
+                if (ProApp.state.themeSoundEnabled === false) return;
+                try {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioCtx) return;
+                    const ctx = new AudioCtx();
+                    const skinMeta = ProApp.getThemeSkinMeta(ProApp.state.themeStyle || 'default');
+                    const prof = skinMeta.sound || 'vip';
+                    const now = ctx.currentTime;
+                    const playNote = (freq, start, dur, wave = 'sine', vol = 0.08) => {
+                        const osc = ctx.createOscillator();
+                        const g = ctx.createGain();
+                        osc.type = wave;
+                        osc.frequency.setValueAtTime(freq, now + start);
+                        g.gain.setValueAtTime(0.0001, now + start);
+                        g.gain.exponentialRampToValueAtTime(vol, now + start + 0.015);
+                        g.gain.exponentialRampToValueAtTime(0.0001, now + start + dur);
+                        osc.connect(g); g.connect(ctx.destination);
+                        osc.start(now + start); osc.stop(now + start + dur + 0.02);
+                    };
+                    if (kind === 'switch') {
+                        if (prof === 'cyber') {
+                            playNote(440, 0, 0.09, 'triangle', 0.09);
+                            playNote(660, 0.06, 0.11, 'sawtooth', 0.05);
+                            playNote(1100, 0.12, 0.22, 'sine', 0.08);
+                        } else if (prof === 'anime-fire') {
+                            playNote(392, 0, 0.12, 'triangle', 0.09);
+                            playNote(587.33, 0.06, 0.16, 'triangle', 0.09);
+                            playNote(880, 0.12, 0.24, 'sine', 0.09);
+                        } else if (prof === 'anime-soft') {
+                            playNote(523.25, 0, 0.18, 'sine', 0.08);
+                            playNote(659.25, 0.08, 0.22, 'sine', 0.08);
+                            playNote(1046.5, 0.16, 0.28, 'sine', 0.07);
+                        } else {
+                            playNote(587.33, 0, 0.20, 'sine', 0.08);
+                            playNote(880, 0.08, 0.26, 'sine', 0.08);
+                            playNote(1174.66, 0.16, 0.30, 'sine', 0.06);
+                        }
+                    } else {
+                        if (prof === 'cyber') playNote(920, 0, 0.07, 'triangle', 0.05);
+                        else if (prof === 'anime-fire') playNote(640, 0, 0.09, 'triangle', 0.05);
+                        else playNote(760, 0, 0.09, 'sine', 0.05);
+                    }
+                    setTimeout(() => { try { ctx.close(); } catch (e) {} }, 600);
+                } catch (e) {}
+            },
+            triggerThemeActivationEffect: function(themeId) {
+                const t = ProApp.getThemeMeta(themeId);
+                const s = ProApp.getThemeSkinMeta(themeId);
+                ProApp.playThemeSound('switch');
+                if (ProApp.state.themeFxEnabled !== false) {
+                    const fl = document.getElementById('themeFlashOverlay');
+                    if (fl) {
+                        fl.classList.remove('flashing');
+                        void fl.offsetWidth;
+                        fl.classList.add('flashing');
+                    }
+                    ProApp.spawnTouchBurst(window.innerWidth / 2, window.innerHeight * 0.32, 22);
+                }
+                const banner = document.getElementById('themeActivationBanner');
+                const bIcon = document.getElementById('themeBannerIcon');
+                const bText = document.getElementById('themeBannerText');
+                if (banner && bIcon && bText) {
+                    bIcon.textContent = t.icon;
+                    bText.textContent = s.banner || `${t.icon} ${t.name}`;
+                    banner.classList.remove('show-banner');
+                    void banner.offsetWidth;
+                    banner.classList.add('show-banner');
+                }
+            },
+            // ✨ INTERACTIVE TOUCH / CLICK BURST ENGINE (60FPS, ZERO IDLE CPU)
+            burstParticles: [],
+            burstRaf: null,
+            burstInitialized: false,
+            initTouchBurstEngine: function() {
+                if (ProApp.burstInitialized) return;
+                ProApp.burstInitialized = true;
+                document.addEventListener('pointerdown', (e) => {
+                    if (ProApp.state.themeFxEnabled === false) return;
+                    if (e.target && e.target.closest('button, .glass-panel, .service-item-btn, .tab-btn, .theme-swatch-card')) {
+                        ProApp.spawnTouchBurst(e.clientX, e.clientY, 11);
+                    }
+                }, { passive: true });
+            },
+            spawnTouchBurst: function(cx, cy, count = 11) {
+                const cv = document.getElementById('touchBurstCanvas');
+                if (!cv) return;
+                const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+                const w = Math.floor(window.innerWidth * dpr), h = Math.floor(window.innerHeight * dpr);
+                if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+                const t = ProApp.getThemeMeta(ProApp.state.themeStyle || 'default');
+                const fxInfo = ProApp.themeFxMap[t.id] || { fx: 'gold-dust' };
+                for (let i = 0; i < count; i++) {
+                    const ang = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.45;
+                    const spd = (2.2 + Math.random() * 4.4) * dpr;
+                    ProApp.burstParticles.push({
+                        x: cx * dpr, y: cy * dpr,
+                        vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd,
+                        r: (2.2 + Math.random() * 2.8) * dpr,
+                        life: 1, decay: 0.032 + Math.random() * 0.02,
+                        rot: Math.random() * Math.PI * 2,
+                        color: Math.random() > 0.35 ? t.accent : (t.accent2 || '#ffffff'),
+                        fx: fxInfo.fx
+                    });
+                }
+                if (!ProApp.burstRaf) {
+                    const ctx = cv.getContext('2d');
+                    const step = () => {
+                        ctx.clearRect(0, 0, cv.width, cv.height);
+                        for (let i = ProApp.burstParticles.length - 1; i >= 0; i--) {
+                            const p = ProApp.burstParticles[i];
+                            p.x += p.vx; p.y += p.vy;
+                            p.vx *= 0.94; p.vy = p.vy * 0.94 + 0.08;
+                            p.life -= p.decay;
+                            if (p.life <= 0) { ProApp.burstParticles.splice(i, 1); continue; }
+                            ctx.save();
+                            ctx.globalAlpha = p.life;
+                            ctx.fillStyle = p.color;
+                            ctx.strokeStyle = p.color;
+                            ctx.shadowColor = p.color;
+                            ctx.shadowBlur = 8;
+                            if (p.fx === 'cyber' || p.fx === 'void') {
+                                ctx.fillRect(p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+                            } else if (p.fx === 'slash') {
+                                ctx.lineWidth = 2;
+                                ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 3, p.y - p.vy * 3); ctx.stroke();
+                            } else if (p.fx === 'sakura' || p.fx === 'stella') {
+                                ctx.translate(p.x, p.y); ctx.rotate(p.rot + p.life * 4);
+                                ctx.beginPath(); ctx.ellipse(0, 0, p.r * 1.4, p.r * 0.65, 0, 0, Math.PI * 2); ctx.fill();
+                            } else {
+                                ctx.beginPath(); ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2); ctx.fill();
+                            }
+                            ctx.restore();
+                        }
+                        if (ProApp.burstParticles.length > 0) {
+                            ProApp.burstRaf = requestAnimationFrame(step);
+                        } else {
+                            ProApp.burstRaf = null;
+                            ctx.clearRect(0, 0, cv.width, cv.height);
+                        }
+                    };
+                    ProApp.burstRaf = requestAnimationFrame(step);
+                }
+            },
+
+            // 🖼️ INTERACTIVE 1:1 SQUARE AVATAR CROPPER ENGINE (ULTRA-LIGHT WEBP ~5–10 KB)
+            cropState: { img: null, zoom: 1, offsetX: 0, offsetY: 0, dragging: false, startX: 0, startY: 0, shape: 'rounded', bound: false },
+            openAvatarCropperModal: function() {
+                ProApp.cropState.shape = ProApp.state.appAvatarShape || 'rounded';
+                ProApp.updateAvatarShapeUI();
+                const emptyOv = document.getElementById('cropEmptyOverlay');
+                const zoomInp = document.getElementById('cropZoomRange');
+                const zoomLbl = document.getElementById('cropZoomLabel');
+                if (ProApp.state.appAvatar && ProApp.state.appAvatar.startsWith('data:image/')) {
+                    const img = new Image();
+                    img.onload = () => {
+                        ProApp.cropState.img = img;
+                        ProApp.cropState.zoom = 1;
+                        ProApp.cropState.offsetX = 0;
+                        ProApp.cropState.offsetY = 0;
+                        if (zoomInp) zoomInp.value = 1;
+                        if (zoomLbl) zoomLbl.textContent = '1.0x';
+                        if (emptyOv) emptyOv.classList.add('hidden');
+                        ProApp.drawCropCanvas();
+                        ProApp.updateCropSizeEstimate();
+                    };
+                    img.src = ProApp.state.appAvatar;
+                } else {
+                    ProApp.cropState.img = null;
+                    if (emptyOv) emptyOv.classList.remove('hidden');
+                    const cv = document.getElementById('cropCanvas');
+                    if (cv) cv.getContext('2d').clearRect(0, 0, cv.width, cv.height);
+                    const badge = document.getElementById('cropSizeBadge');
+                    if (badge) badge.textContent = '160×160px • WebP (~6 KB)';
+                }
+                ProApp.bindCropViewportEvents();
+                document.getElementById('avatarCropperModal')?.classList.remove('hidden');
+            },
+            closeAvatarCropperModal: function() {
+                document.getElementById('avatarCropperModal')?.classList.add('hidden');
+            },
+            bindCropViewportEvents: function() {
+                if (ProApp.cropState.bound) return;
+                const vp = document.getElementById('cropViewport');
+                if (!vp) return;
+                ProApp.cropState.bound = true;
+                const startDrag = (clientX, clientY) => {
+                    if (!ProApp.cropState.img) return;
+                    ProApp.cropState.dragging = true;
+                    ProApp.cropState.startX = clientX - ProApp.cropState.offsetX;
+                    ProApp.cropState.startY = clientY - ProApp.cropState.offsetY;
+                };
+                const moveDrag = (clientX, clientY) => {
+                    if (!ProApp.cropState.dragging || !ProApp.cropState.img) return;
+                    ProApp.cropState.offsetX = clientX - ProApp.cropState.startX;
+                    ProApp.cropState.offsetY = clientY - ProApp.cropState.startY;
+                    ProApp.clampCropOffsets();
+                    ProApp.drawCropCanvas();
+                };
+                const endDrag = () => { ProApp.cropState.dragging = false; };
+
+                vp.addEventListener('pointerdown', (e) => {
+                    if (!ProApp.cropState.img) return;
+                    vp.setPointerCapture?.(e.pointerId);
+                    startDrag(e.clientX, e.clientY);
+                });
+                vp.addEventListener('pointermove', (e) => moveDrag(e.clientX, e.clientY));
+                vp.addEventListener('pointerup', endDrag);
+                vp.addEventListener('pointercancel', endDrag);
+            },
+            loadAvatarFileForCrop: function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        ProApp.cropState.img = img;
+                        ProApp.cropState.zoom = 1;
+                        ProApp.cropState.offsetX = 0;
+                        ProApp.cropState.offsetY = 0;
+                        const zEl = document.getElementById('cropZoomRange');
+                        const zLbl = document.getElementById('cropZoomLabel');
+                        if (zEl) zEl.value = 1;
+                        if (zLbl) zLbl.textContent = '1.0x';
+                        document.getElementById('cropEmptyOverlay')?.classList.add('hidden');
+                        ProApp.drawCropCanvas();
+                        ProApp.updateCropSizeEstimate();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                event.target.value = '';
+            },
+            clampCropOffsets: function() {
+                const st = ProApp.cropState;
+                if (!st.img) return;
+                const vpSize = 236;
+                const baseScale = Math.max(vpSize / st.img.width, vpSize / st.img.height);
+                const drawW = st.img.width * baseScale * st.zoom;
+                const drawH = st.img.height * baseScale * st.zoom;
+                const maxX = Math.max(0, (drawW - vpSize) / 2);
+                const maxY = Math.max(0, (drawH - vpSize) / 2);
+                st.offsetX = Math.max(-maxX, Math.min(maxX, st.offsetX));
+                st.offsetY = Math.max(-maxY, Math.min(maxY, st.offsetY));
+            },
+            onCropZoomChange: function(val) {
+                ProApp.cropState.zoom = Math.max(1, Math.min(3.2, parseFloat(val) || 1));
+                const zLbl = document.getElementById('cropZoomLabel');
+                if (zLbl) zLbl.textContent = ProApp.cropState.zoom.toFixed(1) + 'x';
+                ProApp.clampCropOffsets();
+                ProApp.drawCropCanvas();
+            },
+            drawCropCanvas: function() {
+                const cv = document.getElementById('cropCanvas');
+                const st = ProApp.cropState;
+                if (!cv || !st.img) return;
+                const ctx = cv.getContext('2d');
+                const s = cv.width;
+                ctx.clearRect(0, 0, s, s);
+                const baseScale = Math.max(s / st.img.width, s / st.img.height);
+                const drawW = st.img.width * baseScale * st.zoom;
+                const drawH = st.img.height * baseScale * st.zoom;
+                const dx = (s - drawW) / 2 + st.offsetX;
+                const dy = (s - drawH) / 2 + st.offsetY;
+                ctx.drawImage(st.img, dx, dy, drawW, drawH);
+            },
+            exportCroppedDataUrl: function() {
+                const st = ProApp.cropState;
+                if (!st.img) return '';
+                const outSize = 160;
+                const off = document.createElement('canvas');
+                off.width = outSize; off.height = outSize;
+                const ctx = off.getContext('2d');
+                const vpSize = 236;
+                const ratio = outSize / vpSize;
+                const baseScale = Math.max(vpSize / st.img.width, vpSize / st.img.height);
+                const drawW = st.img.width * baseScale * st.zoom * ratio;
+                const drawH = st.img.height * baseScale * st.zoom * ratio;
+                const dx = (outSize - drawW) / 2 + st.offsetX * ratio;
+                const dy = (outSize - drawH) / 2 + st.offsetY * ratio;
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(st.img, dx, dy, drawW, drawH);
+                let dataUrl = off.toDataURL('image/webp', 0.76);
+                if (!dataUrl.startsWith('data:image/webp')) {
+                    dataUrl = off.toDataURL('image/jpeg', 0.72);
+                }
+                return dataUrl;
+            },
+            updateCropSizeEstimate: function() {
+                const badge = document.getElementById('cropSizeBadge');
+                if (!badge || !ProApp.cropState.img) return;
+                const dataUrl = ProApp.exportCroppedDataUrl();
+                const kb = ((dataUrl.length * 0.75) / 1024).toFixed(1);
+                const fmt = dataUrl.startsWith('data:image/webp') ? 'WebP' : 'JPEG';
+                badge.textContent = `160×160px • ~${kb} KB (${fmt})`;
+            },
+            setAvatarShape: function(shape) {
+                ProApp.cropState.shape = shape === 'circle' ? 'circle' : 'rounded';
+                ProApp.updateAvatarShapeUI();
+            },
+            updateAvatarShapeUI: function() {
+                const isCircle = ProApp.cropState.shape === 'circle';
+                const vp = document.getElementById('cropViewport');
+                if (vp) {
+                    vp.classList.toggle('shape-circle', isCircle);
+                    vp.classList.toggle('shape-rounded', !isCircle);
+                }
+                const btnR = document.getElementById('btnShapeRounded');
+                const btnC = document.getElementById('btnShapeCircle');
+                const activeCls = 'px-3 py-1 rounded-lg text-[10px] font-extrabold bg-white dark:bg-zinc-700 text-blue-600 dark:text-amber-400 shadow-sm cursor-pointer';
+                const inactCls = 'px-3 py-1 rounded-lg text-[10px] font-bold text-slate-500 cursor-pointer';
+                if (btnR) btnR.className = isCircle ? inactCls : activeCls;
+                if (btnC) btnC.className = isCircle ? activeCls : inactCls;
+            },
+            selectPresetAvatar: function(val) {
+                ProApp.vibrate();
+                ProApp.state.appAvatar = val;
+                ProApp.state.appAvatarShape = ProApp.cropState.shape || 'rounded';
+                ProApp.applyAvatarUI();
+                ProApp.saveUiConfigToCloud();
+                ProApp.closeAvatarCropperModal();
+                ProApp.playThemeSound('tap');
+                ProApp.showToast(val ? '✅ បានដូររូប Icon កាបូបជោគជ័យ!' : '↩️ បានប្តូរមករូបកាបូបដើមវិញ', 'success');
+            },
+            saveCroppedAvatar: function() {
+                if (!ProApp.cropState.img) {
+                    ProApp.state.appAvatarShape = ProApp.cropState.shape || 'rounded';
+                    ProApp.applyAvatarUI();
+                    ProApp.saveUiConfigToCloud();
+                    ProApp.closeAvatarCropperModal();
+                    ProApp.showToast('✅ បានរក្សាទុករូបរាងស៊ុម!', 'success');
+                    return;
+                }
+                const cropped = ProApp.exportCroppedDataUrl();
+                const kb = ((cropped.length * 0.75) / 1024).toFixed(1);
+                ProApp.state.appAvatar = cropped;
+                ProApp.state.appAvatarShape = ProApp.cropState.shape || 'rounded';
+                ProApp.applyAvatarUI();
+                ProApp.saveUiConfigToCloud();
+                ProApp.closeAvatarCropperModal();
+                ProApp.playThemeSound('switch');
+                ProApp.showToast(`🖼️ បានកាត់ & រក្សាទុករូបកាបូប (${kb} KB)!`, 'success');
+            },
+            applyAvatarUI: function() {
+                const av = ProApp.state.appAvatar || '';
+                const isCircle = ProApp.state.appAvatarShape === 'circle';
+                const radiusCls = isCircle ? 'rounded-full' : 'rounded-2xl';
+                const headerBtn = document.getElementById('headerAvatarBtn');
+                const headerContent = document.getElementById('headerAvatarContent');
+                const settingsPrev = document.getElementById('settingsAvatarPreview');
+                const rcLogo = document.getElementById('rcLogoBox');
+
+                if (headerBtn) {
+                    headerBtn.classList.toggle('rounded-full', isCircle);
+                    headerBtn.classList.toggle('rounded-2xl', !isCircle);
+                }
+                if (headerContent) {
+                    headerContent.className = `w-full h-full ${radiusCls} overflow-hidden flex items-center justify-center`;
+                    if (av.startsWith('data:image/')) {
+                        headerContent.innerHTML = `<img src="${av}" alt="Avatar" class="w-full h-full object-cover">`;
+                    } else if (av.startsWith('emoji:')) {
+                        headerContent.innerHTML = `<span class="text-2xl leading-none">${ProApp.escapeHtml(av.slice(6))}</span>`;
+                    } else {
+                        headerContent.innerHTML = `<i class="fa-solid fa-wallet text-amber-300 text-xl"></i>`;
+                    }
+                }
+                if (settingsPrev) {
+                    settingsPrev.classList.toggle('rounded-full', isCircle);
+                    settingsPrev.classList.toggle('rounded-2xl', !isCircle);
+                    if (av.startsWith('data:image/')) {
+                        settingsPrev.innerHTML = `<img src="${av}" alt="Avatar" class="w-full h-full object-cover">`;
+                    } else if (av.startsWith('emoji:')) {
+                        settingsPrev.innerHTML = `<span class="text-2xl leading-none">${ProApp.escapeHtml(av.slice(6))}</span>`;
+                    } else {
+                        settingsPrev.innerHTML = `<i class="fa-solid fa-wallet"></i>`;
+                    }
+                }
+                if (rcLogo) {
+                    rcLogo.classList.toggle('rounded-full', isCircle);
+                    rcLogo.classList.toggle('rounded-[14px]', !isCircle);
+                    if (av.startsWith('data:image/')) {
+                        rcLogo.innerHTML = `<img src="${av}" alt="Logo" class="w-full h-full object-cover">`;
+                    } else if (av.startsWith('emoji:')) {
+                        rcLogo.innerHTML = `<span class="text-2xl leading-none">${ProApp.escapeHtml(av.slice(6))}</span>`;
+                    } else {
+                        rcLogo.innerHTML = `<i class="fa-solid fa-wallet"></i>`;
+                    }
+                }
+            },
             openThemeStudioModal: function() {
                 const fxChk = document.getElementById('chkThemeFxEnabled');
                 if (fxChk) fxChk.checked = ProApp.state.themeFxEnabled !== false;
+                const sndChk = document.getElementById('chkThemeSoundEnabled');
+                if (sndChk) sndChk.checked = ProApp.state.themeSoundEnabled !== false;
                 ProApp.renderThemeStudio();
                 document.getElementById('themeStudioModal')?.classList.remove('hidden');
             },
@@ -4439,11 +5197,12 @@
                 if (document.getElementById('cfgTgToken')) ProApp.state.tgBotToken = document.getElementById('cfgTgToken').value.trim();
                 if (document.getElementById('cfgTgChatId')) ProApp.state.tgChatId = document.getElementById('cfgTgChatId').value.trim();
                 if (document.getElementById('cfgTgAuto')) ProApp.state.tgAutoNotify = document.getElementById('cfgTgAuto').checked;
-                ProApp.applyUiConfig(); ProApp.saveUiConfigToCloud(); ProApp.closeThemeStudioModal();
+                ProApp.applyUiConfig(); ProApp.saveUiConfigToCloud(); ProApp.closeAvatarCropperModal();
+                    ProApp.closeThemeStudioModal();
                     ProApp.closeCustomizeModal();
                 ProApp.showToast('បានរក្សាទុកការកំណត់', 'success');
             },
-            setThemeStyle: function(theme) { ProApp.state.themeStyle = theme; ProApp.applyUiConfig(); ProApp.saveUiConfigToCloud(); },
+            setThemeStyle: function(theme) { ProApp.state.themeStyle = theme; ProApp.applyUiConfig(); ProApp.triggerThemeActivationEffect(theme); ProApp.saveUiConfigToCloud(); },
             dashboardSectionsMeta: {
                 'sec-accounts': { label: 'សមតុល្យគណនី', icon: 'fa-credit-card', color: 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400' },
                 'sec-goals':    { label: 'គោលដៅសន្សំប្រាក់', icon: 'fa-piggy-bank', color: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400' },
@@ -4570,9 +5329,27 @@
                 const patEl = document.getElementById('heroPatternOverlay');
                 if (patEl) patEl.style.backgroundImage = ProApp.getThemePatternUri(t.pattern);
 
+                const skinMeta = ProApp.getThemeSkinMeta(t.id);
                 body.className = "text-slate-800 antialiased min-h-screen pt-safe";
                 if (t.isDark) body.classList.add('theme-dark', 'dark');
+                if (skinMeta && skinMeta.skin) body.classList.add('skin-' + skinMeta.skin);
                 if (ProApp.state.themeFxEnabled === false) body.classList.add('fx-disabled');
+
+                // Morph Hero Emblem Watermark, Signature Badge, and Center Quick-Add FAB Icon!
+                const embEl = document.getElementById('heroEmblemLayer');
+                if (embEl) embEl.innerHTML = ProApp.getHeroEmblemSvg(skinMeta.emblem);
+                const badgeIcon = document.getElementById('heroThemeBadgeIcon');
+                const badgeText = document.getElementById('heroThemeBadgeText');
+                if (badgeIcon) badgeIcon.textContent = t.icon;
+                if (badgeText) badgeText.textContent = skinMeta.badge || t.name;
+                const fabIcon = document.getElementById('fabDockIcon');
+                if (fabIcon) {
+                    fabIcon.innerHTML = (t.id === 'default')
+                        ? '<i class="fa-solid fa-bolt"></i>'
+                        : `<span class="text-[21px] leading-none drop-shadow">${skinMeta.fab || t.icon}</span>`;
+                }
+                ProApp.applyAvatarUI();
+                ProApp.initTouchBurstEngine();
                 if (ProApp.state.bgImageUrl) {
                     body.classList.add('has-custom-bg');
                     body.style.backgroundImage = `url('${ProApp.state.bgImageUrl}')`;
@@ -4602,7 +5379,7 @@
             },
             saveUiConfigToLocal: function() {
                 localStorage.setItem('finance_ui_config', JSON.stringify({
-                    appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle, themeFxEnabled: ProApp.state.themeFxEnabled !== false,
+                    appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle, themeFxEnabled: ProApp.state.themeFxEnabled !== false, themeSoundEnabled: ProApp.state.themeSoundEnabled !== false, appAvatar: ProApp.state.appAvatar || '', appAvatarShape: ProApp.state.appAvatarShape || 'rounded',
                     bgImageUrl: ProApp.state.bgImageUrl, hideAmounts: ProApp.state.hideAmounts,
                     hiddenAccounts: ProApp.state.hiddenAccounts || [], visibleSections: ProApp.state.visibleSections || {},
                     dashboardOrder: ProApp.state.dashboardOrder || ['sec-accounts', 'sec-goals', 'sec-budgets', 'sec-debts', 'sec-charts'],
@@ -7658,6 +8435,9 @@
                     ProApp.state.appSubtitle = parsed.appSubtitle || ProApp.state.appSubtitle;
                     ProApp.state.themeStyle = parsed.themeStyle || ProApp.state.themeStyle;
                     if (parsed.themeFxEnabled !== undefined) ProApp.state.themeFxEnabled = parsed.themeFxEnabled !== false;
+                    if (parsed.themeSoundEnabled !== undefined) ProApp.state.themeSoundEnabled = parsed.themeSoundEnabled !== false;
+                    if (parsed.appAvatar !== undefined) ProApp.state.appAvatar = parsed.appAvatar || '';
+                    if (parsed.appAvatarShape) ProApp.state.appAvatarShape = parsed.appAvatarShape;
                     ProApp.state.bgImageUrl = parsed.bgImageUrl || '';
                     ProApp.state.hideAmounts = !!parsed.hideAmounts;
                     ProApp.state.hiddenAccounts = parsed.hiddenAccounts || [];
