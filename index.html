@@ -31,7 +31,7 @@
         body {
             font-family: 'Kantumruy Pro', sans-serif; background-color: #f1f5f9; background-size: cover;
             background-position: center; background-attachment: fixed; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding-bottom: 90px; /* Space for Bottom Navigation */
+            padding-bottom: 105px; /* Space for Bottom Navigation */
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -110,17 +110,22 @@
         .swipe-card { position: relative; z-index: 2; transition: transform 0.2s ease-out; touch-action: pan-y; }
         .swipe-card.swiping { transition: none; }
 
-        /* Floating Action Button (FAB) */
-        .fab-button {
-            position: fixed; bottom: 95px; right: 20px; z-index: 45;
-            width: 58px; height: 58px; border-radius: 50%;
+        /* Docked Center Quick-Add Button inside Bottom Navigation (Zero overlap with content!) */
+        .fab-dock-btn {
+            width: 52px; height: 52px; border-radius: 50%;
+            margin-top: -22px;
             background: linear-gradient(135deg, #3b82f6, #6366f1); color: white;
             display: flex; align-items: center; justify-content: center;
-            font-size: 24px; box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 20px;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.42);
+            border: 4px solid #ffffff;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
         }
-        .fab-button:active { transform: scale(0.85); }
-        body.theme-aba-dark .fab-button { background: linear-gradient(135deg, #f59e0b, #ea580c); box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3); }
+        .fab-dock-btn:hover { transform: translateY(-2px) scale(1.04); }
+        .fab-dock-btn:active { transform: scale(0.88); }
+        body.theme-dark .fab-dock-btn, body.theme-aba-dark .fab-dock-btn, body.theme-slate .fab-dock-btn { border-color: #09090b; }
+        body.theme-aba-dark .fab-dock-btn { background: linear-gradient(135deg, #f59e0b, #ea580c); box-shadow: 0 8px 20px rgba(245, 158, 11, 0.38); }
+        body.theme-slate .fab-dock-btn { background: linear-gradient(135deg, #0ea5e9, #3b82f6); box-shadow: 0 8px 20px rgba(14, 165, 233, 0.38); }
 
         /* Page Transition Animations */
         .page-view { animation: fadeInSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -305,11 +310,6 @@
 
     <!-- TOASTS -->
     <div id="toastContainer"></div>
-
-    <!-- 🌟 FLOATING ACTION BUTTON (QUICK ADD & VOICE) -->
-    <button onclick="ProApp.vibrate(); ProApp.openSmartAddModal()" class="fab-button cursor-pointer" title="កត់ត្រារហ័ស ឬ ស្រង់សម្លេង">
-        <i class="fa-solid fa-bolt"></i>
-    </button>
 
     <!-- 📱 MAIN APP CONTAINER -->
     <div class="max-w-[1400px] mx-auto relative">
@@ -853,19 +853,29 @@
         </div>
     </div> <!-- End Main Container -->
 
-    <!-- 📱 APP BOTTOM NAVIGATION BAR -->
-    <div class="fixed bottom-0 left-0 right-0 z-[80] w-full h-[85px] bg-white/88 dark:bg-zinc-950/90 backdrop-blur-xl border-t border-gray-200/60 dark:border-white/10 flex justify-around items-start pt-2 px-2 shadow-[0_-10px_30px_rgba(0,0,0,0.08)] pb-safe transition-colors">
-        <button onclick="ProApp.switchTab('dashboard')" id="nav-dashboard" class="tab-btn active flex flex-col items-center justify-center w-20 h-[50px] gap-1 text-gray-400 dark:text-gray-500 cursor-pointer">
-            <i class="fa-solid fa-house text-[20px]"></i>
+    <!-- 📱 APP BOTTOM NAVIGATION BAR (With Center-Docked ⚡ Quick Add — Never Blocks Content) -->
+    <div class="fixed bottom-0 left-0 right-0 z-[80] w-full h-[78px] bg-white/92 dark:bg-zinc-950/95 backdrop-blur-xl border-t border-gray-200/70 dark:border-white/10 flex justify-around items-start pt-1.5 px-2 shadow-[0_-8px_28px_rgba(0,0,0,0.08)] pb-safe transition-colors">
+        <button onclick="ProApp.switchTab('dashboard')" id="nav-dashboard" class="tab-btn active flex flex-col items-center justify-center flex-1 max-w-[84px] h-[52px] gap-1 text-gray-400 dark:text-gray-500 cursor-pointer">
+            <i class="fa-solid fa-house text-[19px]"></i>
             <span class="text-[9px] font-bold mt-0.5" data-i18n="navHome">ទំព័រដើម</span>
         </button>
-        <button onclick="ProApp.switchTab('entry')" id="nav-entry" class="tab-btn flex flex-col items-center justify-center w-20 h-[50px] gap-1 text-gray-400 dark:text-gray-500 cursor-pointer">
-            <i class="fa-solid fa-list-check text-[20px]"></i>
+        <button onclick="ProApp.switchTab('entry')" id="nav-entry" class="tab-btn flex flex-col items-center justify-center flex-1 max-w-[84px] h-[52px] gap-1 text-gray-400 dark:text-gray-500 cursor-pointer">
+            <i class="fa-solid fa-list-check text-[19px]"></i>
             <span class="text-[9px] font-bold mt-0.5" data-i18n="navEntry">ប្រតិបត្តិការ</span>
         </button>
-        <button onclick="ProApp.switchTab('report')" id="nav-report" class="tab-btn flex flex-col items-center justify-center w-20 h-[50px] gap-1 text-gray-400 dark:text-gray-500 cursor-pointer">
-            <i class="fa-solid fa-chart-pie text-[20px]"></i>
+        <div class="flex flex-col items-center justify-start flex-1 max-w-[84px]">
+            <button type="button" onclick="ProApp.vibrate(); ProApp.openSmartAddModal()" class="fab-dock-btn cursor-pointer" title="កត់ត្រារហ័ស ឬ ស្រង់សម្លេង (Alt+N)">
+                <i class="fa-solid fa-bolt"></i>
+            </button>
+            <span class="text-[9px] font-extrabold text-blue-600 dark:text-amber-400 mt-0.5" data-i18n="navQuickAdd">កត់ត្រា</span>
+        </div>
+        <button onclick="ProApp.switchTab('report')" id="nav-report" class="tab-btn flex flex-col items-center justify-center flex-1 max-w-[84px] h-[52px] gap-1 text-gray-400 dark:text-gray-500 cursor-pointer">
+            <i class="fa-solid fa-chart-pie text-[19px]"></i>
             <span class="text-[9px] font-bold mt-0.5" data-i18n="navReport">របាយការណ៍</span>
+        </button>
+        <button type="button" onclick="ProApp.vibrate(); ProApp.openCustomizeModal()" id="nav-settings" class="tab-btn flex flex-col items-center justify-center flex-1 max-w-[84px] h-[52px] gap-1 text-gray-400 dark:text-gray-500 cursor-pointer">
+            <i class="fa-solid fa-gear text-[19px]"></i>
+            <span class="text-[9px] font-bold mt-0.5" data-i18n="srvSettings">ការកំណត់</span>
         </button>
     </div>
 
@@ -2491,6 +2501,7 @@
                     navHome: 'ទំព័រដើម',
                     navEntry: 'ប្រតិបត្តិការ',
                     navReport: 'របាយការណ៍',
+                    navQuickAdd: 'កត់ត្រា',
                     settingsTitle: 'ការកំណត់ប្រព័ន្ធ',
                     monthInc: 'ចំណូលខែនេះ',
                     monthExp: 'ចំណាយខែនេះ',
@@ -2535,6 +2546,7 @@
                     navHome: 'Home',
                     navEntry: 'Activity',
                     navReport: 'Reports',
+                    navQuickAdd: 'Quick Add',
                     settingsTitle: 'System Settings',
                     monthInc: 'Month In',
                     monthExp: 'Month Out',
