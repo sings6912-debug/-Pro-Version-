@@ -102,21 +102,65 @@
             background-image: var(--t-bg-grad) !important;
         }
 
-        /* 💎 Luxury Hero Card Metallic Sheen & Ambient Glow */
+        /* 💎 V10.1 LUXURY HERO CARD METALLIC SHEEN, FLOATING ORBS & LIVE ANIMATIONS */
+        @keyframes heroShimmerSweep {
+            0% { transform: translateX(-140%) skewX(-22deg); opacity: 0; }
+            18% { opacity: 0.55; }
+            42% { transform: translateX(220%) skewX(-22deg); opacity: 0; }
+            100% { transform: translateX(220%) skewX(-22deg); opacity: 0; }
+        }
+        @keyframes orbFloatA {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(-26px, 22px) scale(1.14); }
+        }
+        @keyframes orbFloatB {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(28px, -18px) scale(1.16); }
+        }
+        @keyframes fabAuraPulse {
+            0% { box-shadow: var(--t-fab-shadow), 0 0 0 0 var(--t-accent-soft); }
+            70% { box-shadow: var(--t-fab-shadow), 0 0 0 14px rgba(0,0,0,0); }
+            100% { box-shadow: var(--t-fab-shadow), 0 0 0 0 rgba(0,0,0,0); }
+        }
+
+        #themeAmbientCanvas {
+            position: fixed; inset: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 1; opacity: 0.85;
+            transition: opacity 0.4s ease;
+        }
+        body.fx-disabled #themeAmbientCanvas,
+        body.fx-disabled #heroShimmerBeam,
+        body.fx-disabled #heroGlowOrb,
+        body.fx-disabled #heroGlowOrb2 { display: none !important; }
+        body.fx-disabled .fab-dock-btn { animation: none !important; }
+
         #heroCard {
             background: var(--t-hero-bg) !important;
             border-bottom: 1.5px solid var(--t-hero-border) !important;
-            box-shadow: 0 18px 42px -12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+            box-shadow: 0 20px 46px -12px rgba(0, 0, 0, 0.42), 0 0 28px -8px var(--t-hero-glow), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
         }
         #heroCard::after {
             content: ''; position: absolute; inset: 0; pointer-events: none;
-            background: linear-gradient(125deg, rgba(255,255,255,0.14) 0%, transparent 32%, transparent 68%, rgba(255,255,255,0.06) 100%);
+            background: linear-gradient(125deg, rgba(255,255,255,0.16) 0%, transparent 32%, transparent 68%, rgba(255,255,255,0.06) 100%);
+        }
+        #heroShimmerBeam {
+            position: absolute; top: -10%; bottom: -10%; left: 0; width: 42%; pointer-events: none; z-index: 2;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.22) 50%, transparent 100%);
+            animation: heroShimmerSweep 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
         #heroGlowOrb {
             background: radial-gradient(circle, var(--t-hero-glow) 0%, transparent 70%);
+            animation: orbFloatA 7s ease-in-out infinite;
+        }
+        #heroGlowOrb2 {
+            background: radial-gradient(circle, var(--t-accent-soft) 0%, transparent 70%);
+            animation: orbFloatB 9s ease-in-out infinite;
         }
         #heroPatternOverlay {
-            position: absolute; inset: 0; pointer-events: none; opacity: 0.12; background-repeat: repeat; mix-blend-mode: overlay;
+            position: absolute; inset: 0; pointer-events: none; opacity: 0.13; background-repeat: repeat; mix-blend-mode: overlay;
+        }
+        #heroFxCanvas {
+            position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3;
         }
         #smartInsightCard {
             background: var(--t-insight-bg) !important;
@@ -178,7 +222,17 @@
         .swipe-card { position: relative; z-index: 2; transition: transform 0.2s ease-out; touch-action: pan-y; }
         .swipe-card.swiping { transition: none; }
 
-        /* Docked Center Quick-Add Button inside Bottom Navigation (Theme-Synced Glow!) */
+        /* ✨ Subtle Luxury Card Hover / Tap Elevation */
+        .glass-panel:hover {
+            border-color: var(--t-hero-border) !important;
+            box-shadow: 0 14px 36px -10px rgba(0, 0, 0, 0.16), 0 0 18px -6px var(--t-accent-soft);
+        }
+        .service-item-btn:active > div {
+            box-shadow: 0 0 18px var(--t-accent-soft);
+            transform: scale(0.92);
+        }
+
+        /* Docked Center Quick-Add Button inside Bottom Navigation (Theme-Synced Living Pulse!) */
         .fab-dock-btn {
             width: 52px; height: 52px; border-radius: 50%;
             margin-top: -22px;
@@ -187,14 +241,16 @@
             font-size: 20px;
             box-shadow: var(--t-fab-shadow) !important;
             border: 4px solid var(--t-fab-ring) !important;
+            animation: fabAuraPulse 2.8s ease-out infinite;
             transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s, background 0.35s;
         }
-        .fab-dock-btn:hover { transform: translateY(-2px) scale(1.05); }
+        .fab-dock-btn:hover { transform: translateY(-2px) scale(1.06); }
         .fab-dock-btn:active { transform: scale(0.88); }
 
-        /* 🎨 Glossy Stacked Palette Card (Luxury Theme Studio) */
+        /* 🎨 Glossy Mini-App Preview Card (Fixed Mobile Grid Sizing — Never Collapses!) */
         .theme-swatch-card {
-            position: relative; border-radius: 1.25rem; overflow: hidden;
+            position: relative; border-radius: 1.2rem; overflow: hidden;
+            display: flex; flex-direction: column; width: 100%; min-height: 136px;
             transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, border-color 0.2s;
         }
         .theme-swatch-card:hover { transform: translateY(-2px); }
@@ -202,12 +258,15 @@
         .theme-swatch-card.is-active {
             box-shadow: 0 0 0 2.5px var(--t-accent), 0 12px 24px -6px var(--t-accent-soft);
         }
-        .swatch-stack {
-            height: 54px; border-radius: 0.9rem; overflow: hidden; position: relative;
-            display: flex; flex-direction: column;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), 0 4px 12px rgba(0,0,0,0.16);
+        .swatch-preview-hero {
+            height: 70px; width: 100%; border-radius: 0.85rem; overflow: hidden; position: relative;
+            flex-shrink: 0;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.32), 0 4px 12px rgba(0,0,0,0.18);
         }
-        .swatch-stack > span { flex: 1; width: 100%; }
+        .swatch-preview-hero::after {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: linear-gradient(120deg, rgba(255,255,255,0.22) 0%, transparent 45%, rgba(255,255,255,0.08) 100%);
+        }
 
         /* Page Transition Animations */
         .page-view { animation: fadeInSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -391,8 +450,11 @@
     <!-- TOASTS -->
     <div id="toastContainer"></div>
 
+    <!-- ✨ LIVE AMBIENT THEME FX CANVAS -->
+    <canvas id="themeAmbientCanvas"></canvas>
+
     <!-- 📱 MAIN APP CONTAINER -->
-    <div class="max-w-[1400px] mx-auto relative">
+    <div class="max-w-[1400px] mx-auto relative z-10">
 
         <!-- 🧭 COMPACT STICKY SUB-HEADER (Shown only on Transactions & Reports tabs for zero clutter) -->
         <div id="compactSubHeader" class="hidden sticky top-0 z-40 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl border-b border-slate-200/70 dark:border-white/10 px-4 py-3 mb-4 shadow-sm">
@@ -429,7 +491,10 @@
             <!-- 📱 APP HEADER (CURVE PREMIUM DESIGN) -->
             <div id="heroCard" class="bg-gradient-to-b from-blue-700 to-blue-900 rounded-b-[2.5rem] shadow-lg p-5 pb-11 text-white relative overflow-hidden transition-all duration-500 pt-7">
                 <div id="heroPatternOverlay"></div>
+                <div id="heroShimmerBeam"></div>
+                <canvas id="heroFxCanvas"></canvas>
                 <div id="heroGlowOrb" class="absolute -top-16 -right-12 w-72 h-72 rounded-full blur-3xl pointer-events-none"></div>
+                <div id="heroGlowOrb2" class="absolute -bottom-20 -left-14 w-64 h-64 rounded-full blur-3xl pointer-events-none"></div>
                 
                 <div class="flex justify-between items-center relative z-10 mb-5 gap-2">
                     <div class="flex items-center gap-3 cursor-pointer min-w-0" onclick="ProApp.vibrate(); ProApp.openCustomizeModal()" title="ចុចដើម្បីការកំណត់">
@@ -1799,33 +1864,44 @@
         </div>
     </div>
 
-    <!-- 🎨 V10 LUXURY & ANIME 28-THEME STUDIO MODAL -->
+    <!-- 🎨 V10.1 LUXURY & ANIME 28-THEME STUDIO MODAL (FIXED SCROLL + LIVE FX TOGGLE) -->
     <div id="themeStudioModal" class="fixed inset-0 modal-overlay hidden z-[162] flex items-end sm:items-center justify-center sm:p-4" onclick="if(event.target === this) ProApp.closeThemeStudioModal()">
-        <div class="glass-modal rounded-t-[2rem] sm:rounded-3xl shadow-2xl w-full max-w-2xl mx-auto max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="glass-modal rounded-t-[2rem] sm:rounded-3xl shadow-2xl w-full max-w-2xl mx-auto h-[88vh] sm:h-auto sm:max-h-[88vh] flex flex-col overflow-hidden">
             <div class="w-10 h-1 bg-slate-300 dark:bg-zinc-700 rounded-full mx-auto mt-3 sm:hidden flex-shrink-0"></div>
-            <div class="flex items-center justify-between px-5 pt-4 pb-3 border-b border-slate-200/70 dark:border-white/10 flex-shrink-0">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 via-rose-500 to-indigo-600 text-white flex items-center justify-center shadow-md text-base">
+            <div class="flex items-center justify-between px-5 pt-3.5 pb-3 border-b border-slate-200/70 dark:border-white/10 flex-shrink-0 gap-2">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 via-rose-500 to-indigo-600 text-white flex items-center justify-center shadow-md text-base shrink-0">
                         <i class="fa-solid fa-palette"></i>
                     </div>
-                    <div>
-                        <h3 class="text-[15px] font-black modal-label-text">Theme Studio — 28 ម៉ូដ Luxury &amp; Anime</h3>
-                        <p class="text-[10px] text-slate-400 font-bold" id="themeStudioActiveLabel">កំពុងប្រើ៖ Classic Royal Blue • ចុចដើម្បីប្តូរភ្លាមៗ</p>
+                    <div class="min-w-0">
+                        <h3 class="text-[14px] sm:text-[15px] font-black modal-label-text truncate">Theme Studio — 28 ម៉ូដ + Live Effects</h3>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold truncate" id="themeStudioActiveLabel">កំពុងប្រើ៖ Classic Royal Blue</p>
                     </div>
                 </div>
-                <button type="button" onclick="ProApp.closeThemeStudioModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-300 flex items-center justify-center text-lg cursor-pointer">&times;</button>
+                <button type="button" onclick="ProApp.closeThemeStudioModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-300 flex items-center justify-center text-lg cursor-pointer shrink-0">&times;</button>
             </div>
 
-            <!-- Category Filter Tabs -->
-            <div class="px-5 py-3 flex items-center gap-1.5 overflow-x-auto hide-scrollbar border-b border-slate-200/60 dark:border-white/10 flex-shrink-0">
-                <button type="button" id="tsTab-all" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('all')" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold whitespace-nowrap cursor-pointer transition bg-blue-600 text-white shadow-sm">✨ ទាំងអស់ (28)</button>
-                <button type="button" id="tsTab-dark" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('dark')" class="px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300">👑 Luxury ងងឹត (7)</button>
-                <button type="button" id="tsTab-light" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('light')" class="px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300">💎 Luxury ភ្លឺ (7)</button>
-                <button type="button" id="tsTab-anime" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('anime')" class="px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300">⛩️ Anime ល្បីៗ (14)</button>
+            <!-- Category Filter Tabs (Clean 2x2 on mobile, 4-col on desktop — never clipped!) + Live FX Switch -->
+            <div class="px-4 sm:px-5 py-2.5 border-b border-slate-200/60 dark:border-white/10 flex-shrink-0 space-y-2">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                    <button type="button" id="tsTab-all" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('all')" class="px-2.5 py-2 rounded-xl text-[11px] font-extrabold cursor-pointer transition bg-blue-600 text-white shadow-sm text-center">✨ ទាំងអស់ (28)</button>
+                    <button type="button" id="tsTab-dark" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('dark')" class="px-2.5 py-2 rounded-xl text-[11px] font-bold cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-center">👑 Luxury ងងឹត (7)</button>
+                    <button type="button" id="tsTab-light" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('light')" class="px-2.5 py-2 rounded-xl text-[11px] font-bold cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-center">💎 Luxury ភ្លឺ (7)</button>
+                    <button type="button" id="tsTab-anime" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('anime')" class="px-2.5 py-2 rounded-xl text-[11px] font-bold cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-center">⛩️ Anime ល្បីៗ (14)</button>
+                </div>
+                <label class="flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-100/80 dark:bg-white/5 border border-slate-200/70 dark:border-white/10 cursor-pointer">
+                    <span class="text-[11px] font-extrabold flex items-center gap-1.5">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
+                        <span>បើក Live Effects (ភ្លើង • ផ្កា • ផ្កាយ • ពន្លឺរលោង)</span>
+                    </span>
+                    <span class="ios-switch"><input type="checkbox" id="chkThemeFxEnabled" checked onchange="ProApp.vibrate(); ProApp.toggleThemeFx(this.checked)"><span class="ios-slider"></span></span>
+                </label>
             </div>
 
-            <!-- 28 Swatch Cards Grid -->
-            <div id="themeStudioGrid" class="p-4 sm:p-5 overflow-y-auto flex-1 custom-scrollbar grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+            <!-- Dedicated Scroll Wrapper -> Inner Grid NEVER gets squashed on mobile Chrome! -->
+            <div class="flex-1 min-h-0 overflow-y-auto p-4 sm:p-5 custom-scrollbar">
+                <div id="themeStudioGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+            </div>
 
             <div class="px-5 py-3 border-t border-slate-200/70 dark:border-white/10 flex items-center justify-between gap-2 flex-shrink-0 pb-safe">
                 <button type="button" onclick="ProApp.vibrate(); ProApp.pickRandomTheme()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/10 text-xs font-extrabold cursor-pointer active:scale-95 transition flex items-center gap-1.5">
@@ -2004,6 +2080,7 @@
                 },
                 currencyRates: { USD: 1, KHR: 4100 },
                 themeStyle: 'default',
+                themeFxEnabled: true,
                 bgImageUrl: '',
                 titleColor: '#ffffff',
                 subtitleColor: '#bfdbfe',
@@ -2306,6 +2383,7 @@
                     appTitle: ProApp.state.appTitle || 'ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro Cloud',
                     appSubtitle: ProApp.state.appSubtitle || 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️',
                     themeStyle: ProApp.state.themeStyle || 'default',
+                    themeFxEnabled: ProApp.state.themeFxEnabled !== false,
                     bgImageUrl: ProApp.state.bgImageUrl || '',
                     hideAmounts: !!ProApp.state.hideAmounts,
                     hiddenAccounts: ProApp.state.hiddenAccounts || [],
@@ -2564,6 +2642,7 @@
                 if (data.appTitle) ProApp.state.appTitle = data.appTitle;
                 if (data.appSubtitle) ProApp.state.appSubtitle = data.appSubtitle;
                 if (data.themeStyle) ProApp.state.themeStyle = data.themeStyle;
+                if (data.themeFxEnabled !== undefined) ProApp.state.themeFxEnabled = data.themeFxEnabled !== false;
                 if (data.bgImageUrl !== undefined) ProApp.state.bgImageUrl = data.bgImageUrl;
                 if (data.hideAmounts !== undefined) {
                     ProApp.state.hideAmounts = !!data.hideAmounts;
@@ -3978,7 +4057,240 @@
             getThemeMeta: function(id) {
                 return ProApp.themeCatalog.find(t => t.id === id) || ProApp.themeCatalog.find(t => t.id === 'default');
             },
+            themeFxRaf: null,
+            themeFxResizeBound: false,
+            themeFxMap: {
+                'aba-dark':          { fx: 'gold-dust',    label: '✨ Gold Dust' },
+                'emerald-wealth':    { fx: 'gold-dust',    label: '💚 Emerald Glow' },
+                'slate':             { fx: 'aurora',       label: '🌌 Starlight' },
+                'royal-amethyst':    { fx: 'aurora',       label: '🔮 Violet Aura' },
+                'burgundy-velvet':   { fx: 'embers',       label: '🍷 Rose Embers' },
+                'espresso-copper':   { fx: 'embers',       label: '☕ Copper Sparks' },
+                'carbon-titanium':   { fx: 'cyber',        label: '⚡ Metallic Beam' },
+                'default':           { fx: 'aurora',       label: '💎 Crystal Glow' },
+                'champagne-ivory':   { fx: 'gold-dust',    label: '🥂 Gold Shimmer' },
+                'sage-mint':         { fx: 'bubbles',      label: '🌿 Mint Dew' },
+                'frost-lavender':    { fx: 'sakura',       label: '🪻 Soft Petals' },
+                'rose-pearl':        { fx: 'sakura',       label: '🌸 Sakura Drift' },
+                'ocean-glacier':     { fx: 'snow',         label: '❄️ Frost Snow' },
+                'sunset-amber':      { fx: 'embers',       label: '🌅 Warm Glow' },
+                'anime-spyxfamily':  { fx: 'stella',       label: '⭐ Stella & Petals' },
+                'anime-btth':        { fx: 'flame',        label: '🔥 Lotus Flame' },
+                'anime-demonslayer': { fx: 'flame',        label: '🔥 Hinokami Sparks' },
+                'anime-jjk':         { fx: 'void',         label: '🌀 Infinite Void' },
+                'anime-onepiece':    { fx: 'bubbles',      label: '🌊 Grand Line' },
+                'anime-naruto':      { fx: 'flame',        label: '🦊 Kurama Chakra' },
+                'anime-sololeveling':{ fx: 'void',         label: '⚔️ Shadow Arise' },
+                'anime-aot':         { fx: 'slash',        label: '🦅 Wind Streaks' },
+                'anime-dragonball':  { fx: 'void',         label: '⚡ UI Energy' },
+                'anime-bleach':      { fx: 'slash',        label: '🌙 Bankai Slash' },
+                'anime-chainsaw':    { fx: 'flame',        label: '🪚 Hazard Sparks' },
+                'anime-ghibli':      { fx: 'sakura',       label: '🍃 Floating Leaves' },
+                'anime-yourname':    { fx: 'comet',        label: '☄️ Comet Trails' },
+                'anime-cyberpunk':   { fx: 'cyber',        label: '🌆 Neon Matrix' }
+            },
+            toggleThemeFx: function(enabled) {
+                ProApp.state.themeFxEnabled = !!enabled;
+                ProApp.applyUiConfig();
+                ProApp.saveUiConfigToCloud();
+                ProApp.showToast(enabled ? '✨ បានបើក Live Effects!' : 'បានបិទ Live Effects (សន្សំថ្ម)', 'info');
+            },
+            stopThemeFxEngine: function() {
+                if (ProApp.themeFxRaf) {
+                    cancelAnimationFrame(ProApp.themeFxRaf);
+                    ProApp.themeFxRaf = null;
+                }
+                ['heroFxCanvas', 'themeAmbientCanvas'].forEach(cid => {
+                    const cv = document.getElementById(cid);
+                    if (cv) {
+                        const ctx = cv.getContext('2d');
+                        if (ctx) ctx.clearRect(0, 0, cv.width, cv.height);
+                    }
+                });
+            },
+            startThemeFxEngine: function(themeMeta) {
+                ProApp.stopThemeFxEngine();
+                if (ProApp.state.themeFxEnabled === false) return;
+                const heroCv = document.getElementById('heroFxCanvas');
+                const ambCv = document.getElementById('themeAmbientCanvas');
+                if (!heroCv && !ambCv) return;
+
+                const fxInfo = ProApp.themeFxMap[themeMeta.id] || { fx: 'gold-dust', label: '✨ Shimmer' };
+                const fx = fxInfo.fx;
+                const c1 = themeMeta.accent || '#fbbf24';
+                const c2 = themeMeta.accent2 || '#ffffff';
+                const isDark = !!themeMeta.isDark;
+
+                const resizeCanvases = () => {
+                    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+                    if (heroCv && heroCv.parentElement) {
+                        const r = heroCv.parentElement.getBoundingClientRect();
+                        heroCv.width = Math.max(1, Math.floor(r.width * dpr));
+                        heroCv.height = Math.max(1, Math.floor(r.height * dpr));
+                    }
+                    if (ambCv) {
+                        ambCv.width = Math.max(1, Math.floor(window.innerWidth * dpr));
+                        ambCv.height = Math.max(1, Math.floor(window.innerHeight * dpr));
+                    }
+                };
+                resizeCanvases();
+                if (!ProApp.themeFxResizeBound) {
+                    ProApp.themeFxResizeBound = true;
+                    window.addEventListener('resize', () => {
+                        if (ProApp.state.themeFxEnabled !== false) {
+                            ProApp.startThemeFxEngine(ProApp.getThemeMeta(ProApp.state.themeStyle || 'default'));
+                        }
+                    });
+                }
+
+                const makeParticles = (count, w, h, isHero) => {
+                    const arr = [];
+                    for (let i = 0; i < count; i++) {
+                        arr.push({
+                            x: Math.random() * w,
+                            y: Math.random() * h,
+                            r: (isHero ? 1.9 : 2.3) + Math.random() * (fx === 'sakura' || fx === 'bubbles' ? 4.4 : 3.0),
+                            vx: (Math.random() - 0.5) * (fx === 'slash' ? 3.8 : 0.75),
+                            vy: (fx === 'flame' || fx === 'embers' || fx === 'bubbles' || fx === 'gold-dust')
+                                ? -(0.5 + Math.random() * 1.25)
+                                : (fx === 'sakura' || fx === 'snow' || fx === 'stella' || fx === 'comet')
+                                    ? (0.5 + Math.random() * 1.0)
+                                    : ((Math.random() - 0.5) * 0.7),
+                            a: 0.3 + Math.random() * 0.65,
+                            ph: Math.random() * Math.PI * 2,
+                            rot: Math.random() * Math.PI * 2,
+                            vrot: (Math.random() - 0.5) * 0.045,
+                            color: Math.random() > 0.42 ? c1 : c2,
+                            len: 20 + Math.random() * 36
+                        });
+                    }
+                    return arr;
+                };
+
+                const hCtx = heroCv ? heroCv.getContext('2d') : null;
+                const aCtx = ambCv ? ambCv.getContext('2d') : null;
+                const hParts = heroCv ? makeParticles(30, heroCv.width, heroCv.height, true) : [];
+                const aParts = ambCv ? makeParticles(26, ambCv.width, ambCv.height, false) : [];
+                const comets = [
+                    { x: -60, y: 40, vx: 5.4, vy: 2.3 },
+                    { x: 180, y: -40, vx: 4.6, vy: 2.0 }
+                ];
+
+                const drawSet = (ctx, cv, parts, isHero, t) => {
+                    if (!ctx || !cv || cv.width <= 1 || cv.height <= 1) return;
+                    const w = cv.width, h = cv.height;
+                    ctx.clearRect(0, 0, w, h);
+
+                    if (fx === 'comet') {
+                        comets.forEach((cm) => {
+                            cm.x += cm.vx; cm.y += cm.vy;
+                            if (cm.x > w + 130 || cm.y > h + 130) {
+                                cm.x = Math.random() * w * 0.55 - 80;
+                                cm.y = Math.random() * h * 0.25 - 40;
+                            }
+                            const grad = ctx.createLinearGradient(cm.x, cm.y, cm.x - cm.vx * 15, cm.y - cm.vy * 15);
+                            grad.addColorStop(0, '#ffffff');
+                            grad.addColorStop(0.35, c1);
+                            grad.addColorStop(1, 'transparent');
+                            ctx.strokeStyle = grad;
+                            ctx.lineWidth = isHero ? 2.8 : 2.1;
+                            ctx.beginPath();
+                            ctx.moveTo(cm.x, cm.y);
+                            ctx.lineTo(cm.x - cm.vx * 15, cm.y - cm.vy * 15);
+                            ctx.stroke();
+                        });
+                    }
+
+                    if (fx === 'void' && isHero) {
+                        const cx = w * 0.78, cy = h * 0.36;
+                        ctx.save();
+                        ctx.translate(cx, cy);
+                        ctx.rotate(t * 0.009);
+                        ctx.strokeStyle = c1;
+                        ctx.globalAlpha = 0.26;
+                        ctx.lineWidth = 1.8;
+                        ctx.setLineDash([12, 10]);
+                        ctx.beginPath(); ctx.arc(0, 0, Math.min(w, h) * 0.28, 0, Math.PI * 2); ctx.stroke();
+                        ctx.rotate(-t * 0.018);
+                        ctx.strokeStyle = c2;
+                        ctx.beginPath(); ctx.arc(0, 0, Math.min(w, h) * 0.19, 0, Math.PI * 2); ctx.stroke();
+                        ctx.restore();
+                    }
+
+                    for (let i = 0; i < parts.length; i++) {
+                        const p = parts[i];
+                        p.ph += 0.038;
+                        p.rot += p.vrot;
+                        p.x += p.vx + Math.sin(p.ph) * (fx === 'sakura' || fx === 'flame' ? 0.6 : 0.25);
+                        p.y += p.vy;
+
+                        if (p.y < -20) { p.y = h + 15; p.x = Math.random() * w; }
+                        if (p.y > h + 20) { p.y = -15; p.x = Math.random() * w; }
+                        if (p.x < -20) p.x = w + 15;
+                        if (p.x > w + 20) p.x = -15;
+
+                        const alpha = Math.max(0.12, (p.a * (0.65 + 0.35 * Math.sin(p.ph))) * (isHero ? 1 : (isDark ? 0.68 : 0.56)));
+                        ctx.save();
+                        ctx.globalAlpha = alpha;
+                        ctx.fillStyle = p.color;
+                        ctx.strokeStyle = p.color;
+
+                        if (fx === 'sakura') {
+                            ctx.translate(p.x, p.y);
+                            ctx.rotate(p.rot);
+                            ctx.beginPath();
+                            ctx.ellipse(0, 0, p.r * 1.5, p.r * 0.75, 0, 0, Math.PI * 2);
+                            ctx.fill();
+                        } else if (fx === 'stella') {
+                            ctx.translate(p.x, p.y);
+                            ctx.rotate(p.rot);
+                            ctx.beginPath();
+                            for (let k = 0; k < 4; k++) {
+                                const ang = (k * Math.PI) / 2;
+                                ctx.lineTo(Math.cos(ang) * p.r * 2.2, Math.sin(ang) * p.r * 2.2);
+                                ctx.lineTo(Math.cos(ang + Math.PI / 4) * p.r * 0.65, Math.sin(ang + Math.PI / 4) * p.r * 0.65);
+                            }
+                            ctx.closePath(); ctx.fill();
+                        } else if (fx === 'flame' || fx === 'embers') {
+                            ctx.shadowColor = p.color;
+                            ctx.shadowBlur = 11;
+                            ctx.beginPath();
+                            ctx.arc(p.x, p.y, p.r * (fx === 'flame' ? 1.2 : 0.9), 0, Math.PI * 2);
+                            ctx.fill();
+                        } else if (fx === 'slash') {
+                            ctx.lineWidth = 2;
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p.x + p.len, p.y - p.len * 0.45);
+                            ctx.stroke();
+                        } else if (fx === 'cyber') {
+                            ctx.fillRect(p.x, p.y, p.r * 2.8, 2.4);
+                        } else if (fx === 'bubbles') {
+                            ctx.lineWidth = 1.4;
+                            ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 1.25, 0, Math.PI * 2); ctx.stroke();
+                        } else {
+                            ctx.shadowColor = p.color;
+                            ctx.shadowBlur = 9;
+                            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+                        }
+                        ctx.restore();
+                    }
+                };
+
+                let tick = 0;
+                const loop = () => {
+                    tick++;
+                    if (!document.hidden) {
+                        drawSet(hCtx, heroCv, hParts, true, tick);
+                        drawSet(aCtx, ambCv, aParts, false, tick);
+                    }
+                    ProApp.themeFxRaf = requestAnimationFrame(loop);
+                };
+                ProApp.themeFxRaf = requestAnimationFrame(loop);
+            },
             openThemeStudioModal: function() {
+                const fxChk = document.getElementById('chkThemeFxEnabled');
+                if (fxChk) fxChk.checked = ProApp.state.themeFxEnabled !== false;
                 ProApp.renderThemeStudio();
                 document.getElementById('themeStudioModal')?.classList.remove('hidden');
             },
@@ -3991,9 +4303,9 @@
                     const btn = document.getElementById('tsTab-' + k);
                     if (!btn) return;
                     if (k === filterKey) {
-                        btn.className = 'px-3 py-1.5 rounded-xl text-[11px] font-extrabold whitespace-nowrap cursor-pointer transition bg-blue-600 text-white shadow-sm';
+                        btn.className = 'px-2.5 py-2 rounded-xl text-[11px] font-extrabold cursor-pointer transition bg-blue-600 text-white shadow-sm text-center';
                     } else {
-                        btn.className = 'px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300';
+                        btn.className = 'px-2.5 py-2 rounded-xl text-[11px] font-bold cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-center';
                     }
                 });
                 ProApp.renderThemeStudio();
@@ -4019,21 +4331,33 @@
                 const list = f === 'all' ? ProApp.themeCatalog : ProApp.themeCatalog.filter(t => t.group === f);
                 grid.innerHTML = list.map(t => {
                     const isActive = t.id === (ProApp.state.themeStyle || 'default');
+                    const fxInfo = ProApp.themeFxMap[t.id] || { label: '✨ Glow' };
                     const tagTxt = t.group === 'anime' ? 'ANIME' : (t.isDark ? 'DARK VIP' : 'LIGHT');
-                    const cardBg = t.isDark ? 'bg-zinc-900/90 text-white border-white/10' : 'bg-white text-slate-900 border-slate-200';
+                    const cardBg = t.isDark ? 'bg-zinc-900 text-white border-white/15' : 'bg-white text-slate-900 border-slate-200';
+                    const patUri = ProApp.getThemePatternUri(t.pattern);
                     return `
-                        <button type="button" onclick="ProApp.vibrate(); ProApp.setThemeStyle('${t.id}')" class="theme-swatch-card ${isActive ? 'is-active' : ''} ${cardBg} border p-2.5 text-left cursor-pointer flex flex-col gap-2">
-                            <div class="swatch-stack">
-                                <span style="background:${t.swatches[0]}"></span>
-                                <span style="background:${t.swatches[1]}"></span>
-                                <span style="background:${t.swatches[2]}"></span>
-                                <div class="absolute top-1.5 left-1.5 w-6 h-6 rounded-lg bg-black/35 backdrop-blur-md flex items-center justify-center text-xs shadow">${t.icon}</div>
-                                <span class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md text-[8px] font-black tracking-wider bg-black/45 text-white backdrop-blur-sm">${tagTxt}</span>
-                                ${isActive ? '<span class="absolute bottom-1.5 right-1.5 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow"><i class="fa-solid fa-check"></i></span>' : ''}
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.setThemeStyle('${t.id}')" class="theme-swatch-card ${isActive ? 'is-active' : ''} ${cardBg} border p-2 text-left cursor-pointer gap-2 shadow-sm">
+                            <div class="swatch-preview-hero" style="background:${t.heroBg};">
+                                <div class="absolute inset-0 opacity-20" style="background-image:${patUri};"></div>
+                                <div class="absolute -top-4 -right-4 w-16 h-16 rounded-full blur-xl opacity-80" style="background:${t.accent};"></div>
+                                <div class="relative z-10 h-full p-2 flex flex-col justify-between">
+                                    <div class="flex items-center justify-between gap-1">
+                                        <span class="w-6 h-6 rounded-lg bg-black/35 backdrop-blur-md flex items-center justify-center text-xs shadow border border-white/20">${t.icon}</span>
+                                        <span class="px-1.5 py-0.5 rounded-md text-[8px] font-black tracking-wider bg-black/45 text-white backdrop-blur-sm">${tagTxt}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between gap-1">
+                                        <span class="px-1.5 py-0.5 rounded-md text-[8px] font-bold bg-white/15 text-white backdrop-blur-sm truncate">${ProApp.escapeHtml(fxInfo.label)}</span>
+                                        <span class="flex items-center gap-0.5 shrink-0">
+                                            <span class="w-2.5 h-2.5 rounded-full border border-white/60" style="background:${t.swatches[1]}"></span>
+                                            <span class="w-2.5 h-2.5 rounded-full border border-white/60" style="background:${t.swatches[2]}"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                ${isActive ? '<span class="absolute top-1.5 right-1.5 z-20 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow-md ring-2 ring-white"><i class="fa-solid fa-check"></i></span>' : ''}
                             </div>
-                            <div class="min-w-0 px-0.5">
-                                <div class="text-[11px] font-black truncate leading-tight">${ProApp.escapeHtml(t.name)}</div>
-                                <div class="text-[9px] opacity-70 truncate mt-0.5 font-medium">${ProApp.escapeHtml(t.sub)}</div>
+                            <div class="px-1 pb-0.5 min-w-0">
+                                <div class="text-[11px] font-black truncate leading-snug">${ProApp.escapeHtml(t.name)}</div>
+                                <div class="text-[9.5px] opacity-75 truncate mt-0.5 font-medium">${ProApp.escapeHtml(t.sub)}</div>
                             </div>
                         </button>`;
                 }).join('');
@@ -4248,6 +4572,7 @@
 
                 body.className = "text-slate-800 antialiased min-h-screen pt-safe";
                 if (t.isDark) body.classList.add('theme-dark', 'dark');
+                if (ProApp.state.themeFxEnabled === false) body.classList.add('fx-disabled');
                 if (ProApp.state.bgImageUrl) {
                     body.classList.add('has-custom-bg');
                     body.style.backgroundImage = `url('${ProApp.state.bgImageUrl}')`;
@@ -4258,6 +4583,7 @@
                 if (hero) {
                     hero.className = "rounded-b-[2.5rem] shadow-xl p-5 pb-12 text-white relative overflow-hidden pt-8 z-10 pt-safe transition-all duration-500";
                 }
+                ProApp.startThemeFxEngine(t);
 
                 const allVis = Object.assign({ 'smartInsightContainer': true, 'servicesGridCard': true, 'sec-accounts': true, 'sec-goals': true, 'sec-budgets': true, 'sec-debts': true, 'sec-charts': true }, ProApp.state.visibleSections || {});
                 ProApp.state.visibleSections = allVis;
@@ -4276,7 +4602,7 @@
             },
             saveUiConfigToLocal: function() {
                 localStorage.setItem('finance_ui_config', JSON.stringify({
-                    appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle,
+                    appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle, themeFxEnabled: ProApp.state.themeFxEnabled !== false,
                     bgImageUrl: ProApp.state.bgImageUrl, hideAmounts: ProApp.state.hideAmounts,
                     hiddenAccounts: ProApp.state.hiddenAccounts || [], visibleSections: ProApp.state.visibleSections || {},
                     dashboardOrder: ProApp.state.dashboardOrder || ['sec-accounts', 'sec-goals', 'sec-budgets', 'sec-debts', 'sec-charts'],
@@ -7331,6 +7657,7 @@
                     ProApp.state.appTitle = parsed.appTitle || ProApp.state.appTitle;
                     ProApp.state.appSubtitle = parsed.appSubtitle || ProApp.state.appSubtitle;
                     ProApp.state.themeStyle = parsed.themeStyle || ProApp.state.themeStyle;
+                    if (parsed.themeFxEnabled !== undefined) ProApp.state.themeFxEnabled = parsed.themeFxEnabled !== false;
                     ProApp.state.bgImageUrl = parsed.bgImageUrl || '';
                     ProApp.state.hideAmounts = !!parsed.hideAmounts;
                     ProApp.state.hiddenAccounts = parsed.hiddenAccounts || [];
