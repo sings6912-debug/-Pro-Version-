@@ -73,36 +73,104 @@
         .emoji-btn:hover { background-color: rgba(148, 163, 184, 0.2); transform: scale(1.15); }
         .emoji-btn:active { transform: scale(1.25); }
 
-        /* Glassmorphism Classes (Upgraded Crisp Borders for Inputs) */
-        .glass-panel { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.7); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05); }
-        .glass-modal { background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.28); border: 1px solid rgba(226, 232, 240, 0.9); }
-        .glass-input { background: #ffffff; border: 1.5px solid #cbd5e1; color: #0f172a; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03); }
-        .glass-input:focus, .glass-input:focus-within { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
-        
-        /* Dark Theme Adjustments */
-        body.theme-dark, body.theme-aba-dark, body.theme-slate, body.dark { color: #f8fafc; }
-        body.theme-aba-dark { background-color: #000000; }
-        body.theme-slate { background-color: #020617; }
+        /* 🎨 V10 LUXURY & ANIME 28-THEME CSS VARIABLE ENGINE */
+        :root {
+            --t-bg: #f1f5f9;
+            --t-bg-grad: radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 45%), linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+            --t-hero-bg: linear-gradient(145deg, #1d4ed8 0%, #1e40af 52%, #172554 100%);
+            --t-hero-border: rgba(255, 255, 255, 0.22);
+            --t-hero-glow: rgba(96, 165, 250, 0.32);
+            --t-panel-bg: rgba(255, 255, 255, 0.88);
+            --t-panel-border: rgba(255, 255, 255, 0.78);
+            --t-modal-bg: rgba(255, 255, 255, 0.96);
+            --t-input-bg: #ffffff;
+            --t-input-border: #cbd5e1;
+            --t-accent: #2563eb;
+            --t-accent-2: #4f46e5;
+            --t-accent-soft: rgba(37, 99, 235, 0.16);
+            --t-fab-bg: linear-gradient(135deg, #3b82f6, #6366f1);
+            --t-fab-shadow: 0 8px 22px rgba(59, 130, 246, 0.44);
+            --t-fab-ring: #ffffff;
+            --t-insight-bg: linear-gradient(135deg, #f59e0b, #ea580c);
+            --t-nav-bg: rgba(255, 255, 255, 0.92);
+        }
 
-        body.theme-dark .glass-panel, body.theme-aba-dark .glass-panel, body.theme-slate .glass-panel {
-            background: rgba(24, 24, 27, 0.72) !important; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1) !important; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        body {
+            background-color: var(--t-bg) !important;
         }
-        body.theme-dark .glass-modal, body.theme-aba-dark .glass-modal, body.theme-slate .glass-modal {
-            background: rgba(24, 24, 27, 0.92) !important; border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        body:not(.has-custom-bg) {
+            background-image: var(--t-bg-grad) !important;
         }
-        body.theme-dark .glass-input, body.theme-aba-dark .glass-input, body.theme-slate .glass-input {
-            background: rgba(255, 255, 255, 0.07) !important; border: 1.5px solid rgba(255, 255, 255, 0.16) !important; color: #ffffff !important;
+
+        /* 💎 Luxury Hero Card Metallic Sheen & Ambient Glow */
+        #heroCard {
+            background: var(--t-hero-bg) !important;
+            border-bottom: 1.5px solid var(--t-hero-border) !important;
+            box-shadow: 0 18px 42px -12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
         }
-        body.theme-dark .editable-input, body.theme-aba-dark .editable-input, body.theme-slate .editable-input { color: #f8fafc; }
-        body.theme-dark .editable-input:focus, body.theme-aba-dark .editable-input:focus, body.theme-slate .editable-input:focus { background-color: #27272a !important; }
-        body.theme-dark option, body.theme-aba-dark option, body.theme-slate option { background-color: #18181b; color: #ffffff; }
+        #heroCard::after {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: linear-gradient(125deg, rgba(255,255,255,0.14) 0%, transparent 32%, transparent 68%, rgba(255,255,255,0.06) 100%);
+        }
+        #heroGlowOrb {
+            background: radial-gradient(circle, var(--t-hero-glow) 0%, transparent 70%);
+        }
+        #heroPatternOverlay {
+            position: absolute; inset: 0; pointer-events: none; opacity: 0.12; background-repeat: repeat; mix-blend-mode: overlay;
+        }
+        #smartInsightCard {
+            background: var(--t-insight-bg) !important;
+            box-shadow: 0 10px 26px -6px var(--t-accent-soft);
+        }
+        #compactHeaderBadge {
+            background: var(--t-fab-bg) !important;
+        }
+        #bottomNavBar {
+            background: var(--t-nav-bg) !important;
+        }
+
+        /* Glassmorphism Classes (Theme-Aware Frosted Luxury Glass) */
+        .glass-panel {
+            background: var(--t-panel-bg) !important;
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--t-panel-border) !important;
+            box-shadow: 0 10px 30px -8px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+            transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.3s ease;
+        }
+        .glass-modal {
+            background: var(--t-modal-bg) !important;
+            backdrop-filter: blur(26px); -webkit-backdrop-filter: blur(26px);
+            box-shadow: 0 28px 60px -12px rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--t-panel-border) !important;
+        }
+        .glass-input {
+            background: var(--t-input-bg);
+            border: 1.5px solid var(--t-input-border);
+            color: #0f172a; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+        .glass-input:focus, .glass-input:focus-within {
+            border-color: var(--t-accent) !important;
+            box-shadow: 0 0 0 3px var(--t-accent-soft) !important;
+        }
         
-        /* Dark mode readable defaults without overriding semantic colors (emerald/rose/amber/blue) */
+        /* Dark Theme Adjustments (All Dark Luxury & Dark Anime Themes) */
+        body.theme-dark, body.dark { color: #f8fafc; }
+        body.theme-dark .glass-panel {
+            box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+        body.theme-dark .glass-input {
+            background: rgba(255, 255, 255, 0.065) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.14) !important;
+            color: #ffffff !important;
+        }
+        body.theme-dark .editable-input { color: #f8fafc; }
+        body.theme-dark .editable-input:focus { background-color: rgba(255, 255, 255, 0.12) !important; color: #ffffff !important; }
+        body.theme-dark option { background-color: #141418; color: #ffffff; }
         body.theme-dark input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
         body.theme-dark td, body.theme-dark th { color: #e2e8f0; }
         body.theme-dark tfoot { background-color: rgba(9, 9, 11, 0.92) !important; }
 
-        .modal-overlay { background-color: rgba(0, 0, 0, 0.65); backdrop-filter: blur(6px); }
+        .modal-overlay { background-color: rgba(0, 0, 0, 0.65); backdrop-filter: blur(7px); }
 
         /* 👆 Swipe-to-Action Mobile Cards */
         .swipe-wrapper { position: relative; overflow: hidden; border-radius: 1rem; }
@@ -110,22 +178,36 @@
         .swipe-card { position: relative; z-index: 2; transition: transform 0.2s ease-out; touch-action: pan-y; }
         .swipe-card.swiping { transition: none; }
 
-        /* Docked Center Quick-Add Button inside Bottom Navigation (Zero overlap with content!) */
+        /* Docked Center Quick-Add Button inside Bottom Navigation (Theme-Synced Glow!) */
         .fab-dock-btn {
             width: 52px; height: 52px; border-radius: 50%;
             margin-top: -22px;
-            background: linear-gradient(135deg, #3b82f6, #6366f1); color: white;
+            background: var(--t-fab-bg) !important; color: white;
             display: flex; align-items: center; justify-content: center;
             font-size: 20px;
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.42);
-            border: 4px solid #ffffff;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
+            box-shadow: var(--t-fab-shadow) !important;
+            border: 4px solid var(--t-fab-ring) !important;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s, background 0.35s;
         }
-        .fab-dock-btn:hover { transform: translateY(-2px) scale(1.04); }
+        .fab-dock-btn:hover { transform: translateY(-2px) scale(1.05); }
         .fab-dock-btn:active { transform: scale(0.88); }
-        body.theme-dark .fab-dock-btn, body.theme-aba-dark .fab-dock-btn, body.theme-slate .fab-dock-btn { border-color: #09090b; }
-        body.theme-aba-dark .fab-dock-btn { background: linear-gradient(135deg, #f59e0b, #ea580c); box-shadow: 0 8px 20px rgba(245, 158, 11, 0.38); }
-        body.theme-slate .fab-dock-btn { background: linear-gradient(135deg, #0ea5e9, #3b82f6); box-shadow: 0 8px 20px rgba(14, 165, 233, 0.38); }
+
+        /* 🎨 Glossy Stacked Palette Card (Luxury Theme Studio) */
+        .theme-swatch-card {
+            position: relative; border-radius: 1.25rem; overflow: hidden;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, border-color 0.2s;
+        }
+        .theme-swatch-card:hover { transform: translateY(-2px); }
+        .theme-swatch-card:active { transform: scale(0.96); }
+        .theme-swatch-card.is-active {
+            box-shadow: 0 0 0 2.5px var(--t-accent), 0 12px 24px -6px var(--t-accent-soft);
+        }
+        .swatch-stack {
+            height: 54px; border-radius: 0.9rem; overflow: hidden; position: relative;
+            display: flex; flex-direction: column;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), 0 4px 12px rgba(0,0,0,0.16);
+        }
+        .swatch-stack > span { flex: 1; width: 100%; }
 
         /* Page Transition Animations */
         .page-view { animation: fadeInSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -133,9 +215,8 @@
 
         /* Bottom Nav Active State */
         .tab-btn { position: relative; transition: color 0.3s; }
-        .tab-btn.active { color: #2563eb !important; }
-        body.theme-aba-dark .tab-btn.active { color: #f59e0b !important; }
-        body.theme-slate .tab-btn.active { color: #38bdf8 !important; }
+        .tab-btn.active { color: var(--t-accent) !important; }
+        #navQuickAddLabel { color: var(--t-accent) !important; }
         .tab-btn::after {
             content: ''; position: absolute; top: -1px; left: 50%; transform: translateX(-50%) scaleX(0);
             width: 40px; height: 3px; background-color: currentColor; border-radius: 0 0 4px 4px; transition: transform 0.3s ease;
@@ -185,8 +266,7 @@
             background-color: #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.25);
             transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .ios-switch input:checked + .ios-slider { background-color: #2563eb; }
-        body.theme-aba-dark .ios-switch input:checked + .ios-slider { background-color: #f59e0b; }
+        .ios-switch input:checked + .ios-slider { background-color: var(--t-accent) !important; }
         .ios-switch input:checked + .ios-slider::before { transform: translateX(20px); }
 
         /* Clean Settings Group Card */
@@ -318,7 +398,7 @@
         <div id="compactSubHeader" class="hidden sticky top-0 z-40 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl border-b border-slate-200/70 dark:border-white/10 px-4 py-3 mb-4 shadow-sm">
             <div class="flex items-center justify-between gap-3">
                 <div class="flex items-center gap-2.5 min-w-0">
-                    <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm shrink-0">
+                    <div id="compactHeaderBadge" class="w-9 h-9 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm shrink-0">
                         <i id="compactHeaderIcon" class="fa-solid fa-list-check text-sm"></i>
                     </div>
                     <div class="min-w-0">
@@ -348,7 +428,8 @@
         <div id="dashboardTopWrapper">
             <!-- 📱 APP HEADER (CURVE PREMIUM DESIGN) -->
             <div id="heroCard" class="bg-gradient-to-b from-blue-700 to-blue-900 rounded-b-[2.5rem] shadow-lg p-5 pb-11 text-white relative overflow-hidden transition-all duration-500 pt-7">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+                <div id="heroPatternOverlay"></div>
+                <div id="heroGlowOrb" class="absolute -top-16 -right-12 w-72 h-72 rounded-full blur-3xl pointer-events-none"></div>
                 
                 <div class="flex justify-between items-center relative z-10 mb-5 gap-2">
                     <div class="flex items-center gap-3 cursor-pointer min-w-0" onclick="ProApp.vibrate(); ProApp.openCustomizeModal()" title="ចុចដើម្បីការកំណត់">
@@ -367,6 +448,9 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.openThemeStudioModal()" class="w-9 h-9 bg-white/12 backdrop-blur-md text-amber-300 rounded-full flex items-center justify-center border border-white/20 hover:bg-white/25 hover:text-white active:scale-95 transition cursor-pointer" title="🎨 ប្តូរ Theme ទាំង 28 ម៉ូដ (Luxury & Anime)">
+                            <i class="fa-solid fa-palette text-sm"></i>
+                        </button>
                         <button onclick="ProApp.vibrate(); ProApp.manualCloudSync('auto')" class="w-9 h-9 bg-white/10 backdrop-blur-md text-emerald-300 rounded-full flex items-center justify-center border border-white/20 hover:bg-emerald-500/30 hover:text-white active:scale-95 transition cursor-pointer relative" title="Sync ទិន្នន័យជាមួយ Cloud">
                             <i id="headerSyncIcon" class="fa-solid fa-cloud-arrow-up text-sm"></i>
                             <span id="headerPendingDot" class="hidden absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-amber-400 border border-blue-900"></span>
@@ -420,7 +504,7 @@
 
             <!-- 🤖 SMART INSIGHTS -->
             <div id="smartInsightContainer" class="mx-3 md:mx-6 -mt-5 relative z-10 mb-4 floating-insight cursor-pointer" onclick="ProApp.switchTab('report')">
-                <div class="bg-gradient-to-r from-amber-400 to-orange-500 rounded-2xl p-3 shadow-lg shadow-orange-500/20 flex items-center gap-3 border border-amber-300/50">
+                <div id="smartInsightCard" class="bg-gradient-to-r from-amber-400 to-orange-500 rounded-2xl p-3 shadow-lg flex items-center gap-3 border border-white/25">
                     <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0"><i class="fa-solid fa-wand-magic-sparkles text-white text-sm"></i></div>
                     <div class="text-white text-[11px] font-bold leading-tight flex-1" id="smartInsightText">កំពុងវិភាគទិន្នន័យរបស់អ្នក... ✨</div>
                     <i class="fa-solid fa-chevron-right text-white/50 text-xs shrink-0"></i>
@@ -863,7 +947,7 @@
     </div> <!-- End Main Container -->
 
     <!-- 📱 APP BOTTOM NAVIGATION BAR (With Center-Docked ⚡ Quick Add — Never Blocks Content) -->
-    <div class="fixed bottom-0 left-0 right-0 z-[80] w-full h-[78px] bg-white/92 dark:bg-zinc-950/95 backdrop-blur-xl border-t border-gray-200/70 dark:border-white/10 flex justify-around items-start pt-1.5 px-2 shadow-[0_-8px_28px_rgba(0,0,0,0.08)] pb-safe transition-colors">
+    <div id="bottomNavBar" class="fixed bottom-0 left-0 right-0 z-[80] w-full h-[78px] bg-white/92 dark:bg-zinc-950/95 backdrop-blur-xl border-t border-gray-200/70 dark:border-white/10 flex justify-around items-start pt-1.5 px-2 shadow-[0_-8px_28px_rgba(0,0,0,0.08)] pb-safe transition-colors">
         <button onclick="ProApp.switchTab('dashboard')" id="nav-dashboard" class="tab-btn active flex flex-col items-center justify-center flex-1 max-w-[84px] h-[52px] gap-1 text-gray-400 dark:text-gray-500 cursor-pointer">
             <i class="fa-solid fa-house text-[19px]"></i>
             <span class="text-[9px] font-bold mt-0.5" data-i18n="navHome">ទំព័រដើម</span>
@@ -876,7 +960,7 @@
             <button type="button" onclick="ProApp.vibrate(); ProApp.openSmartAddModal()" class="fab-dock-btn cursor-pointer" title="កត់ត្រារហ័ស ឬ ស្រង់សម្លេង (Alt+N)">
                 <i class="fa-solid fa-bolt"></i>
             </button>
-            <span class="text-[9px] font-extrabold text-blue-600 dark:text-amber-400 mt-0.5" data-i18n="navQuickAdd">កត់ត្រា</span>
+            <span id="navQuickAddLabel" class="text-[9px] font-extrabold text-blue-600 dark:text-amber-400 mt-0.5" data-i18n="navQuickAdd">កត់ត្រា</span>
         </div>
         <button onclick="ProApp.switchTab('report')" id="nav-report" class="tab-btn flex flex-col items-center justify-center flex-1 max-w-[84px] h-[52px] gap-1 text-gray-400 dark:text-gray-500 cursor-pointer">
             <i class="fa-solid fa-chart-pie text-[19px]"></i>
@@ -994,25 +1078,19 @@
                         </div>
                     </div>
 
-                    <!-- 🎨 Theme Style Cards -->
-                    <div class="settings-card space-y-2.5">
-                        <label class="block text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase flex items-center gap-1.5">
-                            <i class="fa-solid fa-swatchbook text-indigo-500"></i> ប្រភេទ Theme ពណ៌៖
-                        </label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button type="button" id="themeBtn-default" onclick="ProApp.vibrate(); ProApp.setThemeStyle('default')" class="p-2.5 rounded-2xl border-2 border-blue-500 bg-white text-slate-900 text-[10px] font-extrabold flex flex-col items-center gap-1.5 shadow-sm transition active:scale-95 cursor-pointer">
-                                <span class="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-600 to-sky-400 border border-slate-200 shadow-inner"></span>
-                                <span>Classic Light</span>
-                            </button>
-                            <button type="button" id="themeBtn-aba-dark" onclick="ProApp.vibrate(); ProApp.setThemeStyle('aba-dark')" class="p-2.5 rounded-2xl border-2 border-zinc-700 bg-zinc-950 text-amber-400 text-[10px] font-extrabold flex flex-col items-center gap-1.5 shadow-sm transition active:scale-95 cursor-pointer">
-                                <span class="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 border border-amber-400/50 shadow-inner"></span>
-                                <span>Dark Gold</span>
-                            </button>
-                            <button type="button" id="themeBtn-slate" onclick="ProApp.vibrate(); ProApp.setThemeStyle('slate')" class="p-2.5 rounded-2xl border-2 border-slate-700 bg-slate-900 text-sky-400 text-[10px] font-extrabold flex flex-col items-center gap-1.5 shadow-sm transition active:scale-95 cursor-pointer">
-                                <span class="w-6 h-6 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-400 border border-sky-400/50 shadow-inner"></span>
-                                <span>Navy Slate</span>
-                            </button>
+                    <!-- 🎨 V10 LUXURY & ANIME 28-THEME STUDIO ENTRY -->
+                    <div class="settings-card space-y-3">
+                        <div class="flex items-center justify-between gap-2">
+                            <label class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase flex items-center gap-1.5">
+                                <i class="fa-solid fa-swatchbook text-indigo-500"></i> ប្រភេទ Theme (28 ម៉ូដ Luxury &amp; Anime)
+                            </label>
+                            <span id="activeThemePill" class="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 dark:bg-white/10 text-blue-700 dark:text-amber-300">Classic Royal</span>
                         </div>
+                        <div id="settingsQuickThemeGrid" class="grid grid-cols-3 gap-2"></div>
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.openThemeStudioModal()" class="w-full py-2.5 px-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-pink-500 to-indigo-600 hover:opacity-95 text-white font-black text-xs shadow-md active:scale-95 transition cursor-pointer flex items-center justify-between">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-palette"></i> បើក Theme Studio ទាំង 28 ម៉ូដ</span>
+                            <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">14 Luxury • 14 Anime</span>
+                        </button>
                     </div>
 
                     <!-- ✏️ App Title & Subtitle -->
@@ -1717,6 +1795,43 @@
             <div class="flex gap-2 mt-3 pt-2 border-t border-slate-200/70 dark:border-white/10">
                 <button type="button" onclick="ProApp.triggerReceiptPhotoUpload(ProApp.photoViewerTxId)" class="flex-1 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl cursor-pointer">ប្តូររូបថ្មី</button>
                 <button type="button" onclick="ProApp.removeReceiptPhoto(ProApp.photoViewerTxId)" class="px-4 py-2 bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-300 text-xs font-bold rounded-xl cursor-pointer">លុបរូប</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🎨 V10 LUXURY & ANIME 28-THEME STUDIO MODAL -->
+    <div id="themeStudioModal" class="fixed inset-0 modal-overlay hidden z-[162] flex items-end sm:items-center justify-center sm:p-4" onclick="if(event.target === this) ProApp.closeThemeStudioModal()">
+        <div class="glass-modal rounded-t-[2rem] sm:rounded-3xl shadow-2xl w-full max-w-2xl mx-auto max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="w-10 h-1 bg-slate-300 dark:bg-zinc-700 rounded-full mx-auto mt-3 sm:hidden flex-shrink-0"></div>
+            <div class="flex items-center justify-between px-5 pt-4 pb-3 border-b border-slate-200/70 dark:border-white/10 flex-shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 via-rose-500 to-indigo-600 text-white flex items-center justify-center shadow-md text-base">
+                        <i class="fa-solid fa-palette"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-[15px] font-black modal-label-text">Theme Studio — 28 ម៉ូដ Luxury &amp; Anime</h3>
+                        <p class="text-[10px] text-slate-400 font-bold" id="themeStudioActiveLabel">កំពុងប្រើ៖ Classic Royal Blue • ចុចដើម្បីប្តូរភ្លាមៗ</p>
+                    </div>
+                </div>
+                <button type="button" onclick="ProApp.closeThemeStudioModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-300 flex items-center justify-center text-lg cursor-pointer">&times;</button>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div class="px-5 py-3 flex items-center gap-1.5 overflow-x-auto hide-scrollbar border-b border-slate-200/60 dark:border-white/10 flex-shrink-0">
+                <button type="button" id="tsTab-all" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('all')" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold whitespace-nowrap cursor-pointer transition bg-blue-600 text-white shadow-sm">✨ ទាំងអស់ (28)</button>
+                <button type="button" id="tsTab-dark" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('dark')" class="px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300">👑 Luxury ងងឹត (7)</button>
+                <button type="button" id="tsTab-light" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('light')" class="px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300">💎 Luxury ភ្លឺ (7)</button>
+                <button type="button" id="tsTab-anime" onclick="ProApp.vibrate(); ProApp.setThemeStudioFilter('anime')" class="px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300">⛩️ Anime ល្បីៗ (14)</button>
+            </div>
+
+            <!-- 28 Swatch Cards Grid -->
+            <div id="themeStudioGrid" class="p-4 sm:p-5 overflow-y-auto flex-1 custom-scrollbar grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+
+            <div class="px-5 py-3 border-t border-slate-200/70 dark:border-white/10 flex items-center justify-between gap-2 flex-shrink-0 pb-safe">
+                <button type="button" onclick="ProApp.vibrate(); ProApp.pickRandomTheme()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/10 text-xs font-extrabold cursor-pointer active:scale-95 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-shuffle text-amber-500"></i> សាកចៃដន្យ
+                </button>
+                <button type="button" onclick="ProApp.closeThemeStudioModal()" class="px-6 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-extrabold shadow cursor-pointer active:scale-95 transition">រួចរាល់</button>
             </div>
         </div>
     </div>
@@ -3499,19 +3614,455 @@
                     }
                 });
             },
-            updateThemeButtonsUI: function() {
-                const cur = ProApp.state.themeStyle || 'default';
-                const ringMap = {
-                    'default': 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-zinc-900',
-                    'aba-dark': 'ring-2 ring-amber-500 ring-offset-2 dark:ring-offset-zinc-900',
-                    'slate': 'ring-2 ring-sky-400 ring-offset-2 dark:ring-offset-zinc-900'
+            themeStudioFilter: 'all',
+            // 🎨 28 HANDCRAFTED THEMES (7 DARK LUXURY + 7 LIGHT LUXURY + 14 FAMOUS ANIME)
+            themeCatalog: [
+                // --- 👑 7 DARK LUXURY THEMES ---
+                {
+                    id: 'aba-dark', group: 'dark', isDark: true, icon: '👑',
+                    name: 'Obsidian Gold', sub: 'ខ្មៅកាំម្ញី & មាស VIP',
+                    swatches: ['#09090b', '#78350f', '#f59e0b'], metaColor: '#09090b', pattern: 'diamond',
+                    bodyBg: '#050507', bodyGrad: 'radial-gradient(circle at top right, rgba(245,158,11,0.12), transparent 48%), linear-gradient(180deg, #09090b 0%, #000000 100%)',
+                    heroBg: 'linear-gradient(145deg, #18181b 0%, #271b08 55%, #050507 100%)',
+                    heroBorder: 'rgba(245, 158, 11, 0.38)', heroGlow: 'rgba(251, 191, 36, 0.34)',
+                    panelBg: 'rgba(20, 20, 24, 0.78)', panelBorder: 'rgba(245, 158, 11, 0.16)', modalBg: 'rgba(18, 18, 22, 0.95)',
+                    accent: '#f59e0b', accent2: '#fbbf24', accentSoft: 'rgba(245, 158, 11, 0.22)',
+                    fabBg: 'linear-gradient(135deg, #f59e0b, #d97706)', fabShadow: '0 8px 22px rgba(245, 158, 11, 0.42)',
+                    insightBg: 'linear-gradient(135deg, #d97706, #b45309)', navBg: 'rgba(9, 9, 11, 0.94)'
+                },
+                {
+                    id: 'emerald-wealth', group: 'dark', isDark: true, icon: '💚',
+                    name: 'Emerald Wealth', sub: 'បៃតងមរកត & មាស Fintech',
+                    swatches: ['#021b14', '#065f46', '#10b981'], metaColor: '#021b14', pattern: 'luxury-grid',
+                    bodyBg: '#02120d', bodyGrad: 'radial-gradient(circle at top right, rgba(16,185,129,0.16), transparent 50%), linear-gradient(180deg, #031a13 0%, #020d0a 100%)',
+                    heroBg: 'linear-gradient(145deg, #064e3b 0%, #022c22 55%, #01140f 100%)',
+                    heroBorder: 'rgba(52, 211, 153, 0.35)', heroGlow: 'rgba(16, 185, 129, 0.35)',
+                    panelBg: 'rgba(6, 32, 25, 0.74)', panelBorder: 'rgba(52, 211, 153, 0.16)', modalBg: 'rgba(5, 24, 19, 0.95)',
+                    accent: '#10b981', accent2: '#d4af37', accentSoft: 'rgba(16, 185, 129, 0.22)',
+                    fabBg: 'linear-gradient(135deg, #10b981, #059669)', fabShadow: '0 8px 22px rgba(16, 185, 129, 0.42)',
+                    insightBg: 'linear-gradient(135deg, #059669, #0d9488)', navBg: 'rgba(2, 20, 15, 0.94)'
+                },
+                {
+                    id: 'slate', group: 'dark', isDark: true, icon: '🌌',
+                    name: 'Midnight Sapphire', sub: 'ខៀវរាត្រី & Cyan ទំនើប',
+                    swatches: ['#020617', '#1e3a8a', '#38bdf8'], metaColor: '#020617', pattern: 'hex',
+                    bodyBg: '#020617', bodyGrad: 'radial-gradient(circle at top right, rgba(56,189,248,0.14), transparent 50%), linear-gradient(180deg, #0b1120 0%, #020617 100%)',
+                    heroBg: 'linear-gradient(145deg, #1e293b 0%, #0f172a 55%, #020617 100%)',
+                    heroBorder: 'rgba(56, 189, 248, 0.34)', heroGlow: 'rgba(56, 189, 248, 0.32)',
+                    panelBg: 'rgba(15, 23, 42, 0.76)', panelBorder: 'rgba(56, 189, 248, 0.16)', modalBg: 'rgba(15, 23, 42, 0.95)',
+                    accent: '#38bdf8', accent2: '#3b82f6', accentSoft: 'rgba(56, 189, 248, 0.22)',
+                    fabBg: 'linear-gradient(135deg, #0ea5e9, #3b82f6)', fabShadow: '0 8px 22px rgba(14, 165, 233, 0.42)',
+                    insightBg: 'linear-gradient(135deg, #0284c7, #2563eb)', navBg: 'rgba(2, 6, 23, 0.94)'
+                },
+                {
+                    id: 'royal-amethyst', group: 'dark', isDark: true, icon: '🔮',
+                    name: 'Royal Amethyst', sub: 'ស្វាយរាជវង្ស & Neon Orchid',
+                    swatches: ['#100521', '#581c87', '#c084fc'], metaColor: '#100521', pattern: 'stars',
+                    bodyBg: '#0b0416', bodyGrad: 'radial-gradient(circle at top right, rgba(168,85,247,0.16), transparent 50%), linear-gradient(180deg, #130726 0%, #090312 100%)',
+                    heroBg: 'linear-gradient(145deg, #3b0764 0%, #240942 55%, #0d041a 100%)',
+                    heroBorder: 'rgba(192, 132, 252, 0.35)', heroGlow: 'rgba(168, 85, 247, 0.38)',
+                    panelBg: 'rgba(26, 12, 46, 0.76)', panelBorder: 'rgba(192, 132, 252, 0.18)', modalBg: 'rgba(20, 9, 36, 0.95)',
+                    accent: '#c084fc', accent2: '#e879f9', accentSoft: 'rgba(168, 85, 247, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #9333ea, #d946ef)', fabShadow: '0 8px 22px rgba(168, 85, 247, 0.46)',
+                    insightBg: 'linear-gradient(135deg, #7e22ce, #c026d3)', navBg: 'rgba(12, 5, 24, 0.94)'
+                },
+                {
+                    id: 'burgundy-velvet', group: 'dark', isDark: true, icon: '🍷',
+                    name: 'Burgundy Velvet', sub: 'ស្រាក្រហមប្រណីត & Rose Gold',
+                    swatches: ['#1a040a', '#7f1d1d', '#fb7185'], metaColor: '#1a040a', pattern: 'diamond',
+                    bodyBg: '#120307', bodyGrad: 'radial-gradient(circle at top right, rgba(251,113,133,0.16), transparent 50%), linear-gradient(180deg, #1d060d 0%, #0d0205 100%)',
+                    heroBg: 'linear-gradient(145deg, #5c0d24 0%, #380716 55%, #160309 100%)',
+                    heroBorder: 'rgba(251, 113, 133, 0.36)', heroGlow: 'rgba(244, 63, 94, 0.36)',
+                    panelBg: 'rgba(38, 10, 19, 0.76)', panelBorder: 'rgba(251, 113, 133, 0.18)', modalBg: 'rgba(30, 7, 14, 0.95)',
+                    accent: '#fb7185', accent2: '#f43f5e', accentSoft: 'rgba(244, 63, 94, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #e11d48, #fb7185)', fabShadow: '0 8px 22px rgba(225, 29, 72, 0.44)',
+                    insightBg: 'linear-gradient(135deg, #be123c, #e11d48)', navBg: 'rgba(20, 4, 9, 0.94)'
+                },
+                {
+                    id: 'espresso-copper', group: 'dark', isDark: true, icon: '☕',
+                    name: 'Espresso Copper', sub: 'កាហ្វេដុតងងឹត & ទង់ដែង',
+                    swatches: ['#140b06', '#6b3410', '#fb923c'], metaColor: '#140b06', pattern: 'luxury-grid',
+                    bodyBg: '#100905', bodyGrad: 'radial-gradient(circle at top right, rgba(251,146,60,0.15), transparent 50%), linear-gradient(180deg, #1c1009 0%, #0c0603 100%)',
+                    heroBg: 'linear-gradient(145deg, #431e0c 0%, #2b1307 55%, #120803 100%)',
+                    heroBorder: 'rgba(251, 146, 60, 0.35)', heroGlow: 'rgba(234, 88, 12, 0.34)',
+                    panelBg: 'rgba(34, 20, 12, 0.76)', panelBorder: 'rgba(251, 146, 60, 0.18)', modalBg: 'rgba(26, 15, 9, 0.95)',
+                    accent: '#fb923c', accent2: '#d97706', accentSoft: 'rgba(234, 88, 12, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #ea580c, #d97706)', fabShadow: '0 8px 22px rgba(234, 88, 12, 0.42)',
+                    insightBg: 'linear-gradient(135deg, #c2410c, #d97706)', navBg: 'rgba(18, 10, 6, 0.94)'
+                },
+                {
+                    id: 'carbon-titanium', group: 'dark', isDark: true, icon: '🦾',
+                    name: 'Carbon Titanium', sub: 'ទីតានីញ៉ូម & ប្រាក់រលោង',
+                    swatches: ['#0c0e12', '#334155', '#cbd5e1'], metaColor: '#0c0e12', pattern: 'slash',
+                    bodyBg: '#0b0d11', bodyGrad: 'radial-gradient(circle at top right, rgba(203,213,225,0.12), transparent 48%), linear-gradient(180deg, #13161c 0%, #090b0e 100%)',
+                    heroBg: 'linear-gradient(145deg, #272c35 0%, #171a21 55%, #0a0c10 100%)',
+                    heroBorder: 'rgba(203, 213, 225, 0.28)', heroGlow: 'rgba(148, 163, 184, 0.28)',
+                    panelBg: 'rgba(24, 28, 35, 0.78)', panelBorder: 'rgba(203, 213, 225, 0.14)', modalBg: 'rgba(20, 23, 29, 0.95)',
+                    accent: '#cbd5e1', accent2: '#94a3b8', accentSoft: 'rgba(148, 163, 184, 0.22)',
+                    fabBg: 'linear-gradient(135deg, #64748b, #334155)', fabShadow: '0 8px 22px rgba(148, 163, 184, 0.34)',
+                    insightBg: 'linear-gradient(135deg, #475569, #334155)', navBg: 'rgba(12, 14, 18, 0.94)'
+                },
+
+                // --- 💎 7 LIGHT LUXURY THEMES ---
+                {
+                    id: 'default', group: 'light', isDark: false, icon: '💎',
+                    name: 'Classic Royal Blue', sub: 'សស្អាត & ខៀវធនាគារ Pro',
+                    swatches: ['#f1f5f9', '#2563eb', '#1e3a8a'], metaColor: '#1e3a8a', pattern: 'luxury-grid',
+                    bodyBg: '#f1f5f9', bodyGrad: 'radial-gradient(circle at top right, rgba(59,130,246,0.10), transparent 45%), linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)',
+                    heroBg: 'linear-gradient(145deg, #1d4ed8 0%, #1e40af 55%, #172554 100%)',
+                    heroBorder: 'rgba(147, 197, 253, 0.3)', heroGlow: 'rgba(96, 165, 250, 0.35)',
+                    panelBg: 'rgba(255, 255, 255, 0.88)', panelBorder: 'rgba(255, 255, 255, 0.8)', modalBg: 'rgba(255, 255, 255, 0.96)',
+                    accent: '#2563eb', accent2: '#4f46e5', accentSoft: 'rgba(37, 99, 235, 0.16)',
+                    fabBg: 'linear-gradient(135deg, #3b82f6, #6366f1)', fabShadow: '0 8px 22px rgba(59, 130, 246, 0.42)',
+                    insightBg: 'linear-gradient(135deg, #f59e0b, #ea580c)', navBg: 'rgba(255, 255, 255, 0.92)'
+                },
+                {
+                    id: 'champagne-ivory', group: 'light', isDark: false, icon: '🥂',
+                    name: 'Champagne Ivory', sub: 'ក្រែមភ្លុក & មាសសណ្ឋាគារ ៥★',
+                    swatches: ['#faf6ef', '#b45309', '#d97706'], metaColor: '#78350f', pattern: 'diamond',
+                    bodyBg: '#faf6ef', bodyGrad: 'radial-gradient(circle at top right, rgba(217,119,6,0.12), transparent 48%), linear-gradient(180deg, #fcfaf5 0%, #f5ece0 100%)',
+                    heroBg: 'linear-gradient(145deg, #92400e 0%, #78350f 55%, #451a03 100%)',
+                    heroBorder: 'rgba(253, 230, 138, 0.38)', heroGlow: 'rgba(251, 191, 36, 0.32)',
+                    panelBg: 'rgba(255, 252, 247, 0.90)', panelBorder: 'rgba(217, 119, 6, 0.16)', modalBg: 'rgba(255, 252, 247, 0.97)',
+                    accent: '#b45309', accent2: '#d97706', accentSoft: 'rgba(180, 83, 9, 0.16)',
+                    fabBg: 'linear-gradient(135deg, #d97706, #92400e)', fabShadow: '0 8px 22px rgba(180, 83, 9, 0.38)',
+                    insightBg: 'linear-gradient(135deg, #b45309, #d97706)', navBg: 'rgba(255, 252, 247, 0.94)'
+                },
+                {
+                    id: 'sage-mint', group: 'light', isDark: false, icon: '🌿',
+                    name: 'Sage Mint Fintech', sub: 'បៃតងខ្ចី & មរកតសម័យថ្មី',
+                    swatches: ['#eff8f4', '#059669', '#064e3b'], metaColor: '#065f46', pattern: 'luxury-grid',
+                    bodyBg: '#eff8f4', bodyGrad: 'radial-gradient(circle at top right, rgba(16,185,129,0.12), transparent 48%), linear-gradient(180deg, #f3faf7 0%, #e4f4ec 100%)',
+                    heroBg: 'linear-gradient(145deg, #059669 0%, #047857 52%, #064e3b 100%)',
+                    heroBorder: 'rgba(110, 231, 183, 0.35)', heroGlow: 'rgba(52, 211, 153, 0.35)',
+                    panelBg: 'rgba(255, 255, 255, 0.90)', panelBorder: 'rgba(16, 185, 129, 0.16)', modalBg: 'rgba(255, 255, 255, 0.97)',
+                    accent: '#059669', accent2: '#0d9488', accentSoft: 'rgba(5, 150, 105, 0.16)',
+                    fabBg: 'linear-gradient(135deg, #10b981, #047857)', fabShadow: '0 8px 22px rgba(5, 150, 105, 0.40)',
+                    insightBg: 'linear-gradient(135deg, #0d9488, #059669)', navBg: 'rgba(248, 253, 250, 0.94)'
+                },
+                {
+                    id: 'frost-lavender', group: 'light', isDark: false, icon: '🪻',
+                    name: 'Frost Lavender', sub: 'ស្វាយឡាវេនឌឺ & កញ្ចក់ថ្លា',
+                    swatches: ['#f5f3ff', '#7c3aed', '#4c1d95'], metaColor: '#5b21b6', pattern: 'stars',
+                    bodyBg: '#f5f3ff', bodyGrad: 'radial-gradient(circle at top right, rgba(139,92,246,0.13), transparent 48%), linear-gradient(180deg, #f8f7ff 0%, #ede9fe 100%)',
+                    heroBg: 'linear-gradient(145deg, #7c3aed 0%, #6d28d9 52%, #3b0764 100%)',
+                    heroBorder: 'rgba(221, 214, 254, 0.35)', heroGlow: 'rgba(167, 139, 250, 0.38)',
+                    panelBg: 'rgba(255, 255, 255, 0.88)', panelBorder: 'rgba(124, 58, 237, 0.15)', modalBg: 'rgba(255, 255, 255, 0.97)',
+                    accent: '#7c3aed', accent2: '#6366f1', accentSoft: 'rgba(124, 58, 237, 0.16)',
+                    fabBg: 'linear-gradient(135deg, #8b5cf6, #6366f1)', fabShadow: '0 8px 22px rgba(124, 58, 237, 0.40)',
+                    insightBg: 'linear-gradient(135deg, #7c3aed, #a855f7)', navBg: 'rgba(252, 250, 255, 0.94)'
+                },
+                {
+                    id: 'rose-pearl', group: 'light', isDark: false, icon: '🌸',
+                    name: 'Rose Pearl', sub: 'ផ្កាឈូកគុជ & ក្រហមប៊ឺរី',
+                    swatches: ['#fff1f2', '#e11d48', '#881337'], metaColor: '#9f1239', pattern: 'sakura',
+                    bodyBg: '#fff1f2', bodyGrad: 'radial-gradient(circle at top right, rgba(244,63,94,0.12), transparent 48%), linear-gradient(180deg, #fff5f6 0%, #ffe4e6 100%)',
+                    heroBg: 'linear-gradient(145deg, #e11d48 0%, #be123c 55%, #881337 100%)',
+                    heroBorder: 'rgba(254, 205, 211, 0.35)', heroGlow: 'rgba(251, 113, 133, 0.38)',
+                    panelBg: 'rgba(255, 255, 255, 0.90)', panelBorder: 'rgba(225, 29, 72, 0.14)', modalBg: 'rgba(255, 255, 255, 0.97)',
+                    accent: '#e11d48', accent2: '#f43f5e', accentSoft: 'rgba(225, 29, 72, 0.16)',
+                    fabBg: 'linear-gradient(135deg, #f43f5e, #be123c)', fabShadow: '0 8px 22px rgba(225, 29, 72, 0.40)',
+                    insightBg: 'linear-gradient(135deg, #e11d48, #ec4899)', navBg: 'rgba(255, 250, 251, 0.94)'
+                },
+                {
+                    id: 'ocean-glacier', group: 'light', isDark: false, icon: '❄️',
+                    name: 'Ocean Glacier', sub: 'ទឹកកកត្រជាក់ភ្នែក Minimal',
+                    swatches: ['#f0f9ff', '#0284c7', '#0c4a6e'], metaColor: '#0369a1', pattern: 'wave',
+                    bodyBg: '#f0f9ff', bodyGrad: 'radial-gradient(circle at top right, rgba(14,165,233,0.12), transparent 48%), linear-gradient(180deg, #f5fbff 0%, #e0f2fe 100%)',
+                    heroBg: 'linear-gradient(145deg, #0284c7 0%, #0369a1 55%, #0c4a6e 100%)',
+                    heroBorder: 'rgba(186, 230, 253, 0.36)', heroGlow: 'rgba(56, 189, 248, 0.36)',
+                    panelBg: 'rgba(255, 255, 255, 0.90)', panelBorder: 'rgba(2, 132, 199, 0.14)', modalBg: 'rgba(255, 255, 255, 0.97)',
+                    accent: '#0284c7', accent2: '#06b6d4', accentSoft: 'rgba(2, 132, 199, 0.16)',
+                    fabBg: 'linear-gradient(135deg, #06b6d4, #0284c7)', fabShadow: '0 8px 22px rgba(2, 132, 199, 0.40)',
+                    insightBg: 'linear-gradient(135deg, #0284c7, #0891b2)', navBg: 'rgba(248, 253, 255, 0.94)'
+                },
+                {
+                    id: 'sunset-amber', group: 'light', isDark: false, icon: '🌅',
+                    name: 'Sunset Amber', sub: 'ថ្ងៃលិចមាស & Coral ថាមពល',
+                    swatches: ['#fffbeb', '#ea580c', '#9a3412'], metaColor: '#c2410c', pattern: 'wave',
+                    bodyBg: '#fffbeb', bodyGrad: 'radial-gradient(circle at top right, rgba(249,115,22,0.12), transparent 48%), linear-gradient(180deg, #fffdf5 0%, #ffedd5 100%)',
+                    heroBg: 'linear-gradient(145deg, #ea580c 0%, #c2410c 55%, #7c2d12 100%)',
+                    heroBorder: 'rgba(254, 215, 170, 0.36)', heroGlow: 'rgba(251, 146, 60, 0.38)',
+                    panelBg: 'rgba(255, 255, 255, 0.90)', panelBorder: 'rgba(234, 88, 12, 0.15)', modalBg: 'rgba(255, 255, 255, 0.97)',
+                    accent: '#ea580c', accent2: '#f59e0b', accentSoft: 'rgba(234, 88, 12, 0.16)',
+                    fabBg: 'linear-gradient(135deg, #f97316, #ea580c)', fabShadow: '0 8px 22px rgba(234, 88, 12, 0.40)',
+                    insightBg: 'linear-gradient(135deg, #f59e0b, #dc2626)', navBg: 'rgba(255, 252, 245, 0.94)'
+                },
+
+                // --- ⛩️ 14 FAMOUS ANIME EDITIONS ---
+                {
+                    id: 'anime-spyxfamily', group: 'anime', isDark: true, icon: '🕵️',
+                    name: 'Spy x Family', sub: 'Eden Emerald • Anya Rose • Stella Gold',
+                    swatches: ['#051d17', '#f472b6', '#fbbf24'], metaColor: '#051d17', pattern: 'stars',
+                    bodyBg: '#041410', bodyGrad: 'radial-gradient(circle at top right, rgba(244,114,182,0.14), transparent 48%), radial-gradient(circle at bottom left, rgba(251,191,36,0.10), transparent 50%), linear-gradient(180deg, #06211a 0%, #03110d 100%)',
+                    heroBg: 'linear-gradient(145deg, #064e3b 0%, #0b2b22 52%, #1d1019 100%)',
+                    heroBorder: 'rgba(251, 191, 36, 0.42)', heroGlow: 'rgba(244, 114, 182, 0.36)',
+                    panelBg: 'rgba(8, 34, 27, 0.78)', panelBorder: 'rgba(251, 191, 36, 0.20)', modalBg: 'rgba(6, 26, 20, 0.95)',
+                    accent: '#f472b6', accent2: '#fbbf24', accentSoft: 'rgba(244, 114, 182, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #ec4899, #f59e0b)', fabShadow: '0 8px 22px rgba(244, 114, 182, 0.44)',
+                    insightBg: 'linear-gradient(135deg, #059669, #db2777)', navBg: 'rgba(4, 20, 16, 0.95)'
+                },
+                {
+                    id: 'anime-btth', group: 'anime', isDark: true, icon: '🪷',
+                    name: 'BTTH Heavenly Flame', sub: 'ដុតភ្លើងទេវតា • Azure Lotus Flame',
+                    swatches: ['#041517', '#0d9488', '#38bdf8'], metaColor: '#041517', pattern: 'flame',
+                    bodyBg: '#031012', bodyGrad: 'radial-gradient(circle at top right, rgba(20,184,166,0.18), transparent 48%), radial-gradient(circle at bottom left, rgba(245,158,11,0.12), transparent 50%), linear-gradient(180deg, #04191c 0%, #020a0d 100%)',
+                    heroBg: 'linear-gradient(145deg, #115e59 0%, #0c2f3a 52%, #06121a 100%)',
+                    heroBorder: 'rgba(45, 212, 191, 0.42)', heroGlow: 'rgba(20, 184, 166, 0.42)',
+                    panelBg: 'rgba(7, 29, 34, 0.78)', panelBorder: 'rgba(45, 212, 191, 0.20)', modalBg: 'rgba(5, 22, 26, 0.95)',
+                    accent: '#2dd4bf', accent2: '#f59e0b', accentSoft: 'rgba(45, 212, 191, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #14b8a6, #0284c7)', fabShadow: '0 8px 22px rgba(20, 184, 166, 0.46)',
+                    insightBg: 'linear-gradient(135deg, #0d9488, #f59e0b)', navBg: 'rgba(3, 16, 18, 0.95)'
+                },
+                {
+                    id: 'anime-demonslayer', group: 'anime', isDark: true, icon: '🌊',
+                    name: 'Demon Slayer', sub: 'Tanjiro Checkered • Hinokami Flame',
+                    swatches: ['#071310', '#10b981', '#ef4444'], metaColor: '#071310', pattern: 'checkered',
+                    bodyBg: '#070c0b', bodyGrad: 'radial-gradient(circle at top right, rgba(16,185,129,0.15), transparent 46%), radial-gradient(circle at bottom left, rgba(239,68,68,0.12), transparent 50%), linear-gradient(180deg, #0b1412 0%, #060908 100%)',
+                    heroBg: 'linear-gradient(145deg, #065f46 0%, #111827 54%, #450a0a 100%)',
+                    heroBorder: 'rgba(16, 185, 129, 0.40)', heroGlow: 'rgba(16, 185, 129, 0.36)',
+                    panelBg: 'rgba(14, 22, 20, 0.80)', panelBorder: 'rgba(16, 185, 129, 0.20)', modalBg: 'rgba(11, 18, 16, 0.95)',
+                    accent: '#10b981', accent2: '#ef4444', accentSoft: 'rgba(16, 185, 129, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #10b981, #ef4444)', fabShadow: '0 8px 22px rgba(16, 185, 129, 0.40)',
+                    insightBg: 'linear-gradient(135deg, #059669, #dc2626)', navBg: 'rgba(7, 13, 11, 0.95)'
+                },
+                {
+                    id: 'anime-jjk', group: 'anime', isDark: true, icon: '👁️',
+                    name: 'Jujutsu Kaisen (Gojo)', sub: 'Infinite Void • Six Eyes & Hollow Purple',
+                    swatches: ['#060718', '#38bdf8', '#a855f7'], metaColor: '#060718', pattern: 'hex',
+                    bodyBg: '#050614', bodyGrad: 'radial-gradient(circle at top right, rgba(56,189,248,0.18), transparent 48%), radial-gradient(circle at bottom left, rgba(168,85,247,0.16), transparent 50%), linear-gradient(180deg, #090b24 0%, #04050f 100%)',
+                    heroBg: 'linear-gradient(145deg, #1e1b4b 0%, #3b0764 52%, #0c4a6e 100%)',
+                    heroBorder: 'rgba(56, 189, 248, 0.44)', heroGlow: 'rgba(168, 85, 247, 0.42)',
+                    panelBg: 'rgba(14, 15, 38, 0.78)', panelBorder: 'rgba(139, 92, 246, 0.22)', modalBg: 'rgba(11, 12, 30, 0.95)',
+                    accent: '#38bdf8', accent2: '#a855f7', accentSoft: 'rgba(56, 189, 248, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #38bdf8, #9333ea)', fabShadow: '0 8px 24px rgba(139, 92, 246, 0.48)',
+                    insightBg: 'linear-gradient(135deg, #2563eb, #9333ea)', navBg: 'rgba(6, 7, 22, 0.95)'
+                },
+                {
+                    id: 'anime-onepiece', group: 'anime', isDark: true, icon: '🏴‍☠️',
+                    name: 'One Piece (Grand Line)', sub: 'Straw Hat Gold • Ocean & Gear 5',
+                    swatches: ['#0a1930', '#dc2626', '#facc15'], metaColor: '#0a1930', pattern: 'wave',
+                    bodyBg: '#081426', bodyGrad: 'radial-gradient(circle at top right, rgba(250,204,21,0.14), transparent 46%), radial-gradient(circle at bottom left, rgba(220,38,38,0.12), transparent 50%), linear-gradient(180deg, #0d213f 0%, #071121 100%)',
+                    heroBg: 'linear-gradient(145deg, #1d4ed8 0%, #0f172a 54%, #7f1d1d 100%)',
+                    heroBorder: 'rgba(250, 204, 21, 0.42)', heroGlow: 'rgba(250, 204, 21, 0.34)',
+                    panelBg: 'rgba(13, 29, 54, 0.78)', panelBorder: 'rgba(250, 204, 21, 0.20)', modalBg: 'rgba(10, 23, 44, 0.95)',
+                    accent: '#facc15', accent2: '#ef4444', accentSoft: 'rgba(250, 204, 21, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #ef4444, #eab308)', fabShadow: '0 8px 22px rgba(234, 179, 8, 0.42)',
+                    insightBg: 'linear-gradient(135deg, #dc2626, #ca8a04)', navBg: 'rgba(8, 20, 38, 0.95)'
+                },
+                {
+                    id: 'anime-naruto', group: 'anime', isDark: true, icon: '🦊',
+                    name: 'Naruto (Kurama Sage)', sub: 'Nine-Tails Flame • Chakra Gold',
+                    swatches: ['#160a04', '#f97316', '#facc15'], metaColor: '#160a04', pattern: 'flame',
+                    bodyBg: '#120804', bodyGrad: 'radial-gradient(circle at top right, rgba(249,115,22,0.18), transparent 48%), linear-gradient(180deg, #1d0d05 0%, #0d0502 100%)',
+                    heroBg: 'linear-gradient(145deg, #c2410c 0%, #7c2d12 52%, #1c0a04 100%)',
+                    heroBorder: 'rgba(251, 146, 60, 0.44)', heroGlow: 'rgba(249, 115, 22, 0.42)',
+                    panelBg: 'rgba(34, 16, 8, 0.78)', panelBorder: 'rgba(249, 115, 22, 0.22)', modalBg: 'rgba(26, 12, 6, 0.95)',
+                    accent: '#f97316', accent2: '#facc15', accentSoft: 'rgba(249, 115, 22, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #f97316, #eab308)', fabShadow: '0 8px 22px rgba(249, 115, 22, 0.46)',
+                    insightBg: 'linear-gradient(135deg, #ea580c, #eab308)', navBg: 'rgba(18, 8, 4, 0.95)'
+                },
+                {
+                    id: 'anime-sololeveling', group: 'anime', isDark: true, icon: '⚔️',
+                    name: 'Solo Leveling (Arise)', sub: 'Shadow Monarch • Neon Violet Aura',
+                    swatches: ['#050410', '#4c1d95', '#8b5cf6'], metaColor: '#050410', pattern: 'slash',
+                    bodyBg: '#04030c', bodyGrad: 'radial-gradient(circle at top right, rgba(139,92,246,0.20), transparent 48%), radial-gradient(circle at bottom left, rgba(59,130,246,0.14), transparent 50%), linear-gradient(180deg, #09061a 0%, #03020a 100%)',
+                    heroBg: 'linear-gradient(145deg, #312e81 0%, #1e1042 52%, #05030f 100%)',
+                    heroBorder: 'rgba(139, 92, 246, 0.46)', heroGlow: 'rgba(139, 92, 246, 0.45)',
+                    panelBg: 'rgba(15, 11, 34, 0.80)', panelBorder: 'rgba(139, 92, 246, 0.24)', modalBg: 'rgba(11, 8, 26, 0.96)',
+                    accent: '#8b5cf6', accent2: '#3b82f6', accentSoft: 'rgba(139, 92, 246, 0.26)',
+                    fabBg: 'linear-gradient(135deg, #7c3aed, #2563eb)', fabShadow: '0 8px 24px rgba(124, 58, 237, 0.50)',
+                    insightBg: 'linear-gradient(135deg, #6d28d9, #1d4ed8)', navBg: 'rgba(5, 4, 16, 0.95)'
+                },
+                {
+                    id: 'anime-aot', group: 'anime', isDark: true, icon: '🦅',
+                    name: 'Attack on Titan', sub: 'Survey Corps Olive • Wings Steel Blue',
+                    swatches: ['#0f1511', '#365314', '#60a5fa'], metaColor: '#0f1511', pattern: 'slash',
+                    bodyBg: '#0c110d', bodyGrad: 'radial-gradient(circle at top right, rgba(96,165,250,0.13), transparent 48%), linear-gradient(180deg, #131b15 0%, #0a0e0b 100%)',
+                    heroBg: 'linear-gradient(145deg, #1e3a2f 0%, #1c241d 55%, #17120e 100%)',
+                    heroBorder: 'rgba(96, 165, 250, 0.34)', heroGlow: 'rgba(96, 165, 250, 0.30)',
+                    panelBg: 'rgba(22, 30, 24, 0.80)', panelBorder: 'rgba(132, 204, 22, 0.16)', modalBg: 'rgba(18, 24, 20, 0.95)',
+                    accent: '#60a5fa', accent2: '#a3e635', accentSoft: 'rgba(96, 165, 250, 0.22)',
+                    fabBg: 'linear-gradient(135deg, #2563eb, #4d7c0f)', fabShadow: '0 8px 22px rgba(37, 99, 235, 0.38)',
+                    insightBg: 'linear-gradient(135deg, #3f6212, #1d4ed8)', navBg: 'rgba(12, 17, 13, 0.95)'
+                },
+                {
+                    id: 'anime-dragonball', group: 'anime', isDark: true, icon: '⚡',
+                    name: 'Dragon Ball (UI)', sub: 'Ultra Instinct Silver • Super Saiyan Gold',
+                    swatches: ['#070b1a', '#2563eb', '#93c5fd'], metaColor: '#070b1a', pattern: 'stars',
+                    bodyBg: '#060a17', bodyGrad: 'radial-gradient(circle at top right, rgba(147,197,253,0.18), transparent 48%), radial-gradient(circle at bottom left, rgba(245,158,11,0.12), transparent 50%), linear-gradient(180deg, #0b132b 0%, #050814 100%)',
+                    heroBg: 'linear-gradient(145deg, #1d4ed8 0%, #0f172a 55%, #1e1b4b 100%)',
+                    heroBorder: 'rgba(147, 197, 253, 0.44)', heroGlow: 'rgba(147, 197, 253, 0.40)',
+                    panelBg: 'rgba(14, 22, 46, 0.78)', panelBorder: 'rgba(147, 197, 253, 0.22)', modalBg: 'rgba(10, 16, 36, 0.95)',
+                    accent: '#93c5fd', accent2: '#f59e0b', accentSoft: 'rgba(147, 197, 253, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #3b82f6, #f59e0b)', fabShadow: '0 8px 22px rgba(59, 130, 246, 0.46)',
+                    insightBg: 'linear-gradient(135deg, #2563eb, #f59e0b)', navBg: 'rgba(6, 10, 23, 0.95)'
+                },
+                {
+                    id: 'anime-bleach', group: 'anime', isDark: true, icon: '🌙',
+                    name: 'Bleach (Bankai)', sub: 'Getsuga Pitch Black • Crimson Blade',
+                    swatches: ['#050507', '#991b1b', '#ef4444'], metaColor: '#050507', pattern: 'slash',
+                    bodyBg: '#040406', bodyGrad: 'radial-gradient(circle at top right, rgba(220,38,38,0.18), transparent 46%), linear-gradient(180deg, #0a0a0f 0%, #030305 100%)',
+                    heroBg: 'linear-gradient(145deg, #18181b 0%, #3f090c 55%, #050507 100%)',
+                    heroBorder: 'rgba(239, 68, 68, 0.44)', heroGlow: 'rgba(220, 38, 38, 0.40)',
+                    panelBg: 'rgba(16, 16, 20, 0.82)', panelBorder: 'rgba(239, 68, 68, 0.20)', modalBg: 'rgba(12, 12, 16, 0.96)',
+                    accent: '#ef4444', accent2: '#f8fafc', accentSoft: 'rgba(239, 68, 68, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #dc2626, #7f1d1d)', fabShadow: '0 8px 22px rgba(220, 38, 38, 0.48)',
+                    insightBg: 'linear-gradient(135deg, #b91c1c, #18181b)', navBg: 'rgba(5, 5, 7, 0.96)'
+                },
+                {
+                    id: 'anime-chainsaw', group: 'anime', isDark: true, icon: '🪚',
+                    name: 'Chainsaw Man', sub: 'Pochita Hazard Orange • Crimson Neon',
+                    swatches: ['#120906', '#dc2626', '#fb923c'], metaColor: '#120906', pattern: 'slash',
+                    bodyBg: '#0e0705', bodyGrad: 'radial-gradient(circle at top right, rgba(239,68,68,0.18), transparent 48%), linear-gradient(180deg, #190c08 0%, #0a0503 100%)',
+                    heroBg: 'linear-gradient(145deg, #991b1b 0%, #431407 52%, #110705 100%)',
+                    heroBorder: 'rgba(251, 146, 60, 0.44)', heroGlow: 'rgba(239, 68, 68, 0.42)',
+                    panelBg: 'rgba(30, 15, 11, 0.80)', panelBorder: 'rgba(251, 146, 60, 0.22)', modalBg: 'rgba(24, 11, 8, 0.96)',
+                    accent: '#fb923c', accent2: '#ef4444', accentSoft: 'rgba(251, 146, 60, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #ef4444, #f97316)', fabShadow: '0 8px 22px rgba(239, 68, 68, 0.48)',
+                    insightBg: 'linear-gradient(135deg, #dc2626, #ea580c)', navBg: 'rgba(14, 7, 5, 0.95)'
+                },
+                {
+                    id: 'anime-ghibli', group: 'anime', isDark: false, icon: '🍃',
+                    name: 'Studio Ghibli', sub: 'Spirited Sky • Totoro Teal (Light Anime)',
+                    swatches: ['#eef9f6', '#0d9488', '#e11d48'], metaColor: '#0f766e', pattern: 'sakura',
+                    bodyBg: '#eef9f6', bodyGrad: 'radial-gradient(circle at top right, rgba(20,184,166,0.14), transparent 48%), radial-gradient(circle at bottom left, rgba(244,63,94,0.08), transparent 50%), linear-gradient(180deg, #f2fbf9 0%, #e1f4f0 100%)',
+                    heroBg: 'linear-gradient(145deg, #0f766e 0%, #115e59 55%, #134e4a 100%)',
+                    heroBorder: 'rgba(153, 246, 228, 0.40)', heroGlow: 'rgba(45, 212, 191, 0.36)',
+                    panelBg: 'rgba(255, 255, 255, 0.90)', panelBorder: 'rgba(13, 148, 136, 0.16)', modalBg: 'rgba(255, 255, 255, 0.97)',
+                    accent: '#0d9488', accent2: '#e11d48', accentSoft: 'rgba(13, 148, 136, 0.16)',
+                    fabBg: 'linear-gradient(135deg, #14b8a6, #e11d48)', fabShadow: '0 8px 22px rgba(13, 148, 136, 0.38)',
+                    insightBg: 'linear-gradient(135deg, #0d9488, #e11d48)', navBg: 'rgba(246, 253, 251, 0.95)'
+                },
+                {
+                    id: 'anime-yourname', group: 'anime', isDark: true, icon: '☄️',
+                    name: 'Your Name (Twilight)', sub: 'Kataware-doki Comet • Dusk Pink Gold',
+                    swatches: ['#120c29', '#ec4899', '#fb923c'], metaColor: '#120c29', pattern: 'stars',
+                    bodyBg: '#0e0a21', bodyGrad: 'radial-gradient(circle at top right, rgba(236,72,153,0.20), transparent 48%), radial-gradient(circle at bottom left, rgba(251,146,60,0.14), transparent 50%), linear-gradient(180deg, #171036 0%, #0a071a 100%)',
+                    heroBg: 'linear-gradient(145deg, #312e81 0%, #831843 56%, #9a3412 100%)',
+                    heroBorder: 'rgba(244, 114, 182, 0.42)', heroGlow: 'rgba(236, 72, 153, 0.42)',
+                    panelBg: 'rgba(24, 17, 50, 0.78)', panelBorder: 'rgba(244, 114, 182, 0.22)', modalBg: 'rgba(19, 13, 40, 0.95)',
+                    accent: '#f472b6', accent2: '#fb923c', accentSoft: 'rgba(236, 72, 153, 0.24)',
+                    fabBg: 'linear-gradient(135deg, #ec4899, #f97316)', fabShadow: '0 8px 22px rgba(236, 72, 153, 0.46)',
+                    insightBg: 'linear-gradient(135deg, #db2777, #f97316)', navBg: 'rgba(14, 10, 33, 0.95)'
+                },
+                {
+                    id: 'anime-cyberpunk', group: 'anime', isDark: true, icon: '🌆',
+                    name: 'Cyberpunk Edgerunners', sub: 'Night City • Cyber Yellow & Neon Pink',
+                    swatches: ['#0a0614', '#facc15', '#ec4899'], metaColor: '#0a0614', pattern: 'cyber',
+                    bodyBg: '#080510', bodyGrad: 'radial-gradient(circle at top right, rgba(250,204,21,0.15), transparent 45%), radial-gradient(circle at bottom left, rgba(236,72,153,0.16), transparent 50%), linear-gradient(180deg, #110921 0%, #06030d 100%)',
+                    heroBg: 'linear-gradient(145deg, #1f1035 0%, #3b0764 52%, #422006 100%)',
+                    heroBorder: 'rgba(250, 204, 21, 0.50)', heroGlow: 'rgba(236, 72, 153, 0.44)',
+                    panelBg: 'rgba(20, 12, 36, 0.80)', panelBorder: 'rgba(250, 204, 21, 0.24)', modalBg: 'rgba(15, 9, 28, 0.96)',
+                    accent: '#facc15', accent2: '#ec4899', accentSoft: 'rgba(250, 204, 21, 0.26)',
+                    fabBg: 'linear-gradient(135deg, #eab308, #ec4899)', fabShadow: '0 8px 24px rgba(236, 72, 153, 0.48)',
+                    insightBg: 'linear-gradient(135deg, #ca8a04, #db2777)', navBg: 'rgba(10, 6, 20, 0.95)'
+                }
+            ],
+            getThemePatternUri: function(patternName) {
+                const svgMap = {
+                    'luxury-grid': `<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36'><path d='M36 0H0v36' fill='none' stroke='%23ffffff' stroke-width='0.7'/></svg>`,
+                    'diamond': `<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28'><path d='M14 0L28 14L14 28L0 14Z' fill='none' stroke='%23ffffff' stroke-width='0.8'/></svg>`,
+                    'checkered': `<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><rect width='16' height='16' fill='%23ffffff'/><rect x='16' y='16' width='16' height='16' fill='%23ffffff'/></svg>`,
+                    'hex': `<svg xmlns='http://www.w3.org/2000/svg' width='28' height='49'><path d='M14 0l14 8v16l-14 8L0 24V8z' fill='none' stroke='%23ffffff' stroke-width='0.8'/></svg>`,
+                    'wave': `<svg xmlns='http://www.w3.org/2000/svg' width='48' height='24'><path d='M0 12 Q12 0 24 12 T48 12' fill='none' stroke='%23ffffff' stroke-width='1.1'/></svg>`,
+                    'stars': `<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><path d='M20 4l2.5 7.5L30 14l-7.5 2.5L20 24l-2.5-7.5L10 14l7.5-2.5z' fill='%23ffffff'/></svg>`,
+                    'flame': `<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36'><path d='M18 4 C24 12 28 18 18 32 C8 18 12 12 18 4Z' fill='none' stroke='%23ffffff' stroke-width='0.9'/></svg>`,
+                    'sakura': `<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36'><circle cx='18' cy='18' r='5' fill='none' stroke='%23ffffff' stroke-width='0.9'/><circle cx='8' cy='8' r='2' fill='%23ffffff'/></svg>`,
+                    'slash': `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><path d='M0 24L24 0' stroke='%23ffffff' stroke-width='0.9'/></svg>`,
+                    'cyber': `<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><path d='M0 20h14l6-6h20M20 0v14' fill='none' stroke='%23ffffff' stroke-width='0.8'/></svg>`
                 };
-                ['default', 'aba-dark', 'slate'].forEach(t => {
-                    const el = document.getElementById('themeBtn-' + t);
-                    if (!el) return;
-                    el.classList.remove('ring-2', 'ring-blue-500', 'ring-amber-500', 'ring-sky-400', 'ring-offset-2', 'dark:ring-offset-zinc-900');
-                    if (t === cur) el.classList.add(...ringMap[t].split(' '));
+                const raw = svgMap[patternName] || svgMap['luxury-grid'];
+                return `url("data:image/svg+xml,${raw}")`;
+            },
+            getThemeMeta: function(id) {
+                return ProApp.themeCatalog.find(t => t.id === id) || ProApp.themeCatalog.find(t => t.id === 'default');
+            },
+            openThemeStudioModal: function() {
+                ProApp.renderThemeStudio();
+                document.getElementById('themeStudioModal')?.classList.remove('hidden');
+            },
+            closeThemeStudioModal: function() {
+                document.getElementById('themeStudioModal')?.classList.add('hidden');
+            },
+            setThemeStudioFilter: function(filterKey) {
+                ProApp.themeStudioFilter = filterKey;
+                ['all', 'dark', 'light', 'anime'].forEach(k => {
+                    const btn = document.getElementById('tsTab-' + k);
+                    if (!btn) return;
+                    if (k === filterKey) {
+                        btn.className = 'px-3 py-1.5 rounded-xl text-[11px] font-extrabold whitespace-nowrap cursor-pointer transition bg-blue-600 text-white shadow-sm';
+                    } else {
+                        btn.className = 'px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap cursor-pointer transition bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300';
+                    }
                 });
+                ProApp.renderThemeStudio();
+            },
+            pickRandomTheme: function() {
+                const cur = ProApp.state.themeStyle || 'default';
+                const pool = ProApp.themeCatalog.filter(t => t.id !== cur);
+                const chosen = pool[Math.floor(Math.random() * pool.length)];
+                if (chosen) {
+                    ProApp.setThemeStyle(chosen.id);
+                    ProApp.showToast(`${chosen.icon} ប្តូរទៅ Theme: ${chosen.name}`, 'success');
+                }
+            },
+            renderThemeStudio: function() {
+                const grid = document.getElementById('themeStudioGrid');
+                const activeLbl = document.getElementById('themeStudioActiveLabel');
+                const curTheme = ProApp.getThemeMeta(ProApp.state.themeStyle || 'default');
+                if (activeLbl && curTheme) {
+                    activeLbl.textContent = `កំពុងប្រើ៖ ${curTheme.icon} ${curTheme.name} • ចុចដើម្បីប្តូរភ្លាមៗ`;
+                }
+                if (!grid) return;
+                const f = ProApp.themeStudioFilter || 'all';
+                const list = f === 'all' ? ProApp.themeCatalog : ProApp.themeCatalog.filter(t => t.group === f);
+                grid.innerHTML = list.map(t => {
+                    const isActive = t.id === (ProApp.state.themeStyle || 'default');
+                    const tagTxt = t.group === 'anime' ? 'ANIME' : (t.isDark ? 'DARK VIP' : 'LIGHT');
+                    const cardBg = t.isDark ? 'bg-zinc-900/90 text-white border-white/10' : 'bg-white text-slate-900 border-slate-200';
+                    return `
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.setThemeStyle('${t.id}')" class="theme-swatch-card ${isActive ? 'is-active' : ''} ${cardBg} border p-2.5 text-left cursor-pointer flex flex-col gap-2">
+                            <div class="swatch-stack">
+                                <span style="background:${t.swatches[0]}"></span>
+                                <span style="background:${t.swatches[1]}"></span>
+                                <span style="background:${t.swatches[2]}"></span>
+                                <div class="absolute top-1.5 left-1.5 w-6 h-6 rounded-lg bg-black/35 backdrop-blur-md flex items-center justify-center text-xs shadow">${t.icon}</div>
+                                <span class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md text-[8px] font-black tracking-wider bg-black/45 text-white backdrop-blur-sm">${tagTxt}</span>
+                                ${isActive ? '<span class="absolute bottom-1.5 right-1.5 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow"><i class="fa-solid fa-check"></i></span>' : ''}
+                            </div>
+                            <div class="min-w-0 px-0.5">
+                                <div class="text-[11px] font-black truncate leading-tight">${ProApp.escapeHtml(t.name)}</div>
+                                <div class="text-[9px] opacity-70 truncate mt-0.5 font-medium">${ProApp.escapeHtml(t.sub)}</div>
+                            </div>
+                        </button>`;
+                }).join('');
+            },
+            updateThemeButtonsUI: function() {
+                const curTheme = ProApp.getThemeMeta(ProApp.state.themeStyle || 'default');
+                const pill = document.getElementById('activeThemePill');
+                if (pill && curTheme) pill.textContent = `${curTheme.icon} ${curTheme.name}`;
+                const quickGrid = document.getElementById('settingsQuickThemeGrid');
+                if (quickGrid) {
+                    const quickIds = ['default', 'aba-dark', 'emerald-wealth', 'burgundy-velvet', 'anime-spyxfamily', 'anime-btth'];
+                    quickGrid.innerHTML = quickIds.map(id => {
+                        const t = ProApp.getThemeMeta(id);
+                        const isActive = t.id === curTheme.id;
+                        const cardBg = t.isDark ? 'bg-zinc-950 text-white border-zinc-700' : 'bg-white text-slate-900 border-slate-200';
+                        return `
+                            <button type="button" onclick="ProApp.vibrate(); ProApp.setThemeStyle('${t.id}')" class="p-2 rounded-2xl border-2 ${cardBg} ${isActive ? 'ring-2 ring-blue-500 ring-offset-1 dark:ring-offset-zinc-900' : ''} text-[10px] font-extrabold flex flex-col items-center gap-1.5 shadow-sm transition active:scale-95 cursor-pointer">
+                                <span class="w-full h-5 rounded-lg flex overflow-hidden border border-white/15">
+                                    <span class="flex-1" style="background:${t.swatches[0]}"></span>
+                                    <span class="flex-1" style="background:${t.swatches[1]}"></span>
+                                    <span class="flex-1" style="background:${t.swatches[2]}"></span>
+                                </span>
+                                <span class="truncate w-full text-center">${t.icon} ${ProApp.escapeHtml(t.name.split(' ')[0])}</span>
+                            </button>`;
+                    }).join('');
+                }
+                if (!document.getElementById('themeStudioModal')?.classList.contains('hidden')) {
+                    ProApp.renderThemeStudio();
+                }
             },
             openCustomizeModal: function() {
                 ProApp.switchSettingsTab('general');
@@ -3552,9 +4103,9 @@
                 document.getElementById('cfgBgImageUrl').value = '';
                 document.getElementById('cfgBgFileInput').value = '';
                 ProApp.state.bgImageUrl = '';
-                document.body.style.backgroundImage = 'none';
+                ProApp.applyUiConfig();
                 ProApp.saveUiConfigToCloud();
-                ProApp.showToast('បានលុបរូប', 'info');
+                ProApp.showToast('បានលុបរូបភាពផ្ទៃខាងក្រោយ', 'info');
             },
             saveUiCustomizations: function() {
                 ProApp.state.appTitle = document.getElementById('cfgAppTitle').value.trim() || 'ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro Cloud';
@@ -3564,7 +4115,8 @@
                 if (document.getElementById('cfgTgToken')) ProApp.state.tgBotToken = document.getElementById('cfgTgToken').value.trim();
                 if (document.getElementById('cfgTgChatId')) ProApp.state.tgChatId = document.getElementById('cfgTgChatId').value.trim();
                 if (document.getElementById('cfgTgAuto')) ProApp.state.tgAutoNotify = document.getElementById('cfgTgAuto').checked;
-                ProApp.applyUiConfig(); ProApp.saveUiConfigToCloud(); ProApp.closeCustomizeModal();
+                ProApp.applyUiConfig(); ProApp.saveUiConfigToCloud(); ProApp.closeThemeStudioModal();
+                    ProApp.closeCustomizeModal();
                 ProApp.showToast('បានរក្សាទុកការកំណត់', 'success');
             },
             setThemeStyle: function(theme) { ProApp.state.themeStyle = theme; ProApp.applyUiConfig(); ProApp.saveUiConfigToCloud(); },
@@ -3667,19 +4219,44 @@
                 if (subTitleEl) subTitleEl.textContent = ProApp.state.appSubtitle;
                 const body = document.getElementById('appBody');
                 const hero = document.getElementById('heroCard');
-                if (ProApp.state.bgImageUrl) body.style.backgroundImage = `url('${ProApp.state.bgImageUrl}')`;
-                else body.style.backgroundImage = 'none';
-                body.className = "text-slate-800 antialiased min-h-screen pt-safe";
-                body.classList.remove('theme-aba-dark', 'theme-slate', 'theme-dark', 'dark');
+                const root = document.documentElement;
+                const t = ProApp.getThemeMeta(ProApp.state.themeStyle || 'default');
 
-                if (ProApp.state.themeStyle === 'aba-dark') {
-                    body.classList.add('theme-aba-dark', 'theme-dark', 'dark');
-                    if (hero) hero.className = "bg-gradient-to-b from-neutral-900 via-amber-950/50 to-black rounded-b-[2.5rem] shadow-xl p-5 pb-12 text-white relative overflow-hidden border-b border-amber-500/30 pt-8 backdrop-blur-xl z-10 pt-safe";
-                } else if (ProApp.state.themeStyle === 'slate') {
-                    body.classList.add('theme-slate', 'theme-dark', 'dark');
-                    if (hero) hero.className = "bg-gradient-to-b from-slate-800 to-slate-950 rounded-b-[2.5rem] shadow-xl p-5 pb-12 text-white relative overflow-hidden border-b border-slate-700/50 pt-8 backdrop-blur-xl z-10 pt-safe";
+                // Inject all CSS variables for active Luxury / Anime theme
+                root.style.setProperty('--t-bg', t.bodyBg);
+                root.style.setProperty('--t-bg-grad', t.bodyGrad);
+                root.style.setProperty('--t-hero-bg', t.heroBg);
+                root.style.setProperty('--t-hero-border', t.heroBorder);
+                root.style.setProperty('--t-hero-glow', t.heroGlow);
+                root.style.setProperty('--t-panel-bg', t.panelBg);
+                root.style.setProperty('--t-panel-border', t.panelBorder);
+                root.style.setProperty('--t-modal-bg', t.modalBg);
+                root.style.setProperty('--t-accent', t.accent);
+                root.style.setProperty('--t-accent-2', t.accent2);
+                root.style.setProperty('--t-accent-soft', t.accentSoft);
+                root.style.setProperty('--t-fab-bg', t.fabBg);
+                root.style.setProperty('--t-fab-shadow', t.fabShadow);
+                root.style.setProperty('--t-fab-ring', t.isDark ? t.bodyBg : '#ffffff');
+                root.style.setProperty('--t-insight-bg', t.insightBg);
+                root.style.setProperty('--t-nav-bg', t.navBg);
+
+                const metaTheme = document.querySelector('meta[name="theme-color"]');
+                if (metaTheme) metaTheme.setAttribute('content', t.metaColor);
+
+                const patEl = document.getElementById('heroPatternOverlay');
+                if (patEl) patEl.style.backgroundImage = ProApp.getThemePatternUri(t.pattern);
+
+                body.className = "text-slate-800 antialiased min-h-screen pt-safe";
+                if (t.isDark) body.classList.add('theme-dark', 'dark');
+                if (ProApp.state.bgImageUrl) {
+                    body.classList.add('has-custom-bg');
+                    body.style.backgroundImage = `url('${ProApp.state.bgImageUrl}')`;
                 } else {
-                    if (hero) hero.className = "bg-gradient-to-b from-blue-700 to-blue-900 rounded-b-[2.5rem] shadow-lg p-5 pb-12 text-white relative overflow-hidden pt-8 z-10 pt-safe";
+                    body.classList.remove('has-custom-bg');
+                    body.style.backgroundImage = '';
+                }
+                if (hero) {
+                    hero.className = "rounded-b-[2.5rem] shadow-xl p-5 pb-12 text-white relative overflow-hidden pt-8 z-10 pt-safe transition-all duration-500";
                 }
 
                 const allVis = Object.assign({ 'smartInsightContainer': true, 'servicesGridCard': true, 'sec-accounts': true, 'sec-goals': true, 'sec-budgets': true, 'sec-debts': true, 'sec-charts': true }, ProApp.state.visibleSections || {});
