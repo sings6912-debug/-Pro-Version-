@@ -890,21 +890,25 @@
                     <p class="text-[11px] text-gray-500" id="maSubtitle"></p>
                 </div>
             </div>
-            <div class="grid grid-cols-4 gap-3 mb-2">
-                <button id="maBtnEdit" class="flex flex-col items-center justify-center gap-2 group cursor-pointer active:scale-90 transition">
-                    <div class="w-12 h-12 rounded-[16px] bg-slate-50 dark:bg-zinc-800 text-slate-700 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm border border-gray-200/70 dark:border-zinc-700"><i class="fa-solid fa-pen"></i></div>
+            <div class="grid grid-cols-5 gap-2 mb-2">
+                <button id="maBtnEdit" class="flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-90 transition">
+                    <div class="w-11 h-11 rounded-[14px] bg-slate-50 dark:bg-zinc-800 text-slate-700 dark:text-slate-300 flex items-center justify-center text-lg shadow-sm border border-gray-200/70 dark:border-zinc-700"><i class="fa-solid fa-pen"></i></div>
                     <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400">កែប្រែ</span>
                 </button>
-                <button id="maBtnCopy" class="flex flex-col items-center justify-center gap-2 group cursor-pointer active:scale-90 transition">
-                    <div class="w-12 h-12 rounded-[16px] bg-blue-50 dark:bg-blue-900/20 text-blue-600 flex items-center justify-center text-xl shadow-sm border border-blue-200/70 dark:border-blue-800/50"><i class="fa-solid fa-copy"></i></div>
+                <button id="maBtnCopy" class="flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-90 transition">
+                    <div class="w-11 h-11 rounded-[14px] bg-blue-50 dark:bg-blue-900/20 text-blue-600 flex items-center justify-center text-lg shadow-sm border border-blue-200/70 dark:border-blue-800/50"><i class="fa-solid fa-copy"></i></div>
                     <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400">ចម្លង</span>
                 </button>
-                <button id="maBtnSplit" class="flex flex-col items-center justify-center gap-2 group cursor-pointer active:scale-90 transition">
-                    <div class="w-12 h-12 rounded-[16px] bg-orange-50 dark:bg-orange-900/20 text-orange-500 flex items-center justify-center text-xl shadow-sm border border-orange-200/70 dark:border-orange-800/50"><i class="fa-solid fa-pizza-slice"></i></div>
+                <button id="maBtnPhoto" class="flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-90 transition">
+                    <div id="maPhotoIconBox" class="w-11 h-11 rounded-[14px] bg-sky-50 dark:bg-sky-900/20 text-sky-600 flex items-center justify-center text-lg shadow-sm border border-sky-200/70 dark:border-sky-800/50"><i class="fa-solid fa-camera"></i></div>
+                    <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400" id="maPhotoLabel">រូបភាព</span>
+                </button>
+                <button id="maBtnSplit" class="flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-90 transition">
+                    <div class="w-11 h-11 rounded-[14px] bg-orange-50 dark:bg-orange-900/20 text-orange-500 flex items-center justify-center text-lg shadow-sm border border-orange-200/70 dark:border-orange-800/50"><i class="fa-solid fa-pizza-slice"></i></div>
                     <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400">ចែកលុយ</span>
                 </button>
-                <button id="maBtnReceipt" class="flex flex-col items-center justify-center gap-2 group cursor-pointer active:scale-90 transition">
-                    <div class="w-12 h-12 rounded-[16px] bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 flex items-center justify-center text-xl shadow-sm border border-emerald-200/70 dark:border-emerald-800/50"><i class="fa-solid fa-receipt"></i></div>
+                <button id="maBtnReceipt" class="flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-90 transition">
+                    <div class="w-11 h-11 rounded-[14px] bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 flex items-center justify-center text-lg shadow-sm border border-emerald-200/70 dark:border-emerald-800/50"><i class="fa-solid fa-receipt"></i></div>
                     <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400">វិក្កយបត្រ</span>
                 </button>
             </div>
@@ -1195,12 +1199,12 @@
             <div class="space-y-3.5 mb-5">
                 <div><label class="block text-[11px] font-bold mb-1 text-gray-500">ក្នុងគណនី៖</label><select id="exAccount" class="glass-input w-full p-2.5 rounded-xl text-xs font-bold outline-none"></select></div>
                 <div class="grid grid-cols-2 gap-3">
-                    <div><label class="block text-[11px] font-bold mb-1 text-gray-500">ប្តូរពី (ខ្នាត)៖</label><select id="exFromCur" onchange="ProApp.calculateExchange()" class="glass-input w-full p-2.5 rounded-xl text-xs font-bold text-amber-600 outline-none"></select></div>
-                    <div><label class="block text-[11px] font-bold mb-1 text-gray-500">ទៅជា (ខ្នាត)៖</label><select id="exToCur" onchange="ProApp.calculateExchange()" class="glass-input w-full p-2.5 rounded-xl text-xs font-bold text-amber-600 outline-none"></select></div>
+                    <div><label class="block text-[11px] font-bold mb-1 text-gray-500">ប្តូរពី (ខ្នាត)៖</label><select id="exFromCur" onchange="ProApp.onExchangeCurrencyChange()" class="glass-input w-full p-2.5 rounded-xl text-xs font-bold text-amber-600 outline-none"></select></div>
+                    <div><label class="block text-[11px] font-bold mb-1 text-gray-500">ទៅជា (ខ្នាត)៖</label><select id="exToCur" onchange="ProApp.onExchangeCurrencyChange()" class="glass-input w-full p-2.5 rounded-xl text-xs font-bold text-amber-600 outline-none"></select></div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div><label class="block text-[11px] font-bold mb-1 text-gray-500">ចំនួនប្តូរចេញ៖</label><input type="text" id="exFromAmount" placeholder="0.00" oninput="ProApp.calculateExchange()" class="glass-input w-full p-2.5 rounded-xl text-xs font-bold text-rose-600 outline-none"></div>
-                    <div><label class="block text-[11px] font-bold mb-1 text-gray-500">អត្រាប្តូរប្រាក់៖</label><input type="number" step="any" id="exRate" placeholder="4100" oninput="ProApp.calculateExchange()" class="glass-input w-full p-2.5 rounded-xl text-xs font-bold text-blue-600 outline-none"></div>
+                    <div><label class="block text-[11px] font-bold mb-1 text-gray-500">អត្រា <span id="exRateHint" class="text-blue-500 font-mono"></span></label><input type="number" step="any" id="exRate" placeholder="4100" oninput="ProApp.calculateExchange()" class="glass-input w-full p-2.5 rounded-xl text-xs font-bold text-blue-600 outline-none"></div>
                 </div>
                 <div><label class="block text-[11px] font-bold mb-1 text-gray-500">ចំនួនទទួលបាន៖</label><input type="number" step="any" id="exToAmount" readonly class="glass-input w-full p-2.5 rounded-xl text-sm font-black text-emerald-600 outline-none opacity-90"></div>
             </div>
@@ -1910,6 +1914,7 @@
             lastDeletedBatch: null,
             renderDebounceTimer: null,
             searchDebounceTimer: null,
+            localQuotaWarned: false,
             deferredPrompt: null,
             excelFilterEnabled: true,
             excelSortLevels: [{ col: 'date', dir: 'desc' }],
@@ -2012,7 +2017,36 @@
                         lastSyncedAt: ProApp.lastSyncedAt
                     };
                     localStorage.setItem(ProApp.getCacheKey(lKey), JSON.stringify(payload));
-                } catch (e) { console.warn('Local cache save warning:', e); }
+                } catch (e) {
+                    // QuotaExceededError fallback: strip heavy Base64 receiptImg from localStorage only (still kept in memory & Firebase Cloud)
+                    try {
+                        const lKey = ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key');
+                        const slimTxs = (ProApp.state.transactions || []).map(tx => {
+                            if (!tx || !tx.receiptImg) return tx;
+                            const copy = { ...tx }; delete copy.receiptImg; return copy;
+                        });
+                        const slimPayload = {
+                            licenseInfo: ProApp.state.licenseInfo,
+                            exchangeRate: ProApp.state.exchangeRate,
+                            accounts: ProApp.state.accounts,
+                            currencies: ProApp.state.currencies,
+                            categories: ProApp.state.categories,
+                            budgets: ProApp.state.budgets,
+                            goals: ProApp.state.goals,
+                            shortcuts: ProApp.state.shortcuts,
+                            transactions: slimTxs,
+                            recurrings: ProApp.state.recurrings,
+                            debts: ProApp.state.debts || [],
+                            currencyRates: ProApp.state.currencyRates || { USD: 1, KHR: 4100 },
+                            lastSyncedAt: ProApp.lastSyncedAt
+                        };
+                        localStorage.setItem(ProApp.getCacheKey(lKey), JSON.stringify(slimPayload));
+                        if (!ProApp.localQuotaWarned) {
+                            ProApp.localQuotaWarned = true;
+                            ProApp.showToast('💾 ម៉ាស៊ីនពេញ Cache រូបភាព — ទិន្នន័យតួលេខនៅរក្សាទុក Offline ធម្មតា ហើយរូបភាពរក្សាលើ Cloud!', 'info', '', null, 4500);
+                        }
+                    } catch (e2) { console.warn('Local cache slim fallback failed:', e2); }
+                }
             },
             loadLocalCache: function(lKey) {
                 try {
@@ -2169,6 +2203,8 @@
                 if (tx.pairRole) cleanObj.pairRole = tx.pairRole;
                 if (tx.isDebt) cleanObj.isDebt = true;
                 if (tx.debtId) cleanObj.debtId = tx.debtId;
+                if (tx.debtPayAmt > 0) cleanObj.debtPayAmt = Number(tx.debtPayAmt);
+                if (tx.debtInit) cleanObj.debtInit = true;
                 if (tx.receiptImg) cleanObj.receiptImg = tx.receiptImg;
                 const cleanTx = ProApp.sanitizeForCloud(cleanObj);
                 const idx = ProApp.state.transactions.findIndex(t => t.id === cleanTx.id);
@@ -3861,6 +3897,16 @@
                 document.getElementById('maBtnSplit').onclick = () => { ProApp.closeMobileActionSheet(); ProApp.openSplitBill(id); };
                 document.getElementById('maBtnReceipt').onclick = () => { ProApp.closeMobileActionSheet(); ProApp.previewReceipt(id); };
                 document.getElementById('maBtnEdit').onclick = () => { ProApp.closeMobileActionSheet(); ProApp.openMobileEditModal(id); };
+                const photoBtn = document.getElementById('maBtnPhoto');
+                const photoBox = document.getElementById('maPhotoIconBox');
+                const photoLbl = document.getElementById('maPhotoLabel');
+                if (photoBox) {
+                    photoBox.className = tx.receiptImg
+                        ? 'w-11 h-11 rounded-[14px] bg-emerald-500 text-white flex items-center justify-center text-lg shadow-sm'
+                        : 'w-11 h-11 rounded-[14px] bg-sky-50 dark:bg-sky-900/20 text-sky-600 flex items-center justify-center text-lg shadow-sm border border-sky-200/70 dark:border-sky-800/50';
+                }
+                if (photoLbl) photoLbl.textContent = tx.receiptImg ? 'មើលរូប' : 'ភ្ជាប់រូប';
+                if (photoBtn) photoBtn.onclick = () => { ProApp.closeMobileActionSheet(); ProApp.openPhotoViewer(id); };
             },
             closeMobileActionSheet: function() {
                 document.getElementById('mobileActionSheet')?.classList.add('hidden');
@@ -3872,9 +3918,9 @@
                 const cats = ProApp.state.categories.includes(tx.cat) ? ProApp.state.categories : [...ProApp.state.categories, tx.cat].filter(Boolean);
                 const accs = ProApp.state.accounts.includes(tx.acc) ? ProApp.state.accounts : [...ProApp.state.accounts, tx.acc].filter(Boolean);
                 const curs = ProApp.state.currencies.includes(tx.cur) ? ProApp.state.currencies : [...ProApp.state.currencies, tx.cur].filter(Boolean);
-                document.getElementById('meCat').innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join('');
-                document.getElementById('meAcc').innerHTML = accs.map(a => `<option value="${a}">${a}</option>`).join('');
-                document.getElementById('meCur').innerHTML = curs.map(c => `<option value="${c}">${c}</option>`).join('');
+                document.getElementById('meCat').innerHTML = cats.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
+                document.getElementById('meAcc').innerHTML = accs.map(a => `<option value="${ProApp.escapeHtml(a)}">${ProApp.escapeHtml(a)}</option>`).join('');
+                document.getElementById('meCur').innerHTML = curs.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
                 document.getElementById('meDate').value = ProApp.formatForDateTimeInput(tx.date);
                 document.getElementById('meCat').value = tx.cat;
                 document.getElementById('meAcc').value = tx.acc;
@@ -3976,6 +4022,20 @@
                 tx.inc = incParsed.amount; tx.exp = expParsed.amount;
                 if (incParsed.hasCurrencyStr) tx.cur = incParsed.isUSD ? 'USD' : 'KHR';
                 else if (expParsed.hasCurrencyStr) tx.cur = expParsed.isUSD ? 'USD' : 'KHR';
+                // 🔗 Sync paired Transfer/Exchange transaction on mobile edits too!
+                if (tx.pairId) {
+                    const partner = ProApp.state.transactions.find(t => t.pairId === tx.pairId && t.id !== tx.id);
+                    if (partner) {
+                        partner.date = tx.date;
+                        if (tx.pairType === 'transfer') {
+                            const amt = tx.inc > 0 ? tx.inc : tx.exp;
+                            partner.cur = tx.cur;
+                            if (partner.pairRole === 'in') { partner.inc = amt; partner.exp = 0; }
+                            else { partner.exp = amt; partner.inc = 0; }
+                        }
+                        ProApp.syncTxWrite(partner, false);
+                    }
+                }
                 ProApp.syncTxWrite(tx, false).then(() => {
                     ProApp.showToast('បានកែប្រែដោយជោគជ័យ!', 'success');
                 });
@@ -4006,7 +4066,7 @@
                 let html = '';
                 ProApp.state.accounts.forEach((acc, i) => {
                     const isHidden = ProApp.state.hiddenAccounts.includes(acc);
-                    const safeAcc = acc.replace(/'/g, "\\'");
+                    const safeAcc = ProApp.escapeJsStr(acc);
                     html += `
                         <div class="flex items-center p-2 mb-2 glass-input rounded-xl gap-2">
                             <div class="flex flex-col gap-1">
@@ -4016,7 +4076,7 @@
                             <button onclick="ProApp.toggleAccountVisibility('${safeAcc}')" class="w-9 h-9 shrink-0 rounded-lg transition flex items-center justify-center border ${isHidden ? 'bg-slate-100 text-slate-400 border-slate-200 dark:bg-slate-800 dark:border-slate-700' : 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800'}">
                                 <i class="fa-solid ${isHidden ? 'fa-eye-slash' : 'fa-eye'} text-sm"></i>
                             </button>
-                            <input type="text" value="${acc}" onchange="ProApp.editAccountName(${i}, this.value)" class="flex-1 min-w-0 bg-transparent outline-none text-sm font-bold px-2 py-1.5 border border-gray-200/60 dark:border-white/10 rounded-lg">
+                            <input type="text" value="${ProApp.escapeHtml(acc)}" onchange="ProApp.editAccountName(${i}, this.value)" class="flex-1 min-w-0 bg-transparent outline-none text-sm font-bold px-2 py-1.5 border border-gray-200/60 dark:border-white/10 rounded-lg">
                             <button onclick="ProApp.deleteAccount(${i})" class="bg-rose-500 text-white w-9 h-9 shrink-0 rounded-lg flex items-center justify-center"><i class="fa-solid fa-trash-can text-xs"></i></button>
                         </div>`;
                 });
@@ -4050,6 +4110,7 @@
                 (ProApp.state.goals || []).forEach(g => { if (g.linkedAcc === oldVal) g.linkedAcc = val; });
                 (ProApp.state.shortcuts || []).forEach(s => { if (s.acc === oldVal) s.acc = val; });
                 (ProApp.state.recurrings || []).forEach(r => { if (r.acc === oldVal) r.acc = val; });
+                (ProApp.state.debts || []).forEach(d => { if (d.acc === oldVal) d.acc = val; });
                 if (Array.isArray(ProApp.state.hiddenAccounts)) {
                     ProApp.state.hiddenAccounts = ProApp.state.hiddenAccounts.map(a => a === oldVal ? val : a);
                 }
@@ -4065,7 +4126,7 @@
             renderFilterAccounts: function() {
                 const sel = document.getElementById('filterAccount'); if (!sel) return;
                 const currentVal = sel.value || 'ALL';
-                sel.innerHTML = `<option value="ALL">គ្រប់គណនី</option>` + ProApp.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
+                sel.innerHTML = `<option value="ALL">គ្រប់គណនី</option>` + ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">${ProApp.escapeHtml(a)}</option>`).join('');
                 sel.value = ProApp.state.accounts.includes(currentVal) ? currentVal : 'ALL';
             },
 
@@ -4125,6 +4186,11 @@
                 (ProApp.state.budgets || []).forEach(b => { if (b.cur === oldVal) b.cur = val; });
                 (ProApp.state.shortcuts || []).forEach(s => { if (s.cur === oldVal) s.cur = val; });
                 (ProApp.state.recurrings || []).forEach(r => { if (r.cur === oldVal) r.cur = val; });
+                (ProApp.state.debts || []).forEach(d => { if (d.cur === oldVal) d.cur = val; });
+                if (ProApp.state.currencyRates && ProApp.state.currencyRates[oldVal] !== undefined) {
+                    ProApp.state.currencyRates[val] = ProApp.state.currencyRates[oldVal];
+                    delete ProApp.state.currencyRates[oldVal];
+                }
                 ProApp.renderCurrenciesList(); ProApp.renderTable(); ProApp.updateDashboard();
                 ProApp.saveLocalCache(); ProApp.manualCloudSync('push', true);
                 ProApp.showToast(`បានប្តូរឈ្មោះខ្នាតទៅ «${val}» ទាំងអស់!`, 'success');
@@ -4151,7 +4217,7 @@
                             <button onclick="ProApp.moveCategory(${i}, -1)" ${i === 0 ? 'disabled class="opacity-30 p-1"' : 'class="bg-blue-100 dark:bg-blue-900/40 text-blue-600 p-1 rounded"'}><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
                             <button onclick="ProApp.moveCategory(${i}, 1)" ${i === ProApp.state.categories.length - 1 ? 'disabled class="opacity-30 p-1"' : 'class="bg-blue-100 dark:bg-blue-900/40 text-blue-600 p-1 rounded"'}><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
                         </div>
-                        <input type="text" value="${cat}" onchange="ProApp.editCategoryName(${i}, this.value)" class="flex-1 min-w-0 bg-transparent outline-none text-sm font-bold px-2 py-1.5 border border-gray-200/60 dark:border-white/10 rounded-lg">
+                        <input type="text" value="${ProApp.escapeHtml(cat)}" onchange="ProApp.editCategoryName(${i}, this.value)" class="flex-1 min-w-0 bg-transparent outline-none text-sm font-bold px-2 py-1.5 border border-gray-200/60 dark:border-white/10 rounded-lg">
                         <button onclick="ProApp.deleteCategory(${i})" class="bg-rose-500 text-white w-9 h-9 shrink-0 rounded-lg flex items-center justify-center"><i class="fa-solid fa-trash-can text-xs"></i></button>
                     </div>`).join('');
             },
@@ -4184,7 +4250,7 @@
                 const container = document.getElementById('shortcutsContainer'); if (!container) return;
                 container.innerHTML = ProApp.state.shortcuts.map(sc => `
                     <button onclick="ProApp.vibrate(); ProApp.executeShortcut('${sc.id}')" class="px-3 py-1.5 bg-blue-50 dark:bg-zinc-800 hover:bg-blue-100 text-blue-700 dark:text-amber-300 border border-blue-200 dark:border-zinc-700 text-xs font-bold rounded-xl transition whitespace-nowrap flex items-center gap-1 shadow-sm active:scale-95">
-                        ⚡ ${sc.name}
+                        ⚡ ${ProApp.escapeHtml(sc.name)}
                     </button>`).join('');
             },
             executeShortcut: function(shortcutId) {
@@ -4199,9 +4265,9 @@
             },
             openShortcutModal: function(editId = null) {
                 const catSel = document.getElementById('newScCat'), accSel = document.getElementById('newScAcc'), curSel = document.getElementById('newScCur'), typeSel = document.getElementById('newScType'), saveBtn = document.getElementById('scSaveBtn');
-                if (catSel) catSel.innerHTML = ProApp.state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
-                if (accSel) accSel.innerHTML = ProApp.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
-                if (curSel) curSel.innerHTML = ProApp.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+                if (catSel) catSel.innerHTML = ProApp.state.categories.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
+                if (accSel) accSel.innerHTML = ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">${ProApp.escapeHtml(a)}</option>`).join('');
+                if (curSel) curSel.innerHTML = ProApp.state.currencies.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
                 if (editId) {
                     const sc = ProApp.state.shortcuts.find(s => s.id === editId);
                     if (sc) {
@@ -4275,8 +4341,8 @@
                                     <button onclick="ProApp.moveShortcut(${idx}, 1)" ${idx === ProApp.state.shortcuts.length - 1 ? 'disabled class="opacity-30 p-0.5"' : 'class="text-blue-600 p-0.5"'}><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
                                 </div>
                                 <div>
-                                    <div class="font-bold text-xs">${sc.name}</div>
-                                    <div class="text-[10px] text-gray-500">${isInc ? '+' : '-'} ${ProApp.formatMoney(isInc ? sc.inc : sc.exp, sc.cur)} (${sc.acc})</div>
+                                    <div class="font-bold text-xs">${ProApp.escapeHtml(sc.name)}</div>
+                                    <div class="text-[10px] text-gray-500">${isInc ? '+' : '-'} ${ProApp.formatMoney(isInc ? sc.inc : sc.exp, sc.cur)} (${ProApp.escapeHtml(sc.acc)})</div>
                                 </div>
                             </div>
                             <div class="flex gap-2 text-xs">
@@ -4423,8 +4489,7 @@
                         isLinked = true;
                         const bObj = accBalances[g.linkedAcc]; let totalUSD = 0;
                         Object.keys(bObj).forEach(c => {
-                            if (c === 'USD') totalUSD += bObj[c];
-                            else if (c === 'KHR') totalUSD += bObj[c] / (ProApp.state.exchangeRate || 4100);
+                            totalUSD += ProApp.toUSD(bObj[c], c);
                         });
                         currentVal = Math.max(0, totalUSD);
                     }
@@ -4452,7 +4517,7 @@
                 const modalEl = document.getElementById('goalModal'); if (!modalEl) return;
                 const sel = document.getElementById('glLinkedAcc'), saveBtn = document.getElementById('glSaveBtn');
                 const glName = document.getElementById('glName'), glTarget = document.getElementById('glTarget'), glCurrent = document.getElementById('glCurrent');
-                if (sel) sel.innerHTML = `<option value="NONE">គ្មាន (កំណត់ចំនួនដោយដៃ)</option>` + ProApp.state.accounts.map(a => `<option value="${a}">🔗 ភ្ជាប់កុង ${a}</option>`).join('');
+                if (sel) sel.innerHTML = `<option value="NONE">គ្មាន (កំណត់ចំនួនដោយដៃ)</option>` + ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">🔗 ភ្ជាប់កុង ${ProApp.escapeHtml(a)}</option>`).join('');
                 if (editId) {
                     const goal = ProApp.state.goals.find(g => g.id === editId);
                     if (goal) {
@@ -4637,8 +4702,9 @@
                         if (tx.cur === b.cur) {
                             spent += (Number(tx.exp) || 0);
                         } else if (autoConvert) {
-                            if (b.cur === 'USD' && tx.cur === 'KHR') spent += (Number(tx.exp) || 0) / rate;
-                            else if (b.cur === 'KHR' && tx.cur === 'USD') spent += (Number(tx.exp) || 0) * rate;
+                            const txUSD = ProApp.toUSD(tx.exp, tx.cur);
+                            const targetRate = ProApp.getRateToUSD(b.cur);
+                            if (txUSD > 0 && targetRate > 0) spent += (txUSD * targetRate);
                         }
                     });
                     spent = Math.round(spent * 100) / 100;
@@ -4712,9 +4778,9 @@
             },
             openBudgetModal: function(editId = null) {
                 const catSel = document.getElementById('bgCategory'), curSel = document.getElementById('bgCurrency'), accSel = document.getElementById('bgLinkedAcc'), saveBtn = document.getElementById('bgSaveBtn'), autoChk = document.getElementById('bgAutoConvert');
-                if (catSel) catSel.innerHTML = ProApp.state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
-                if (curSel) curSel.innerHTML = ProApp.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
-                if (accSel) accSel.innerHTML = `<option value="ALL">គ្រប់គណនីទាំងអស់ (ALL)</option>` + ProApp.state.accounts.map(a => `<option value="${a}">🔗 ភ្ជាប់កុង ${a}</option>`).join('');
+                if (catSel) catSel.innerHTML = ProApp.state.categories.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
+                if (curSel) curSel.innerHTML = ProApp.state.currencies.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
+                if (accSel) accSel.innerHTML = `<option value="ALL">គ្រប់គណនីទាំងអស់ (ALL)</option>` + ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">🔗 ភ្ជាប់កុង ${ProApp.escapeHtml(a)}</option>`).join('');
                 if (editId) {
                     const budget = ProApp.state.budgets.find(b => b.id === editId);
                     if (budget) {
@@ -4955,7 +5021,8 @@
                             inc: isOwe ? parsed.amount : 0,
                             exp: isOwe ? 0 : parsed.amount,
                             isDebt: true,
-                            debtId: debtId
+                            debtId: debtId,
+                            debtInit: true
                         };
                         ProApp.syncTxWrite(tx, false);
                     }
@@ -5015,7 +5082,8 @@
                         inc: isLent ? parsed.amount : 0,
                         exp: isLent ? 0 : parsed.amount,
                         isDebt: true,
-                        debtId: d.id
+                        debtId: d.id,
+                        debtPayAmt: parsed.amount
                     };
                     ProApp.syncTxWrite(tx, false);
                 }
@@ -5032,8 +5100,31 @@
                 ProApp.saveDebtsToCloud();
                 ProApp.renderDebtList();
             },
+            reconcileDebtOnTxChange: function(txList, direction) {
+                // direction = -1 when deleting repayment txs, +1 when undoing delete
+                if (!Array.isArray(txList) || !Array.isArray(ProApp.state.debts)) return;
+                let changed = false;
+                txList.forEach(tx => {
+                    if (!tx || !tx.debtId || tx.debtInit) return;
+                    const payVal = Number(tx.debtPayAmt) || Number(tx.inc) || Number(tx.exp) || 0;
+                    if (payVal <= 0) return;
+                    const d = ProApp.state.debts.find(x => x.id === tx.debtId);
+                    if (d) {
+                        const nextPaid = Math.max(0, Math.round(((Number(d.paid) || 0) + (direction * payVal)) * 100) / 100);
+                        if (nextPaid !== d.paid) { d.paid = nextPaid; changed = true; }
+                    }
+                });
+                if (changed) {
+                    ProApp.saveDebtsToCloud();
+                    ProApp.renderDebtList();
+                }
+            },
             deleteDebt: function(id) {
+                const linkedTxs = (ProApp.state.transactions || []).filter(t => t.debtId === id);
                 ProApp.state.debts = (ProApp.state.debts || []).filter(d => d.id !== id);
+                if (linkedTxs.length > 0 && confirm(`បំណុលនេះមានប្រតិបត្តិការភ្ជាប់ចំនួន ${linkedTxs.length} ជួរ។ តើអ្នកចង់លុបប្រតិបត្តិការភ្ជាប់ទាំងនោះចេញពីបញ្ជីសាច់ប្រាក់ផងដែរឬទេ?`)) {
+                    linkedTxs.forEach(tx => ProApp.syncTxDelete(tx.id));
+                }
                 ProApp.saveDebtsToCloud();
                 ProApp.renderDebtList();
                 ProApp.showToast('បានលុបបំណុល', 'info');
@@ -5075,10 +5166,10 @@
 
             // 🔄 TRANSFER & 💱 EXCHANGE (Paired with pairId so both sides stay synchronized!)
             openTransferModal: function() {
-                document.getElementById('transferFromAcc').innerHTML = ProApp.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
-                document.getElementById('transferToAcc').innerHTML = ProApp.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
+                document.getElementById('transferFromAcc').innerHTML = ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">${ProApp.escapeHtml(a)}</option>`).join('');
+                document.getElementById('transferToAcc').innerHTML = ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">${ProApp.escapeHtml(a)}</option>`).join('');
                 if (ProApp.state.accounts.length > 1) document.getElementById('transferToAcc').selectedIndex = 1;
-                document.getElementById('transferCurrency').innerHTML = ProApp.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+                document.getElementById('transferCurrency').innerHTML = ProApp.state.currencies.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
                 document.getElementById('transferAmount').value = '';
                 document.getElementById('transferModal').classList.remove('hidden');
             },
@@ -5104,25 +5195,47 @@
                 });
             },
             openExchangeModal: function() {
-                document.getElementById('exAccount').innerHTML = ProApp.state.accounts.map(a => `<option value="${a}">${a}</option>`).join('');
-                document.getElementById('exFromCur').innerHTML = ProApp.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
-                document.getElementById('exToCur').innerHTML = ProApp.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+                document.getElementById('exAccount').innerHTML = ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">${ProApp.escapeHtml(a)}</option>`).join('');
+                document.getElementById('exFromCur').innerHTML = ProApp.state.currencies.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
+                document.getElementById('exToCur').innerHTML = ProApp.state.currencies.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
                 if (ProApp.state.currencies.length > 1) document.getElementById('exToCur').selectedIndex = 1;
-                document.getElementById('exRate').value = ProApp.state.exchangeRate || 4100;
                 document.getElementById('exFromAmount').value = '';
                 document.getElementById('exToAmount').value = '';
+                ProApp.onExchangeCurrencyChange();
                 document.getElementById('exchangeModal').classList.remove('hidden');
             },
             closeExchangeModal: function() { document.getElementById('exchangeModal').classList.add('hidden'); },
+            onExchangeCurrencyChange: function() {
+                const fromCur = document.getElementById('exFromCur')?.value || 'USD';
+                const toCur = document.getElementById('exToCur')?.value || 'KHR';
+                const rFrom = ProApp.getRateToUSD(fromCur) || 1;
+                const rTo = ProApp.getRateToUSD(toCur) || 1;
+                const rateInput = document.getElementById('exRate');
+                if (rateInput) {
+                    if (fromCur === toCur) rateInput.value = 1;
+                    else {
+                        const suggested = rFrom > rTo ? (rFrom / rTo) : (rTo / rFrom);
+                        rateInput.value = suggested >= 100 ? Math.round(suggested) : (Math.round(suggested * 100) / 100);
+                    }
+                }
+                ProApp.calculateExchange();
+            },
             calculateExchange: function() {
                 const amount = ProApp.parseSmartAmount(document.getElementById('exFromAmount').value).amount;
                 const rate = parseFloat(document.getElementById('exRate').value) || 0;
                 const fromCur = document.getElementById('exFromCur').value;
                 const toCur = document.getElementById('exToCur').value;
+                const rFrom = ProApp.getRateToUSD(fromCur) || 1;
+                const rTo = ProApp.getRateToUSD(toCur) || 1;
+                const shouldDivide = (fromCur !== toCur) && (rFrom > rTo);
+                const hintEl = document.getElementById('exRateHint');
+                if (hintEl) {
+                    hintEl.textContent = fromCur === toCur ? '(1:1)' : (shouldDivide ? `(÷ 1 ${toCur} = ${rate || '?'} ${fromCur})` : `(× 1 ${fromCur} = ${rate || '?'} ${toCur})`);
+                }
                 let result = 0;
                 if (amount > 0 && rate > 0) {
                     if (fromCur === toCur) result = amount;
-                    else if (fromCur === 'KHR') result = amount / rate;
+                    else if (shouldDivide) result = amount / rate;
                     else result = amount * rate;
                 }
                 document.getElementById('exToAmount').value = result > 0 ? (toCur === 'KHR' ? Math.round(result) : result.toFixed(2)) : '';
@@ -5204,8 +5317,8 @@
                                 const bal = d[cur].in - d[cur].out;
                                 html += `
                                 <tr class="hover:bg-slate-50/50 dark:hover:bg-white/5 border-b border-gray-100/50 dark:border-white/5">
-                                    <td class="px-4 py-2.5 text-xs font-bold">${key}</td>
-                                    <td class="px-4 py-2.5 text-xs text-right font-medium">${cur}</td>
+                                    <td class="px-4 py-2.5 text-xs font-bold">${ProApp.escapeHtml(key)}</td>
+                                    <td class="px-4 py-2.5 text-xs text-right font-medium">${ProApp.escapeHtml(cur)}</td>
                                     <td class="px-4 py-2.5 text-xs text-right font-bold text-green-600 dark:text-emerald-400">${ProApp.formatMoney(d[cur].in, cur)}</td>
                                     <td class="px-4 py-2.5 text-xs text-right font-bold text-red-500 dark:text-rose-400">${ProApp.formatMoney(d[cur].out, cur)}</td>
                                     ${showBal ? `<td class="px-4 py-2.5 text-xs text-right font-black ${bal < 0 ? 'text-red-500' : 'text-blue-500'}">${ProApp.formatMoney(bal, cur)}</td>` : ''}
@@ -5238,14 +5351,46 @@
                 reader.onload = (e) => {
                     try {
                         const imported = JSON.parse(e.target.result);
-                        if (imported) {
+                        if (imported && typeof imported === 'object') {
+                            // 🛡️ Preserve active License session so restoring an older backup never breaks Cloud auth
+                            const activeLicenseKey = ProApp.state.licenseKey;
+                            const activeLicenseInfo = ProApp.state.licenseInfo;
+                            const mergedVis = Object.assign(
+                                { 'smartInsightContainer': true, 'servicesGridCard': true, 'sec-accounts': true, 'sec-goals': true, 'sec-budgets': true, 'sec-debts': true, 'sec-charts': true },
+                                ProApp.state.visibleSections || {},
+                                imported.visibleSections || {}
+                            );
+                            const mergedRates = Object.assign(
+                                { USD: 1, KHR: Number(imported.exchangeRate) || ProApp.state.exchangeRate || 4100 },
+                                ProApp.state.currencyRates || {},
+                                imported.currencyRates || {}
+                            );
                             Object.assign(ProApp.state, imported);
+                            ProApp.state.licenseKey = activeLicenseKey;
+                            ProApp.state.licenseInfo = activeLicenseInfo;
+                            ProApp.state.visibleSections = mergedVis;
+                            ProApp.state.currencyRates = mergedRates;
+                            if (!Array.isArray(ProApp.state.transactions)) ProApp.state.transactions = [];
+                            if (!Array.isArray(ProApp.state.accounts) || !ProApp.state.accounts.length) ProApp.state.accounts = ['🏦 ABA', '👛 សាច់ប្រាក់'];
+                            if (!Array.isArray(ProApp.state.currencies) || !ProApp.state.currencies.length) ProApp.state.currencies = ['USD', 'KHR'];
+                            if (!Array.isArray(ProApp.state.categories) || !ProApp.state.categories.length) ProApp.state.categories = ['🍔 អាហារ', 'ផ្សេងៗ'];
+                            if (!Array.isArray(ProApp.state.budgets)) ProApp.state.budgets = [];
+                            if (!Array.isArray(ProApp.state.goals)) ProApp.state.goals = [];
+                            if (!Array.isArray(ProApp.state.shortcuts)) ProApp.state.shortcuts = [];
+                            if (!Array.isArray(ProApp.state.recurrings)) ProApp.state.recurrings = [];
+                            if (!Array.isArray(ProApp.state.debts)) ProApp.state.debts = [];
+                            const rateEl = document.getElementById('exchangeRate');
+                            if (rateEl) rateEl.value = ProApp.state.exchangeRate || 4100;
                             ProApp.applyUiConfig();
+                            ProApp.renderFilterAccounts();
+                            ProApp.renderShortcuts();
                             ProApp.saveLocalCache();
                             ProApp.manualCloudSync('push', true);
-                            ProApp.renderTable(); ProApp.updateDashboard(); ProApp.showToast('បាន Restore ទិន្នន័យជោគជ័យ!', 'success');
+                            ProApp.renderTable(); ProApp.updateDashboard();
+                            ProApp.showToast('✅ បាន Restore ទិន្នន័យជោគជ័យ (រក្សា License ដដែល)!', 'success');
                         }
                     } catch (err) { ProApp.showToast('ឯកសារ JSON មិនត្រឹមត្រូវ', 'error'); }
+                    event.target.value = '';
                 };
                 reader.readAsText(file);
             },
@@ -5934,6 +6079,7 @@
                 });
                 const deletedRows = ProApp.state.transactions.filter(tx => toDeleteIds.has(tx.id));
                 ProApp.lastDeletedBatch = deletedRows;
+                ProApp.reconcileDebtOnTxChange(deletedRows, -1);
                 ProApp.state.transactions = ProApp.state.transactions.filter(tx => !toDeleteIds.has(tx.id));
                 ProApp.saveLocalCache();
                 const lKey = ProApp.state.licenseKey || localStorage.getItem('finance_client_license_key');
@@ -5953,6 +6099,7 @@
                         ProApp.state.transactions.push(tx);
                     }
                 });
+                ProApp.reconcileDebtOnTxChange(batch, 1);
                 ProApp.saveLocalCache();
                 ProApp.renderTable();
                 ProApp.updateDashboard();
@@ -6181,7 +6328,9 @@
                     if (target && target.pairId) {
                         ProApp.state.transactions.forEach(p => { if (p.pairId === target.pairId && p.id !== target.id) idsToRemove.push(p.id); });
                     }
-                    ProApp.lastDeletedBatch = ProApp.state.transactions.filter(t => idsToRemove.includes(t.id));
+                    const removedList = ProApp.state.transactions.filter(t => idsToRemove.includes(t.id));
+                    ProApp.lastDeletedBatch = removedList;
+                    ProApp.reconcileDebtOnTxChange(removedList, -1);
                     Promise.all(idsToRemove.map(id => ProApp.syncTxDelete(id))).then(() => {
                         ProApp.closeModal();
                         ProApp.showToast(idsToRemove.length > 1 ? '🗑️ បានលុបគូផ្ទេរ/ប្តូរប្រាក់ទាំង ២ ជួរ' : '🗑️ បានលុបប្រតិបត្តិការ', 'info', '↩️ ត្រឡប់វិញ', () => ProApp.undoLastDelete(), 6000);
