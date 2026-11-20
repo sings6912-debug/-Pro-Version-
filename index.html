@@ -168,7 +168,7 @@
             position: relative; display: inline-flex; align-items: center; flex-shrink: 0;
             width: 44px; height: 24px; cursor: pointer;
         }
-        .ios-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+        .ios-switch input { opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 2; }
         .ios-slider {
             position: absolute; inset: 0; border-radius: 9999px;
             background-color: #cbd5e1; transition: background-color 0.25s ease;
@@ -1311,100 +1311,132 @@
         </div>
     </div>
 
-    <!-- ⚡ SHORTCUT MODAL -->
-    <div id="shortcutModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeShortcutModal()">
-        <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
-            <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0"><h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><span>⚡</span> កែសម្រួលប៊ូតុងរហ័ស</h3><button onclick="ProApp.closeShortcutModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button></div>
-            <div class="bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700 p-4 rounded-2xl shadow-sm space-y-3 flex-shrink-0 mb-4">
-                <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ឈ្មោះប៊ូតុង៖</label><input type="text" id="newScName" placeholder="ឧ. ☕ កាហ្វេ" class="glass-input w-full p-2.5 text-[13px] font-bold rounded-xl outline-none"></div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ប្រភេទ៖</label><select id="newScCat" class="glass-input w-full p-2.5 text-[13px] font-medium rounded-xl outline-none"></select></div>
-                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">គណនី៖</label><select id="newScAcc" class="glass-input w-full p-2.5 text-[13px] font-medium rounded-xl outline-none"></select></div>
-                </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">សកម្មភាព៖</label><select id="newScType" class="glass-input w-full p-2.5 text-[13px] font-bold rounded-xl outline-none"><option value="exp">ចំណាយ (-)</option><option value="inc">ចំណូល (+)</option></select></div>
-                    <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">ចំនួនទឹកប្រាក់៖</label><input type="text" id="newScAmount" placeholder="0.00" class="glass-input w-full p-2.5 text-[13px] font-bold text-blue-600 dark:text-blue-400 rounded-xl outline-none"></div>
-                    <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">ខ្នាត៖</label><select id="newScCur" class="glass-input w-full p-2.5 text-[13px] font-bold text-amber-600 dark:text-amber-400 rounded-xl outline-none"></select></div>
-                </div>
-                <button id="scSaveBtn" onclick="ProApp.addNewShortcut()" class="w-full py-2.5 mt-2 bg-blue-600 text-white text-[13px] font-bold rounded-xl shadow-md active:scale-95 transition cursor-pointer">បន្ថែមប៊ូតុងថ្មី</button>
+    <!-- ⚡ SHORTCUT MODAL (Spacious 2-Column Desktop + Clean Mobile Scroll) -->
+    <div id="shortcutModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) ProApp.closeShortcutModal()">
+        <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md md:max-w-3xl mx-auto max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center mb-3.5 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
+                <h3 class="text-[15px] font-black flex items-center gap-2 modal-label-text"><span>⚡</span> កែសម្រួលប៊ូតុងរហ័ស</h3>
+                <button type="button" onclick="ProApp.closeShortcutModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button>
             </div>
-            <p class="text-[11px] font-bold text-gray-500 flex-shrink-0">បញ្ជីប៊ូតុងមានស្រាប់៖</p>
-            <div class="overflow-y-auto pr-1 mt-2 flex-1 custom-scrollbar" id="shortcutListContainer"></div>
-            <div class="flex justify-end mt-4 border-t pt-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
-                <button onclick="ProApp.closeShortcutModal()" class="px-5 py-2 text-xs font-bold text-gray-700 bg-gray-100 dark:bg-white/10 dark:text-gray-300 rounded-xl transition cursor-pointer">បិទ</button>
+            <div class="flex-1 min-h-0 overflow-y-auto md:overflow-hidden grid grid-cols-1 md:grid-cols-12 gap-4 pr-0.5 custom-scrollbar">
+                <div class="md:col-span-5 bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700 p-3.5 rounded-2xl shadow-sm space-y-3 h-fit">
+                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ឈ្មោះប៊ូតុង៖</label><input type="text" id="newScName" placeholder="ឧ. ☕ កាហ្វេ" class="glass-input w-full p-2.5 text-[13px] font-bold rounded-xl outline-none"></div>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ប្រភេទ៖</label><select id="newScCat" class="glass-input w-full p-2.5 text-[13px] font-medium rounded-xl outline-none"></select></div>
+                        <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">គណនី៖</label><select id="newScAcc" class="glass-input w-full p-2.5 text-[13px] font-medium rounded-xl outline-none"></select></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">សកម្មភាព៖</label><select id="newScType" class="glass-input w-full p-2.5 text-[13px] font-bold rounded-xl outline-none"><option value="exp">ចំណាយ (-)</option><option value="inc">ចំណូល (+)</option></select></div>
+                        <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">ចំនួនទឹកប្រាក់៖</label><input type="text" id="newScAmount" placeholder="0.00" class="glass-input w-full p-2.5 text-[13px] font-bold text-blue-600 dark:text-blue-400 rounded-xl outline-none"></div>
+                        <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">ខ្នាត៖</label><select id="newScCur" class="glass-input w-full p-2.5 text-[13px] font-bold text-amber-600 dark:text-amber-400 rounded-xl outline-none"></select></div>
+                    </div>
+                    <button type="button" id="scSaveBtn" onclick="ProApp.addNewShortcut()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[13px] font-bold rounded-xl shadow-md active:scale-95 transition cursor-pointer">បន្ថែមប៊ូតុងថ្មី</button>
+                </div>
+                <div class="md:col-span-7 flex flex-col min-h-[180px] md:min-h-0 md:border-l md:border-slate-200/70 md:dark:border-white/10 md:pl-4 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200/70 dark:border-white/10">
+                    <p class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 mb-2 flex-shrink-0">បញ្ជីប៊ូតុងមានស្រាប់ (ចុច ↑ ↓ ដើម្បីរៀបលំដាប់)៖</p>
+                    <div class="flex-1 overflow-y-auto pr-1 custom-scrollbar" id="shortcutListContainer"></div>
+                </div>
+            </div>
+            <div class="flex justify-end mt-3.5 border-t pt-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
+                <button type="button" onclick="ProApp.closeShortcutModal()" class="px-5 py-2 text-xs font-bold text-gray-700 bg-gray-100 dark:bg-white/10 dark:text-gray-300 rounded-xl transition cursor-pointer">បិទ</button>
             </div>
         </div>
     </div>
 
-    <!-- 🐖 GOALS MODAL -->
-    <div id="goalModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeGoalModal()">
-        <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
-            <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0"><h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><span>🐖</span> គោលដៅសន្សំប្រាក់</h3><button onclick="ProApp.closeGoalModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button></div>
-            <div class="space-y-3.5 mb-4 flex-shrink-0">
-                <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ឈ្មោះគោលដៅ៖</label><input type="text" id="glName" placeholder="ឧ. ទិញម៉ូតូ..." class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></div>
-                <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">🔗 ភ្ជាប់ជាមួយគណនី៖</label><select id="glLinkedAcc" onchange="ProApp.toggleGoalCurrentInput()" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-amber-600 outline-none"></select></div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ចំនួនដៅសរុប ($)៖</label><input type="text" id="glTarget" placeholder="1500" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-emerald-600 outline-none"></div>
-                    <div id="glCurrentWrapper"><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">សន្សំបានបច្ចុប្បន្ន ($)៖</label><input type="text" id="glCurrent" placeholder="400" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-blue-600 outline-none"></div>
-                </div>
-                <button id="glSaveBtn" onclick="ProApp.saveSavingsGoal()" class="w-full py-2.5 bg-emerald-600 text-white text-[13px] font-bold rounded-xl shadow-md active:scale-95 transition cursor-pointer">រក្សាទុក</button>
+    <!-- 🐖 GOALS MODAL (Spacious 2-Column Desktop + Clean Mobile Scroll + ↑↓ Reorder) -->
+    <div id="goalModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) ProApp.closeGoalModal()">
+        <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md md:max-w-3xl mx-auto max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center mb-3.5 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
+                <h3 class="text-[15px] font-black flex items-center gap-2 modal-label-text"><span>🐖</span> គោលដៅសន្សំប្រាក់</h3>
+                <button type="button" onclick="ProApp.closeGoalModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button>
             </div>
-            <p class="text-[11px] border-t pt-3 mt-1 font-bold text-gray-500 flex-shrink-0">បញ្ជីគោលដៅ៖</p>
-            <div class="overflow-y-auto pr-1 mt-2 flex-1 custom-scrollbar" id="goalListContainer"></div>
-            <div class="flex justify-end mt-4 border-t pt-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
-                <button onclick="ProApp.closeGoalModal()" class="px-5 py-2 text-xs font-bold text-gray-700 bg-gray-100 dark:bg-white/10 dark:text-gray-300 rounded-xl transition cursor-pointer">បិទ</button>
+            <div class="flex-1 min-h-0 overflow-y-auto md:overflow-hidden grid grid-cols-1 md:grid-cols-12 gap-4 pr-0.5 custom-scrollbar">
+                <div class="md:col-span-5 space-y-3 md:overflow-y-auto md:pr-1 custom-scrollbar">
+                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ឈ្មោះគោលដៅ៖</label><input type="text" id="glName" placeholder="ឧ. ទិញម៉ូតូ..." class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></div>
+                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">🔗 ភ្ជាប់ជាមួយគណនី៖</label><select id="glLinkedAcc" onchange="ProApp.toggleGoalCurrentInput()" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-amber-600 outline-none"></select></div>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ចំនួនដៅសរុប ($)៖</label><input type="text" id="glTarget" placeholder="1500" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-emerald-600 outline-none"></div>
+                        <div id="glCurrentWrapper"><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">សន្សំបានបច្ចុប្បន្ន ($)៖</label><input type="text" id="glCurrent" placeholder="400" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-blue-600 outline-none"></div>
+                    </div>
+                    <button type="button" id="glSaveBtn" onclick="ProApp.saveSavingsGoal()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[13px] font-bold rounded-xl shadow-md active:scale-95 transition cursor-pointer">រក្សាទុក</button>
+                </div>
+                <div class="md:col-span-7 flex flex-col min-h-[180px] md:min-h-0 md:border-l md:border-slate-200/70 md:dark:border-white/10 md:pl-4 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200/70 dark:border-white/10">
+                    <p class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 mb-2 flex-shrink-0">បញ្ជីគោលដៅ (ចុច ↑ ↓ ដើម្បីរៀបលំដាប់)៖</p>
+                    <div class="flex-1 overflow-y-auto pr-1 custom-scrollbar" id="goalListContainer"></div>
+                </div>
+            </div>
+            <div class="flex justify-end mt-3.5 border-t pt-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
+                <button type="button" onclick="ProApp.closeGoalModal()" class="px-5 py-2 text-xs font-bold text-gray-700 bg-gray-100 dark:bg-white/10 dark:text-gray-300 rounded-xl transition cursor-pointer">បិទ</button>
             </div>
         </div>
     </div>
 
-    <!-- 🎯 BUDGETS MODAL -->
-    <div id="budgetModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeBudgetModal()">
-        <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
-            <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0"><h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><span>🎯</span> កំណត់ថវិកាចំណាយ</h3><button onclick="ProApp.closeBudgetModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button></div>
-            <div class="space-y-3.5 mb-4 flex-shrink-0">
-                <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ប្រភេទចំណាយ៖</label><select id="bgCategory" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></select></div>
-                <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">🔗 ភ្ជាប់ជាមួយគណនី៖</label><select id="bgLinkedAcc" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-blue-600 outline-none"></select></div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ថវិកាអតិបរមា៖</label><input type="text" id="bgLimit" placeholder="200" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-indigo-600 outline-none"></div>
-                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ខ្នាត៖</label><select id="bgCurrency" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-amber-600 outline-none"></select></div>
-                </div>
-                <label class="flex items-center justify-between gap-2 px-3 py-2 glass-input rounded-xl cursor-pointer">
-                    <span class="text-[11px] font-bold flex items-center gap-1.5">
-                        <i class="fa-solid fa-arrows-rotate text-emerald-500"></i> បូកទាំង USD &amp; KHR អូតូតាម Rate
-                    </span>
-                    <span class="ios-switch"><input type="checkbox" id="bgAutoConvert" checked><span class="ios-slider"></span></span>
-                </label>
-                <button id="bgSaveBtn" onclick="ProApp.saveBudgetLimit()" class="w-full py-2.5 bg-indigo-600 text-white text-[13px] font-bold rounded-xl shadow-md active:scale-95 transition cursor-pointer">រក្សាទុក</button>
+    <!-- 🎯 BUDGETS MODAL (Spacious 2-Column Desktop + Clean Mobile Scroll + ↑↓ Reorder) -->
+    <div id="budgetModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) ProApp.closeBudgetModal()">
+        <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md md:max-w-3xl mx-auto max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center mb-3.5 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
+                <h3 class="text-[15px] font-black flex items-center gap-2 modal-label-text"><span>🎯</span> កំណត់ថវិកាចំណាយ</h3>
+                <button type="button" onclick="ProApp.closeBudgetModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button>
             </div>
-            <p class="text-[11px] border-t pt-3 mt-1 font-bold text-gray-500 flex-shrink-0">បញ្ជីថវិកា៖</p>
-            <div class="overflow-y-auto pr-1 mt-2 flex-1 custom-scrollbar" id="budgetListContainer"></div>
-            <div class="flex justify-end mt-4 border-t pt-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
-                <button onclick="ProApp.closeBudgetModal()" class="px-5 py-2 text-xs font-bold text-gray-700 bg-gray-100 dark:bg-white/10 dark:text-gray-300 rounded-xl transition cursor-pointer">បិទ</button>
+            <div class="flex-1 min-h-0 overflow-y-auto md:overflow-hidden grid grid-cols-1 md:grid-cols-12 gap-4 pr-0.5 custom-scrollbar">
+                <!-- Left Column: Form -->
+                <div class="md:col-span-5 space-y-3 md:overflow-y-auto md:pr-1 custom-scrollbar">
+                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ប្រភេទចំណាយ៖</label><select id="bgCategory" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></select></div>
+                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">🔗 ភ្ជាប់ជាមួយគណនី៖</label><select id="bgLinkedAcc" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-blue-600 outline-none"></select></div>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ថវិកាអតិបរមា៖</label><input type="text" id="bgLimit" placeholder="200" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-indigo-600 outline-none"></div>
+                        <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ខ្នាត៖</label><select id="bgCurrency" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-amber-600 outline-none"></select></div>
+                    </div>
+                    <label class="flex items-center justify-between gap-2 px-3 py-2 glass-input rounded-xl cursor-pointer">
+                        <span class="text-[11px] font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-arrows-rotate text-emerald-500"></i> បូកទាំង USD &amp; KHR អូតូតាម Rate
+                        </span>
+                        <span class="ios-switch"><input type="checkbox" id="bgAutoConvert" checked><span class="ios-slider"></span></span>
+                    </label>
+                    <button type="button" id="bgSaveBtn" onclick="ProApp.saveBudgetLimit()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[13px] font-bold rounded-xl shadow-md active:scale-95 transition cursor-pointer">រក្សាទុក</button>
+                </div>
+                <!-- Right Column: Spacious Scrollable List -->
+                <div class="md:col-span-7 flex flex-col min-h-[180px] md:min-h-0 md:border-l md:border-slate-200/70 md:dark:border-white/10 md:pl-4 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200/70 dark:border-white/10">
+                    <div class="flex items-center justify-between mb-2 flex-shrink-0">
+                        <p class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400">បញ្ជីថវិកា (ចុច ↑ ↓ ដើម្បីរៀបលំដាប់)៖</p>
+                    </div>
+                    <div class="flex-1 overflow-y-auto pr-1 custom-scrollbar" id="budgetListContainer"></div>
+                </div>
+            </div>
+            <div class="flex justify-end mt-3.5 border-t pt-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
+                <button type="button" onclick="ProApp.closeBudgetModal()" class="px-5 py-2 text-xs font-bold text-gray-700 bg-gray-100 dark:bg-white/10 dark:text-gray-300 rounded-xl transition cursor-pointer">បិទ</button>
             </div>
         </div>
     </div>
 
-    <!-- ⏰ RECURRING MODAL -->
-    <div id="recurringModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeRecurringModal()">
-        <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
-            <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0"><h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><span>⏰</span> កត់ត្រាស្វ័យប្រវត្តិ</h3><button onclick="ProApp.closeRecurringModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button></div>
-            <div class="space-y-3.5 mb-4 flex-shrink-0">
-                <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ការពិពណ៌នា៖</label><input type="text" id="recDesc" placeholder="ឧ. បង់ថ្លៃទឹកភ្លើង..." class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ប្រភេទ៖</label><select id="recCat" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></select></div>
-                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">គណនី៖</label><select id="recAcc" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></select></div>
-                </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">សកម្មភាព៖</label><select id="recType" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold outline-none"><option value="exp">ចំណាយ (-)</option><option value="inc">ចំណូល (+)</option></select></div>
-                    <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">ចំនួនទឹកប្រាក់៖</label><input type="text" id="recAmount" placeholder="0.00" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-blue-600 outline-none"></div>
-                    <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">រៀងរាល់ថ្ងៃទី៖</label><input type="number" id="recDay" min="1" max="31" value="1" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-amber-600 outline-none"></div>
-                </div>
-                <button onclick="ProApp.saveRecurring()" class="w-full py-2.5 bg-blue-600 text-white text-[13px] font-bold rounded-xl shadow-md active:scale-95 transition cursor-pointer">បន្ថែមការកំណត់ស្វ័យប្រវត្តិ</button>
+    <!-- ⏰ RECURRING MODAL (Spacious 2-Column Desktop + Clean Mobile Scroll + ↑↓ Reorder) -->
+    <div id="recurringModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) ProApp.closeRecurringModal()">
+        <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md md:max-w-3xl mx-auto max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center mb-3.5 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
+                <h3 class="text-[15px] font-black flex items-center gap-2 modal-label-text"><span>⏰</span> កត់ត្រាស្វ័យប្រវត្តិ</h3>
+                <button type="button" onclick="ProApp.closeRecurringModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button>
             </div>
-            <p class="text-[11px] border-t pt-3 mt-1 font-bold text-gray-500 flex-shrink-0">បញ្ជីកត់ត្រាស្វ័យប្រវត្តិ៖</p>
-            <div class="overflow-y-auto pr-1 mt-2 flex-1 custom-scrollbar" id="recurringListContainer"></div>
-            <div class="flex justify-end mt-4 border-t pt-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
-                <button onclick="ProApp.closeRecurringModal()" class="px-5 py-2 text-xs font-bold text-gray-700 bg-gray-100 dark:bg-white/10 dark:text-gray-300 rounded-xl transition cursor-pointer">បិទ</button>
+            <div class="flex-1 min-h-0 overflow-y-auto md:overflow-hidden grid grid-cols-1 md:grid-cols-12 gap-4 pr-0.5 custom-scrollbar">
+                <div class="md:col-span-5 space-y-3 md:overflow-y-auto md:pr-1 custom-scrollbar">
+                    <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ការពិពណ៌នា៖</label><input type="text" id="recDesc" placeholder="ឧ. បង់ថ្លៃទឹកភ្លើង..." class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></div>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ប្រភេទ៖</label><select id="recCat" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></select></div>
+                        <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">គណនី៖</label><select id="recAcc" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-medium outline-none"></select></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">សកម្មភាព៖</label><select id="recType" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold outline-none"><option value="exp">ចំណាយ (-)</option><option value="inc">ចំណូល (+)</option></select></div>
+                        <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">ចំនួនទឹកប្រាក់៖</label><input type="text" id="recAmount" placeholder="0.00" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-blue-600 outline-none"></div>
+                        <div><label class="block text-[10px] font-bold mb-1 text-gray-600 dark:text-gray-300">រៀងរាល់ថ្ងៃទី៖</label><input type="number" id="recDay" min="1" max="31" value="1" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-amber-600 outline-none"></div>
+                    </div>
+                    <button type="button" onclick="ProApp.saveRecurring()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[13px] font-bold rounded-xl shadow-md active:scale-95 transition cursor-pointer">បន្ថែមការកំណត់ស្វ័យប្រវត្តិ</button>
+                </div>
+                <div class="md:col-span-7 flex flex-col min-h-[180px] md:min-h-0 md:border-l md:border-slate-200/70 md:dark:border-white/10 md:pl-4 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200/70 dark:border-white/10">
+                    <p class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 mb-2 flex-shrink-0">បញ្ជីកត់ត្រាស្វ័យប្រវត្តិ (ចុច ↑ ↓ ដើម្បីរៀបលំដាប់)៖</p>
+                    <div class="flex-1 overflow-y-auto pr-1 custom-scrollbar" id="recurringListContainer"></div>
+                </div>
+            </div>
+            <div class="flex justify-end mt-3.5 border-t pt-3 border-gray-200/70 dark:border-white/10 flex-shrink-0">
+                <button type="button" onclick="ProApp.closeRecurringModal()" class="px-5 py-2 text-xs font-bold text-gray-700 bg-gray-100 dark:bg-white/10 dark:text-gray-300 rounded-xl transition cursor-pointer">បិទ</button>
             </div>
         </div>
     </div>
@@ -3258,21 +3290,23 @@
                     const isChecked = vis[secId] !== false;
                     return `
                         <div class="flex items-center justify-between px-3 py-2.5 hover:bg-white/60 dark:hover:bg-white/5 transition gap-2">
-                            <div class="flex items-center gap-2 min-w-0">
+                            <div class="flex items-center gap-2 min-w-0 flex-1">
                                 <div class="flex flex-col gap-0.5 shrink-0">
                                     <button type="button" onclick="ProApp.vibrate(); ProApp.moveDashboardSection(${idx}, -1)" ${idx === 0 ? 'disabled class="opacity-25 text-slate-400 px-1 py-0.5 leading-none"' : 'class="text-blue-600 dark:text-amber-400 hover:bg-blue-50 dark:hover:bg-white/10 rounded px-1 py-0.5 leading-none cursor-pointer"'} title="រំកិលឡើងលើ"><i class="fa-solid fa-chevron-up text-[9px]"></i></button>
                                     <button type="button" onclick="ProApp.vibrate(); ProApp.moveDashboardSection(${idx}, 1)" ${idx === order.length - 1 ? 'disabled class="opacity-25 text-slate-400 px-1 py-0.5 leading-none"' : 'class="text-blue-600 dark:text-amber-400 hover:bg-blue-50 dark:hover:bg-white/10 rounded px-1 py-0.5 leading-none cursor-pointer"'} title="រំកិលចុះក្រោម"><i class="fa-solid fa-chevron-down text-[9px]"></i></button>
                                 </div>
-                                <span class="w-7 h-7 rounded-lg ${meta.color} flex items-center justify-center text-xs shrink-0"><i class="fa-solid ${meta.icon}"></i></span>
-                                <span class="text-xs font-bold truncate">${meta.label}</span>
+                                <label for="chkDash-${secId}" class="flex items-center gap-2 min-w-0 flex-1 cursor-pointer select-none">
+                                    <span class="w-7 h-7 rounded-lg ${meta.color} flex items-center justify-center text-xs shrink-0"><i class="fa-solid ${meta.icon}"></i></span>
+                                    <span class="text-xs font-bold truncate">${meta.label}</span>
+                                </label>
                             </div>
-                            <span class="ios-switch"><input type="checkbox" ${isChecked ? 'checked' : ''} onchange="ProApp.toggleSection('${secId}', this.checked)"><span class="ios-slider"></span></span>
+                            <label class="ios-switch"><input type="checkbox" id="chkDash-${secId}" ${isChecked ? 'checked' : ''} onchange="ProApp.vibrate(); ProApp.toggleSection('${secId}', this.checked)"><span class="ios-slider"></span></label>
                         </div>`;
                 }).join('');
             },
             toggleSection: function(secId, isVisible) {
                 if (!ProApp.state.visibleSections) ProApp.state.visibleSections = {};
-                ProApp.state.visibleSections[secId] = isVisible;
+                ProApp.state.visibleSections[secId] = !!isVisible;
                 const el = document.getElementById(secId);
                 if (el) el.classList.toggle('hidden', !isVisible);
                 ProApp.saveUiConfigToCloud();
@@ -3907,19 +3941,37 @@
             saveRecurringsToCloud: function() {
                 ProApp.writeCloudNode('recurrings', ProApp.state.recurrings);
             },
+            moveRecurring: function(idx, dir) {
+                const n = idx + dir;
+                if (n < 0 || n >= ProApp.state.recurrings.length) return;
+                [ProApp.state.recurrings[idx], ProApp.state.recurrings[n]] = [ProApp.state.recurrings[n], ProApp.state.recurrings[idx]];
+                ProApp.saveRecurringsToCloud();
+                ProApp.renderRecurringList();
+            },
             renderRecurringList: function() {
                 const c = document.getElementById('recurringListContainer'); if (!c) return;
                 const badge = document.getElementById('recBadge');
-                if (badge) badge.classList.toggle('hidden', !ProApp.state.recurrings || ProApp.state.recurrings.length === 0);
-                c.innerHTML = (ProApp.state.recurrings || []).map(r => {
+                const isEmpty = !ProApp.state.recurrings || ProApp.state.recurrings.length === 0;
+                if (badge) badge.classList.toggle('hidden', isEmpty);
+                if (isEmpty) {
+                    c.innerHTML = `<div class="text-center py-6 text-xs text-slate-400">មិនទាន់មានកត់ត្រាស្វ័យប្រវត្តិទេ</div>`;
+                    return;
+                }
+                c.innerHTML = ProApp.state.recurrings.map((r, idx) => {
                     const isInc = r.inc > 0;
                     return `
-                        <div class="flex items-center justify-between p-2.5 mb-2 glass-input rounded-xl text-xs">
-                            <div>
-                                <div class="font-bold">${r.desc} (រៀងរាល់ថ្ងៃទី ${r.day})</div>
-                                <div class="text-[10px] text-gray-500">${r.cat} • ${r.acc} • ${ProApp.formatMoney(isInc ? r.inc : r.exp, r.cur)}</div>
+                        <div class="flex items-center justify-between p-2.5 mb-2 glass-input rounded-xl text-xs gap-2">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <div class="flex flex-col gap-0.5 shrink-0">
+                                    <button type="button" onclick="ProApp.vibrate(); ProApp.moveRecurring(${idx}, -1)" ${idx === 0 ? 'disabled class="opacity-25 text-slate-400 px-1 py-0.5 leading-none"' : 'class="text-blue-600 dark:text-amber-400 hover:bg-blue-50 dark:hover:bg-white/10 rounded px-1 py-0.5 leading-none cursor-pointer"'} title="រំកិលឡើងលើ"><i class="fa-solid fa-chevron-up text-[9px]"></i></button>
+                                    <button type="button" onclick="ProApp.vibrate(); ProApp.moveRecurring(${idx}, 1)" ${idx === ProApp.state.recurrings.length - 1 ? 'disabled class="opacity-25 text-slate-400 px-1 py-0.5 leading-none"' : 'class="text-blue-600 dark:text-amber-400 hover:bg-blue-50 dark:hover:bg-white/10 rounded px-1 py-0.5 leading-none cursor-pointer"'} title="រំកិលចុះក្រោម"><i class="fa-solid fa-chevron-down text-[9px]"></i></button>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="font-bold truncate">${ProApp.escapeHtml(r.desc)} (ថ្ងៃទី ${r.day})</div>
+                                    <div class="text-[10px] text-gray-500 truncate">${ProApp.escapeHtml(r.cat)} • ${ProApp.escapeHtml(r.acc)} • ${ProApp.formatMoney(isInc ? r.inc : r.exp, r.cur)}</div>
+                                </div>
                             </div>
-                            <button onclick="ProApp.deleteRecurring('${r.id}')" class="text-rose-500 font-bold"><i class="fa-solid fa-trash-can"></i></button>
+                            <button type="button" onclick="ProApp.deleteRecurring('${r.id}')" class="px-2.5 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-900/30 text-rose-600 font-bold cursor-pointer shrink-0"><i class="fa-solid fa-trash-can"></i></button>
                         </div>`;
                 }).join('');
             },
@@ -4026,16 +4078,36 @@
                 ProApp.updateDashboard();
                 ProApp.writeCloudNode('goals', ProApp.state.goals);
             },
+            moveGoal: function(idx, dir) {
+                const n = idx + dir;
+                if (n < 0 || n >= ProApp.state.goals.length) return;
+                [ProApp.state.goals[idx], ProApp.state.goals[n]] = [ProApp.state.goals[n], ProApp.state.goals[idx]];
+                ProApp.saveGoalsToCloud();
+                ProApp.renderGoalList();
+            },
             renderGoalList: function() {
                 const container = document.getElementById('goalListContainer'); if (!container) return;
-                container.innerHTML = ProApp.state.goals.map(g => {
-                    const linkLabel = (g.linkedAcc && g.linkedAcc !== 'NONE') ? ` 🔗 (${g.linkedAcc})` : '';
+                if (!ProApp.state.goals || ProApp.state.goals.length === 0) {
+                    container.innerHTML = `<div class="text-center py-6 text-xs text-slate-400">មិនទាន់មានគោលដៅសន្សំទេ</div>`;
+                    return;
+                }
+                container.innerHTML = ProApp.state.goals.map((g, idx) => {
+                    const linkLabel = (g.linkedAcc && g.linkedAcc !== 'NONE') ? ` 🔗 (${ProApp.escapeHtml(g.linkedAcc)})` : '';
                     return `
-                        <div class="flex items-center justify-between p-2.5 mb-2 glass-input rounded-xl text-xs">
-                            <span class="font-bold">${g.name}${linkLabel}: <span class="text-emerald-600">${ProApp.formatMoney(g.target, 'USD')}</span></span>
-                            <div class="flex gap-2">
-                                <button onclick="ProApp.openGoalModal('${g.id}')" class="text-blue-500 font-bold">កែ</button>
-                                <button onclick="ProApp.deleteGoal('${g.id}')" class="text-rose-500 font-bold">លុប</button>
+                        <div class="flex items-center justify-between p-2.5 mb-2 glass-input rounded-xl text-xs gap-2">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <div class="flex flex-col gap-0.5 shrink-0">
+                                    <button type="button" onclick="ProApp.vibrate(); ProApp.moveGoal(${idx}, -1)" ${idx === 0 ? 'disabled class="opacity-25 text-slate-400 px-1 py-0.5 leading-none"' : 'class="text-emerald-600 dark:text-amber-400 hover:bg-emerald-50 dark:hover:bg-white/10 rounded px-1 py-0.5 leading-none cursor-pointer"'} title="រំកិលឡើងលើ"><i class="fa-solid fa-chevron-up text-[9px]"></i></button>
+                                    <button type="button" onclick="ProApp.vibrate(); ProApp.moveGoal(${idx}, 1)" ${idx === ProApp.state.goals.length - 1 ? 'disabled class="opacity-25 text-slate-400 px-1 py-0.5 leading-none"' : 'class="text-emerald-600 dark:text-amber-400 hover:bg-emerald-50 dark:hover:bg-white/10 rounded px-1 py-0.5 leading-none cursor-pointer"'} title="រំកិលចុះក្រោម"><i class="fa-solid fa-chevron-down text-[9px]"></i></button>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="font-bold truncate">${ProApp.escapeHtml(g.name)}${linkLabel}</div>
+                                    <div class="text-[11px] font-mono font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5">${ProApp.formatMoney(g.target, 'USD')}</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-1.5 shrink-0">
+                                <button type="button" onclick="ProApp.openGoalModal('${g.id}')" class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 font-bold cursor-pointer hover:bg-blue-100">កែ</button>
+                                <button type="button" onclick="ProApp.deleteGoal('${g.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-300 font-bold cursor-pointer hover:bg-rose-100">លុប</button>
                             </div>
                         </div>`;
                 }).join('');
@@ -4269,16 +4341,37 @@
                 ProApp.updateDashboard();
                 ProApp.writeCloudNode('budgets', ProApp.state.budgets);
             },
+            moveBudget: function(idx, dir) {
+                const n = idx + dir;
+                if (n < 0 || n >= ProApp.state.budgets.length) return;
+                [ProApp.state.budgets[idx], ProApp.state.budgets[n]] = [ProApp.state.budgets[n], ProApp.state.budgets[idx]];
+                ProApp.saveBudgetsToCloud();
+                ProApp.renderBudgetList();
+            },
             renderBudgetList: function() {
                 const container = document.getElementById('budgetListContainer'); if (!container) return;
-                container.innerHTML = ProApp.state.budgets.map(b => {
-                    const accLabel = (b.linkedAcc && b.linkedAcc !== 'ALL') ? ` 🔗 (${b.linkedAcc})` : '';
+                if (!ProApp.state.budgets || ProApp.state.budgets.length === 0) {
+                    container.innerHTML = `<div class="text-center py-6 text-xs text-slate-400">មិនទាន់មានថវិកាទេ</div>`;
+                    return;
+                }
+                container.innerHTML = ProApp.state.budgets.map((b, idx) => {
+                    const accLabel = (b.linkedAcc && b.linkedAcc !== 'ALL') ? ` 🔗 (${ProApp.escapeHtml(b.linkedAcc)})` : '';
+                    const convBadge = b.autoConvert !== false ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-bold ml-1">USD+KHR</span>` : '';
                     return `
-                        <div class="flex items-center justify-between p-2.5 mb-2 glass-input rounded-xl text-xs">
-                            <span class="font-bold">${b.cat}${accLabel}: <span class="text-indigo-500">${ProApp.formatMoney(b.limit, b.cur)}</span></span>
-                            <div class="flex gap-2">
-                                <button onclick="ProApp.openBudgetModal('${b.id}')" class="text-blue-500 font-bold">កែ</button>
-                                <button onclick="ProApp.deleteBudget('${b.id}')" class="text-rose-500 font-bold">លុប</button>
+                        <div class="flex items-center justify-between p-2.5 mb-2 glass-input rounded-xl text-xs gap-2">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <div class="flex flex-col gap-0.5 shrink-0">
+                                    <button type="button" onclick="ProApp.vibrate(); ProApp.moveBudget(${idx}, -1)" ${idx === 0 ? 'disabled class="opacity-25 text-slate-400 px-1 py-0.5 leading-none"' : 'class="text-indigo-600 dark:text-amber-400 hover:bg-indigo-50 dark:hover:bg-white/10 rounded px-1 py-0.5 leading-none cursor-pointer"'} title="រំកិលឡើងលើ"><i class="fa-solid fa-chevron-up text-[9px]"></i></button>
+                                    <button type="button" onclick="ProApp.vibrate(); ProApp.moveBudget(${idx}, 1)" ${idx === ProApp.state.budgets.length - 1 ? 'disabled class="opacity-25 text-slate-400 px-1 py-0.5 leading-none"' : 'class="text-indigo-600 dark:text-amber-400 hover:bg-indigo-50 dark:hover:bg-white/10 rounded px-1 py-0.5 leading-none cursor-pointer"'} title="រំកិលចុះក្រោម"><i class="fa-solid fa-chevron-down text-[9px]"></i></button>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="font-bold truncate">${ProApp.escapeHtml(b.cat)}${accLabel}</div>
+                                    <div class="text-[11px] font-mono font-extrabold text-indigo-600 dark:text-indigo-400 flex items-center flex-wrap gap-1 mt-0.5">${ProApp.formatMoney(b.limit, b.cur)}${convBadge}</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-1.5 shrink-0">
+                                <button type="button" onclick="ProApp.openBudgetModal('${b.id}')" class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 font-bold cursor-pointer hover:bg-blue-100">កែ</button>
+                                <button type="button" onclick="ProApp.deleteBudget('${b.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-300 font-bold cursor-pointer hover:bg-rose-100">លុប</button>
                             </div>
                         </div>`;
                 }).join('');
