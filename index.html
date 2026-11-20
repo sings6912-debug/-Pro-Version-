@@ -482,44 +482,72 @@
 
         <div class="px-3 md:px-6 relative">
             <!-- 🏠 VIEW: DASHBOARD -->
-            <div id="view-dashboard" class="space-y-6 page-view">
-                <div id="sec-accounts">
-                    <div class="flex justify-between items-center mb-3">
-                        <h2 class="text-[15px] font-extrabold text-slate-900 dark:text-amber-300 flex items-center gap-2">
-                            <i class="fa-solid fa-credit-card text-blue-600 dark:text-amber-400"></i> <span data-i18n="accBalances">សមតុល្យតាមគណនី</span>
-                        </h2>
+            <div id="view-dashboard" class="space-y-5 page-view">
+                <div id="sec-accounts" class="dash-section">
+                    <div class="flex justify-between items-center mb-3 px-1">
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.toggleCollapseSection('sec-accounts')" class="text-[15px] font-extrabold text-slate-900 dark:text-amber-300 flex items-center gap-2 cursor-pointer group">
+                            <i class="fa-solid fa-credit-card text-blue-600 dark:text-amber-400"></i>
+                            <span data-i18n="accBalances">សមតុល្យតាមគណនី</span>
+                            <i id="collapseIcon-sec-accounts" class="fa-solid fa-chevron-down text-[11px] text-slate-400 group-hover:text-blue-500 transition-transform duration-200"></i>
+                        </button>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboardCards"></div>
+                    <div id="secBody-sec-accounts">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboardCards"></div>
+                    </div>
                 </div>
 
-                <div id="sec-goals" class="glass-panel p-5 rounded-3xl shadow-sm relative">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-[15px] font-bold text-slate-900 dark:text-white flex items-center gap-2" data-i18n="savingsGoals">🐖 គោលដៅសន្សំ</h2>
-                        <button type="button" onclick="ProApp.vibrate(); ProApp.openGoalModal()" class="cursor-pointer active:scale-90 transition-transform text-[11px] bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 font-bold px-3 py-2 rounded-xl border border-emerald-200 dark:border-emerald-800 shadow-sm">
+                <div id="sec-goals" class="dash-section glass-panel p-5 rounded-3xl shadow-sm relative transition-all">
+                    <div id="goalsHeaderRow" class="flex justify-between items-center gap-2 mb-4">
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.toggleCollapseSection('sec-goals')" class="text-[15px] font-bold text-slate-900 dark:text-white flex items-center gap-2 cursor-pointer group min-w-0">
+                            <span data-i18n="savingsGoals" class="truncate">🐖 គោលដៅសន្សំ</span>
+                            <span id="goalsEmptyInlineHint" class="hidden text-[11px] font-medium text-slate-400 truncate">• មិនទាន់មានគោលដៅ</span>
+                            <i id="collapseIcon-sec-goals" class="fa-solid fa-chevron-down text-[11px] text-slate-400 group-hover:text-emerald-500 transition-transform duration-200 shrink-0"></i>
+                        </button>
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.openGoalModal()" class="cursor-pointer active:scale-90 transition-transform text-[11px] bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 font-bold px-3 py-2 rounded-xl border border-emerald-200 dark:border-emerald-800 shadow-sm shrink-0">
                             <i class="fa-solid fa-plus mr-1"></i> <span data-i18n="btnAdd">បន្ថែម</span>
                         </button>
                     </div>
-                    <div id="goalsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    <div id="secBody-sec-goals">
+                        <div id="goalsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    </div>
                 </div>
 
-                <div id="sec-budgets" class="glass-panel p-5 rounded-3xl shadow-sm relative">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-[15px] font-bold text-slate-900 dark:text-white flex items-center gap-2" data-i18n="monthlyBudgets">🎯 ថវិកាចំណាយ</h2>
-                        <button type="button" onclick="ProApp.vibrate(); ProApp.openBudgetModal()" class="cursor-pointer active:scale-90 transition-transform text-[11px] bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-400 font-bold px-3 py-2 rounded-xl border border-indigo-200 dark:border-indigo-800 shadow-sm">
+                <div id="sec-budgets" class="dash-section glass-panel p-5 rounded-3xl shadow-sm relative transition-all">
+                    <div id="budgetsHeaderRow" class="flex flex-wrap justify-between items-center gap-2 mb-4">
+                        <div class="flex flex-wrap items-center gap-2 min-w-0">
+                            <button type="button" onclick="ProApp.vibrate(); ProApp.toggleCollapseSection('sec-budgets')" class="text-[15px] font-bold text-slate-900 dark:text-white flex items-center gap-2 cursor-pointer group">
+                                <span data-i18n="monthlyBudgets">🎯 ថវិកាចំណាយ</span>
+                                <span id="budgetsEmptyInlineHint" class="hidden text-[11px] font-medium text-slate-400">• មិនទាន់បានកំណត់</span>
+                                <i id="collapseIcon-sec-budgets" class="fa-solid fa-chevron-down text-[11px] text-slate-400 group-hover:text-indigo-500 transition-transform duration-200"></i>
+                            </button>
+                            <span id="budgetSummaryPill" class="hidden px-2.5 py-1 rounded-full text-[10px] font-extrabold font-mono bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-700/40"></span>
+                        </div>
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.openBudgetModal()" class="cursor-pointer active:scale-90 transition-transform text-[11px] bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-400 font-bold px-3 py-2 rounded-xl border border-indigo-200 dark:border-indigo-800 shadow-sm shrink-0">
                             <i class="fa-solid fa-gear mr-1"></i> <span data-i18n="btnSet">កំណត់</span>
                         </button>
                     </div>
-                    <div id="budgetProgressContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    <div id="secBody-sec-budgets">
+                        <div id="budgetProgressContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    </div>
                 </div>
 
-                <div id="sec-charts" class="grid grid-cols-1 lg:grid-cols-2 gap-5 pb-6">
-                    <div class="glass-panel p-5 rounded-3xl shadow-sm">
-                        <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 text-center" data-i18n="chartExpCat">ចំណាយតាមផ្នែក (ខែនេះ)</h3>
-                        <div class="relative h-[250px] w-full flex justify-center"><canvas id="expenseChart"></canvas></div>
+                <div id="sec-charts" class="dash-section pb-6">
+                    <div class="flex justify-between items-center mb-3 px-1">
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.toggleCollapseSection('sec-charts')" class="text-[15px] font-extrabold text-slate-900 dark:text-amber-300 flex items-center gap-2 cursor-pointer group">
+                            <i class="fa-solid fa-chart-simple text-amber-500"></i>
+                            <span data-i18n="chartsSectionTitle">ក្រាហ្វវិភាគ</span>
+                            <i id="collapseIcon-sec-charts" class="fa-solid fa-chevron-down text-[11px] text-slate-400 group-hover:text-amber-500 transition-transform duration-200"></i>
+                        </button>
                     </div>
-                    <div class="glass-panel p-5 rounded-3xl shadow-sm">
-                        <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 text-center" data-i18n="chartTrend">ចំណូល vs ចំណាយ (៦ ខែ)</h3>
-                        <div class="relative h-[250px] w-full flex justify-center"><canvas id="trendChart"></canvas></div>
+                    <div id="secBody-sec-charts" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <div class="glass-panel p-5 rounded-3xl shadow-sm">
+                            <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 text-center" data-i18n="chartExpCat">ចំណាយតាមផ្នែក (ខែនេះ)</h3>
+                            <div class="relative h-[250px] w-full flex justify-center"><canvas id="expenseChart"></canvas></div>
+                        </div>
+                        <div class="glass-panel p-5 rounded-3xl shadow-sm">
+                            <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 text-center" data-i18n="chartTrend">ចំណូល vs ចំណាយ (៦ ខែ)</h3>
+                            <div class="relative h-[250px] w-full flex justify-center"><canvas id="trendChart"></canvas></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -913,41 +941,35 @@
                         </div>
                     </div>
 
-                    <!-- 👁️ Dashboard Sections (Sleek Grouped iOS List with Pill Switches) -->
+                    <!-- 👁️ Top Widgets & Reorderable Dashboard Sections -->
                     <div class="space-y-2">
                         <label class="block text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase px-1 flex items-center gap-1.5">
-                            <i class="fa-solid fa-eye text-blue-500"></i> បង្ហាញ / លាក់ ផ្នែកលើ Dashboard
+                            <i class="fa-solid fa-sparkles text-amber-500"></i> បង្ហាញ / លាក់ របារខាងលើ
                         </label>
                         <div class="settings-card !p-0 divide-y divide-slate-200/70 dark:divide-white/10 overflow-hidden">
                             <label class="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-white/60 dark:hover:bg-white/5 transition">
                                 <span class="flex items-center gap-2.5 text-xs font-bold">
-                                    <span class="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs"><i class="fa-solid fa-credit-card"></i></span>
-                                    សមតុល្យគណនី
+                                    <span class="w-7 h-7 rounded-lg bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 flex items-center justify-center text-xs"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                                    របារ Smart Insight
                                 </span>
-                                <span class="ios-switch"><input type="checkbox" id="chkAccounts" checked onchange="ProApp.toggleSection('sec-accounts', this.checked)"><span class="ios-slider"></span></span>
+                                <span class="ios-switch"><input type="checkbox" id="chkSmartInsight" checked onchange="ProApp.toggleSection('smartInsightContainer', this.checked)"><span class="ios-slider"></span></span>
                             </label>
                             <label class="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-white/60 dark:hover:bg-white/5 transition">
                                 <span class="flex items-center gap-2.5 text-xs font-bold">
-                                    <span class="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs"><i class="fa-solid fa-piggy-bank"></i></span>
-                                    គោលដៅសន្សំប្រាក់
+                                    <span class="w-7 h-7 rounded-lg bg-sky-100 dark:bg-sky-900/40 text-sky-600 dark:text-sky-400 flex items-center justify-center text-xs"><i class="fa-solid fa-layer-group"></i></span>
+                                    ប្រអប់មុខងារសំខាន់ៗ (Services)
                                 </span>
-                                <span class="ios-switch"><input type="checkbox" id="chkGoals" checked onchange="ProApp.toggleSection('sec-goals', this.checked)"><span class="ios-slider"></span></span>
-                            </label>
-                            <label class="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-white/60 dark:hover:bg-white/5 transition">
-                                <span class="flex items-center gap-2.5 text-xs font-bold">
-                                    <span class="w-7 h-7 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs"><i class="fa-solid fa-bullseye"></i></span>
-                                    ថវិកាចំណាយ
-                                </span>
-                                <span class="ios-switch"><input type="checkbox" id="chkBudgets" checked onchange="ProApp.toggleSection('sec-budgets', this.checked)"><span class="ios-slider"></span></span>
-                            </label>
-                            <label class="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-white/60 dark:hover:bg-white/5 transition">
-                                <span class="flex items-center gap-2.5 text-xs font-bold">
-                                    <span class="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs"><i class="fa-solid fa-chart-simple"></i></span>
-                                    ក្រាហ្វវិភាគ
-                                </span>
-                                <span class="ios-switch"><input type="checkbox" id="chkCharts" checked onchange="ProApp.toggleSection('sec-charts', this.checked)"><span class="ios-slider"></span></span>
+                                <span class="ios-switch"><input type="checkbox" id="chkServicesGrid" checked onchange="ProApp.toggleSection('servicesGridCard', this.checked)"><span class="ios-slider"></span></span>
                             </label>
                         </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase px-1 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-eye text-blue-500"></i> បង្ហាញ / លាក់ &amp; រៀបលំដាប់ Dashboard</span>
+                            <span class="text-[9px] font-bold text-slate-400 normal-case">ចុច ↑ ↓ ដើម្បីប្តូរទីតាំង</span>
+                        </label>
+                        <div id="dashboardSectionsConfigList" class="settings-card !p-0 divide-y divide-slate-200/70 dark:divide-white/10 overflow-hidden"></div>
                     </div>
                 </div>
 
@@ -1094,7 +1116,7 @@
     </div>
 
     <!-- 🔄 TRANSFER MODAL (FIXED - RESTORED) -->
-    <div id="transferModal" class="fixed inset-0 modal-overlay hidden z-[120] flex items-center justify-center p-4">
+    <div id="transferModal" class="fixed inset-0 modal-overlay hidden z-[120] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeTransferModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-6 w-full max-w-md mx-auto">
             <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10">
                 <h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><i class="fa-solid fa-money-bill-transfer text-emerald-500"></i> ផ្ទេរប្រាក់រវាងគណនី</h3>
@@ -1117,7 +1139,7 @@
     </div>
 
     <!-- 💱 EXCHANGE MODAL (FIXED - RESTORED) -->
-    <div id="exchangeModal" class="fixed inset-0 modal-overlay hidden z-[120] flex items-center justify-center p-4">
+    <div id="exchangeModal" class="fixed inset-0 modal-overlay hidden z-[120] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeExchangeModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-6 w-full max-w-md mx-auto">
             <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10">
                 <h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><i class="fa-solid fa-right-left text-purple-500"></i> ប្តូរប្រាក់ (Exchange)</h3>
@@ -1143,7 +1165,7 @@
     </div>
 
     <!-- 🗑️ CONFIRM DELETE MODAL (FIXED - RESTORED) -->
-    <div id="confirmModal" class="fixed inset-0 modal-overlay hidden z-[170] flex items-center justify-center p-4">
+    <div id="confirmModal" class="fixed inset-0 modal-overlay hidden z-[170] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-6 w-full max-w-sm mx-auto text-center">
             <div class="w-14 h-14 bg-rose-100 dark:bg-rose-900/30 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
             <h3 class="text-base font-black mb-1 modal-label-text" id="modalTitle">បញ្ជាក់ការលុប</h3>
@@ -1156,7 +1178,7 @@
     </div>
 
     <!-- 🍕 BILL SPLITTER MODAL -->
-    <div id="splitBillModal" class="fixed inset-0 modal-overlay hidden z-[120] flex items-center justify-center p-4 transition-all duration-300">
+    <div id="splitBillModal" class="fixed inset-0 modal-overlay hidden z-[120] flex items-center justify-center p-4 transition-all duration-300" onclick="if(event.target === this) ProApp.closeSplitBillModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-6 w-full max-w-sm mx-auto relative border border-white/20 text-center">
             <button onclick="ProApp.closeSplitBillModal()" class="absolute -top-12 right-0 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition border border-white/20 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             <div class="w-16 h-16 bg-gradient-to-tr from-orange-400 to-amber-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-lg"><i class="fa-solid fa-pizza-slice"></i></div>
@@ -1189,7 +1211,7 @@
     </div>
 
     <!-- 🧾 RECEIPT MODAL (MINI-POS) -->
-    <div id="receiptModal" class="fixed inset-0 modal-overlay hidden z-[120] flex items-center justify-center p-4 transition-all duration-300">
+    <div id="receiptModal" class="fixed inset-0 modal-overlay hidden z-[120] flex items-center justify-center p-4 transition-all duration-300" onclick="if(event.target === this) ProApp.closeReceiptModal()">
         <div class="relative w-full max-w-sm mx-auto">
             <button onclick="ProApp.closeReceiptModal()" class="absolute -top-12 right-0 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition border border-white/20 z-[100] cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             <div id="receiptTicket" class="receipt-paper p-6 relative z-50">
@@ -1222,7 +1244,7 @@
     </div>
 
     <!-- ⚡ SMART ADD & VOICE MODAL -->
-    <div id="smartAddModal" class="fixed inset-0 modal-overlay hidden z-[120] flex items-end sm:items-center justify-center sm:p-4 transition-all duration-300">
+    <div id="smartAddModal" class="fixed inset-0 modal-overlay hidden z-[120] flex items-end sm:items-center justify-center sm:p-4 transition-all duration-300" onclick="if(event.target === this) ProApp.closeSmartAddModal()">
         <div class="glass-modal rounded-t-3xl sm:rounded-3xl shadow-2xl p-6 w-full max-w-md mx-auto transform transition-all translate-y-0 relative border-t border-white/20">
             <div class="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-4 sm:hidden"></div>
             <div class="flex justify-between items-center mb-4">
@@ -1246,7 +1268,7 @@
     </div>
 
     <!-- 💳 ACCOUNTS MODAL -->
-    <div id="accountsModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4">
+    <div id="accountsModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeAccountsModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0"><h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><span>⚙️</span> គ្រប់គ្រងគណនី</h3><button onclick="ProApp.closeAccountsModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button></div>
             <div class="pb-3 border-b border-gray-100 dark:border-white/5 flex-shrink-0">
@@ -1262,7 +1284,7 @@
     </div>
 
     <!-- ⛽ CURRENCIES MODAL -->
-    <div id="currenciesModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4">
+    <div id="currenciesModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeCurrenciesModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0"><h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><span>⛽</span> គ្រប់គ្រងខ្នាត</h3><button onclick="ProApp.closeCurrenciesModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button></div>
             <div class="pb-3 border-b border-gray-100 dark:border-white/5 flex-shrink-0">
@@ -1276,7 +1298,7 @@
     </div>
 
     <!-- 📁 CATEGORIES MODAL -->
-    <div id="categoriesModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4">
+    <div id="categoriesModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeCategoriesModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0"><h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><span>📁</span> គ្រប់គ្រងប្រភេទ</h3><button onclick="ProApp.closeCategoriesModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button></div>
             <div class="pb-3 border-b border-gray-100 dark:border-white/5 flex-shrink-0">
@@ -1290,7 +1312,7 @@
     </div>
 
     <!-- ⚡ SHORTCUT MODAL -->
-    <div id="shortcutModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4">
+    <div id="shortcutModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeShortcutModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0"><h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><span>⚡</span> កែសម្រួលប៊ូតុងរហ័ស</h3><button onclick="ProApp.closeShortcutModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button></div>
             <div class="bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700 p-4 rounded-2xl shadow-sm space-y-3 flex-shrink-0 mb-4">
@@ -1315,7 +1337,7 @@
     </div>
 
     <!-- 🐖 GOALS MODAL -->
-    <div id="goalModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4">
+    <div id="goalModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeGoalModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0"><h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><span>🐖</span> គោលដៅសន្សំប្រាក់</h3><button onclick="ProApp.closeGoalModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button></div>
             <div class="space-y-3.5 mb-4 flex-shrink-0">
@@ -1336,7 +1358,7 @@
     </div>
 
     <!-- 🎯 BUDGETS MODAL -->
-    <div id="budgetModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4">
+    <div id="budgetModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeBudgetModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0"><h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><span>🎯</span> កំណត់ថវិកាចំណាយ</h3><button onclick="ProApp.closeBudgetModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button></div>
             <div class="space-y-3.5 mb-4 flex-shrink-0">
@@ -1346,6 +1368,12 @@
                     <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ថវិកាអតិបរមា៖</label><input type="text" id="bgLimit" placeholder="200" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-indigo-600 outline-none"></div>
                     <div><label class="block text-[11px] font-bold mb-1 text-gray-600 dark:text-gray-300">ខ្នាត៖</label><select id="bgCurrency" class="glass-input w-full p-2.5 rounded-xl text-[13px] font-bold text-amber-600 outline-none"></select></div>
                 </div>
+                <label class="flex items-center justify-between gap-2 px-3 py-2 glass-input rounded-xl cursor-pointer">
+                    <span class="text-[11px] font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrows-rotate text-emerald-500"></i> បូកទាំង USD &amp; KHR អូតូតាម Rate
+                    </span>
+                    <span class="ios-switch"><input type="checkbox" id="bgAutoConvert" checked><span class="ios-slider"></span></span>
+                </label>
                 <button id="bgSaveBtn" onclick="ProApp.saveBudgetLimit()" class="w-full py-2.5 bg-indigo-600 text-white text-[13px] font-bold rounded-xl shadow-md active:scale-95 transition cursor-pointer">រក្សាទុក</button>
             </div>
             <p class="text-[11px] border-t pt-3 mt-1 font-bold text-gray-500 flex-shrink-0">បញ្ជីថវិកា៖</p>
@@ -1357,7 +1385,7 @@
     </div>
 
     <!-- ⏰ RECURRING MODAL -->
-    <div id="recurringModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4">
+    <div id="recurringModal" class="fixed inset-0 modal-overlay hidden z-[110] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeRecurringModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10 flex-shrink-0"><h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><span>⏰</span> កត់ត្រាស្វ័យប្រវត្តិ</h3><button onclick="ProApp.closeRecurringModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 flex items-center justify-center cursor-pointer">&times;</button></div>
             <div class="space-y-3.5 mb-4 flex-shrink-0">
@@ -1382,7 +1410,7 @@
     </div>
 
     <!-- 📱 MOBILE EDIT TRANSACTION MODAL -->
-    <div id="mobileEditModal" class="fixed inset-0 modal-overlay hidden z-[165] flex items-center justify-center p-4">
+    <div id="mobileEditModal" class="fixed inset-0 modal-overlay hidden z-[165] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeMobileEditModal()">
         <div class="glass-modal rounded-3xl shadow-2xl p-6 w-full max-w-md mx-auto">
             <div class="flex justify-between items-center mb-4 border-b pb-3 border-gray-200/70 dark:border-white/10">
                 <h3 class="text-[15px] font-bold flex items-center gap-2 modal-label-text"><i class="fa-solid fa-pen-to-square text-blue-500"></i> កែប្រែប្រតិបត្តិការ</h3>
@@ -1423,6 +1451,46 @@
                 </div>
             </div>
             <button onclick="ProApp.saveMobileEdit()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[13px] rounded-xl shadow-md active:scale-95 transition cursor-pointer">រក្សាទុកការកែប្រែ</button>
+        </div>
+    </div>
+
+    <!-- ⚡ QUICK ADD EXPENSE FROM BUDGET CARD MODAL -->
+    <div id="quickBudgetExpModal" class="fixed inset-0 modal-overlay hidden z-[168] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeQuickBudgetExpModal()">
+        <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-sm mx-auto">
+            <div class="flex justify-between items-center mb-3 border-b pb-2.5 border-slate-200/70 dark:border-white/10">
+                <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0"><i class="fa-solid fa-bolt text-xs"></i></div>
+                    <div class="min-w-0">
+                        <h3 class="text-sm font-black truncate modal-label-text" id="qbeTitle">កត់ចំណាយរហ័ស</h3>
+                        <p class="text-[10px] text-slate-400 truncate font-bold" id="qbeSubtitle"></p>
+                    </div>
+                </div>
+                <button type="button" onclick="ProApp.closeQuickBudgetExpModal()" class="w-7 h-7 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 flex items-center justify-center cursor-pointer">&times;</button>
+            </div>
+            <form onsubmit="event.preventDefault(); ProApp.submitQuickBudgetExpense();" class="space-y-3">
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="col-span-2">
+                        <label class="block text-[10px] font-bold mb-1 text-slate-500">ចំនួនចំណាយ (ឧ. 5$ ឬ 20k)៖</label>
+                        <input type="text" id="qbeAmount" placeholder="0.00" autocomplete="off" class="glass-input w-full p-2.5 rounded-xl text-sm font-black text-rose-600 dark:text-rose-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold mb-1 text-slate-500">ខ្នាត៖</label>
+                        <select id="qbeCur" class="glass-input w-full p-2.5 rounded-xl text-xs font-bold text-amber-600 outline-none"></select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold mb-1 text-slate-500">គណនី៖</label>
+                    <select id="qbeAcc" class="glass-input w-full p-2.5 rounded-xl text-xs font-bold outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold mb-1 text-slate-500">ការពិពណ៌នា (ស្រេចចិត្ត)៖</label>
+                    <input type="text" id="qbeDesc" placeholder="ឧ. ទិញអាហារថ្ងៃត្រង់..." class="glass-input w-full p-2.5 rounded-xl text-xs font-medium outline-none">
+                </div>
+                <div class="flex gap-2 pt-1">
+                    <button type="button" onclick="ProApp.closeQuickBudgetExpModal()" class="flex-1 py-2.5 bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer">បោះបង់</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white text-xs font-extrabold rounded-xl shadow cursor-pointer active:scale-95 transition">កត់ចំណាយឥឡូវ</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -1576,10 +1644,19 @@
                 hideAmounts: false,
                 hiddenAccounts: [],
                 visibleSections: {
+                    'smartInsightContainer': true,
+                    'servicesGridCard': true,
                     'sec-accounts': true,
                     'sec-goals': true,
                     'sec-budgets': true,
                     'sec-charts': true
+                },
+                dashboardOrder: ['sec-accounts', 'sec-goals', 'sec-budgets', 'sec-charts'],
+                collapsedSections: {
+                    'sec-accounts': false,
+                    'sec-goals': false,
+                    'sec-budgets': false,
+                    'sec-charts': false
                 },
                 themeStyle: 'default',
                 bgImageUrl: '',
@@ -1612,6 +1689,7 @@
             isClearAll: false,
             currentSplitObj: null,
             currentEditMobileId: null,
+            quickBudgetTargetId: null,
             deferredPrompt: null,
             excelFilterEnabled: true,
             excelSortLevels: [{ col: 'date', dir: 'desc' }],
@@ -1813,7 +1891,9 @@
                     bgImageUrl: ProApp.state.bgImageUrl || '',
                     hideAmounts: !!ProApp.state.hideAmounts,
                     hiddenAccounts: ProApp.state.hiddenAccounts || [],
-                    visibleSections: ProApp.state.visibleSections || { 'sec-accounts': true, 'sec-goals': true, 'sec-budgets': true, 'sec-charts': true },
+                    visibleSections: ProApp.state.visibleSections || { 'smartInsightContainer': true, 'servicesGridCard': true, 'sec-accounts': true, 'sec-goals': true, 'sec-budgets': true, 'sec-charts': true },
+                    dashboardOrder: ProApp.state.dashboardOrder || ['sec-accounts', 'sec-goals', 'sec-budgets', 'sec-charts'],
+                    collapsedSections: ProApp.state.collapsedSections || {},
                     pinCode: ProApp.state.pinCode || '',
                     exchangeRate: ProApp.state.exchangeRate || 4100,
                     language: ProApp.state.language || 'km',
@@ -2024,7 +2104,9 @@
                 }
                 if (data.pinCode !== undefined) ProApp.state.pinCode = data.pinCode;
                 if (data.hiddenAccounts) ProApp.state.hiddenAccounts = data.hiddenAccounts;
-                if (data.visibleSections) ProApp.state.visibleSections = data.visibleSections;
+                if (data.visibleSections) ProApp.state.visibleSections = Object.assign({ 'smartInsightContainer': true, 'servicesGridCard': true, 'sec-accounts': true, 'sec-goals': true, 'sec-budgets': true, 'sec-charts': true }, data.visibleSections);
+                if (Array.isArray(data.dashboardOrder) && data.dashboardOrder.length) ProApp.state.dashboardOrder = data.dashboardOrder;
+                if (data.collapsedSections && typeof data.collapsedSections === 'object') ProApp.state.collapsedSections = data.collapsedSections;
                 if (data.exchangeRate) {
                     ProApp.state.exchangeRate = parseFloat(data.exchangeRate) || 4100;
                     ProApp.state.hasSavedExchangeRate = true;
@@ -2058,13 +2140,12 @@
                 setVal('cfgTgChatId', ProApp.state.tgChatId || '');
                 const tgAutoEl = document.getElementById('cfgTgAuto');
                 if (tgAutoEl) tgAutoEl.checked = !!ProApp.state.tgAutoNotify;
-                if (ProApp.state.visibleSections) {
-                    const setChk = (id, k) => { const el = document.getElementById(id); if (el) el.checked = !!ProApp.state.visibleSections[k]; };
-                    setChk('chkAccounts', 'sec-accounts');
-                    setChk('chkGoals', 'sec-goals');
-                    setChk('chkBudgets', 'sec-budgets');
-                    setChk('chkCharts', 'sec-charts');
-                }
+                const vis = ProApp.state.visibleSections || {};
+                const chkSI = document.getElementById('chkSmartInsight');
+                const chkSG = document.getElementById('chkServicesGrid');
+                if (chkSI) chkSI.checked = vis['smartInsightContainer'] !== false;
+                if (chkSG) chkSG.checked = vis['servicesGridCard'] !== false;
+                ProApp.renderDashboardSectionsConfig();
             },
 
             // ✈️ TELEGRAM BOT NOTIFICATION & SUMMARY
@@ -2146,6 +2227,7 @@
                     btnAdd: 'បន្ថែម',
                     monthlyBudgets: '🎯 ថវិកាចំណាយ',
                     btnSet: 'កំណត់',
+                    chartsSectionTitle: 'ក្រាហ្វវិភាគ',
                     chartExpCat: 'ចំណាយតាមផ្នែក (ខែនេះ)',
                     chartTrend: 'ចំណូល vs ចំណាយ (៦ ខែ)',
                     quickShortcuts: '⚡ កត់ត្រារហ័ស៖',
@@ -2180,6 +2262,7 @@
                     btnAdd: 'Add',
                     monthlyBudgets: '🎯 Monthly Budgets',
                     btnSet: 'Setup',
+                    chartsSectionTitle: 'Analytics Charts',
                     chartExpCat: 'Expenses by Category (This Month)',
                     chartTrend: 'Income vs Expense (6 Months)',
                     quickShortcuts: '⚡ Quick Shortcuts:',
@@ -3109,6 +3192,84 @@
                 ProApp.showToast('បានរក្សាទុកការកំណត់', 'success');
             },
             setThemeStyle: function(theme) { ProApp.state.themeStyle = theme; ProApp.applyUiConfig(); ProApp.saveUiConfigToCloud(); },
+            dashboardSectionsMeta: {
+                'sec-accounts': { label: 'សមតុល្យគណនី', icon: 'fa-credit-card', color: 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400' },
+                'sec-goals':    { label: 'គោលដៅសន្សំប្រាក់', icon: 'fa-piggy-bank', color: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400' },
+                'sec-budgets':  { label: 'ថវិកាចំណាយ', icon: 'fa-bullseye', color: 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400' },
+                'sec-charts':   { label: 'ក្រាហ្វវិភាគ', icon: 'fa-chart-simple', color: 'bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400' }
+            },
+            getNormalizedDashboardOrder: function() {
+                const defaults = ['sec-accounts', 'sec-goals', 'sec-budgets', 'sec-charts'];
+                const cur = Array.isArray(ProApp.state.dashboardOrder) ? ProApp.state.dashboardOrder.filter(id => defaults.includes(id)) : [];
+                defaults.forEach(id => { if (!cur.includes(id)) cur.push(id); });
+                ProApp.state.dashboardOrder = cur;
+                return cur;
+            },
+            applyDashboardOrderAndCollapse: function() {
+                const container = document.getElementById('view-dashboard');
+                const order = ProApp.getNormalizedDashboardOrder();
+                if (container) {
+                    order.forEach(secId => {
+                        const secEl = document.getElementById(secId);
+                        if (secEl) container.appendChild(secEl);
+                    });
+                }
+                const collapsed = ProApp.state.collapsedSections || {};
+                order.forEach(secId => {
+                    const isCol = !!collapsed[secId];
+                    const bodyEl = document.getElementById('secBody-' + secId);
+                    const iconEl = document.getElementById('collapseIcon-' + secId);
+                    if (bodyEl) bodyEl.classList.toggle('hidden', isCol);
+                    if (iconEl) iconEl.style.transform = isCol ? 'rotate(-90deg)' : 'rotate(0deg)';
+                    if (secId === 'sec-goals') {
+                        document.getElementById('goalsHeaderRow')?.classList.toggle('mb-0', isCol);
+                        document.getElementById('goalsHeaderRow')?.classList.toggle('mb-4', !isCol && ProApp.state.goals.length > 0);
+                    }
+                    if (secId === 'sec-budgets') {
+                        document.getElementById('budgetsHeaderRow')?.classList.toggle('mb-0', isCol);
+                        document.getElementById('budgetsHeaderRow')?.classList.toggle('mb-4', !isCol && ProApp.state.budgets.length > 0);
+                    }
+                });
+            },
+            toggleCollapseSection: function(secId) {
+                if (!ProApp.state.collapsedSections) ProApp.state.collapsedSections = {};
+                ProApp.state.collapsedSections[secId] = !ProApp.state.collapsedSections[secId];
+                ProApp.applyDashboardOrderAndCollapse();
+                ProApp.saveUiConfigToCloud();
+            },
+            moveDashboardSection: function(idx, dir) {
+                const order = ProApp.getNormalizedDashboardOrder();
+                const n = idx + dir;
+                if (n < 0 || n >= order.length) return;
+                [order[idx], order[n]] = [order[n], order[idx]];
+                ProApp.state.dashboardOrder = order;
+                ProApp.applyDashboardOrderAndCollapse();
+                ProApp.renderDashboardSectionsConfig();
+                ProApp.saveUiConfigToCloud();
+            },
+            renderDashboardSectionsConfig: function() {
+                const listEl = document.getElementById('dashboardSectionsConfigList');
+                if (!listEl) return;
+                const order = ProApp.getNormalizedDashboardOrder();
+                const vis = ProApp.state.visibleSections || {};
+                listEl.innerHTML = order.map((secId, idx) => {
+                    const meta = ProApp.dashboardSectionsMeta[secId];
+                    if (!meta) return '';
+                    const isChecked = vis[secId] !== false;
+                    return `
+                        <div class="flex items-center justify-between px-3 py-2.5 hover:bg-white/60 dark:hover:bg-white/5 transition gap-2">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <div class="flex flex-col gap-0.5 shrink-0">
+                                    <button type="button" onclick="ProApp.vibrate(); ProApp.moveDashboardSection(${idx}, -1)" ${idx === 0 ? 'disabled class="opacity-25 text-slate-400 px-1 py-0.5 leading-none"' : 'class="text-blue-600 dark:text-amber-400 hover:bg-blue-50 dark:hover:bg-white/10 rounded px-1 py-0.5 leading-none cursor-pointer"'} title="រំកិលឡើងលើ"><i class="fa-solid fa-chevron-up text-[9px]"></i></button>
+                                    <button type="button" onclick="ProApp.vibrate(); ProApp.moveDashboardSection(${idx}, 1)" ${idx === order.length - 1 ? 'disabled class="opacity-25 text-slate-400 px-1 py-0.5 leading-none"' : 'class="text-blue-600 dark:text-amber-400 hover:bg-blue-50 dark:hover:bg-white/10 rounded px-1 py-0.5 leading-none cursor-pointer"'} title="រំកិលចុះក្រោម"><i class="fa-solid fa-chevron-down text-[9px]"></i></button>
+                                </div>
+                                <span class="w-7 h-7 rounded-lg ${meta.color} flex items-center justify-center text-xs shrink-0"><i class="fa-solid ${meta.icon}"></i></span>
+                                <span class="text-xs font-bold truncate">${meta.label}</span>
+                            </div>
+                            <span class="ios-switch"><input type="checkbox" ${isChecked ? 'checked' : ''} onchange="ProApp.toggleSection('${secId}', this.checked)"><span class="ios-slider"></span></span>
+                        </div>`;
+                }).join('');
+            },
             toggleSection: function(secId, isVisible) {
                 if (!ProApp.state.visibleSections) ProApp.state.visibleSections = {};
                 ProApp.state.visibleSections[secId] = isVisible;
@@ -3138,13 +3299,13 @@
                     if (hero) hero.className = "bg-gradient-to-b from-blue-700 to-blue-900 rounded-b-[2.5rem] shadow-lg p-5 pb-12 text-white relative overflow-hidden pt-8 z-10 pt-safe";
                 }
 
-                if (ProApp.state.visibleSections) {
-                    Object.keys(ProApp.state.visibleSections).forEach(secId => {
-                        const isVis = ProApp.state.visibleSections[secId];
-                        const secEl = document.getElementById(secId);
-                        if (secEl) secEl.classList.toggle('hidden', !isVis);
-                    });
-                }
+                const allVis = Object.assign({ 'smartInsightContainer': true, 'servicesGridCard': true, 'sec-accounts': true, 'sec-goals': true, 'sec-budgets': true, 'sec-charts': true }, ProApp.state.visibleSections || {});
+                ProApp.state.visibleSections = allVis;
+                Object.keys(allVis).forEach(secId => {
+                    const secEl = document.getElementById(secId);
+                    if (secEl) secEl.classList.toggle('hidden', allVis[secId] === false);
+                });
+                ProApp.applyDashboardOrderAndCollapse();
                 const eyeCls = ProApp.state.hideAmounts ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
                 const eyeIcon = document.getElementById('eyeIcon');
                 const compactEye = document.getElementById('compactEyeIcon');
@@ -3158,6 +3319,8 @@
                     appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle,
                     bgImageUrl: ProApp.state.bgImageUrl, hideAmounts: ProApp.state.hideAmounts,
                     hiddenAccounts: ProApp.state.hiddenAccounts || [], visibleSections: ProApp.state.visibleSections || {},
+                    dashboardOrder: ProApp.state.dashboardOrder || ['sec-accounts', 'sec-goals', 'sec-budgets', 'sec-charts'],
+                    collapsedSections: ProApp.state.collapsedSections || {},
                     pinCode: ProApp.state.pinCode, exchangeRate: ProApp.state.exchangeRate,
                     tgBotToken: ProApp.state.tgBotToken || '', tgChatId: ProApp.state.tgChatId || '', tgAutoNotify: !!ProApp.state.tgAutoNotify
                 }));
@@ -3761,11 +3924,21 @@
                 }).join('');
             },
 
-            // 🐖 SAVINGS GOALS
+            // 🐖 SAVINGS GOALS (Auto-Slim when empty + Inline Edit)
             renderSavingsGoals: function(accBalances = {}) {
                 const container = document.getElementById('goalsContainer'); if (!container) return;
-                if (ProApp.state.goals.length === 0) {
-                    container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់មានគោលដៅសន្សំ។ ចុច "+ បន្ថែម" ដើម្បីកំណត់។</p>`;
+                const secEl = document.getElementById('sec-goals');
+                const hdrEl = document.getElementById('goalsHeaderRow');
+                const emptyHint = document.getElementById('goalsEmptyInlineHint');
+                const isEmpty = !ProApp.state.goals || ProApp.state.goals.length === 0;
+                const isCollapsed = !!(ProApp.state.collapsedSections && ProApp.state.collapsedSections['sec-goals']);
+
+                if (secEl) { secEl.classList.toggle('p-3.5', isEmpty); secEl.classList.toggle('p-5', !isEmpty); }
+                if (hdrEl) { hdrEl.classList.toggle('mb-0', isEmpty || isCollapsed); hdrEl.classList.toggle('mb-4', !isEmpty && !isCollapsed); }
+                if (emptyHint) emptyHint.classList.toggle('hidden', !isEmpty);
+
+                if (isEmpty) {
+                    container.innerHTML = '';
                     return;
                 }
                 container.innerHTML = ProApp.state.goals.map(g => {
@@ -3780,14 +3953,18 @@
                         currentVal = Math.max(0, totalUSD);
                     }
                     const pct = g.target > 0 ? Math.min(Math.round((currentVal / g.target) * 100), 100) : 0;
+                    const cardClick = isLinked ? `onclick="ProApp.vibrate(); ProApp.filterByAccountFromCard('${g.linkedAcc.replace(/'/g, "\'")}')"` : `onclick="ProApp.vibrate(); ProApp.openGoalModal('${g.id}')"`;
                     return `
-                        <div class="glass-input p-3.5 rounded-2xl">
-                            <div class="flex justify-between items-center mb-1.5 text-xs font-bold">
-                                <span class="flex items-center gap-1.5">
-                                    ${g.name} ${pct >= 100 ? '🏆' : ''}
-                                    ${isLinked ? `<span class="text-[9px] bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 px-1.5 py-0.5 rounded">🔗 ${g.linkedAcc}</span>` : ''}
+                        <div ${cardClick} class="glass-input p-3.5 rounded-2xl cursor-pointer hover:border-emerald-400 dark:hover:border-emerald-500/60 transition group">
+                            <div class="flex justify-between items-center mb-1.5 text-xs font-bold gap-2">
+                                <span class="flex items-center gap-1.5 min-w-0">
+                                    <span class="truncate">${ProApp.escapeHtml(g.name)} ${pct >= 100 ? '🏆' : ''}</span>
+                                    ${isLinked ? `<span class="text-[9px] bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 px-1.5 py-0.5 rounded shrink-0">🔗 ${ProApp.escapeHtml(g.linkedAcc)}</span>` : ''}
                                 </span>
-                                <span class="text-emerald-600 dark:text-emerald-400">${ProApp.formatMoney(currentVal, 'USD')} / ${ProApp.formatMoney(g.target, 'USD')} (${pct}%)</span>
+                                <span class="flex items-center gap-1.5 shrink-0">
+                                    <span class="text-emerald-600 dark:text-emerald-400 font-mono">${ProApp.formatMoney(currentVal, 'USD')} / ${ProApp.formatMoney(g.target, 'USD')} (${pct}%)</span>
+                                    <button type="button" onclick="event.stopPropagation(); ProApp.vibrate(); ProApp.openGoalModal('${g.id}')" class="w-6 h-6 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-500 hover:text-blue-600 flex items-center justify-center cursor-pointer" title="កែប្រែគោលដៅ"><i class="fa-solid fa-pen text-[10px]"></i></button>
+                                </span>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2.5 overflow-hidden">
                                 <div class="bg-emerald-500 h-2.5 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
@@ -3864,21 +4041,114 @@
                 }).join('');
             },
 
-            // 🎯 BUDGETS
+            // 🎯 BUDGETS (Multi-Currency Auto-Convert + Total Summary Pill + Click-to-Filter + Inline Quick Add/Edit)
+            openBudgetTransactions: function(budgetId) {
+                const b = ProApp.state.budgets.find(x => x.id === budgetId); if (!b) return;
+                ProApp.switchTab('entry');
+                const periodSel = document.getElementById('filterDatePeriod');
+                const accSel = document.getElementById('filterAccount');
+                const typeSel = document.getElementById('filterTxType');
+                const searchEl = document.getElementById('searchInput');
+                if (periodSel) periodSel.value = 'THIS_MONTH';
+                document.getElementById('filterDateTimeContainer')?.classList.add('hidden');
+                if (accSel) accSel.value = (b.linkedAcc && b.linkedAcc !== 'ALL' && ProApp.state.accounts.includes(b.linkedAcc)) ? b.linkedAcc : 'ALL';
+                if (typeSel) typeSel.value = 'EXP';
+                if (searchEl) searchEl.value = '';
+                ProApp.excelColumnFilters = {
+                    cat: { values: new Set([b.cat]), min: null, max: null }
+                };
+                ProApp.renderTable();
+                ProApp.showToast(`🔍 បង្ហាញចំណាយ «${b.cat}» ក្នុងខែនេះ`, 'info');
+            },
+            openQuickBudgetExpModal: function(budgetId) {
+                const b = ProApp.state.budgets.find(x => x.id === budgetId); if (!b) return;
+                ProApp.quickBudgetTargetId = budgetId;
+                document.getElementById('qbeTitle').textContent = `កត់ចំណាយ៖ ${b.cat}`;
+                document.getElementById('qbeSubtitle').textContent = (b.linkedAcc && b.linkedAcc !== 'ALL') ? `🔗 ${b.linkedAcc} • ថវិកា ${ProApp.formatMoney(b.limit, b.cur)}` : `ថវិកា ${ProApp.formatMoney(b.limit, b.cur)}`;
+                const curSel = document.getElementById('qbeCur');
+                const accSel = document.getElementById('qbeAcc');
+                if (curSel) {
+                    curSel.innerHTML = ProApp.state.currencies.map(c => `<option value="${ProApp.escapeHtml(c)}">${ProApp.escapeHtml(c)}</option>`).join('');
+                    if (ProApp.state.currencies.includes(b.cur)) curSel.value = b.cur;
+                }
+                if (accSel) {
+                    accSel.innerHTML = ProApp.state.accounts.map(a => `<option value="${ProApp.escapeHtml(a)}">${ProApp.escapeHtml(a)}</option>`).join('');
+                    if (b.linkedAcc && b.linkedAcc !== 'ALL' && ProApp.state.accounts.includes(b.linkedAcc)) accSel.value = b.linkedAcc;
+                }
+                document.getElementById('qbeAmount').value = '';
+                document.getElementById('qbeDesc').value = '';
+                document.getElementById('quickBudgetExpModal')?.classList.remove('hidden');
+                setTimeout(() => document.getElementById('qbeAmount')?.focus(), 180);
+            },
+            closeQuickBudgetExpModal: function() {
+                document.getElementById('quickBudgetExpModal')?.classList.add('hidden');
+                ProApp.quickBudgetTargetId = null;
+            },
+            submitQuickBudgetExpense: function() {
+                const b = ProApp.state.budgets.find(x => x.id === ProApp.quickBudgetTargetId); if (!b) return;
+                const rawAmt = document.getElementById('qbeAmount')?.value;
+                const parsed = ProApp.parseSmartAmount(rawAmt);
+                if (parsed.amount <= 0) { ProApp.showToast('សូមបញ្ចូលចំនួនចំណាយ!', 'error'); return; }
+                let cur = document.getElementById('qbeCur')?.value || b.cur || 'USD';
+                if (parsed.hasCurrencyStr) cur = parsed.isUSD ? 'USD' : 'KHR';
+                const acc = document.getElementById('qbeAcc')?.value || ProApp.state.accounts[0] || '🏦 ABA';
+                const desc = (document.getElementById('qbeDesc')?.value || '').trim() || b.cat;
+                const newTx = {
+                    id: ProApp.generateId(),
+                    date: ProApp.getLocalDateTimeISO(),
+                    cat: b.cat,
+                    desc: desc,
+                    acc: acc,
+                    cur: cur,
+                    inc: 0,
+                    exp: parsed.amount
+                };
+                ProApp.playChimeSound();
+                ProApp.syncTxWrite(newTx, true).then(() => {
+                    ProApp.showToast(`✅ បានកត់ចំណាយ ${ProApp.formatMoney(parsed.amount, cur)} ក្នុង «${b.cat}»!`, 'success');
+                });
+                ProApp.closeQuickBudgetExpModal();
+            },
             renderBudgetWidget: function() {
                 const container = document.getElementById('budgetProgressContainer'); if (!container) return;
-                if (ProApp.state.budgets.length === 0) {
-                    container.innerHTML = `<p class="text-xs text-gray-400 col-span-3">មិនទាន់បានកំណត់ថវិកា។ ចុច "⚙️ កំណត់" ដើម្បីកំណត់។</p>`;
+                const secEl = document.getElementById('sec-budgets');
+                const hdrEl = document.getElementById('budgetsHeaderRow');
+                const emptyHint = document.getElementById('budgetsEmptyInlineHint');
+                const pillEl = document.getElementById('budgetSummaryPill');
+                const isEmpty = !ProApp.state.budgets || ProApp.state.budgets.length === 0;
+                const isCollapsed = !!(ProApp.state.collapsedSections && ProApp.state.collapsedSections['sec-budgets']);
+
+                if (secEl) { secEl.classList.toggle('p-3.5', isEmpty); secEl.classList.toggle('p-5', !isEmpty); }
+                if (hdrEl) { hdrEl.classList.toggle('mb-0', isEmpty || isCollapsed); hdrEl.classList.toggle('mb-4', !isEmpty && !isCollapsed); }
+                if (emptyHint) emptyHint.classList.toggle('hidden', !isEmpty);
+
+                if (isEmpty) {
+                    if (pillEl) pillEl.classList.add('hidden');
+                    container.innerHTML = '';
                     return;
                 }
                 const currentMonth = ProApp.getLocalMonthStr(0);
+                const rate = ProApp.state.exchangeRate || 4100;
                 const isEn = ProApp.state.language === 'en';
+                let totalSpentUSD = 0, totalLimitUSD = 0;
+
                 container.innerHTML = ProApp.state.budgets.map(b => {
+                    const autoConvert = b.autoConvert !== false;
                     let spent = 0;
                     ProApp.state.transactions.forEach(tx => {
                         const matchAcc = (!b.linkedAcc || b.linkedAcc === 'ALL' || tx.acc === b.linkedAcc);
-                        if (tx.date && tx.date.substring(0, 7) === currentMonth && tx.cat === b.cat && tx.cur === b.cur && matchAcc) { spent += (tx.exp || 0); }
+                        if (!tx.date || tx.date.substring(0, 7) !== currentMonth || tx.cat !== b.cat || !matchAcc || !(tx.exp > 0)) return;
+                        if (tx.cur === b.cur) {
+                            spent += (Number(tx.exp) || 0);
+                        } else if (autoConvert) {
+                            if (b.cur === 'USD' && tx.cur === 'KHR') spent += (Number(tx.exp) || 0) / rate;
+                            else if (b.cur === 'KHR' && tx.cur === 'USD') spent += (Number(tx.exp) || 0) * rate;
+                        }
                     });
+                    spent = Math.round(spent * 100) / 100;
+                    totalSpentUSD += ProApp.toUSD(spent, b.cur);
+                    totalLimitUSD += ProApp.toUSD(b.limit, b.cur);
+
                     const rawPct = b.limit > 0 ? Math.round((spent / b.limit) * 100) : 0;
                     const pct = Math.min(rawPct, 100);
                     const remaining = Math.round(((b.limit || 0) - spent) * 100) / 100;
@@ -3902,13 +4172,20 @@
 
                     const isLinked = b.linkedAcc && b.linkedAcc !== 'ALL';
                     return `
-                        <div class="glass-input p-3.5 rounded-2xl">
+                        <div onclick="ProApp.vibrate(); ProApp.openBudgetTransactions('${b.id}')" class="glass-input p-3.5 rounded-2xl cursor-pointer hover:border-indigo-400 dark:hover:border-amber-400/60 transition group" title="ចុចដើម្បីមើលបញ្ជីចំណាយប្រភេទនេះក្នុងខែនេះ">
                             <div class="flex justify-between items-center mb-1.5 text-xs font-bold gap-2">
                                 <span class="flex items-center gap-1 min-w-0">
-                                    <span class="truncate">${b.cat} (${b.cur})</span>
-                                    ${isLinked ? `<span class="text-[9px] bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 px-1.5 py-0.5 rounded shrink-0">🔗 ${b.linkedAcc}</span>` : ''}
+                                    <span class="truncate">${ProApp.escapeHtml(b.cat)} (${ProApp.escapeHtml(b.cur)})</span>
+                                    ${isLinked ? `<span class="text-[9px] bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 px-1.5 py-0.5 rounded shrink-0">🔗 ${ProApp.escapeHtml(b.linkedAcc)}</span>` : ''}
                                 </span>
-                                <span class="${textClass} whitespace-nowrap">${ProApp.formatMoney(spent, b.cur)} / ${ProApp.formatMoney(b.limit, b.cur)} (${rawPct}%)</span>
+                                <span class="flex items-center gap-1 shrink-0">
+                                    <button type="button" onclick="event.stopPropagation(); ProApp.vibrate(); ProApp.openQuickBudgetExpModal('${b.id}')" class="w-6 h-6 rounded-lg bg-rose-50 dark:bg-rose-900/40 text-rose-600 dark:text-rose-300 hover:bg-rose-500 hover:text-white flex items-center justify-center transition cursor-pointer" title="កត់ចំណាយរហ័ស"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                                    <button type="button" onclick="event.stopPropagation(); ProApp.vibrate(); ProApp.openBudgetModal('${b.id}')" class="w-6 h-6 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-500 hover:text-indigo-600 dark:hover:text-amber-400 flex items-center justify-center transition cursor-pointer" title="កែប្រែថវិកា"><i class="fa-solid fa-pen text-[10px]"></i></button>
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center text-[11px] font-bold mb-1.5">
+                                <span class="${textClass} font-mono">${ProApp.formatMoney(spent, b.cur)} / ${ProApp.formatMoney(b.limit, b.cur)}</span>
+                                <span class="${textClass} font-mono">${rawPct}%</span>
                             </div>
                             <div class="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2.5 overflow-hidden">
                                 <div class="${colorClass} h-2.5 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
@@ -3919,9 +4196,26 @@
                             </div>
                         </div>`;
                 }).join('');
+
+                if (pillEl) {
+                    if (totalLimitUSD > 0) {
+                        const overallPct = Math.round((totalSpentUSD / totalLimitUSD) * 100);
+                        pillEl.classList.remove('hidden');
+                        pillEl.textContent = `${isEn ? 'Used' : 'ប្រើអស់'} ${ProApp.formatMoney(totalSpentUSD, 'USD')} / ${ProApp.formatMoney(totalLimitUSD, 'USD')} • ${overallPct}%`;
+                        if (overallPct >= 100) {
+                            pillEl.className = 'px-2.5 py-1 rounded-full text-[10px] font-extrabold font-mono bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-300 border border-rose-200/70 dark:border-rose-700/40';
+                        } else if (overallPct >= 80) {
+                            pillEl.className = 'px-2.5 py-1 rounded-full text-[10px] font-extrabold font-mono bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200/70 dark:border-amber-700/40';
+                        } else {
+                            pillEl.className = 'px-2.5 py-1 rounded-full text-[10px] font-extrabold font-mono bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-700/40';
+                        }
+                    } else {
+                        pillEl.classList.add('hidden');
+                    }
+                }
             },
             openBudgetModal: function(editId = null) {
-                const catSel = document.getElementById('bgCategory'), curSel = document.getElementById('bgCurrency'), accSel = document.getElementById('bgLinkedAcc'), saveBtn = document.getElementById('bgSaveBtn');
+                const catSel = document.getElementById('bgCategory'), curSel = document.getElementById('bgCurrency'), accSel = document.getElementById('bgLinkedAcc'), saveBtn = document.getElementById('bgSaveBtn'), autoChk = document.getElementById('bgAutoConvert');
                 if (catSel) catSel.innerHTML = ProApp.state.categories.map(c => `<option value="${c}">${c}</option>`).join('');
                 if (curSel) curSel.innerHTML = ProApp.state.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
                 if (accSel) accSel.innerHTML = `<option value="ALL">គ្រប់គណនីទាំងអស់ (ALL)</option>` + ProApp.state.accounts.map(a => `<option value="${a}">🔗 ភ្ជាប់កុង ${a}</option>`).join('');
@@ -3930,11 +4224,13 @@
                     if (budget) {
                         if (catSel) catSel.value = budget.cat; if (curSel) curSel.value = budget.cur; if (accSel) accSel.value = budget.linkedAcc || 'ALL';
                         document.getElementById('bgLimit').value = budget.limit;
+                        if (autoChk) autoChk.checked = budget.autoConvert !== false;
                         document.getElementById('budgetModal').setAttribute('data-edit-id', editId);
                         if (saveBtn) saveBtn.textContent = '✏️ រក្សាទុកការកែប្រែ';
                     }
                 } else {
                     document.getElementById('bgLimit').value = ''; if (accSel) accSel.value = 'ALL';
+                    if (autoChk) autoChk.checked = true;
                     document.getElementById('budgetModal').removeAttribute('data-edit-id');
                     if (saveBtn) saveBtn.textContent = 'រក្សាទុក';
                 }
@@ -3947,16 +4243,17 @@
                 const limit = ProApp.parseSmartAmount(document.getElementById('bgLimit').value).amount;
                 const cur = document.getElementById('bgCurrency').value;
                 const linkedAcc = document.getElementById('bgLinkedAcc')?.value || 'ALL';
+                const autoConvert = document.getElementById('bgAutoConvert')?.checked !== false;
                 const editId = document.getElementById('budgetModal').getAttribute('data-edit-id');
                 if (limit <= 0) { ProApp.showToast('សូមបញ្ចូលចំនួនថវិកា!', 'error'); return; }
                 if (editId) {
                     const budget = ProApp.state.budgets.find(b => b.id === editId);
-                    if (budget) { budget.cat = cat; budget.limit = limit; budget.cur = cur; budget.linkedAcc = linkedAcc; }
+                    if (budget) { budget.cat = cat; budget.limit = limit; budget.cur = cur; budget.linkedAcc = linkedAcc; budget.autoConvert = autoConvert; }
                     ProApp.showToast('បានកែប្រែថវិកា', 'success');
                 } else {
                     const existing = ProApp.state.budgets.find(b => b.cat === cat && b.cur === cur && (b.linkedAcc || 'ALL') === linkedAcc);
-                    if (existing) existing.limit = limit;
-                    else ProApp.state.budgets.push({ id: ProApp.generateId(), cat, limit, cur, linkedAcc });
+                    if (existing) { existing.limit = limit; existing.autoConvert = autoConvert; }
+                    else ProApp.state.budgets.push({ id: ProApp.generateId(), cat, limit, cur, linkedAcc, autoConvert });
                     ProApp.showToast('បានរក្សាទុកថវិកា', 'success');
                 }
                 ProApp.saveBudgetsToCloud(); ProApp.renderBudgetList();
@@ -4996,7 +5293,9 @@
                     ProApp.state.bgImageUrl = parsed.bgImageUrl || '';
                     ProApp.state.hideAmounts = !!parsed.hideAmounts;
                     ProApp.state.hiddenAccounts = parsed.hiddenAccounts || [];
-                    if (parsed.visibleSections) ProApp.state.visibleSections = parsed.visibleSections;
+                    if (parsed.visibleSections) ProApp.state.visibleSections = Object.assign({ 'smartInsightContainer': true, 'servicesGridCard': true, 'sec-accounts': true, 'sec-goals': true, 'sec-budgets': true, 'sec-charts': true }, parsed.visibleSections);
+                    if (Array.isArray(parsed.dashboardOrder) && parsed.dashboardOrder.length) ProApp.state.dashboardOrder = parsed.dashboardOrder;
+                    if (parsed.collapsedSections && typeof parsed.collapsedSections === 'object') ProApp.state.collapsedSections = parsed.collapsedSections;
                     ProApp.state.titleColor = parsed.titleColor || '#ffffff';
                     ProApp.state.subtitleColor = parsed.subtitleColor || '#bfdbfe';
                     ProApp.state.pinCode = parsed.pinCode || '';
@@ -5056,6 +5355,7 @@
                 if (e.key === 'Escape') {
                     ProApp.closeAllExcelMenus();
                     ProApp.closeCustomSortModal();
+                    ProApp.closeQuickBudgetExpModal();
                 }
             });
             document.getElementById('tableScrollContainer')?.addEventListener('scroll', () => {
