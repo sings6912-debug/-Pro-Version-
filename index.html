@@ -176,14 +176,14 @@
         /* Glassmorphism Classes (Theme-Aware Frosted Luxury Glass) */
         .glass-panel {
             background: var(--t-panel-bg) !important;
-            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--t-panel-border) !important;
             box-shadow: 0 10px 30px -8px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.28);
             transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.3s ease;
         }
         .glass-modal {
             background: var(--t-modal-bg) !important;
-            backdrop-filter: blur(26px); -webkit-backdrop-filter: blur(26px);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             box-shadow: 0 28px 60px -12px rgba(0, 0, 0, 0.35);
             border: 1px solid var(--t-panel-border) !important;
         }
@@ -564,6 +564,84 @@
             background-size: 33.333% 33.333%;
         }
 
+
+        /* 🚀 V12 ULTIMATE: WELCOME INTRO, THEMED PIN LOCK, XP BAR, MUSIC, CALENDAR, TAGS & FLEX CARD */
+        @keyframes welcomeLogoIn {
+            0% { transform: scale(0.72) translateY(16px); opacity: 0; }
+            60% { transform: scale(1.06) translateY(-2px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        @keyframes welcomeRingSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes musicEqBar {
+            0%, 100% { transform: scaleY(0.35); }
+            50% { transform: scaleY(1); }
+        }
+        #welcomeIntroOverlay {
+            background: var(--t-hero-bg);
+            transition: opacity 0.45s ease, transform 0.45s ease;
+        }
+        #welcomeIntroOverlay.welcome-fade-out {
+            opacity: 0; transform: scale(1.04); pointer-events: none;
+        }
+        .welcome-emblem-ring {
+            animation: welcomeRingSpin 14s linear infinite;
+            border-color: var(--t-hero-border);
+        }
+        .welcome-card-pop {
+            animation: welcomeLogoIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* 🔐 Themed PIN Lock Screen */
+        #pinLockOverlay {
+            background: var(--t-hero-bg) !important;
+        }
+        #pinLockOverlay .pin-dot {
+            border-color: var(--t-accent) !important;
+        }
+        #pinLockOverlay .pin-dot.filled {
+            background-color: var(--t-accent) !important;
+            box-shadow: 0 0 12px var(--t-accent) !important;
+        }
+        #pinLockOverlay .pin-key-btn {
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid var(--t-hero-border);
+        }
+        #pinLockOverlay .pin-key-btn:active {
+            background: var(--t-accent-soft);
+            border-color: var(--t-accent);
+        }
+
+        /* 🎵 Header Music Playing Equalizer */
+        .eq-bars { display: inline-flex; align-items: flex-end; gap: 1.5px; height: 12px; }
+        .eq-bars span { width: 2.5px; height: 100%; background: currentColor; border-radius: 2px; transform-origin: bottom; animation: musicEqBar 0.7s ease-in-out infinite; }
+        .eq-bars span:nth-child(2) { animation-delay: 0.2s; }
+        .eq-bars span:nth-child(3) { animation-delay: 0.4s; }
+
+        /* 📅 Calendar Heatmap Cells */
+        .cal-day-cell {
+            min-height: 44px; border-radius: 12px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 1px; cursor: pointer;
+            transition: transform 0.15s ease, border-color 0.15s ease;
+        }
+        .cal-day-cell:active { transform: scale(0.92); }
+        .cal-day-cell.is-selected { box-shadow: 0 0 0 2px var(--t-accent); }
+
+        /* 🏷️ #Tag Chips */
+        .tx-tag-pill {
+            display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px;
+            border-radius: 9999px; font-size: 10.5px; font-weight: 800; cursor: pointer;
+            border: 1px solid var(--t-hero-border); background: var(--t-accent-soft);
+            color: var(--t-accent); transition: transform 0.15s ease; white-space: nowrap;
+        }
+        .tx-tag-pill:active { transform: scale(0.94); }
+        .tx-tag-pill.is-active { background: var(--t-fab-bg); color: #ffffff !important; border-color: transparent; }
+
+        /* GPU Layer Hints */
+        #heroCard, #bottomNavBar, #themeAmbientCanvas { will-change: transform; }
+
         /* 🖨️ Clean A4 Print Stylesheet */
         @media print {
             body { background: #ffffff !important; background-image: none !important; color: #0f172a !important; padding: 0 !important; margin: 0 !important; }
@@ -608,32 +686,55 @@
         </div>
     </div>
 
-    <!-- 🔒 PIN & BIOMETRIC SECURITY LOCK OVERLAY -->
-    <div id="pinLockOverlay" class="fixed inset-0 z-[140] bg-slate-950/95 backdrop-blur-2xl flex flex-col items-center justify-center text-white hidden">
-        <div class="text-center mb-8">
-            <div class="w-16 h-16 bg-blue-600/20 border border-blue-500/40 rounded-full flex items-center justify-center mx-auto mb-3 text-blue-400 text-2xl"><i class="fa-solid fa-lock"></i></div>
-            <h2 class="text-xl font-bold" id="pinLockTitle">បញ្ចូលលេខកូដ PIN ៤ ខ្ទង់</h2>
+    <!-- 🔒 V12 THEMED PIN & BIOMETRIC SECURITY LOCK OVERLAY -->
+    <div id="pinLockOverlay" class="fixed inset-0 z-[140] flex flex-col items-center justify-center text-white hidden overflow-hidden">
+        <div id="pinLockEmblemBg" class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none scale-150"></div>
+        <div class="relative z-10 text-center mb-7 px-6">
+            <div id="pinLockAvatarBox" class="w-20 h-20 bg-white/15 border-2 border-white/30 rounded-3xl overflow-hidden flex items-center justify-center mx-auto mb-3 text-3xl shadow-2xl">
+                <i class="fa-solid fa-lock text-amber-300"></i>
+            </div>
+            <div id="pinLockBadge" class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-black/30 border border-white/20 text-[10px] font-black tracking-widest uppercase mb-2">🔐 SECURE VAULT</div>
+            <h2 class="text-lg font-black" id="pinLockTitle">បញ្ចូលលេខកូដ PIN ៤ ខ្ទង់</h2>
         </div>
-        <div class="flex gap-4 mb-8">
+        <div class="relative z-10 flex gap-4 mb-7">
             <div class="pin-dot" id="dot-0"></div><div class="pin-dot" id="dot-1"></div><div class="pin-dot" id="dot-2"></div><div class="pin-dot" id="dot-3"></div>
         </div>
-        <div class="grid grid-cols-3 gap-4 w-72">
-            <button onclick="ProApp.pressPin('1')" class="h-16 bg-white/10 hover:bg-white/20 rounded-full text-2xl font-bold transition active:scale-90">1</button>
-            <button onclick="ProApp.pressPin('2')" class="h-16 bg-white/10 hover:bg-white/20 rounded-full text-2xl font-bold transition active:scale-90">2</button>
-            <button onclick="ProApp.pressPin('3')" class="h-16 bg-white/10 hover:bg-white/20 rounded-full text-2xl font-bold transition active:scale-90">3</button>
-            <button onclick="ProApp.pressPin('4')" class="h-16 bg-white/10 hover:bg-white/20 rounded-full text-2xl font-bold transition active:scale-90">4</button>
-            <button onclick="ProApp.pressPin('5')" class="h-16 bg-white/10 hover:bg-white/20 rounded-full text-2xl font-bold transition active:scale-90">5</button>
-            <button onclick="ProApp.pressPin('6')" class="h-16 bg-white/10 hover:bg-white/20 rounded-full text-2xl font-bold transition active:scale-90">6</button>
-            <button onclick="ProApp.pressPin('7')" class="h-16 bg-white/10 hover:bg-white/20 rounded-full text-2xl font-bold transition active:scale-90">7</button>
-            <button onclick="ProApp.pressPin('8')" class="h-16 bg-white/10 hover:bg-white/20 rounded-full text-2xl font-bold transition active:scale-90">8</button>
-            <button onclick="ProApp.pressPin('9')" class="h-16 bg-white/10 hover:bg-white/20 rounded-full text-2xl font-bold transition active:scale-90">9</button>
-            <!-- 🪪 Biometric FaceID / Fingerprint Button -->
-            <button id="btnBioUnlock" onclick="ProApp.verifyBiometric()" class="h-16 bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/40 rounded-full text-2xl font-bold transition active:scale-90 hidden items-center justify-center" title="ដោះសោរដោយស្កេនមុខ/ក្រយៅដៃ">
+        <div class="relative z-10 grid grid-cols-3 gap-3.5 w-72">
+            <button type="button" onclick="ProApp.pressPin('1')" class="pin-key-btn h-16 rounded-full text-2xl font-bold transition active:scale-90 cursor-pointer">1</button>
+            <button type="button" onclick="ProApp.pressPin('2')" class="pin-key-btn h-16 rounded-full text-2xl font-bold transition active:scale-90 cursor-pointer">2</button>
+            <button type="button" onclick="ProApp.pressPin('3')" class="pin-key-btn h-16 rounded-full text-2xl font-bold transition active:scale-90 cursor-pointer">3</button>
+            <button type="button" onclick="ProApp.pressPin('4')" class="pin-key-btn h-16 rounded-full text-2xl font-bold transition active:scale-90 cursor-pointer">4</button>
+            <button type="button" onclick="ProApp.pressPin('5')" class="pin-key-btn h-16 rounded-full text-2xl font-bold transition active:scale-90 cursor-pointer">5</button>
+            <button type="button" onclick="ProApp.pressPin('6')" class="pin-key-btn h-16 rounded-full text-2xl font-bold transition active:scale-90 cursor-pointer">6</button>
+            <button type="button" onclick="ProApp.pressPin('7')" class="pin-key-btn h-16 rounded-full text-2xl font-bold transition active:scale-90 cursor-pointer">7</button>
+            <button type="button" onclick="ProApp.pressPin('8')" class="pin-key-btn h-16 rounded-full text-2xl font-bold transition active:scale-90 cursor-pointer">8</button>
+            <button type="button" onclick="ProApp.pressPin('9')" class="pin-key-btn h-16 rounded-full text-2xl font-bold transition active:scale-90 cursor-pointer">9</button>
+            <button type="button" id="btnBioUnlock" onclick="ProApp.verifyBiometric()" class="h-16 bg-emerald-500/25 text-emerald-300 border border-emerald-400/40 rounded-full text-2xl font-bold transition active:scale-90 hidden items-center justify-center cursor-pointer" title="ដោះសោរដោយស្កេនមុខ/ក្រយៅដៃ">
                 <i class="fa-solid fa-fingerprint"></i>
             </button>
             <div id="pinEmptySpacer"></div>
-            <button onclick="ProApp.pressPin('0')" class="h-16 bg-white/10 hover:bg-white/20 rounded-full text-2xl font-bold transition active:scale-90">0</button>
-            <button onclick="ProApp.clearPin()" class="h-16 bg-rose-500/20 text-rose-400 hover:bg-rose-500/40 rounded-full text-lg font-bold transition active:scale-90"><i class="fa-solid fa-delete-left"></i></button>
+            <button type="button" onclick="ProApp.pressPin('0')" class="pin-key-btn h-16 rounded-full text-2xl font-bold transition active:scale-90 cursor-pointer">0</button>
+            <button type="button" onclick="ProApp.clearPin()" class="h-16 bg-rose-500/25 text-rose-300 border border-rose-400/35 rounded-full text-lg font-bold transition active:scale-90 cursor-pointer"><i class="fa-solid fa-delete-left"></i></button>
+        </div>
+    </div>
+
+    <!-- ✨ V12 CINEMATIC 28-THEME WELCOME INTRO OVERLAY (CLIENT-READY, 1-TAP SOUND & ENTER) -->
+    <div id="welcomeIntroOverlay" onclick="ProApp.dismissWelcomeIntro(true)" class="fixed inset-0 z-[138] hidden flex flex-col items-center justify-center text-white p-6 overflow-hidden cursor-pointer select-none">
+        <div id="welcomeEmblemWatermark" class="absolute inset-0 flex items-center justify-center opacity-15 pointer-events-none scale-150"></div>
+        <div class="relative z-10 flex flex-col items-center text-center max-w-sm w-full welcome-card-pop">
+            <div class="relative w-28 h-28 flex items-center justify-center mb-5">
+                <div class="welcome-emblem-ring absolute inset-0 rounded-full border-2 border-dashed opacity-75"></div>
+                <div id="welcomeAvatarOrb" class="w-20 h-20 rounded-3xl bg-white/15 border-2 border-white/40 shadow-2xl overflow-hidden flex items-center justify-center text-4xl">🥜</div>
+            </div>
+            <div id="welcomeThemeTag" class="px-3.5 py-1 rounded-full bg-black/30 border border-white/25 text-[10px] font-black tracking-widest uppercase mb-2.5">PRO CLOUD EDITION</div>
+            <h2 id="welcomeTitleText" class="text-2xl sm:text-3xl font-black tracking-tight drop-shadow-md mb-1.5">សូមស្វាគមន៍!</h2>
+            <p id="welcomeSubtitleText" class="text-xs sm:text-sm text-white/80 font-bold leading-relaxed mb-6">រៀបចំហិរញ្ញវត្ថុរបស់អ្នកដោយភាពវៃឆ្លាត ✨</p>
+            <div class="flex items-center gap-2">
+                <button type="button" onclick="event.stopPropagation(); ProApp.dismissWelcomeIntro(true)" class="px-6 py-2.5 rounded-2xl bg-white/20 hover:bg-white/30 border border-white/35 text-xs font-black backdrop-blur-md shadow-lg active:scale-95 transition cursor-pointer flex items-center gap-2">
+                    <i class="fa-solid fa-sparkles"></i> <span>ចូលប្រើកម្មវិធី</span>
+                </button>
+            </div>
+            <p class="text-[9.5px] text-white/55 mt-4 font-bold">ចុចត្រង់ណាក៏បាន ដើម្បីចូល និងបន្លឺសំឡេងស្វាគមន៍</p>
         </div>
     </div>
 
@@ -692,8 +793,8 @@
                 <div id="heroScanline"></div>
                 <div id="heroEmblemLayer"></div>
                 <canvas id="heroFxCanvas"></canvas>
-                <div id="heroGlowOrb" class="absolute -top-16 -right-12 w-72 h-72 rounded-full blur-3xl pointer-events-none"></div>
-                <div id="heroGlowOrb2" class="absolute -bottom-20 -left-14 w-64 h-64 rounded-full blur-3xl pointer-events-none"></div>
+                <div id="heroGlowOrb" class="absolute -top-16 -right-12 w-64 h-64 rounded-full blur-2xl pointer-events-none"></div>
+                <div id="heroGlowOrb2" class="absolute -bottom-20 -left-14 w-56 h-56 rounded-full blur-2xl pointer-events-none"></div>
                 
                 <div class="flex justify-between items-center relative z-10 mb-4 gap-2">
                     <div class="flex items-center gap-3 min-w-0">
@@ -714,9 +815,16 @@
                             </p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button type="button" onclick="ProApp.vibrate(); ProApp.openThemeStudioModal()" class="w-9 h-9 bg-white/12 backdrop-blur-md text-amber-300 rounded-full flex items-center justify-center border border-white/20 hover:bg-white/25 hover:text-white active:scale-95 transition cursor-pointer" title="🎨 ប្តូរ Theme ទាំង 28 ម៉ូដ (Luxury & Anime)">
-                            <i class="fa-solid fa-palette text-sm"></i>
+                    <div class="flex items-center gap-1 shrink-0">
+                        <button type="button" id="headerMusicBtn" onclick="ProApp.vibrate(); ProApp.openMusicModal()" class="w-8 h-8 sm:w-9 sm:h-9 bg-white/12 backdrop-blur-md text-sky-200 rounded-full flex items-center justify-center border border-white/20 hover:bg-white/25 hover:text-white active:scale-95 transition cursor-pointer relative" title="🎵 ភ្លេង 14 បទ &amp; ចម្រៀង MP3">
+                            <i id="headerMusicIcon" class="fa-solid fa-music text-xs sm:text-sm"></i>
+                            <span id="headerMusicEq" class="hidden eq-bars text-amber-300"><span></span><span></span><span></span></span>
+                        </button>
+                        <button type="button" id="headerSoundBtn" onclick="ProApp.vibrate(); ProApp.quickToggleGlobalSound()" class="w-8 h-8 sm:w-9 sm:h-9 bg-white/12 backdrop-blur-md text-white rounded-full flex items-center justify-center border border-white/20 hover:bg-white/25 active:scale-95 transition cursor-pointer" title="🔊 បើក / បិទ សំឡេងទាំងអស់">
+                            <i id="headerSoundIcon" class="fa-solid fa-volume-high text-xs sm:text-sm"></i>
+                        </button>
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.openThemeStudioModal()" class="w-8 h-8 sm:w-9 sm:h-9 bg-white/12 backdrop-blur-md text-amber-300 rounded-full flex items-center justify-center border border-white/20 hover:bg-white/25 hover:text-white active:scale-95 transition cursor-pointer" title="🎨 ប្តូរ Theme ទាំង 28 ម៉ូដ (Luxury & Anime)">
+                            <i class="fa-solid fa-palette text-xs sm:text-sm"></i>
                         </button>
                         <button onclick="ProApp.vibrate(); ProApp.manualCloudSync('auto')" class="w-9 h-9 bg-white/10 backdrop-blur-md text-emerald-300 rounded-full flex items-center justify-center border border-white/20 hover:bg-emerald-500/30 hover:text-white active:scale-95 transition cursor-pointer relative" title="Sync ទិន្នន័យជាមួយ Cloud">
                             <i id="headerSyncIcon" class="fa-solid fa-cloud-arrow-up text-sm"></i>
@@ -773,6 +881,23 @@
                             <i class="fa-solid fa-rotate text-[11px]" id="rateSyncSpin"></i>
                         </button>
                     </div>
+
+                    <!-- 🏆 V12 XP RANK + 🔥 DAILY STREAK BAR (Tap for Daily Quests!) -->
+                    <div id="heroXpStrip" onclick="ProApp.vibrate(); ProApp.openQuestsModal()" class="max-w-md mx-auto mt-3 px-3 py-2 rounded-2xl bg-black/25 border border-white/15 cursor-pointer hover:bg-black/35 transition">
+                        <div class="flex items-center justify-between text-[10px] font-black mb-1 gap-2">
+                            <span class="flex items-center gap-1.5 truncate">
+                                <span id="heroRankBadge" class="theme-accent-text">🏆 Lv.1 • Silver</span>
+                                <span id="heroQuestDot" class="hidden w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="មានបេសកកម្មអាច Claim XP!"></span>
+                            </span>
+                            <span class="flex items-center gap-2 shrink-0 font-mono">
+                                <span id="heroStreakBadge" class="text-amber-300">🔥 0 ថ្ងៃ</span>
+                                <span id="heroXpNumbers" class="text-white/75">0 XP</span>
+                            </span>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-white/15 overflow-hidden">
+                            <div id="heroXpBarFill" class="h-full rounded-full theme-btn-primary transition-all duration-500" style="width: 12%"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -803,45 +928,54 @@
 
                 <div class="grid grid-cols-3 md:grid-cols-9 gap-y-4 gap-x-2 transition-all duration-300 scroll-smooth touch-pan-x" id="servicesGridContainer" style="-webkit-overflow-scrolling: touch;" onscroll="ProApp.updateServicesScrollDots()">
                     <button onclick="ProApp.vibrate(); ProApp.switchTab('entry');" class="service-item-btn flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-95 transition-transform">
-                        <div class="w-12 h-12 rounded-[18px] bg-blue-100/80 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl shadow-sm border border-blue-200/50 dark:border-blue-800/50"><i class="fa-solid fa-pen-to-square"></i></div>
+                        <div class="w-12 h-12 rounded-[18px] bg-blue-100/80 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl shadow-sm border border-blue-200/50 dark:border-blue-800/50"><span id="srvIcon-0"><i class="fa-solid fa-pen-to-square"></i></span></div>
                         <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center whitespace-nowrap" data-i18n="srvLedger">បញ្ជី</span>
                     </button>
                     <button onclick="ProApp.vibrate(); ProApp.openTransferModal()" class="service-item-btn flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-95 transition-transform">
-                        <div class="w-12 h-12 rounded-[18px] bg-emerald-100/80 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl shadow-sm border border-emerald-200/50 dark:border-emerald-800/50"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                        <div class="w-12 h-12 rounded-[18px] bg-emerald-100/80 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl shadow-sm border border-emerald-200/50 dark:border-emerald-800/50"><span id="srvIcon-1"><i class="fa-solid fa-money-bill-transfer"></i></span></div>
                         <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center whitespace-nowrap" data-i18n="srvTransfer">ផ្ទេរប្រាក់</span>
                     </button>
                     <button onclick="ProApp.vibrate(); ProApp.openExchangeModal()" class="service-item-btn flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-95 transition-transform">
-                        <div class="w-12 h-12 rounded-[18px] bg-purple-100/80 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl shadow-sm border border-purple-200/50 dark:border-purple-800/50"><i class="fa-solid fa-right-left"></i></div>
+                        <div class="w-12 h-12 rounded-[18px] bg-purple-100/80 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl shadow-sm border border-purple-200/50 dark:border-purple-800/50"><span id="srvIcon-2"><i class="fa-solid fa-right-left"></i></span></div>
                         <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center whitespace-nowrap" data-i18n="srvExchange">ប្តូរប្រាក់</span>
                     </button>
                     <button onclick="ProApp.vibrate(); ProApp.openDebtModal()" class="service-item-btn flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-95 transition-transform">
                         <div class="w-12 h-12 rounded-[18px] bg-rose-100/80 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl shadow-sm border border-rose-200/50 dark:border-rose-800/50 relative">
-                            <i class="fa-solid fa-hand-holding-dollar"></i><span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-rose-500 rounded-full border-2 border-white dark:border-zinc-900 hidden" id="debtBadge"></span>
+                            <span id="srvIcon-3"><i class="fa-solid fa-hand-holding-dollar"></i></span><span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-rose-500 rounded-full border-2 border-white dark:border-zinc-900 hidden" id="debtBadge"></span>
                         </div>
                         <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center whitespace-nowrap" data-i18n="srvDebts">បំណុល</span>
                     </button>
                     <button onclick="ProApp.vibrate(); ProApp.openRecurringModal()" class="service-item-btn flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-95 transition-transform">
                         <div class="w-12 h-12 rounded-[18px] bg-amber-100/80 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl shadow-sm border border-amber-200/50 dark:border-amber-800/50 relative">
-                            <i class="fa-solid fa-clock-rotate-left"></i><span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-rose-500 rounded-full border-2 border-white dark:border-zinc-900 hidden" id="recBadge"></span>
+                            <span id="srvIcon-4"><i class="fa-solid fa-clock-rotate-left"></i></span><span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-rose-500 rounded-full border-2 border-white dark:border-zinc-900 hidden" id="recBadge"></span>
                         </div>
                         <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center whitespace-nowrap" data-i18n="srvAuto">ស្វ័យប្រវត្តិ</span>
                     </button>
                     <button onclick="ProApp.vibrate(); ProApp.openAccountsModal()" class="service-item-btn service-extra-row flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-95 transition-transform">
-                        <div class="w-12 h-12 rounded-[18px] bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm border border-slate-200/50 dark:border-slate-700/50"><i class="fa-solid fa-building-columns"></i></div>
+                        <div class="w-12 h-12 rounded-[18px] bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm border border-slate-200/50 dark:border-slate-700/50"><span id="srvIcon-5"><i class="fa-solid fa-building-columns"></i></span></div>
                         <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center whitespace-nowrap" data-i18n="srvAccounts">គណនី</span>
                     </button>
                     <button onclick="ProApp.vibrate(); ProApp.openCategoriesModal()" class="service-item-btn service-extra-row flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-95 transition-transform">
-                        <div class="w-12 h-12 rounded-[18px] bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm border border-slate-200/50 dark:border-slate-700/50"><i class="fa-solid fa-icons"></i></div>
+                        <div class="w-12 h-12 rounded-[18px] bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm border border-slate-200/50 dark:border-slate-700/50"><span id="srvIcon-6"><i class="fa-solid fa-icons"></i></span></div>
                         <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center whitespace-nowrap" data-i18n="srvCategories">ប្រភេទ</span>
                     </button>
                     <button onclick="ProApp.vibrate(); ProApp.openCurrenciesModal()" class="service-item-btn service-extra-row flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-95 transition-transform">
-                        <div class="w-12 h-12 rounded-[18px] bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm border border-slate-200/50 dark:border-slate-700/50"><i class="fa-solid fa-coins"></i></div>
+                        <div class="w-12 h-12 rounded-[18px] bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm border border-slate-200/50 dark:border-slate-700/50"><span id="srvIcon-7"><i class="fa-solid fa-coins"></i></span></div>
                         <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center whitespace-nowrap" data-i18n="srvCurrencies">ខ្នាត</span>
                     </button>
                     <button onclick="ProApp.vibrate(); ProApp.openCustomizeModal()" class="service-item-btn service-extra-row flex flex-col items-center justify-center gap-1.5 group cursor-pointer active:scale-95 transition-transform">
-                        <div class="w-12 h-12 rounded-[18px] bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm border border-slate-200/50 dark:border-slate-700/50"><i class="fa-solid fa-gear"></i></div>
+                        <div class="w-12 h-12 rounded-[18px] bg-slate-100/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xl shadow-sm border border-slate-200/50 dark:border-slate-700/50"><span id="srvIcon-8"><i class="fa-solid fa-gear"></i></span></div>
                         <span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center whitespace-nowrap" data-i18n="srvSettings">ការកំណត់</span>
                     </button>
+                </div>
+
+                <!-- ✨ V12 SMART TOOLS RIBBON (1-Tap: Quests, Calendar, Affordability, Music, Flex Card) -->
+                <div class="mt-3 pt-2.5 border-t border-gray-200/40 dark:border-white/10 flex items-center gap-1.5 overflow-x-auto hide-scrollbar">
+                    <button type="button" onclick="ProApp.vibrate(); ProApp.openQuestsModal()" class="px-2.5 py-1.5 rounded-xl glass-input text-[10.5px] font-extrabold whitespace-nowrap cursor-pointer active:scale-95 transition flex items-center gap-1.5 shrink-0"><span>📜</span> <span>បេសកកម្ម &amp; XP</span></button>
+                    <button type="button" onclick="ProApp.vibrate(); ProApp.openCalendarModal()" class="px-2.5 py-1.5 rounded-xl glass-input text-[10.5px] font-extrabold whitespace-nowrap cursor-pointer active:scale-95 transition flex items-center gap-1.5 shrink-0"><span>📅</span> <span>ប្រតិទិនចំណាយ</span></button>
+                    <button type="button" onclick="ProApp.vibrate(); ProApp.openAffordModal()" class="px-2.5 py-1.5 rounded-xl glass-input text-[10.5px] font-extrabold whitespace-nowrap cursor-pointer active:scale-95 transition flex items-center gap-1.5 shrink-0"><span>🧮</span> <span>គួរទិញឬអត់?</span></button>
+                    <button type="button" onclick="ProApp.vibrate(); ProApp.openMusicModal()" class="px-2.5 py-1.5 rounded-xl glass-input text-[10.5px] font-extrabold whitespace-nowrap cursor-pointer active:scale-95 transition flex items-center gap-1.5 shrink-0"><span>🎵</span> <span>ភ្លេង 14 &amp; MP3</span></button>
+                    <button type="button" onclick="ProApp.vibrate(); ProApp.openFlexCardModal()" class="px-2.5 py-1.5 rounded-xl glass-input text-[10.5px] font-extrabold whitespace-nowrap cursor-pointer active:scale-95 transition flex items-center gap-1.5 shrink-0"><span>🪪</span> <span>កាតសង្ខេបខែ</span></button>
                 </div>
 
                 <!-- ↔️ 1-Row Horizontal Swipe Indicator (Clean & Compact) -->
@@ -1015,6 +1149,15 @@
                     </div>
                 </div>
 
+                <!-- 🏷️ #TAG EVENT FILTER STRIP (Auto-detected from #tags in descriptions) -->
+                <div id="txTagsFilterBar" class="hidden glass-panel px-3.5 py-2.5 rounded-2xl space-y-2">
+                    <div class="flex items-center justify-between gap-2 text-[10.5px] font-extrabold">
+                        <span class="theme-accent-text flex items-center gap-1.5"><i class="fa-solid fa-hashtag"></i> <span>#Tag ព្រឹត្តិការណ៍ (ចុចដើម្បីបូកសរុប)</span></span>
+                        <button type="button" id="btnClearActiveTag" onclick="ProApp.vibrate(); ProApp.selectTxTag('')" class="hidden px-2 py-0.5 rounded-lg bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-300 text-[10px] font-bold cursor-pointer">✕ លុបតម្រង Tag</button>
+                    </div>
+                    <div id="txTagsChipsWrap" class="flex items-center gap-1.5 overflow-x-auto hide-scrollbar"></div>
+                </div>
+
                 <!-- Slim Summary Strip -->
                 <div id="todaySummaryBanner" class="glass-panel px-4 py-2.5 rounded-2xl flex flex-wrap items-center justify-between text-[11px] font-bold gap-2">
                     <span class="text-slate-600 dark:text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-chart-line text-blue-500 dark:text-amber-400"></i> <span data-i18n="summaryBanner">សង្ខេបចំណូលចំណាយ៖</span></span>
@@ -1167,7 +1310,8 @@
                             <input type="datetime-local" step="1" id="customEndDate" onchange="ProApp.renderReports()" class="bg-transparent border border-gray-200/50 dark:border-white/10 text-xs rounded-lg p-2 font-mono flex-1 outline-none">
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.openFlexCardModal()" class="flex-1 sm:flex-none px-4 py-2.5 theme-btn-primary text-[11px] font-extrabold rounded-xl flex items-center justify-center gap-1.5 transition cursor-pointer active:scale-95"><i class="fa-solid fa-id-card"></i> កាតសង្ខេបខែ</button>
                         <button onclick="ProApp.vibrate(); ProApp.exportToPDF()" class="flex-1 sm:flex-none px-4 py-2.5 bg-rose-50/80 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400 border border-rose-200/70 dark:border-rose-800/50 text-[11px] font-bold rounded-xl flex items-center justify-center gap-1.5 transition shadow-sm cursor-pointer active:scale-95"><i class="fa-solid fa-file-pdf"></i> Save PDF</button>
                         <button onclick="ProApp.vibrate(); window.print()" class="flex-1 sm:flex-none px-4 py-2.5 bg-slate-100/80 text-slate-700 dark:bg-black/20 dark:text-slate-300 border border-slate-200/70 dark:border-white/10 text-[11px] font-bold rounded-xl flex items-center justify-center gap-1.5 transition shadow-sm cursor-pointer active:scale-95"><i class="fa-solid fa-print"></i> បោះពុម្ព</button>
                     </div>
@@ -1375,13 +1519,18 @@
                         <button type="button" onclick="ProApp.vibrate(); ProApp.openAvatarCropperModal()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-extrabold rounded-xl shadow-sm active:scale-95 transition cursor-pointer shrink-0">ដូររូប</button>
                     </div>
 
-                    <!-- ✏️ App Title & Subtitle -->
+                    <!-- ✏️ App Title, Subtitle & Client Welcome Name -->
                     <div class="settings-card space-y-2.5">
                         <label class="block text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase flex items-center gap-1.5">
-                            <i class="fa-solid fa-pen-nib text-blue-500"></i> ឈ្មោះកម្មវិធី &amp; ការរៀបរាប់៖
+                            <i class="fa-solid fa-pen-nib text-blue-500"></i> ឈ្មោះកម្មវិធី • ការរៀបរាប់ • ផ្ទាំងស្វាគមន៍៖
                         </label>
                         <input type="text" id="cfgAppTitle" placeholder="ឈ្មោះប្រព័ន្ធ..." class="glass-input w-full min-w-0 p-2.5 text-xs font-bold rounded-xl outline-none">
                         <input type="text" id="cfgAppSubtitle" placeholder="ការរៀបរាប់..." class="glass-input w-full min-w-0 p-2.5 text-xs rounded-xl outline-none">
+                        <input type="text" id="cfgWelcomeName" placeholder="ឈ្មោះម្ចាស់គណនីលើផ្ទាំងស្វាគមន៍ (ស្រេចចិត្ត)..." class="glass-input w-full min-w-0 p-2.5 text-xs rounded-xl outline-none">
+                        <label class="flex items-center justify-between pt-1 cursor-pointer">
+                            <span class="text-[11px] font-bold flex items-center gap-1.5"><i class="fa-solid fa-hand-sparkles text-amber-500"></i> បង្ហាញផ្ទាំងស្វាគមន៍ពេលចូល App</span>
+                            <span class="ios-switch"><input type="checkbox" id="cfgWelcomeEnabled" checked><span class="ios-slider"></span></span>
+                        </label>
                     </div>
 
                     <!-- 🖼️ Background Wallpaper -->
@@ -2220,11 +2369,251 @@
             </div>
 
             <div class="px-5 py-3 border-t border-slate-200/70 dark:border-white/10 flex items-center justify-between gap-2 flex-shrink-0 pb-safe">
-                <button type="button" onclick="ProApp.vibrate(); ProApp.pickRandomTheme()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/10 text-xs font-extrabold cursor-pointer active:scale-95 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-shuffle text-amber-500"></i> សាកចៃដន្យ
-                </button>
+                <div class="flex items-center gap-1.5">
+                    <button type="button" onclick="ProApp.vibrate(); ProApp.pickRandomTheme()" class="px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/10 text-xs font-extrabold cursor-pointer active:scale-95 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-shuffle text-amber-500"></i> ចៃដន្យ
+                    </button>
+                    <button type="button" onclick="ProApp.vibrate(); ProApp.closeThemeStudioModal(); ProApp.showWelcomeIntro(true);" class="px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/10 text-xs font-extrabold cursor-pointer active:scale-95 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-play text-emerald-500"></i> សាក Welcome
+                    </button>
+                </div>
                 <button type="button" onclick="ProApp.closeThemeStudioModal()" class="px-6 py-2 rounded-xl theme-btn-primary text-xs font-extrabold cursor-pointer active:scale-95 transition">រួចរាល់</button>
             </div>
+        </div>
+    </div>
+
+    <!-- 🎵 V12 MUSIC & SONG STUDIO MODAL (14 BUILT-IN 0KB TRACKS + CUSTOM MP3/URL SONGS) -->
+    <div id="musicPlayerModal" class="fixed inset-0 modal-overlay hidden z-[174] flex items-end sm:items-center justify-center sm:p-4" onclick="if(event.target === this) ProApp.closeMusicModal()">
+        <div class="glass-modal rounded-t-[2rem] sm:rounded-3xl shadow-2xl w-full max-w-lg mx-auto h-[86vh] sm:h-auto sm:max-h-[86vh] flex flex-col overflow-hidden">
+            <div class="w-10 h-1 bg-slate-300 dark:bg-zinc-700 rounded-full mx-auto mt-3 sm:hidden flex-shrink-0"></div>
+            <div class="flex items-center justify-between px-5 pt-3.5 pb-3 border-b border-slate-200/70 dark:border-white/10 flex-shrink-0">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-10 h-10 rounded-2xl theme-btn-primary flex items-center justify-center text-base shrink-0"><i class="fa-solid fa-headphones"></i></div>
+                    <div class="min-w-0">
+                        <h3 class="text-sm font-black modal-label-text truncate">Music Studio — 14 ភ្លេង &amp; ចម្រៀង MP3</h3>
+                        <p id="musicNowPlayingLbl" class="text-[10px] text-slate-400 font-bold truncate">មិនទាន់ចាក់ភ្លេងទេ • ចុចបទណាមួយដើម្បីស្តាប់</p>
+                    </div>
+                </div>
+                <button type="button" onclick="ProApp.closeMusicModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 flex items-center justify-center text-lg cursor-pointer shrink-0">&times;</button>
+            </div>
+            <div class="px-5 py-3 border-b border-slate-200/60 dark:border-white/10 flex-shrink-0 space-y-2.5 bg-slate-50/70 dark:bg-black/20">
+                <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.prevMusicTrack()" class="w-9 h-9 rounded-full glass-input flex items-center justify-center text-xs cursor-pointer active:scale-90"><i class="fa-solid fa-backward-step"></i></button>
+                        <button type="button" id="musicPlayPauseBtn" onclick="ProApp.vibrate(); ProApp.toggleMusicPlay()" class="w-11 h-11 rounded-full theme-btn-primary flex items-center justify-center text-base cursor-pointer active:scale-90"><i id="musicPlayIcon" class="fa-solid fa-play ml-0.5"></i></button>
+                        <button type="button" onclick="ProApp.vibrate(); ProApp.nextMusicTrack()" class="w-9 h-9 rounded-full glass-input flex items-center justify-center text-xs cursor-pointer active:scale-90"><i class="fa-solid fa-forward-step"></i></button>
+                    </div>
+                    <div class="flex items-center gap-2 flex-1 max-w-[175px]">
+                        <i class="fa-solid fa-volume-low text-xs text-slate-400"></i>
+                        <input type="range" id="musicVolumeRange" min="0" max="1" step="0.05" value="0.45" oninput="ProApp.setMusicVolume(this.value)" class="w-full accent-blue-600 cursor-pointer">
+                        <span id="musicVolPct" class="text-[10px] font-mono font-bold w-8 text-right">45%</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5">
+                    <button type="button" id="musicTab-synth" onclick="ProApp.switchMusicTab('synth')" class="py-1.5 rounded-xl text-[11px] font-extrabold theme-btn-primary cursor-pointer text-center">🎹 ១៤ ភ្លេងក្នុង App (0 KB)</button>
+                    <button type="button" id="musicTab-songs" onclick="ProApp.switchMusicTab('songs')" class="py-1.5 rounded-xl text-[11px] font-bold bg-slate-200/70 dark:bg-white/10 text-slate-600 dark:text-slate-300 cursor-pointer text-center">🎤 ចម្រៀង MP3 / URL</button>
+                </div>
+                <label class="flex items-center justify-between px-3 py-1.5 rounded-xl glass-input cursor-pointer">
+                    <span class="text-[10.5px] font-extrabold flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> ដូរភ្លេងអូតូតាម Theme (Auto-Match)</span>
+                    <span class="ios-switch"><input type="checkbox" id="chkAutoMatchMusic" checked onchange="ProApp.toggleAutoMatchMusic(this.checked)"><span class="ios-slider"></span></span>
+                </label>
+            </div>
+            <div class="flex-1 min-h-0 overflow-y-auto p-4 custom-scrollbar">
+                <div id="musicPane-synth" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+                <div id="musicPane-songs" class="hidden space-y-3">
+                    <div class="settings-card space-y-2.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[11px] font-extrabold">📁 ជ្រើសចម្រៀង MP3 ពីទូរស័ព្ទ/កុំព្យូទ័រ៖</span>
+                            <input type="file" id="customAudioFileInput" accept="audio/*" multiple class="hidden" onchange="ProApp.addLocalAudioFiles(event)">
+                            <button type="button" onclick="document.getElementById('customAudioFileInput').click()" class="px-3 py-1.5 rounded-xl theme-btn-primary text-[10.5px] font-extrabold cursor-pointer active:scale-95 shrink-0">+ ជ្រើស MP3</button>
+                        </div>
+                        <div class="pt-2 border-t border-slate-200/70 dark:border-white/10 space-y-1.5">
+                            <div class="text-[10px] font-bold text-slate-500">ឬបន្ថែម Link ចម្រៀង (URL / ./music/song.mp3)៖</div>
+                            <div class="flex gap-1.5">
+                                <input type="text" id="newSongTitle" placeholder="ឈ្មោះចម្រៀង..." class="glass-input w-2/5 p-2 text-xs rounded-xl outline-none">
+                                <input type="text" id="newSongUrl" placeholder="https://... ឬ ./music/a.mp3" class="glass-input flex-1 min-w-0 p-2 text-xs font-mono rounded-xl outline-none">
+                                <button type="button" onclick="ProApp.addCustomSongUrl()" class="px-3 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold cursor-pointer shrink-0">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="customSongsList" class="space-y-2"></div>
+                    <audio id="customSongAudioEl" class="hidden"></audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📜 V12 DAILY QUESTS & XP RANK MODAL -->
+    <div id="questsModal" class="fixed inset-0 modal-overlay hidden z-[174] flex items-end sm:items-center justify-center sm:p-4" onclick="if(event.target === this) ProApp.closeQuestsModal()">
+        <div class="glass-modal rounded-t-[2rem] sm:rounded-3xl shadow-2xl w-full max-w-md mx-auto max-h-[88vh] flex flex-col overflow-hidden">
+            <div class="w-10 h-1 bg-slate-300 dark:bg-zinc-700 rounded-full mx-auto mt-3 sm:hidden flex-shrink-0"></div>
+            <div class="flex items-center justify-between px-5 pt-3.5 pb-3 border-b border-slate-200/70 dark:border-white/10 flex-shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div id="questModalIconBox" class="w-10 h-10 rounded-2xl theme-btn-primary flex items-center justify-center text-lg">🏆</div>
+                    <div>
+                        <h3 id="questModalTitle" class="text-sm font-black modal-label-text">បេសកកម្មប្រចាំថ្ងៃ &amp; កម្រិត XP</h3>
+                        <p id="questModalSub" class="text-[10px] text-slate-400 font-bold">បង្កើន Rank តាម Theme ដែលអ្នកប្រើ</p>
+                    </div>
+                </div>
+                <button type="button" onclick="ProApp.closeQuestsModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 flex items-center justify-center text-lg cursor-pointer">&times;</button>
+            </div>
+            <div class="p-5 overflow-y-auto flex-1 custom-scrollbar space-y-4">
+                <div class="p-4 rounded-2xl text-white relative overflow-hidden" style="background: var(--t-hero-bg); border: 1px solid var(--t-hero-border);">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <div>
+                            <div class="text-[10px] uppercase tracking-wider text-white/75 font-bold">កម្រិតបច្ចុប្បន្ន (CURRENT RANK)</div>
+                            <div id="qmRankTitle" class="text-lg font-black mt-0.5">Lv.1 • Silver</div>
+                        </div>
+                        <div class="text-right">
+                            <div id="qmStreakNum" class="text-sm font-black text-amber-300">🔥 0 ថ្ងៃជាប់គ្នា</div>
+                            <div id="qmTotalXp" class="text-[11px] font-mono text-white/80">0 XP</div>
+                        </div>
+                    </div>
+                    <div class="w-full h-2 rounded-full bg-black/30 overflow-hidden mb-1">
+                        <div id="qmXpBar" class="h-full rounded-full theme-btn-primary transition-all duration-500" style="width: 15%"></div>
+                    </div>
+                    <div id="qmNextRankHint" class="text-[10px] text-white/75 font-bold">សល់ 100 XP ទៀតឡើងកម្រិតបន្ទាប់!</div>
+                </div>
+                <div class="space-y-2.5" id="dailyQuestsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📅 V12 CALENDAR EXPENSE HEATMAP & STREAK MODAL -->
+    <div id="calendarModal" class="fixed inset-0 modal-overlay hidden z-[174] flex items-end sm:items-center justify-center sm:p-4" onclick="if(event.target === this) ProApp.closeCalendarModal()">
+        <div class="glass-modal rounded-t-[2rem] sm:rounded-3xl shadow-2xl w-full max-w-lg mx-auto h-[88vh] sm:h-auto sm:max-h-[88vh] flex flex-col overflow-hidden">
+            <div class="w-10 h-1 bg-slate-300 dark:bg-zinc-700 rounded-full mx-auto mt-3 sm:hidden flex-shrink-0"></div>
+            <div class="flex items-center justify-between px-5 pt-3.5 pb-3 border-b border-slate-200/70 dark:border-white/10 flex-shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-2xl theme-btn-primary flex items-center justify-center text-sm"><i class="fa-solid fa-calendar-days"></i></div>
+                    <div>
+                        <h3 class="text-sm font-black modal-label-text">ប្រតិទិនចំណូល-ចំណាយ (Heatmap)</h3>
+                        <p id="calStreakSubtitle" class="text-[10px] text-slate-400 font-bold">🔥 កត់ត្រាជាប់គ្នា 0 ថ្ងៃ</p>
+                    </div>
+                </div>
+                <button type="button" onclick="ProApp.closeCalendarModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 flex items-center justify-center text-lg cursor-pointer">&times;</button>
+            </div>
+            <div class="p-4 overflow-y-auto flex-1 custom-scrollbar space-y-3.5">
+                <div class="flex items-center justify-between gap-2">
+                    <button type="button" onclick="ProApp.vibrate(); ProApp.shiftCalendarMonth(-1)" class="w-9 h-9 rounded-xl glass-input flex items-center justify-center cursor-pointer active:scale-90"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                    <div id="calMonthTitle" class="text-sm font-black">ខែ ១១ ឆ្នាំ ២០២៦</div>
+                    <button type="button" onclick="ProApp.vibrate(); ProApp.shiftCalendarMonth(1)" class="w-9 h-9 rounded-xl glass-input flex items-center justify-center cursor-pointer active:scale-90"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                </div>
+                <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-black text-slate-400">
+                    <span>អាទិត្យ</span><span>ចន្ទ</span><span>អង្គារ</span><span>ពុធ</span><span>ព្រហ</span><span>សុក្រ</span><span>សៅរ៍</span>
+                </div>
+                <div id="calHeatmapGrid" class="grid grid-cols-7 gap-1.5"></div>
+                <div class="flex items-center justify-center gap-3 text-[9.5px] font-bold text-slate-500">
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-500/70"></span> សល់លុយ</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-amber-500/70"></span> ចាយមធ្យម</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-rose-500/80"></span> ចាយច្រើន</span>
+                </div>
+                <div id="calDayDetailsBox" class="settings-card space-y-2">
+                    <div class="text-xs font-bold text-slate-400 text-center py-2">ចុចលើថ្ងៃណាមួយក្នុងប្រតិទិន ដើម្បីមើលប្រតិបត្តិការថ្ងៃនោះ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🧮 V12 SMART AFFORDABILITY CALCULATOR MODAL ("គួរទិញឬអត់?") -->
+    <div id="affordModal" class="fixed inset-0 modal-overlay hidden z-[174] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeAffordModal()">
+        <div class="glass-modal rounded-3xl shadow-2xl p-5 w-full max-w-md mx-auto max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between mb-3.5 pb-3 border-b border-slate-200/70 dark:border-white/10 flex-shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-2xl theme-btn-primary flex items-center justify-center text-base">🧮</div>
+                    <div>
+                        <h3 class="text-sm font-black modal-label-text">ម៉ាស៊ីនគិត «គួរទិញឬអត់?»</h3>
+                        <p class="text-[10px] text-slate-400 font-bold">វិភាគតាមសមតុល្យសុទ្ធ &amp; ល្បឿនសន្សំពិតរបស់អ្នក</p>
+                    </div>
+                </div>
+                <button type="button" onclick="ProApp.closeAffordModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 flex items-center justify-center text-lg cursor-pointer">&times;</button>
+            </div>
+            <div class="space-y-3 overflow-y-auto flex-1 custom-scrollbar">
+                <div>
+                    <label class="block text-[11px] font-bold mb-1 text-slate-500">ឈ្មោះរបស់ដែលចង់ទិញ៖</label>
+                    <input type="text" id="affItemName" placeholder="ឧ. ទូរស័ព្ទថ្មី, កង់, កុំព្យូទ័រ..." class="glass-input w-full p-2.5 rounded-xl text-xs font-bold outline-none">
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="col-span-2">
+                        <label class="block text-[11px] font-bold mb-1 text-slate-500">តម្លៃ (ឧ. 350$ ឬ 1.2m)៖</label>
+                        <input type="text" id="affPrice" placeholder="350" oninput="ProApp.calculateAffordability()" class="glass-input w-full p-2.5 rounded-xl text-sm font-black theme-accent-text outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold mb-1 text-slate-500">ខ្នាត៖</label>
+                        <select id="affCur" onchange="ProApp.calculateAffordability()" class="glass-input w-full p-2.5 rounded-xl text-xs font-bold outline-none">
+                            <option value="USD">USD ($)</option>
+                            <option value="KHR">KHR (៛)</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="affResultCard" class="settings-card space-y-2.5 text-center py-4">
+                    <div class="text-xs text-slate-400 font-bold">បញ្ចូលតម្លៃខាងលើ ដើម្បីឱ្យប្រព័ន្ធវិភាគភ្លាមៗ ✨</div>
+                </div>
+            </div>
+            <div class="flex gap-2 mt-3.5 pt-3 border-t border-slate-200/70 dark:border-white/10 flex-shrink-0">
+                <button type="button" id="btnAffCreateGoal" onclick="ProApp.vibrate(); ProApp.convertAffordToGoal()" class="hidden flex-1 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-extrabold cursor-pointer active:scale-95">🐖 បង្កើតជាគោលដៅសន្សំ</button>
+                <button type="button" onclick="ProApp.closeAffordModal()" class="flex-1 py-2.5 rounded-xl bg-slate-100 dark:bg-white/10 text-xs font-bold cursor-pointer">បិទ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🪪 V12 MONTHLY FLEX SUMMARY CARD MODAL (SAVE PNG / SHARE) -->
+    <div id="flexCardModal" class="fixed inset-0 modal-overlay hidden z-[175] flex items-center justify-center p-4" onclick="if(event.target === this) ProApp.closeFlexCardModal()">
+        <div class="w-full max-w-sm mx-auto space-y-3">
+            <div class="flex items-center justify-between text-white px-1">
+                <label class="flex items-center gap-2 text-xs font-bold cursor-pointer">
+                    <input type="checkbox" id="chkFlexHideMoney" onchange="ProApp.renderFlexCard()" class="w-4 h-4 rounded accent-amber-400">
+                    <span>👁️ លាក់តួលេខលុយពិត (បង្ហាញតែ %)</span>
+                </label>
+                <button type="button" onclick="ProApp.closeFlexCardModal()" class="w-8 h-8 rounded-full bg-black/50 border border-white/20 text-white flex items-center justify-center cursor-pointer">&times;</button>
+            </div>
+            <div id="flexCardExportArea" class="rounded-3xl p-5 text-white relative overflow-hidden shadow-2xl" style="background: var(--t-hero-bg); border: 2px solid var(--t-hero-border);">
+                <div id="flexEmblemBg" class="absolute -right-6 -bottom-6 w-40 h-40 opacity-15 pointer-events-none"></div>
+                <div class="relative z-10 space-y-4">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div id="flexAvatarBox" class="w-11 h-11 rounded-2xl bg-white/15 border border-white/30 overflow-hidden flex items-center justify-center text-xl shrink-0">💰</div>
+                            <div class="min-w-0">
+                                <div id="flexAppTitle" class="text-sm font-black truncate">Pro Cloud Finance</div>
+                                <div id="flexMonthLabel" class="text-[10px] text-white/75 font-bold">Monthly Report</div>
+                            </div>
+                        </div>
+                        <span id="flexThemeBadge" class="px-2.5 py-1 rounded-full bg-black/30 border border-white/20 text-[9px] font-black uppercase shrink-0">PRO VIP</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div class="p-3 rounded-2xl bg-black/25 border border-white/15">
+                            <div class="text-[9.5px] text-white/70 font-bold uppercase">អត្រាសន្សំខែនេះ</div>
+                            <div id="flexSaveRate" class="text-2xl font-black text-emerald-300 font-mono mt-0.5">0%</div>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-black/25 border border-white/15">
+                            <div class="text-[9.5px] text-white/70 font-bold uppercase">កម្រិត &amp; Streak</div>
+                            <div id="flexRankVal" class="text-xs font-black text-amber-300 mt-1 truncate">Lv.1 • Silver</div>
+                            <div id="flexStreakVal" class="text-[10px] font-mono text-white/80">🔥 0 ថ្ងៃ</div>
+                        </div>
+                    </div>
+                    <div id="flexMoneyGrid" class="grid grid-cols-3 gap-2 p-2.5 rounded-2xl bg-black/25 border border-white/10 text-center">
+                        <div>
+                            <div class="text-[9px] text-emerald-200/80 font-bold">ចំណូល</div>
+                            <div id="flexIncVal" class="text-xs font-black text-emerald-300 font-mono mt-0.5">$0</div>
+                        </div>
+                        <div class="border-x border-white/10">
+                            <div class="text-[9px] text-rose-200/80 font-bold">ចំណាយ</div>
+                            <div id="flexExpVal" class="text-xs font-black text-rose-300 font-mono mt-0.5">$0</div>
+                        </div>
+                        <div>
+                            <div class="text-[9px] text-amber-200/80 font-bold">សល់ខែនេះ</div>
+                            <div id="flexNetVal" class="text-xs font-black text-amber-300 font-mono mt-0.5">$0</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[10px] font-bold pt-2 border-t border-white/15">
+                        <span class="text-white/75 truncate">ចាយច្រើនជាងគេ៖ <strong id="flexTopCat" class="text-white">-</strong></span>
+                        <span class="text-white/60 font-mono shrink-0">Pro Cloud V12</span>
+                    </div>
+                </div>
+            </div>
+            <button type="button" onclick="ProApp.vibrate(); ProApp.downloadFlexCard()" class="w-full py-3.5 rounded-2xl theme-btn-primary text-xs font-black shadow-xl active:scale-95 transition cursor-pointer flex items-center justify-center gap-2">
+                <i class="fa-solid fa-download"></i> ទាញយករូបភាពកាតសង្ខេប (Save PNG)
+            </button>
         </div>
     </div>
 
@@ -2400,6 +2789,12 @@
                 themeSoundEnabled: true,
                 appAvatar: '',
                 appAvatarShape: 'rounded',
+                welcomeName: '',
+                welcomeEnabled: true,
+                autoMatchMusic: true,
+                bonusXp: 0,
+                claimedQuests: {},
+                customSongs: [],
                 bgImageUrl: '',
                 titleColor: '#ffffff',
                 subtitleColor: '#bfdbfe',
@@ -2706,6 +3101,12 @@
                     themeSoundEnabled: ProApp.state.themeSoundEnabled !== false,
                     appAvatar: ProApp.state.appAvatar || '',
                     appAvatarShape: ProApp.state.appAvatarShape || 'rounded',
+                    welcomeName: ProApp.state.welcomeName || '',
+                    welcomeEnabled: ProApp.state.welcomeEnabled !== false,
+                    autoMatchMusic: ProApp.state.autoMatchMusic !== false,
+                    bonusXp: Number(ProApp.state.bonusXp) || 0,
+                    claimedQuests: ProApp.state.claimedQuests || {},
+                    customSongs: (ProApp.state.customSongs || []).filter(s => s && s.url && !String(s.url).startsWith('blob:')),
                     bgImageUrl: ProApp.state.bgImageUrl || '',
                     hideAmounts: !!ProApp.state.hideAmounts,
                     hiddenAccounts: ProApp.state.hiddenAccounts || [],
@@ -2970,6 +3371,12 @@
                 if (data.themeSoundEnabled !== undefined) ProApp.state.themeSoundEnabled = data.themeSoundEnabled !== false;
                 if (data.appAvatar !== undefined) ProApp.state.appAvatar = data.appAvatar || '';
                 if (data.appAvatarShape) ProApp.state.appAvatarShape = data.appAvatarShape;
+                if (data.welcomeName !== undefined) ProApp.state.welcomeName = data.welcomeName || '';
+                if (data.welcomeEnabled !== undefined) ProApp.state.welcomeEnabled = data.welcomeEnabled !== false;
+                if (data.autoMatchMusic !== undefined) ProApp.state.autoMatchMusic = data.autoMatchMusic !== false;
+                if (data.bonusXp !== undefined) ProApp.state.bonusXp = Number(data.bonusXp) || 0;
+                if (data.claimedQuests && typeof data.claimedQuests === 'object') ProApp.state.claimedQuests = data.claimedQuests;
+                if (Array.isArray(data.customSongs)) ProApp.state.customSongs = data.customSongs;
                 if (data.bgImageUrl !== undefined) ProApp.state.bgImageUrl = data.bgImageUrl;
                 if (data.hideAmounts !== undefined) {
                     ProApp.state.hideAmounts = !!data.hideAmounts;
@@ -3009,6 +3416,8 @@
                 const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v ?? ''; };
                 setVal('cfgAppTitle', ProApp.state.appTitle || '');
                 setVal('cfgAppSubtitle', ProApp.state.appSubtitle || '');
+                setVal('cfgWelcomeName', ProApp.state.welcomeName || '');
+                const wChk = document.getElementById('cfgWelcomeEnabled'); if (wChk) wChk.checked = ProApp.state.welcomeEnabled !== false;
                 setVal('cfgBgImageUrl', ProApp.state.bgImageUrl || '');
                 setVal('cfgPinInput', ''); const pinInp = document.getElementById('cfgPinInput'); if (pinInp) pinInp.placeholder = ProApp.hasPinEnabled() ? '🔒 បានដាក់សោររួច' : '••••';
                 setVal('cfgTgToken', ProApp.state.tgBotToken || '');
@@ -3308,7 +3717,8 @@
                         document.getElementById('pinLockOverlay')?.classList.add('hidden');
                         ProApp.state.enteredPin = '';
                         ProApp.updatePinDots();
-                        ProApp.showToast('🪪 ដោះសោរដោយ FaceID / ក្រយៅដៃជោគជ័យ!', 'success');
+                        if (ProApp.state.welcomeEnabled !== false) ProApp.showWelcomeIntro(true);
+                        else ProApp.showToast('🪪 ដោះសោរដោយ FaceID / ក្រយៅដៃជោគជ័យ!', 'success');
                     }
                 } catch (err) {
                     console.error('Biometric Verify Error:', err);
@@ -3621,12 +4031,30 @@
                     });
                 }
 
-                let msgs = [];
-                if (thisMonthInc > 0 && thisMonthInc > thisMonthExp) { msgs.push(`ខែនេះសល់លុយសន្សំ ${ProApp.formatMoney(thisMonthInc - thisMonthExp, 'USD')} អស្ចារ្យ! 🎉`); }
-                if (lastMonthExp > 0 && thisMonthExp < lastMonthExp && now.getDate() > 20) { msgs.push(`ចំណាយខែនេះតិចជាងខែមុន! បន្តការសន្សំទៀតណា៎ 💪`); }
-                if (thisMonthExp > thisMonthInc && thisMonthInc > 0) { msgs.push(`ប្រយ័ត្ន! ចំណាយខែនេះលើសចំណូលហើយ ⚠️`); }
-                if (msgs.length === 0) msgs.push("សូមស្វាគមន៍មកកាន់ប្រព័ន្ធ Pro Cloud 🌟");
-                textEl.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+                const tid = ProApp.state.themeStyle || 'default';
+                const savedTxt = ProApp.formatMoney(Math.max(0, thisMonthInc - thisMonthExp), 'USD');
+                let msg = '';
+                if (thisMonthExp > thisMonthInc && thisMonthInc > 0) {
+                    if (tid === 'anime-spyxfamily') msg = '🥜 អូយ! ចំណាយលើសចំណូលហើយ ប្រយ័ត្នអត់លុយទិញភីណាតណា៎ ⚠️';
+                    else if (tid === 'anime-sololeveling') msg = '⚔️ [ SYSTEM WARNING ] ចំណាយខែនេះលើសចំណូលហើយ! ⚠️';
+                    else if (tid === 'anime-btth') msg = '🪷 ប្រយ័ត្ន! ថាមពលចំណាយកំពុងលើសចំណូលខែនេះហើយ ⚠️';
+                    else msg = 'ប្រយ័ត្ន! ចំណាយខែនេះលើសចំណូលហើយ ⚠️';
+                } else if (thisMonthInc > 0 && thisMonthInc > thisMonthExp) {
+                    if (tid === 'anime-spyxfamily') msg = `🥜 Waku Waku! ខែនេះសល់លុយទិញភីណាតដល់ ${savedTxt} ឯណោះ!`;
+                    else if (tid === 'anime-sololeveling') msg = `⚔️ [ SYSTEM ] ថវិកាខែនេះល្អឥតខ្ចោះ — សល់ ${savedTxt}!`;
+                    else if (tid === 'anime-btth') msg = `🪷 ថាមពលទ្រព្យកំពុងកើនឡើង! ខែនេះសល់សន្សំ ${savedTxt}`;
+                    else if (tid === 'anime-onepiece') msg = `👒 កំណប់ទ្រព្យកើនឡើងហើយ! ខែនេះសល់ ${savedTxt} ⛵`;
+                    else if (tid === 'anime-naruto') msg = `🦊 Believe It! ខែនេះសន្សំបាន ${savedTxt} អស្ចារ្យណាស់!`;
+                    else msg = `ខែនេះសល់លុយសន្សំ ${savedTxt} អស្ចារ្យ! 🎉`;
+                } else if (lastMonthExp > 0 && thisMonthExp < lastMonthExp && now.getDate() > 15) {
+                    msg = `ចំណាយខែនេះតិចជាងខែមុន! បន្តការសន្សំទៀតណា៎ 💪`;
+                } else {
+                    if (tid === 'anime-spyxfamily') msg = '🥜 Waku Waku! ត្រៀមខ្លួនកត់ត្រាហិរញ្ញវត្ថុថ្ងៃនេះហើយឬនៅ?';
+                    else if (tid === 'anime-sololeveling') msg = '⚔️ [ SYSTEM ] Daily Quest រួចរាល់ — កត់ត្រាដើម្បីឡើង Rank!';
+                    else if (tid === 'anime-btth') msg = '🪷 ភ្លើងទេវតាបំភ្លឺផ្លូវទ្រព្យ — សូមស្វាគមន៍មកកាន់ Pro Cloud!';
+                    else msg = 'សូមស្វាគមន៍មកកាន់ប្រព័ន្ធ Pro Cloud V12 🌟';
+                }
+                textEl.textContent = msg;
             },
 
             // ⏰ AUTO-RECURRING ENGINE
@@ -3813,15 +4241,17 @@
                 return (amount || 0).toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' ' + (cur || '');
             },
             playChimeSound: function() {
+                if (ProApp.state.themeSoundEnabled === false) return;
                 try {
-                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const ctx = ProApp.getAudioCtx();
+                    if (!ctx) return;
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(587.33, ctx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
-                    gain.gain.setValueAtTime(0.12, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+                    gain.gain.setValueAtTime(0.10, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.24);
                     osc.connect(gain); gain.connect(ctx.destination);
                     osc.start(); osc.stop(ctx.currentTime + 0.25);
                 } catch (e) {}
@@ -3875,6 +4305,7 @@
                 return p.length === 4 || p.startsWith('sha256:') || p.startsWith('fnv:');
             },
             checkPinLock: function() {
+                ProApp.applyThemedPinLock();
                 const el = document.getElementById('pinLockOverlay');
                 if (!el) return;
                 ProApp.updateBiometricUI();
@@ -3886,7 +4317,7 @@
                 }
             },
             pressPin: function(digit) {
-                ProApp.vibrate(20);
+                ProApp.vibrate(20); ProApp.playThemeSound('tap');
                 if (ProApp.state.enteredPin.length < 4) {
                     ProApp.state.enteredPin += digit;
                     ProApp.updatePinDots();
@@ -3909,7 +4340,8 @@
                                 ProApp.playChimeSound();
                                 document.getElementById('pinLockOverlay').classList.add('hidden');
                                 ProApp.state.enteredPin = '';
-                                ProApp.showToast('ស្វាគមន៍! បានដោះសោរដោយជោគជ័យ', 'success');
+                                if (ProApp.state.welcomeEnabled !== false) ProApp.showWelcomeIntro(true);
+                                else ProApp.showToast('ស្វាគមន៍! បានដោះសោរដោយជោគជ័យ', 'success');
                             } else {
                                 ProApp.vibrate(100);
                                 ProApp.showToast('លេខកូដ PIN មិនត្រឹមត្រូវទេ!', 'error');
@@ -4193,8 +4625,8 @@
 
                 // --- ⛩️ 14 FAMOUS ANIME EDITIONS ---
                 {
-                    id: 'anime-spyxfamily', group: 'anime', isDark: true, icon: '🕵️',
-                    name: 'Spy x Family', sub: 'Eden Emerald • Anya Rose • Stella Gold',
+                    id: 'anime-spyxfamily', group: 'anime', isDark: true, icon: '🥜',
+                    name: 'Spy x Family', sub: 'Anya Peanuts 🥜 • Eden Emerald & Rose',
                     swatches: ['#051d17', '#f472b6', '#fbbf24'], metaColor: '#051d17', pattern: 'stars',
                     bodyBg: '#041410', bodyGrad: 'radial-gradient(circle at top right, rgba(244,114,182,0.14), transparent 48%), radial-gradient(circle at bottom left, rgba(251,191,36,0.10), transparent 50%), linear-gradient(180deg, #06211a 0%, #03110d 100%)',
                     heroBg: 'linear-gradient(145deg, #064e3b 0%, #0b2b22 52%, #1d1019 100%)',
@@ -4217,7 +4649,7 @@
                     insightBg: 'linear-gradient(135deg, #0d9488, #f59e0b)', navBg: 'rgba(3, 16, 18, 0.95)'
                 },
                 {
-                    id: 'anime-demonslayer', group: 'anime', isDark: true, icon: '🌊',
+                    id: 'anime-demonslayer', group: 'anime', isDark: true, icon: '⚔️',
                     name: 'Demon Slayer', sub: 'Tanjiro Checkered • Hinokami Flame',
                     swatches: ['#071310', '#10b981', '#ef4444'], metaColor: '#071310', pattern: 'checkered',
                     bodyBg: '#070c0b', bodyGrad: 'radial-gradient(circle at top right, rgba(16,185,129,0.15), transparent 46%), radial-gradient(circle at bottom left, rgba(239,68,68,0.12), transparent 50%), linear-gradient(180deg, #0b1412 0%, #060908 100%)',
@@ -4229,7 +4661,7 @@
                     insightBg: 'linear-gradient(135deg, #059669, #dc2626)', navBg: 'rgba(7, 13, 11, 0.95)'
                 },
                 {
-                    id: 'anime-jjk', group: 'anime', isDark: true, icon: '👁️',
+                    id: 'anime-jjk', group: 'anime', isDark: true, icon: '♾️',
                     name: 'Jujutsu Kaisen (Gojo)', sub: 'Infinite Void • Six Eyes & Hollow Purple',
                     swatches: ['#060718', '#38bdf8', '#a855f7'], metaColor: '#060718', pattern: 'hex',
                     bodyBg: '#050614', bodyGrad: 'radial-gradient(circle at top right, rgba(56,189,248,0.18), transparent 48%), radial-gradient(circle at bottom left, rgba(168,85,247,0.16), transparent 50%), linear-gradient(180deg, #090b24 0%, #04050f 100%)',
@@ -4241,7 +4673,7 @@
                     insightBg: 'linear-gradient(135deg, #2563eb, #9333ea)', navBg: 'rgba(6, 7, 22, 0.95)'
                 },
                 {
-                    id: 'anime-onepiece', group: 'anime', isDark: true, icon: '🏴‍☠️',
+                    id: 'anime-onepiece', group: 'anime', isDark: true, icon: '👒',
                     name: 'One Piece (Grand Line)', sub: 'Straw Hat Gold • Ocean & Gear 5',
                     swatches: ['#0a1930', '#dc2626', '#facc15'], metaColor: '#0a1930', pattern: 'wave',
                     bodyBg: '#081426', bodyGrad: 'radial-gradient(circle at top right, rgba(250,204,21,0.14), transparent 46%), radial-gradient(circle at bottom left, rgba(220,38,38,0.12), transparent 50%), linear-gradient(180deg, #0d213f 0%, #071121 100%)',
@@ -4289,7 +4721,7 @@
                     insightBg: 'linear-gradient(135deg, #3f6212, #1d4ed8)', navBg: 'rgba(12, 17, 13, 0.95)'
                 },
                 {
-                    id: 'anime-dragonball', group: 'anime', isDark: true, icon: '⚡',
+                    id: 'anime-dragonball', group: 'anime', isDark: true, icon: '🐉',
                     name: 'Dragon Ball (UI)', sub: 'Ultra Instinct Silver • Super Saiyan Gold',
                     swatches: ['#070b1a', '#2563eb', '#93c5fd'], metaColor: '#070b1a', pattern: 'stars',
                     bodyBg: '#060a17', bodyGrad: 'radial-gradient(circle at top right, rgba(147,197,253,0.18), transparent 48%), radial-gradient(circle at bottom left, rgba(245,158,11,0.12), transparent 50%), linear-gradient(180deg, #0b132b 0%, #050814 100%)',
@@ -4397,15 +4829,15 @@
                 'rose-pearl':        { fx: 'sakura',       label: '🌸 Sakura Drift' },
                 'ocean-glacier':     { fx: 'snow',         label: '❄️ Frost Snow' },
                 'sunset-amber':      { fx: 'embers',       label: '🌅 Warm Glow' },
-                'anime-spyxfamily':  { fx: 'stella',       label: '⭐ Stella & Petals' },
+                'anime-spyxfamily':  { fx: 'peanut',       label: '🥜 Peanuts & Petals' },
                 'anime-btth':        { fx: 'flame',        label: '🔥 Lotus Flame' },
-                'anime-demonslayer': { fx: 'flame',        label: '🔥 Hinokami Sparks' },
-                'anime-jjk':         { fx: 'void',         label: '🌀 Infinite Void' },
-                'anime-onepiece':    { fx: 'bubbles',      label: '🌊 Grand Line' },
+                'anime-demonslayer': { fx: 'flame',        label: '⚔️ Hinokami Flame' },
+                'anime-jjk':         { fx: 'void',         label: '♾️ Infinite Void' },
+                'anime-onepiece':    { fx: 'bubbles',      label: '👒 Grand Line' },
                 'anime-naruto':      { fx: 'flame',        label: '🦊 Kurama Chakra' },
                 'anime-sololeveling':{ fx: 'void',         label: '⚔️ Shadow Arise' },
                 'anime-aot':         { fx: 'slash',        label: '🦅 Wind Streaks' },
-                'anime-dragonball':  { fx: 'void',         label: '⚡ UI Energy' },
+                'anime-dragonball':  { fx: 'void',         label: '🐉 Ultra Instinct' },
                 'anime-bleach':      { fx: 'slash',        label: '🌙 Bankai Slash' },
                 'anime-chainsaw':    { fx: 'flame',        label: '🪚 Hazard Sparks' },
                 'anime-ghibli':      { fx: 'sakura',       label: '🍃 Floating Leaves' },
@@ -4431,8 +4863,20 @@
                     }
                 });
             },
+            isScrollingFast: false,
+            scrollPauseTimer: null,
+            bindPerfScrollGuard: function() {
+                if (ProApp._perfScrollBound) return;
+                ProApp._perfScrollBound = true;
+                window.addEventListener('scroll', () => {
+                    ProApp.isScrollingFast = true;
+                    clearTimeout(ProApp.scrollPauseTimer);
+                    ProApp.scrollPauseTimer = setTimeout(() => { ProApp.isScrollingFast = false; }, 160);
+                }, { passive: true });
+            },
             startThemeFxEngine: function(themeMeta) {
                 ProApp.stopThemeFxEngine();
+                ProApp.bindPerfScrollGuard();
                 if (ProApp.state.themeFxEnabled === false) return;
                 const heroCv = document.getElementById('heroFxCanvas');
                 const ambCv = document.getElementById('themeAmbientCanvas');
@@ -4443,26 +4887,30 @@
                 const c1 = themeMeta.accent || '#fbbf24';
                 const c2 = themeMeta.accent2 || '#ffffff';
                 const isDark = !!themeMeta.isDark;
+                const isMobile = window.innerWidth < 768;
 
                 const resizeCanvases = () => {
-                    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
                     if (heroCv && heroCv.parentElement) {
                         const r = heroCv.parentElement.getBoundingClientRect();
-                        heroCv.width = Math.max(1, Math.floor(r.width * dpr));
-                        heroCv.height = Math.max(1, Math.floor(r.height * dpr));
+                        heroCv.width = Math.max(1, Math.floor(r.width));
+                        heroCv.height = Math.max(1, Math.floor(r.height));
                     }
                     if (ambCv) {
-                        ambCv.width = Math.max(1, Math.floor(window.innerWidth * dpr));
-                        ambCv.height = Math.max(1, Math.floor(window.innerHeight * dpr));
+                        ambCv.width = Math.max(1, Math.floor(window.innerWidth));
+                        ambCv.height = Math.max(1, Math.floor(window.innerHeight));
                     }
                 };
                 resizeCanvases();
                 if (!ProApp.themeFxResizeBound) {
                     ProApp.themeFxResizeBound = true;
+                    let rzT = null;
                     window.addEventListener('resize', () => {
-                        if (ProApp.state.themeFxEnabled !== false) {
-                            ProApp.startThemeFxEngine(ProApp.getThemeMeta(ProApp.state.themeStyle || 'default'));
-                        }
+                        clearTimeout(rzT);
+                        rzT = setTimeout(() => {
+                            if (ProApp.state.themeFxEnabled !== false) {
+                                ProApp.startThemeFxEngine(ProApp.getThemeMeta(ProApp.state.themeStyle || 'default'));
+                            }
+                        }, 200);
                     });
                 }
 
@@ -4472,19 +4920,20 @@
                         arr.push({
                             x: Math.random() * w,
                             y: Math.random() * h,
-                            r: (isHero ? 1.9 : 2.3) + Math.random() * (fx === 'sakura' || fx === 'bubbles' ? 4.4 : 3.0),
-                            vx: (Math.random() - 0.5) * (fx === 'slash' ? 3.8 : 0.75),
+                            r: (isHero ? 1.8 : 2.1) + Math.random() * (fx === 'sakura' || fx === 'peanut' || fx === 'bubbles' ? 3.8 : 2.6),
+                            vx: (Math.random() - 0.5) * (fx === 'slash' ? 3.2 : 0.65),
                             vy: (fx === 'flame' || fx === 'embers' || fx === 'bubbles' || fx === 'gold-dust')
-                                ? -(0.5 + Math.random() * 1.25)
-                                : (fx === 'sakura' || fx === 'snow' || fx === 'stella' || fx === 'comet')
-                                    ? (0.5 + Math.random() * 1.0)
-                                    : ((Math.random() - 0.5) * 0.7),
-                            a: 0.3 + Math.random() * 0.65,
+                                ? -(0.45 + Math.random() * 1.05)
+                                : (fx === 'sakura' || fx === 'snow' || fx === 'peanut' || fx === 'stella' || fx === 'comet')
+                                    ? (0.45 + Math.random() * 0.9)
+                                    : ((Math.random() - 0.5) * 0.6),
+                            a: 0.28 + Math.random() * 0.58,
                             ph: Math.random() * Math.PI * 2,
                             rot: Math.random() * Math.PI * 2,
-                            vrot: (Math.random() - 0.5) * 0.045,
+                            vrot: (Math.random() - 0.5) * 0.04,
                             color: Math.random() > 0.42 ? c1 : c2,
-                            len: 20 + Math.random() * 36
+                            isPeanut: fx === 'peanut' && Math.random() > 0.45,
+                            len: 18 + Math.random() * 30
                         });
                     }
                     return arr;
@@ -4492,11 +4941,11 @@
 
                 const hCtx = heroCv ? heroCv.getContext('2d') : null;
                 const aCtx = ambCv ? ambCv.getContext('2d') : null;
-                const hParts = heroCv ? makeParticles(30, heroCv.width, heroCv.height, true) : [];
-                const aParts = ambCv ? makeParticles(26, ambCv.width, ambCv.height, false) : [];
+                const hParts = heroCv ? makeParticles(isMobile ? 16 : 22, heroCv.width, heroCv.height, true) : [];
+                const aParts = ambCv ? makeParticles(isMobile ? 12 : 18, ambCv.width, ambCv.height, false) : [];
                 const comets = [
-                    { x: -60, y: 40, vx: 5.4, vy: 2.3 },
-                    { x: 180, y: -40, vx: 4.6, vy: 2.0 }
+                    { x: -60, y: 40, vx: 4.8, vy: 2.1 },
+                    { x: 180, y: -40, vx: 4.1, vy: 1.8 }
                 ];
 
                 const drawSet = (ctx, cv, parts, isHero, t) => {
@@ -4507,19 +4956,16 @@
                     if (fx === 'comet') {
                         comets.forEach((cm) => {
                             cm.x += cm.vx; cm.y += cm.vy;
-                            if (cm.x > w + 130 || cm.y > h + 130) {
+                            if (cm.x > w + 120 || cm.y > h + 120) {
                                 cm.x = Math.random() * w * 0.55 - 80;
                                 cm.y = Math.random() * h * 0.25 - 40;
                             }
-                            const grad = ctx.createLinearGradient(cm.x, cm.y, cm.x - cm.vx * 15, cm.y - cm.vy * 15);
-                            grad.addColorStop(0, '#ffffff');
-                            grad.addColorStop(0.35, c1);
-                            grad.addColorStop(1, 'transparent');
-                            ctx.strokeStyle = grad;
-                            ctx.lineWidth = isHero ? 2.8 : 2.1;
+                            ctx.strokeStyle = c1;
+                            ctx.globalAlpha = 0.55;
+                            ctx.lineWidth = isHero ? 2.4 : 1.8;
                             ctx.beginPath();
                             ctx.moveTo(cm.x, cm.y);
-                            ctx.lineTo(cm.x - cm.vx * 15, cm.y - cm.vy * 15);
+                            ctx.lineTo(cm.x - cm.vx * 13, cm.y - cm.vy * 13);
                             ctx.stroke();
                         });
                     }
@@ -4528,82 +4974,84 @@
                         const cx = w * 0.78, cy = h * 0.36;
                         ctx.save();
                         ctx.translate(cx, cy);
-                        ctx.rotate(t * 0.009);
+                        ctx.rotate(t * 0.014);
                         ctx.strokeStyle = c1;
-                        ctx.globalAlpha = 0.26;
-                        ctx.lineWidth = 1.8;
+                        ctx.globalAlpha = 0.24;
+                        ctx.lineWidth = 1.6;
                         ctx.setLineDash([12, 10]);
-                        ctx.beginPath(); ctx.arc(0, 0, Math.min(w, h) * 0.28, 0, Math.PI * 2); ctx.stroke();
-                        ctx.rotate(-t * 0.018);
+                        ctx.beginPath(); ctx.arc(0, 0, Math.min(w, h) * 0.26, 0, Math.PI * 2); ctx.stroke();
+                        ctx.rotate(-t * 0.028);
                         ctx.strokeStyle = c2;
-                        ctx.beginPath(); ctx.arc(0, 0, Math.min(w, h) * 0.19, 0, Math.PI * 2); ctx.stroke();
+                        ctx.beginPath(); ctx.arc(0, 0, Math.min(w, h) * 0.17, 0, Math.PI * 2); ctx.stroke();
                         ctx.restore();
                     }
 
                     for (let i = 0; i < parts.length; i++) {
                         const p = parts[i];
-                        p.ph += 0.038;
+                        p.ph += 0.05;
                         p.rot += p.vrot;
-                        p.x += p.vx + Math.sin(p.ph) * (fx === 'sakura' || fx === 'flame' ? 0.6 : 0.25);
+                        p.x += p.vx + Math.sin(p.ph) * (fx === 'sakura' || fx === 'peanut' || fx === 'flame' ? 0.55 : 0.22);
                         p.y += p.vy;
 
-                        if (p.y < -20) { p.y = h + 15; p.x = Math.random() * w; }
-                        if (p.y > h + 20) { p.y = -15; p.x = Math.random() * w; }
-                        if (p.x < -20) p.x = w + 15;
-                        if (p.x > w + 20) p.x = -15;
+                        if (p.y < -18) { p.y = h + 14; p.x = Math.random() * w; }
+                        if (p.y > h + 18) { p.y = -14; p.x = Math.random() * w; }
+                        if (p.x < -18) p.x = w + 14;
+                        if (p.x > w + 18) p.x = -14;
 
-                        const alpha = Math.max(0.12, (p.a * (0.65 + 0.35 * Math.sin(p.ph))) * (isHero ? 1 : (isDark ? 0.68 : 0.56)));
-                        ctx.save();
+                        const alpha = Math.max(0.12, (p.a * (0.68 + 0.32 * Math.sin(p.ph))) * (isHero ? 1 : (isDark ? 0.62 : 0.50)));
                         ctx.globalAlpha = alpha;
                         ctx.fillStyle = p.color;
                         ctx.strokeStyle = p.color;
 
-                        if (fx === 'sakura') {
+                        if (p.isPeanut) {
+                            ctx.save();
                             ctx.translate(p.x, p.y);
                             ctx.rotate(p.rot);
+                            ctx.fillStyle = '#eab308';
                             ctx.beginPath();
-                            ctx.ellipse(0, 0, p.r * 1.5, p.r * 0.75, 0, 0, Math.PI * 2);
+                            ctx.arc(-p.r * 0.55, 0, p.r * 0.85, 0, Math.PI * 2);
+                            ctx.arc(p.r * 0.65, 0, p.r * 0.72, 0, Math.PI * 2);
                             ctx.fill();
-                        } else if (fx === 'stella') {
+                            ctx.restore();
+                        } else if (fx === 'sakura' || fx === 'peanut') {
+                            ctx.save();
                             ctx.translate(p.x, p.y);
                             ctx.rotate(p.rot);
                             ctx.beginPath();
-                            for (let k = 0; k < 4; k++) {
-                                const ang = (k * Math.PI) / 2;
-                                ctx.lineTo(Math.cos(ang) * p.r * 2.2, Math.sin(ang) * p.r * 2.2);
-                                ctx.lineTo(Math.cos(ang + Math.PI / 4) * p.r * 0.65, Math.sin(ang + Math.PI / 4) * p.r * 0.65);
-                            }
-                            ctx.closePath(); ctx.fill();
+                            ctx.ellipse(0, 0, p.r * 1.4, p.r * 0.7, 0, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.restore();
                         } else if (fx === 'flame' || fx === 'embers') {
-                            ctx.shadowColor = p.color;
-                            ctx.shadowBlur = 11;
-                            ctx.beginPath();
-                            ctx.arc(p.x, p.y, p.r * (fx === 'flame' ? 1.2 : 0.9), 0, Math.PI * 2);
-                            ctx.fill();
+                            ctx.globalAlpha = alpha * 0.28;
+                            ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 2.2, 0, Math.PI * 2); ctx.fill();
+                            ctx.globalAlpha = alpha;
+                            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
                         } else if (fx === 'slash') {
-                            ctx.lineWidth = 2;
+                            ctx.lineWidth = 1.8;
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(p.x + p.len, p.y - p.len * 0.45);
                             ctx.stroke();
                         } else if (fx === 'cyber') {
-                            ctx.fillRect(p.x, p.y, p.r * 2.8, 2.4);
+                            ctx.fillRect(p.x, p.y, p.r * 2.6, 2.2);
                         } else if (fx === 'bubbles') {
-                            ctx.lineWidth = 1.4;
-                            ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 1.25, 0, Math.PI * 2); ctx.stroke();
+                            ctx.lineWidth = 1.3;
+                            ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 1.15, 0, Math.PI * 2); ctx.stroke();
                         } else {
-                            ctx.shadowColor = p.color;
-                            ctx.shadowBlur = 9;
+                            ctx.globalAlpha = alpha * 0.25;
+                            ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 2.1, 0, Math.PI * 2); ctx.fill();
+                            ctx.globalAlpha = alpha;
                             ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
                         }
-                        ctx.restore();
                     }
+                    ctx.globalAlpha = 1;
                 };
 
-                let tick = 0;
-                const loop = () => {
-                    tick++;
-                    if (!document.hidden) {
+                let tick = 0, lastFrame = 0;
+                const loop = (ts) => {
+                    if (!document.hidden && !ProApp.isScrollingFast && (ts - lastFrame >= 33)) {
+                        lastFrame = ts;
+                        tick++;
                         drawSet(hCtx, heroCv, hParts, true, tick);
                         drawSet(aCtx, ambCv, aParts, false, tick);
                     }
@@ -4627,15 +5075,15 @@
                 'rose-pearl':        { skin: 'soft',  badge: 'ROSE PEARL EDITION',  fab: '🌸', sound: 'anime-soft', emblem: 'sakura',   banner: '🌸 Rose Pearl Edition' },
                 'ocean-glacier':     { skin: 'soft',  badge: 'GLACIER MINIMAL',     fab: '❄️', sound: 'anime-soft', emblem: 'compass',  banner: '❄️ Ocean Glacier Minimal' },
                 'sunset-amber':      { skin: 'soft',  badge: 'SUNSET CORAL',        fab: '🌅', sound: 'anime-fire', emblem: 'sun',      banner: '🌅 Sunset Amber Energy' },
-                'anime-spyxfamily':  { skin: 'anime', badge: 'OPERATION STRIX ★',   fab: '⭐', sound: 'anime-soft', emblem: 'stella',   banner: '🕵️ Spy x Family • Operation Strix!' },
+                'anime-spyxfamily':  { skin: 'anime', badge: 'OPERATION STRIX 🥜',  fab: '🥜', sound: 'peanut',     emblem: 'peanut',   banner: '🥜 WAKU WAKU! Spy x Family Activated!' },
                 'anime-btth':        { skin: 'anime', badge: 'ដុតភ្លើងទេវតា • BTTH', fab: '🪷', sound: 'anime-fire', emblem: 'lotus',    banner: '🪷 BTTH • Azure Lotus Flame Awakened!' },
-                'anime-demonslayer': { skin: 'anime', badge: 'HINOKAMI KAGURA',     fab: '🌊', sound: 'anime-fire', emblem: 'katana',   banner: '🌊 Demon Slayer • Hinokami Kagura!' },
-                'anime-jjk':         { skin: 'cyber', badge: '[ INFINITE VOID ]',   fab: '👁️', sound: 'cyber',      emblem: 'void',     banner: '👁️ Domain Expansion: Infinite Void!' },
-                'anime-onepiece':    { skin: 'anime', badge: 'GRAND LINE • GEAR 5', fab: '🏴‍☠️', sound: 'anime-fire', emblem: 'helm',     banner: '🏴‍☠️ One Piece • Set Sail!' },
+                'anime-demonslayer': { skin: 'anime', badge: 'HINOKAMI KAGURA',     fab: '⚔️', sound: 'anime-fire', emblem: 'katana',   banner: '⚔️ Demon Slayer • Hinokami Kagura!' },
+                'anime-jjk':         { skin: 'cyber', badge: '[ INFINITE VOID ♾️ ]', fab: '♾️', sound: 'cyber',      emblem: 'void',     banner: '♾️ Domain Expansion: Infinite Void!' },
+                'anime-onepiece':    { skin: 'anime', badge: 'GRAND LINE • STRAWHATS', fab: '👒', sound: 'anime-fire', emblem: 'strawhat', banner: '👒 One Piece • Set Sail to Grand Line!' },
                 'anime-naruto':      { skin: 'anime', badge: 'KURAMA SAGE MODE',    fab: '🦊', sound: 'anime-fire', emblem: 'spiral',   banner: '🦊 Naruto • Kurama Sage Mode!' },
                 'anime-sololeveling':{ skin: 'cyber', badge: '[ SYSTEM • ARISE ]',  fab: '⚔️', sound: 'cyber',      emblem: 'dagger',   banner: '⚔️ [ SYSTEM ] Shadow Monarch Arise!' },
                 'anime-aot':         { skin: 'anime', badge: 'SURVEY CORPS • WINGS',fab: '🦅', sound: 'anime-fire', emblem: 'wings',    banner: '🦅 Attack on Titan • Wings of Freedom!' },
-                'anime-dragonball':  { skin: 'cyber', badge: '[ ULTRA INSTINCT ]',  fab: '⚡', sound: 'cyber',      emblem: 'dragon',   banner: '⚡ Dragon Ball • Ultra Instinct!' },
+                'anime-dragonball':  { skin: 'cyber', badge: '[ ULTRA INSTINCT ]',  fab: '🐉', sound: 'cyber',      emblem: 'dragon',   banner: '🐉 Dragon Ball • Ultra Instinct!' },
                 'anime-bleach':      { skin: 'cyber', badge: '[ BANKAI • TENSA ]',  fab: '🌙', sound: 'cyber',      emblem: 'moon',     banner: '🌙 Bleach • Bankai Released!' },
                 'anime-chainsaw':    { skin: 'anime', badge: 'PUBLIC SAFETY • CSM', fab: '🪚', sound: 'anime-fire', emblem: 'gear',     banner: '🪚 Chainsaw Man • Rev It Up!' },
                 'anime-ghibli':      { skin: 'soft',  badge: 'STUDIO GHIBLI SKY',   fab: '🍃', sound: 'anime-soft', emblem: 'leaf',     banner: '🍃 Studio Ghibli • Spirited Breeze' },
@@ -4647,6 +5095,8 @@
                     crown:   `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 86L10 38l28 20L60 22l22 36 28-20-8 48H18z"/><circle cx="60" cy="18" r="4" fill="currentColor"/><circle cx="10" cy="34" r="3.5" fill="currentColor"/><circle cx="110" cy="34" r="3.5" fill="currentColor"/><line x1="20" y1="98" x2="100" y2="98" stroke-width="4"/></svg>`,
                     diamond: `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.6"><polygon points="60,12 104,46 60,108 16,46"/><polyline points="16,46 104,46"/><polyline points="60,12 42,46 60,108 78,46 60,12"/></svg>`,
                     lotus:   `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M60 14C46 38 46 64 60 88C74 64 74 38 60 14Z"/><path d="M60 88C34 78 20 56 22 34C40 42 52 60 60 88Z"/><path d="M60 88C86 78 100 56 98 34C80 42 68 60 60 88Z"/><path d="M60 92C26 92 10 76 10 62C28 66 44 76 60 92Z"/><path d="M60 92C94 92 110 76 110 62C92 66 76 76 60 92Z"/></svg>`,
+                    peanut:  `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3"><path d="M46 22C30 22 22 36 28 50c4 8 6 12 2 20-8 14 2 30 20 30 10 0 18-4 24-10 14-14 22-26 20-42-2-14-12-26-26-26-8 0-14 4-22 0z"/><path d="M38 42c6 4 14 2 20-4M40 60c8 4 18 2 26-4M44 78c8 4 18 2 26-4" stroke-width="1.8" opacity="0.7"/><path d="M54 30c-4 14-4 38 4 54M70 36c-4 14-4 34 2 46" stroke-width="1.5" opacity="0.55"/></svg>`,
+                    strawhat:`<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 72c18 14 78 14 96 0" stroke-width="3.5"/><path d="M28 70C30 38 44 26 60 26s30 12 32 44"/><path d="M29 58c16 8 46 8 62 0" stroke-width="6" opacity="0.55"/></svg>`,
                     stella:  `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.8"><polygon points="60,10 72,44 108,44 79,65 90,100 60,79 30,100 41,65 12,44 48,44"/><circle cx="60" cy="58" r="14"/></svg>`,
                     void:    `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="60" cy="60" r="46" stroke-dasharray="10 6"/><circle cx="60" cy="60" r="32"/><circle cx="60" cy="60" r="16" stroke-dasharray="4 4"/><circle cx="60" cy="60" r="5" fill="currentColor"/></svg>`,
                     dagger:  `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M96 16L48 64L38 54L86 6Z"/><path d="M36 52L68 84"/><path d="M44 72L20 96L24 100L48 76"/><circle cx="60" cy="60" r="46" stroke-dasharray="6 8" stroke-width="1.8"/></svg>`,
@@ -4669,8 +5119,42 @@
             getThemeSkinMeta: function(id) {
                 return ProApp.themeSkinMap[id] || ProApp.themeSkinMap['default'];
             },
+            sharedAudioCtx: null,
+            getAudioCtx: function() {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return null;
+                if (!ProApp.sharedAudioCtx || ProApp.sharedAudioCtx.state === 'closed') {
+                    ProApp.sharedAudioCtx = new AudioCtx();
+                }
+                if (ProApp.sharedAudioCtx.state === 'suspended') {
+                    ProApp.sharedAudioCtx.resume().catch(() => {});
+                }
+                return ProApp.sharedAudioCtx;
+            },
+            updateHeaderSoundUI: function() {
+                const on = ProApp.state.themeSoundEnabled !== false;
+                const ic = document.getElementById('headerSoundIcon');
+                const btn = document.getElementById('headerSoundBtn');
+                const chk = document.getElementById('chkThemeSoundEnabled');
+                if (ic) ic.className = on ? 'fa-solid fa-volume-high text-xs sm:text-sm' : 'fa-solid fa-volume-xmark text-xs sm:text-sm text-rose-300';
+                if (btn) btn.classList.toggle('opacity-70', !on);
+                if (chk) chk.checked = on;
+            },
+            quickToggleGlobalSound: function() {
+                const next = ProApp.state.themeSoundEnabled === false;
+                ProApp.state.themeSoundEnabled = next;
+                if (!next && ProApp.musicState && ProApp.musicState.playing) {
+                    ProApp.stopAllMusic();
+                }
+                ProApp.updateHeaderSoundUI();
+                ProApp.saveUiConfigToCloud();
+                if (next) ProApp.playThemeSound('switch');
+                ProApp.showToast(next ? '🔊 បានបើកសំឡេង & Effect!' : '🔇 បានបិទសំឡេងទាំងអស់', 'info');
+            },
             toggleThemeSound: function(enabled) {
                 ProApp.state.themeSoundEnabled = !!enabled;
+                if (!enabled && ProApp.musicState && ProApp.musicState.playing) ProApp.stopAllMusic();
+                ProApp.updateHeaderSoundUI();
                 ProApp.saveUiConfigToCloud();
                 if (enabled) ProApp.playThemeSound('switch');
                 ProApp.showToast(enabled ? '🔊 បានបើកសំឡេង Effect តាម Theme!' : '🔇 បានបិទសំឡេង Effect', 'info');
@@ -4678,47 +5162,55 @@
             playThemeSound: function(kind = 'tap') {
                 if (ProApp.state.themeSoundEnabled === false) return;
                 try {
-                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                    if (!AudioCtx) return;
-                    const ctx = new AudioCtx();
+                    const ctx = ProApp.getAudioCtx();
+                    if (!ctx) return;
                     const skinMeta = ProApp.getThemeSkinMeta(ProApp.state.themeStyle || 'default');
                     const prof = skinMeta.sound || 'vip';
                     const now = ctx.currentTime;
-                    const playNote = (freq, start, dur, wave = 'sine', vol = 0.08) => {
+                    const playNote = (freq, start, dur, wave = 'sine', vol = 0.08, slideTo = null) => {
                         const osc = ctx.createOscillator();
                         const g = ctx.createGain();
                         osc.type = wave;
                         osc.frequency.setValueAtTime(freq, now + start);
+                        if (slideTo) osc.frequency.exponentialRampToValueAtTime(slideTo, now + start + dur);
                         g.gain.setValueAtTime(0.0001, now + start);
-                        g.gain.exponentialRampToValueAtTime(vol, now + start + 0.015);
+                        g.gain.exponentialRampToValueAtTime(vol, now + start + 0.012);
                         g.gain.exponentialRampToValueAtTime(0.0001, now + start + dur);
                         osc.connect(g); g.connect(ctx.destination);
                         osc.start(now + start); osc.stop(now + start + dur + 0.02);
                     };
-                    if (kind === 'switch') {
-                        if (prof === 'cyber') {
-                            playNote(440, 0, 0.09, 'triangle', 0.09);
-                            playNote(660, 0.06, 0.11, 'sawtooth', 0.05);
-                            playNote(1100, 0.12, 0.22, 'sine', 0.08);
+                    if (kind === 'welcome' || kind === 'switch') {
+                        if (prof === 'peanut') {
+                            playNote(523.25, 0, 0.10, 'sine', 0.09, 659.25);
+                            playNote(659.25, 0.09, 0.11, 'triangle', 0.09, 783.99);
+                            playNote(1046.5, 0.18, 0.24, 'sine', 0.10);
+                        } else if (prof === 'cyber') {
+                            playNote(440, 0, 0.08, 'triangle', 0.09);
+                            playNote(660, 0.06, 0.10, 'sawtooth', 0.045);
+                            playNote(1100, 0.12, 0.22, 'sine', 0.085);
                         } else if (prof === 'anime-fire') {
                             playNote(392, 0, 0.12, 'triangle', 0.09);
                             playNote(587.33, 0.06, 0.16, 'triangle', 0.09);
                             playNote(880, 0.12, 0.24, 'sine', 0.09);
                         } else if (prof === 'anime-soft') {
-                            playNote(523.25, 0, 0.18, 'sine', 0.08);
-                            playNote(659.25, 0.08, 0.22, 'sine', 0.08);
-                            playNote(1046.5, 0.16, 0.28, 'sine', 0.07);
+                            playNote(523.25, 0, 0.16, 'sine', 0.08);
+                            playNote(659.25, 0.07, 0.20, 'sine', 0.08);
+                            playNote(1046.5, 0.15, 0.28, 'sine', 0.075);
                         } else {
-                            playNote(587.33, 0, 0.20, 'sine', 0.08);
-                            playNote(880, 0.08, 0.26, 'sine', 0.08);
-                            playNote(1174.66, 0.16, 0.30, 'sine', 0.06);
+                            playNote(587.33, 0, 0.18, 'sine', 0.08);
+                            playNote(880, 0.08, 0.24, 'sine', 0.08);
+                            playNote(1174.66, 0.16, 0.30, 'sine', 0.065);
                         }
+                    } else if (kind === 'quest') {
+                        playNote(587.33, 0, 0.10, 'triangle', 0.09);
+                        playNote(880, 0.08, 0.12, 'triangle', 0.09);
+                        playNote(1174.66, 0.16, 0.25, 'sine', 0.10);
                     } else {
-                        if (prof === 'cyber') playNote(920, 0, 0.07, 'triangle', 0.05);
-                        else if (prof === 'anime-fire') playNote(640, 0, 0.09, 'triangle', 0.05);
-                        else playNote(760, 0, 0.09, 'sine', 0.05);
+                        if (prof === 'peanut') playNote(580, 0, 0.075, 'sine', 0.055, 860);
+                        else if (prof === 'cyber') playNote(940, 0, 0.055, 'triangle', 0.045, 1180);
+                        else if (prof === 'anime-fire') playNote(620, 0, 0.075, 'triangle', 0.045, 480);
+                        else playNote(760, 0, 0.07, 'sine', 0.045, 920);
                     }
-                    setTimeout(() => { try { ctx.close(); } catch (e) {} }, 600);
                 } catch (e) {}
             },
             triggerThemeActivationEffect: function(themeId) {
@@ -4732,7 +5224,7 @@
                         void fl.offsetWidth;
                         fl.classList.add('flashing');
                     }
-                    ProApp.spawnTouchBurst(window.innerWidth / 2, window.innerHeight * 0.32, 22);
+                    ProApp.spawnTouchBurst(window.innerWidth / 2, window.innerHeight * 0.32, 16);
                 }
                 const banner = document.getElementById('themeActivationBanner');
                 const bIcon = document.getElementById('themeBannerIcon');
@@ -4744,39 +5236,50 @@
                     void banner.offsetWidth;
                     banner.classList.add('show-banner');
                 }
+                if (ProApp.musicState && ProApp.musicState.playing && ProApp.musicState.mode === 'synth' && ProApp.state.autoMatchMusic !== false) {
+                    const trackIdx = ProApp.getThemeMusicTrackIndex(themeId);
+                    if (trackIdx !== ProApp.musicState.synthIdx) {
+                        ProApp.playSynthTrack(trackIdx);
+                    }
+                }
             },
-            // ✨ INTERACTIVE TOUCH / CLICK BURST ENGINE (60FPS, ZERO IDLE CPU)
             burstParticles: [],
             burstRaf: null,
             burstInitialized: false,
+            lastTapSoundTs: 0,
             initTouchBurstEngine: function() {
                 if (ProApp.burstInitialized) return;
                 ProApp.burstInitialized = true;
                 document.addEventListener('pointerdown', (e) => {
-                    if (ProApp.state.themeFxEnabled === false) return;
-                    if (e.target && e.target.closest('button, .glass-panel, .service-item-btn, .tab-btn, .theme-swatch-card')) {
-                        ProApp.spawnTouchBurst(e.clientX, e.clientY, 11);
+                    const btn = e.target && e.target.closest('button, .service-item-btn, .tab-btn, .theme-swatch-card, .tx-tag-pill, .cal-day-cell');
+                    if (!btn) return;
+                    const nowTs = Date.now();
+                    if (ProApp.state.themeSoundEnabled !== false && nowTs - ProApp.lastTapSoundTs > 85) {
+                        ProApp.lastTapSoundTs = nowTs;
+                        ProApp.playThemeSound('tap');
+                    }
+                    if (ProApp.state.themeFxEnabled !== false) {
+                        ProApp.spawnTouchBurst(e.clientX, e.clientY, 8);
                     }
                 }, { passive: true });
             },
-            spawnTouchBurst: function(cx, cy, count = 11) {
+            spawnTouchBurst: function(cx, cy, count = 8) {
                 const cv = document.getElementById('touchBurstCanvas');
                 if (!cv) return;
-                const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-                const w = Math.floor(window.innerWidth * dpr), h = Math.floor(window.innerHeight * dpr);
+                const w = window.innerWidth, h = window.innerHeight;
                 if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
                 const t = ProApp.getThemeMeta(ProApp.state.themeStyle || 'default');
                 const fxInfo = ProApp.themeFxMap[t.id] || { fx: 'gold-dust' };
                 for (let i = 0; i < count; i++) {
                     const ang = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.45;
-                    const spd = (2.2 + Math.random() * 4.4) * dpr;
+                    const spd = 2.0 + Math.random() * 3.8;
                     ProApp.burstParticles.push({
-                        x: cx * dpr, y: cy * dpr,
+                        x: cx, y: cy,
                         vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd,
-                        r: (2.2 + Math.random() * 2.8) * dpr,
-                        life: 1, decay: 0.032 + Math.random() * 0.02,
+                        r: 2.2 + Math.random() * 2.5,
+                        life: 1, decay: 0.042 + Math.random() * 0.02,
                         rot: Math.random() * Math.PI * 2,
-                        color: Math.random() > 0.35 ? t.accent : (t.accent2 || '#ffffff'),
+                        color: fxInfo.fx === 'peanut' && i % 2 === 0 ? '#eab308' : (Math.random() > 0.35 ? t.accent : (t.accent2 || '#ffffff')),
                         fx: fxInfo.fx
                     });
                 }
@@ -4787,28 +5290,24 @@
                         for (let i = ProApp.burstParticles.length - 1; i >= 0; i--) {
                             const p = ProApp.burstParticles[i];
                             p.x += p.vx; p.y += p.vy;
-                            p.vx *= 0.94; p.vy = p.vy * 0.94 + 0.08;
+                            p.vx *= 0.93; p.vy = p.vy * 0.93 + 0.09;
                             p.life -= p.decay;
                             if (p.life <= 0) { ProApp.burstParticles.splice(i, 1); continue; }
-                            ctx.save();
                             ctx.globalAlpha = p.life;
                             ctx.fillStyle = p.color;
                             ctx.strokeStyle = p.color;
-                            ctx.shadowColor = p.color;
-                            ctx.shadowBlur = 8;
                             if (p.fx === 'cyber' || p.fx === 'void') {
                                 ctx.fillRect(p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
                             } else if (p.fx === 'slash') {
-                                ctx.lineWidth = 2;
+                                ctx.lineWidth = 1.8;
                                 ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 3, p.y - p.vy * 3); ctx.stroke();
-                            } else if (p.fx === 'sakura' || p.fx === 'stella') {
-                                ctx.translate(p.x, p.y); ctx.rotate(p.rot + p.life * 4);
-                                ctx.beginPath(); ctx.ellipse(0, 0, p.r * 1.4, p.r * 0.65, 0, 0, Math.PI * 2); ctx.fill();
+                            } else if (p.fx === 'peanut') {
+                                ctx.beginPath(); ctx.arc(p.x - 1.5, p.y, p.r * p.life, 0, Math.PI * 2); ctx.arc(p.x + 1.5, p.y, p.r * 0.85 * p.life, 0, Math.PI * 2); ctx.fill();
                             } else {
                                 ctx.beginPath(); ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2); ctx.fill();
                             }
-                            ctx.restore();
                         }
+                        ctx.globalAlpha = 1;
                         if (ProApp.burstParticles.length > 0) {
                             ProApp.burstRaf = requestAnimationFrame(step);
                         } else {
@@ -4819,7 +5318,6 @@
                     ProApp.burstRaf = requestAnimationFrame(step);
                 }
             },
-
             // 🖼️ INTERACTIVE 1:1 SQUARE AVATAR CROPPER ENGINE (ULTRA-LIGHT WEBP ~5–10 KB)
             cropState: { img: null, zoom: 1, offsetX: 0, offsetY: 0, dragging: false, startX: 0, startY: 0, shape: 'rounded', bound: false },
             openAvatarCropperModal: function() {
@@ -5066,6 +5564,822 @@
                     }
                 }
             },
+
+            // 🚀 V12 ULTIMATE ENGINES
+            activeTxTag: '',
+            calYear: new Date().getFullYear(),
+            calMonth: new Date().getMonth(),
+            calSelectedDate: '',
+            welcomeAutoTimer: null,
+            musicState: { playing: false, mode: 'synth', synthIdx: 0, songIdx: -1, volume: 0.45, stepTimer: null, stepNum: 0, localUrls: [] },
+
+            applyThemeMenuIcons: function(themeId) {
+                const skin = ProApp.getThemeSkinMeta(themeId).skin;
+                let icons = null;
+                if (themeId === 'anime-spyxfamily') {
+                    icons = ['📋', '🥜', '⭐', '🕵️', '⏱️', '🏰', '🎀', '🪙', '🔧'];
+                } else if (themeId === 'anime-btth') {
+                    icons = ['📜', '🔥', '🪷', '⚔️', '⏳', '🏯', '☯️', '💎', '⚙️'];
+                } else if (themeId === 'anime-onepiece') {
+                    icons = ['🗺️', '⛵', '🧭', '🏴‍☠️', '⏳', '🏝️', '👒', '🪙', '⚙️'];
+                } else if (themeId === 'anime-naruto' || themeId === 'anime-demonslayer' || themeId === 'anime-chainsaw') {
+                    icons = ['📜', '🔥', '🌀', '⚔️', '⏳', '⛩️', '🎭', '💰', '⚙️'];
+                } else if (themeId === 'anime-ghibli' || themeId === 'rose-pearl' || themeId === 'frost-lavender') {
+                    icons = ['📖', '🌸', '✨', '🎀', '🕰️', '🏡', '🍃', '💎', '⚙️'];
+                } else if (skin === 'cyber') {
+                    icons = ['📜', '⚡', '🌀', '💀', '⏳', '🛡️', '⚔️', '💎', '⚙️'];
+                } else if (skin === 'anime') {
+                    icons = ['📜', '✨', '🌀', '⚔️', '⏳', '🏛️', '🎴', '🪙', '⚙️'];
+                }
+                const defaultFA = [
+                    '<i class="fa-solid fa-pen-to-square"></i>',
+                    '<i class="fa-solid fa-money-bill-transfer"></i>',
+                    '<i class="fa-solid fa-right-left"></i>',
+                    '<i class="fa-solid fa-hand-holding-dollar"></i>',
+                    '<i class="fa-solid fa-clock-rotate-left"></i>',
+                    '<i class="fa-solid fa-building-columns"></i>',
+                    '<i class="fa-solid fa-icons"></i>',
+                    '<i class="fa-solid fa-coins"></i>',
+                    '<i class="fa-solid fa-gear"></i>'
+                ];
+                for (let i = 0; i < 9; i++) {
+                    const el = document.getElementById('srvIcon-' + i);
+                    if (!el) continue;
+                    el.innerHTML = icons ? `<span class="text-[21px] leading-none">${icons[i]}</span>` : defaultFA[i];
+                }
+            },
+
+            applyThemedPinLock: function() {
+                const t = ProApp.getThemeMeta(ProApp.state.themeStyle || 'default');
+                const s = ProApp.getThemeSkinMeta(t.id);
+                const bg = document.getElementById('pinLockEmblemBg');
+                const avBox = document.getElementById('pinLockAvatarBox');
+                const badge = document.getElementById('pinLockBadge');
+                const title = document.getElementById('pinLockTitle');
+                if (bg) bg.innerHTML = ProApp.getHeroEmblemSvg(s.emblem);
+                if (avBox) {
+                    const av = ProApp.state.appAvatar || '';
+                    if (av.startsWith('data:image/')) avBox.innerHTML = `<img src="${av}" alt="Avatar" class="w-full h-full object-cover">`;
+                    else if (av.startsWith('emoji:')) avBox.innerHTML = `<span class="text-4xl">${ProApp.escapeHtml(av.slice(6))}</span>`;
+                    else avBox.innerHTML = `<span class="text-4xl">${t.icon}</span>`;
+                }
+                if (badge) {
+                    if (t.id === 'anime-spyxfamily') badge.textContent = '🥜 SECRET PEANUT CODE';
+                    else if (s.skin === 'cyber') badge.textContent = `⚔️ ${s.badge} LOCK`;
+                    else if (s.skin === 'vip') badge.textContent = `👑 ${s.badge} VAULT`;
+                    else badge.textContent = `${t.icon} ${s.badge}`;
+                }
+                if (title) {
+                    title.textContent = ProApp.state.language === 'en' ? 'Enter 4-Digit PIN' : 'បញ្ចូលលេខកូដ PIN ៤ ខ្ទង់';
+                }
+            },
+
+            getThemeWelcomeCopy: function(themeId) {
+                const t = ProApp.getThemeMeta(themeId);
+                const s = ProApp.getThemeSkinMeta(themeId);
+                const owner = (ProApp.state.welcomeName || '').trim();
+                const greetName = owner ? ` ${owner}` : '';
+                const customMap = {
+                    'anime-spyxfamily':  { title: `WAKU WAKU!${greetName} 🥜`, sub: 'Operation Strix រួចរាល់ — គ្រប់គ្រងលុយឱ្យបានល្អ ទិញភីណាតឱ្យច្រើន!' },
+                    'anime-btth':        { title: `ភ្លើងទេវតាភ្ញាក់ឡើង${greetName} 🪷`, sub: 'ថាមពលទ្រព្យសម្បត្តិកំពុងកើនឡើង — សូមស្វាគមន៍ការត្រឡប់មកវិញ!' },
+                    'anime-sololeveling':{ title: `[ SYSTEM ] ARISE${greetName}`, sub: 'Shadow Monarch Dashboard Online — គ្រប់ប្រតិបត្តិការស្ថិតក្រោមការគ្រប់គ្រង!' },
+                    'anime-jjk':         { title: `Infinite Void ♾️${greetName}`, sub: 'Domain Expansion Opened — វិភាគហិរញ្ញវត្ថុច្បាស់គ្រប់ចំណុច!' },
+                    'anime-onepiece':    { title: `Set Sail!${greetName} 👒`, sub: 'ដំណើរស្វែងរកកំណប់ Grand Line — សូមស្វាគមន៍កាពីទែន!' },
+                    'anime-naruto':      { title: `Believe It!${greetName} 🦊`, sub: 'Kurama Sage Mode — សន្សំកម្លាំង និងទ្រព្យសម្បត្តិជារៀងរាល់ថ្ងៃ!' },
+                    'anime-demonslayer': { title: `Hinokami Kagura${greetName} ⚔️`, sub: 'កាត់បន្ថយចំណាយមិនចាំបាច់ រក្សាទ្រព្យឱ្យរឹងមាំ!' },
+                    'anime-cyberpunk':   { title: `Night City Online${greetName} 🌆`, sub: 'Neural Finance Synced — ទិន្នន័យរួចរាល់ ១០០%!' },
+                    'anime-dragonball':  { title: `Ultra Instinct${greetName} 🐉`, sub: 'កម្រិតថាមពលហិរញ្ញវត្ថុលើស 9000!' },
+                    'anime-bleach':      { title: `BANKAI!${greetName} 🌙`, sub: 'Soul Finance Awakened — ស្វាគមន៍ការត្រឡប់មកវិញ!' },
+                    'anime-ghibli':      { title: `សូមស្វាគមន៍${greetName} 🍃`, sub: 'ថ្ងៃថ្មីដ៏ស្រស់ស្រាយ — កត់ត្រាហិរញ្ញវត្ថុដោយភាពស្ងប់ចិត្ត' },
+                    'anime-yourname':    { title: `Twilight Sky${greetName} ☄️`, sub: 'គ្រប់ពេលវេលា និងគ្រប់កាក់សុទ្ធតែមានតម្លៃ!' },
+                    'aba-dark':          { title: `Welcome Back${greetName} 👑`, sub: 'Obsidian Gold Private Vault — សុវត្ថិភាព និងប្រណីតភាព' },
+                    'emerald-wealth':    { title: `Emerald Private${greetName} 💚`, sub: 'ទ្រព្យសម្បត្តិរីកចម្រើនប្រកបដោយស្ថិរភាព' }
+                };
+                if (customMap[themeId]) return { tag: s.badge, ...customMap[themeId], icon: t.icon, emblem: s.emblem };
+                return {
+                    tag: s.badge,
+                    title: owner ? `សូមស្វាគមន៍ ${owner}! ${t.icon}` : `សូមស្វាគមន៍ការត្រឡប់មកវិញ! ${t.icon}`,
+                    sub: ProApp.state.appTitle || 'Pro Cloud Finance — រួចរាល់សម្រាប់ថ្ងៃថ្មី ✨',
+                    icon: t.icon,
+                    emblem: s.emblem
+                };
+            },
+            showWelcomeIntro: function(playSoundNow = false) {
+                const ov = document.getElementById('welcomeIntroOverlay');
+                if (!ov) return;
+                const t = ProApp.getThemeMeta(ProApp.state.themeStyle || 'default');
+                const copy = ProApp.getThemeWelcomeCopy(t.id);
+                const av = ProApp.state.appAvatar || '';
+                const orb = document.getElementById('welcomeAvatarOrb');
+                if (orb) {
+                    if (av.startsWith('data:image/')) orb.innerHTML = `<img src="${av}" alt="Avatar" class="w-full h-full object-cover">`;
+                    else if (av.startsWith('emoji:')) orb.innerHTML = `<span>${ProApp.escapeHtml(av.slice(6))}</span>`;
+                    else orb.innerHTML = `<span>${copy.icon}</span>`;
+                }
+                const wm = document.getElementById('welcomeEmblemWatermark');
+                if (wm) wm.innerHTML = ProApp.getHeroEmblemSvg(copy.emblem);
+                const tagEl = document.getElementById('welcomeThemeTag');
+                const ttlEl = document.getElementById('welcomeTitleText');
+                const subEl = document.getElementById('welcomeSubtitleText');
+                if (tagEl) tagEl.textContent = copy.tag;
+                if (ttlEl) ttlEl.textContent = copy.title;
+                if (subEl) subEl.textContent = copy.sub;
+
+                ov.classList.remove('hidden', 'welcome-fade-out');
+                if (playSoundNow) {
+                    ProApp.playThemeSound('welcome');
+                    if (ProApp.state.themeFxEnabled !== false) ProApp.spawnTouchBurst(window.innerWidth / 2, window.innerHeight * 0.42, 14);
+                }
+                clearTimeout(ProApp.welcomeAutoTimer);
+                ProApp.welcomeAutoTimer = setTimeout(() => ProApp.dismissWelcomeIntro(false), 2600);
+            },
+            dismissWelcomeIntro: function(fromUserTap = false) {
+                clearTimeout(ProApp.welcomeAutoTimer);
+                const ov = document.getElementById('welcomeIntroOverlay');
+                if (!ov || ov.classList.contains('hidden')) return;
+                if (fromUserTap) {
+                    ProApp.playThemeSound('welcome');
+                    if (ProApp.state.themeFxEnabled !== false) ProApp.spawnTouchBurst(window.innerWidth / 2, window.innerHeight * 0.45, 14);
+                }
+                ov.classList.add('welcome-fade-out');
+                setTimeout(() => { ov.classList.add('hidden'); ov.classList.remove('welcome-fade-out'); }, 420);
+            },
+
+            musicCatalog: [
+                { id: 'lofi',      icon: '☕', name: 'Lo-Fi Cafe Chill',      bpm: 84,  wave: 'triangle', bassWave: 'sine',     notes: [261.6,329.6,392.0,493.9, 440.0,392.0,329.6,293.7, 349.2,440.0,523.3,493.9, 392.0,329.6,293.7,261.6], bass: [130.8,130.8,110.0,110.0, 174.6,174.6,196.0,196.0] },
+                { id: 'piano',     icon: '🎹', name: 'Luxury Piano Lounge',   bpm: 76,  wave: 'sine',     bassWave: 'sine',     notes: [523.3,659.3,784.0,987.8, 880.0,784.0,659.3,587.3, 698.5,880.0,1046.5,880.0, 784.0,659.3,587.3,523.3], bass: [130.8,164.8,110.0,146.8, 174.6,220.0,196.0,146.8] },
+                { id: 'spyjazz',   icon: '🥜', name: 'Spy Jazz Swing',        bpm: 112, wave: 'triangle', bassWave: 'triangle', notes: [293.7,349.2,440.0,415.3, 440.0,523.3,587.3,523.3, 440.0,349.2,329.6,293.7, 349.2,440.0,523.3,440.0], bass: [146.8,174.6,220.0,196.0, 146.8,130.8,110.0,130.8] },
+                { id: 'guzheng',   icon: '🪷', name: 'Heavenly Guzheng',      bpm: 88,  wave: 'triangle', bassWave: 'sine',     notes: [293.7,329.6,440.0,523.3, 587.3,659.3,587.3,440.0, 523.3,440.0,329.6,293.7, 440.0,587.3,659.3,880.0], bass: [146.8,146.8,220.0,220.0, 130.8,130.8,146.8,110.0] },
+                { id: 'sakura',    icon: '🌸', name: 'Sakura Music Box',      bpm: 92,  wave: 'sine',     bassWave: 'sine',     notes: [659.3,784.0,880.0,1046.5, 987.8,880.0,784.0,659.3, 587.3,659.3,784.0,880.0, 784.0,659.3,587.3,523.3], bass: [261.6,261.6,220.0,220.0, 174.6,174.6,196.0,196.0] },
+                { id: 'cyber',     icon: '🌆', name: 'Cyberpunk Synthwave',   bpm: 118, wave: 'sawtooth', bassWave: 'sawtooth', notes: [220.0,261.6,329.6,440.0, 392.0,329.6,261.6,220.0, 196.0,246.9,293.7,392.0, 329.6,293.7,246.9,220.0], bass: [110.0,110.0,87.3,87.3, 98.0,98.0,82.4,82.4] },
+                { id: 'shadow',    icon: '⚔️', name: 'Shadow Dungeon Pulse',  bpm: 102, wave: 'sawtooth', bassWave: 'triangle', notes: [196.0,233.1,293.7,311.1, 293.7,233.1,196.0,174.6, 196.0,293.7,392.0,349.2, 311.1,293.7,233.1,196.0], bass: [98.0,98.0,77.8,77.8, 87.3,87.3,98.0,73.4] },
+                { id: 'grandline', icon: '👒', name: 'Grand Line Adventure',  bpm: 122, wave: 'triangle', bassWave: 'triangle', notes: [392.0,493.9,587.3,784.0, 659.3,587.3,493.9,587.3, 523.3,659.3,784.0,659.3, 587.3,493.9,440.0,392.0], bass: [196.0,196.0,146.8,146.8, 130.8,130.8,146.8,196.0] },
+                { id: 'ghibli',    icon: '🍃', name: 'Ghibli Meadow Harp',    bpm: 82,  wave: 'sine',     bassWave: 'sine',     notes: [349.2,440.0,523.3,659.3, 587.3,523.3,440.0,392.0, 349.2,392.0,440.0,587.3, 523.3,440.0,392.0,349.2], bass: [174.6,174.6,130.8,130.8, 116.5,116.5,130.8,174.6] },
+                { id: 'comet',     icon: '☄️', name: 'Twilight Comet Pad',    bpm: 78,  wave: 'sine',     bassWave: 'triangle', notes: [440.0,523.3,659.3,784.0, 880.0,784.0,659.3,523.3, 392.0,493.9,587.3,784.0, 659.3,587.3,523.3,440.0], bass: [110.0,130.8,174.6,130.8, 98.0,123.5,130.8,110.0] },
+                { id: 'rainy',     icon: '🌧️', name: 'Rainy Study Rhodes',    bpm: 72,  wave: 'sine',     bassWave: 'sine',     notes: [261.6,311.1,392.0,466.2, 440.0,392.0,311.1,261.6, 233.1,293.7,349.2,440.0, 392.0,349.2,293.7,261.6], bass: [130.8,130.8,116.5,116.5, 103.8,103.8,116.5,130.8] },
+                { id: 'emerald',   icon: '💎', name: 'Emerald Wealth Ambient',bpm: 70,  wave: 'sine',     bassWave: 'sine',     notes: [329.6,392.0,493.9,659.3, 587.3,493.9,392.0,329.6, 293.7,392.0,493.9,587.3, 493.9,392.0,329.6,293.7], bass: [164.8,164.8,146.8,146.8, 130.8,130.8,146.8,164.8] },
+                { id: 'shamisen',  icon: '🔥', name: 'Kurama Shamisen Beat',  bpm: 126, wave: 'triangle', bassWave: 'sawtooth', notes: [293.7,311.1,440.0,466.2, 587.3,466.2,440.0,311.1, 293.7,440.0,587.3,622.3, 587.3,440.0,311.1,293.7], bass: [146.8,146.8,116.5,116.5, 146.8,116.5,110.0,146.8] },
+                { id: 'edm',       icon: '⚡', name: 'EDM Focus Groove',      bpm: 128, wave: 'sawtooth', bassWave: 'triangle', notes: [523.3,523.3,659.3,784.0, 659.3,784.0,880.0,784.0, 698.5,698.5,880.0,1046.5, 880.0,784.0,659.3,587.3], bass: [130.8,130.8,110.0,110.0, 174.6,174.6,196.0,196.0] }
+            ],
+            getThemeMusicTrackIndex: function(themeId) {
+                const map = {
+                    'anime-spyxfamily': 2, 'anime-btth': 3, 'rose-pearl': 4, 'frost-lavender': 4,
+                    'anime-cyberpunk': 5, 'carbon-titanium': 5, 'anime-sololeveling': 6, 'anime-jjk': 6,
+                    'anime-bleach': 6, 'anime-onepiece': 7, 'anime-aot': 7, 'anime-ghibli': 8,
+                    'sage-mint': 8, 'anime-yourname': 9, 'slate': 9, 'ocean-glacier': 9,
+                    'default': 10, 'espresso-copper': 10, 'emerald-wealth': 11, 'aba-dark': 11,
+                    'champagne-ivory': 11, 'burgundy-velvet': 11, 'royal-amethyst': 1,
+                    'anime-naruto': 12, 'anime-demonslayer': 12, 'anime-chainsaw': 12,
+                    'sunset-amber': 12, 'anime-dragonball': 13
+                };
+                return map[themeId] !== undefined ? map[themeId] : 0;
+            },
+            openMusicModal: function() {
+                const autoChk = document.getElementById('chkAutoMatchMusic');
+                if (autoChk) autoChk.checked = ProApp.state.autoMatchMusic !== false;
+                const volEl = document.getElementById('musicVolumeRange');
+                if (volEl) volEl.value = ProApp.musicState.volume;
+                ProApp.renderMusicLists();
+                ProApp.updateMusicUI();
+                document.getElementById('musicPlayerModal')?.classList.remove('hidden');
+            },
+            closeMusicModal: function() { document.getElementById('musicPlayerModal')?.classList.add('hidden'); },
+            switchMusicTab: function(tab) {
+                const isSynth = tab === 'synth';
+                document.getElementById('musicPane-synth')?.classList.toggle('hidden', !isSynth);
+                document.getElementById('musicPane-songs')?.classList.toggle('hidden', isSynth);
+                const t1 = document.getElementById('musicTab-synth'), t2 = document.getElementById('musicTab-songs');
+                if (t1) t1.className = isSynth ? 'py-1.5 rounded-xl text-[11px] font-extrabold theme-btn-primary cursor-pointer text-center' : 'py-1.5 rounded-xl text-[11px] font-bold bg-slate-200/70 dark:bg-white/10 text-slate-600 dark:text-slate-300 cursor-pointer text-center';
+                if (t2) t2.className = !isSynth ? 'py-1.5 rounded-xl text-[11px] font-extrabold theme-btn-primary cursor-pointer text-center' : 'py-1.5 rounded-xl text-[11px] font-bold bg-slate-200/70 dark:bg-white/10 text-slate-600 dark:text-slate-300 cursor-pointer text-center';
+            },
+            toggleAutoMatchMusic: function(en) {
+                ProApp.state.autoMatchMusic = !!en;
+                ProApp.saveUiConfigToCloud();
+            },
+            setMusicVolume: function(v) {
+                const val = Math.max(0, Math.min(1, parseFloat(v) || 0));
+                ProApp.musicState.volume = val;
+                const pct = document.getElementById('musicVolPct');
+                if (pct) pct.textContent = Math.round(val * 100) + '%';
+                const audioEl = document.getElementById('customSongAudioEl');
+                if (audioEl) audioEl.volume = val;
+            },
+            stopAllMusic: function() {
+                if (ProApp.musicState.stepTimer) {
+                    clearInterval(ProApp.musicState.stepTimer);
+                    ProApp.musicState.stepTimer = null;
+                }
+                const audioEl = document.getElementById('customSongAudioEl');
+                if (audioEl) { audioEl.pause(); }
+                ProApp.musicState.playing = false;
+                ProApp.updateMusicUI();
+            },
+            playSynthTrack: function(idx) {
+                if (ProApp.state.themeSoundEnabled === false) {
+                    ProApp.state.themeSoundEnabled = true;
+                    ProApp.updateHeaderSoundUI();
+                }
+                ProApp.stopAllMusic();
+                const safeIdx = ((idx % ProApp.musicCatalog.length) + ProApp.musicCatalog.length) % ProApp.musicCatalog.length;
+                const tr = ProApp.musicCatalog[safeIdx];
+                ProApp.musicState.mode = 'synth';
+                ProApp.musicState.synthIdx = safeIdx;
+                ProApp.musicState.playing = true;
+                ProApp.musicState.stepNum = 0;
+
+                const stepMs = Math.round((60 / tr.bpm) * 500);
+                const playStep = () => {
+                    if (!ProApp.musicState.playing || ProApp.state.themeSoundEnabled === false) return;
+                    const ctx = ProApp.getAudioCtx();
+                    if (!ctx) return;
+                    const now = ctx.currentTime;
+                    const s = ProApp.musicState.stepNum++;
+                    const vol = (ProApp.musicState.volume || 0.45) * 0.14;
+                    const melFreq = tr.notes[s % tr.notes.length];
+                    const dur = stepMs / 1000 * 1.45;
+
+                    const o1 = ctx.createOscillator(), g1 = ctx.createGain();
+                    o1.type = tr.wave;
+                    o1.frequency.setValueAtTime(melFreq, now);
+                    g1.gain.setValueAtTime(0.0001, now);
+                    g1.gain.exponentialRampToValueAtTime(Math.max(0.001, vol), now + 0.02);
+                    g1.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+                    o1.connect(g1); g1.connect(ctx.destination);
+                    o1.start(now); o1.stop(now + dur + 0.03);
+
+                    if (s % 2 === 0) {
+                        const bFreq = tr.bass[Math.floor(s / 2) % tr.bass.length];
+                        const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+                        o2.type = tr.bassWave;
+                        o2.frequency.setValueAtTime(bFreq, now);
+                        g2.gain.setValueAtTime(0.0001, now);
+                        g2.gain.exponentialRampToValueAtTime(Math.max(0.001, vol * 0.72), now + 0.03);
+                        g2.gain.exponentialRampToValueAtTime(0.0001, now + dur * 1.7);
+                        o2.connect(g2); g2.connect(ctx.destination);
+                        o2.start(now); o2.stop(now + dur * 1.75);
+                    }
+                };
+                playStep();
+                ProApp.musicState.stepTimer = setInterval(playStep, stepMs);
+                ProApp.renderMusicLists();
+                ProApp.updateMusicUI();
+            },
+            playCustomSong: function(idx) {
+                const songs = ProApp.state.customSongs || [];
+                if (!songs[idx]) return;
+                if (ProApp.state.themeSoundEnabled === false) {
+                    ProApp.state.themeSoundEnabled = true;
+                    ProApp.updateHeaderSoundUI();
+                }
+                ProApp.stopAllMusic();
+                const audioEl = document.getElementById('customSongAudioEl');
+                if (!audioEl) return;
+                ProApp.musicState.mode = 'song';
+                ProApp.musicState.songIdx = idx;
+                ProApp.musicState.playing = true;
+                audioEl.src = songs[idx].url;
+                audioEl.volume = ProApp.musicState.volume || 0.45;
+                audioEl.onended = () => ProApp.nextMusicTrack();
+                audioEl.play().catch(() => {
+                    ProApp.showToast('❌ មិនអាចចាក់ឯកសារចម្រៀងនេះបានទេ (សូមពិនិត្យ Link/MP3)', 'error');
+                    ProApp.stopAllMusic();
+                });
+                ProApp.renderMusicLists();
+                ProApp.updateMusicUI();
+            },
+            toggleMusicPlay: function() {
+                if (ProApp.musicState.playing) {
+                    ProApp.stopAllMusic();
+                } else if (ProApp.musicState.mode === 'song' && ProApp.musicState.songIdx >= 0 && (ProApp.state.customSongs || [])[ProApp.musicState.songIdx]) {
+                    ProApp.playCustomSong(ProApp.musicState.songIdx);
+                } else {
+                    const startIdx = ProApp.state.autoMatchMusic !== false ? ProApp.getThemeMusicTrackIndex(ProApp.state.themeStyle || 'default') : ProApp.musicState.synthIdx;
+                    ProApp.playSynthTrack(startIdx);
+                }
+            },
+            nextMusicTrack: function() {
+                if (ProApp.musicState.mode === 'song' && (ProApp.state.customSongs || []).length > 0) {
+                    ProApp.playCustomSong((ProApp.musicState.songIdx + 1) % ProApp.state.customSongs.length);
+                } else {
+                    ProApp.playSynthTrack(ProApp.musicState.synthIdx + 1);
+                }
+            },
+            prevMusicTrack: function() {
+                if (ProApp.musicState.mode === 'song' && (ProApp.state.customSongs || []).length > 0) {
+                    const len = ProApp.state.customSongs.length;
+                    ProApp.playCustomSong((ProApp.musicState.songIdx - 1 + len) % len);
+                } else {
+                    ProApp.playSynthTrack(ProApp.musicState.synthIdx - 1);
+                }
+            },
+            addLocalAudioFiles: function(event) {
+                const files = Array.from(event.target.files || []);
+                if (!files.length) return;
+                if (!Array.isArray(ProApp.state.customSongs)) ProApp.state.customSongs = [];
+                files.forEach(file => {
+                    const blobUrl = URL.createObjectURL(file);
+                    ProApp.musicState.localUrls.push(blobUrl);
+                    ProApp.state.customSongs.push({ id: ProApp.generateId(), title: file.name.replace(/\.[^.]+$/, ''), url: blobUrl, isLocal: true });
+                });
+                event.target.value = '';
+                ProApp.renderMusicLists();
+                ProApp.playCustomSong(ProApp.state.customSongs.length - 1);
+                ProApp.showToast(`🎤 បានបន្ថែមចម្រៀង ${files.length} បទ!`, 'success');
+            },
+            addCustomSongUrl: function() {
+                const tEl = document.getElementById('newSongTitle');
+                const uEl = document.getElementById('newSongUrl');
+                const title = (tEl?.value || '').trim();
+                const url = (uEl?.value || '').trim();
+                if (!url) { ProApp.showToast('សូមបញ្ចូល Link ចម្រៀង MP3!', 'error'); return; }
+                if (!Array.isArray(ProApp.state.customSongs)) ProApp.state.customSongs = [];
+                ProApp.state.customSongs.push({ id: ProApp.generateId(), title: title || 'Custom Song', url: url, isLocal: false });
+                if (tEl) tEl.value = ''; if (uEl) uEl.value = '';
+                ProApp.saveUiConfigToCloud();
+                ProApp.renderMusicLists();
+                ProApp.playCustomSong(ProApp.state.customSongs.length - 1);
+                ProApp.showToast('🎵 បានរក្សាទុកចម្រៀងចូល Playlist!', 'success');
+            },
+            deleteCustomSong: function(idx) {
+                if (!Array.isArray(ProApp.state.customSongs)) return;
+                if (ProApp.musicState.mode === 'song' && ProApp.musicState.songIdx === idx) ProApp.stopAllMusic();
+                ProApp.state.customSongs.splice(idx, 1);
+                ProApp.saveUiConfigToCloud();
+                ProApp.renderMusicLists();
+            },
+            renderMusicLists: function() {
+                const sBox = document.getElementById('musicPane-synth');
+                if (sBox) {
+                    sBox.innerHTML = ProApp.musicCatalog.map((tr, idx) => {
+                        const isCur = ProApp.musicState.playing && ProApp.musicState.mode === 'synth' && ProApp.musicState.synthIdx === idx;
+                        return `<button type="button" onclick="ProApp.playSynthTrack(${idx})" class="p-2.5 rounded-2xl border text-left flex items-center justify-between gap-2 cursor-pointer transition active:scale-95 ${isCur ? 'theme-btn-primary border-transparent' : 'glass-input'}">
+                            <span class="flex items-center gap-2 min-w-0"><span class="text-base shrink-0">${tr.icon}</span><span class="text-[11px] font-extrabold truncate">${idx + 1}. ${ProApp.escapeHtml(tr.name)}</span></span>
+                            <i class="fa-solid ${isCur ? 'fa-volume-high' : 'fa-play opacity-50'} text-[10px] shrink-0"></i>
+                        </button>`;
+                    }).join('');
+                }
+                const cBox = document.getElementById('customSongsList');
+                if (cBox) {
+                    const songs = ProApp.state.customSongs || [];
+                    if (!songs.length) {
+                        cBox.innerHTML = '<div class="text-center text-xs text-slate-400 py-6 font-bold">មិនទាន់មានចម្រៀង MP3 ទេ • ចុច «+ ជ្រើស MP3» ខាងលើដើម្បីស្តាប់ចម្រៀងរបស់អ្នក 🎤</div>';
+                    } else {
+                        cBox.innerHTML = songs.map((sg, idx) => {
+                            const isCur = ProApp.musicState.playing && ProApp.musicState.mode === 'song' && ProApp.musicState.songIdx === idx;
+                            return `<div class="p-2.5 rounded-2xl flex items-center justify-between gap-2 ${isCur ? 'theme-btn-primary' : 'glass-input'}">
+                                <button type="button" onclick="ProApp.playCustomSong(${idx})" class="flex items-center gap-2 min-w-0 flex-1 text-left cursor-pointer">
+                                    <i class="fa-solid ${isCur ? 'fa-circle-pause' : 'fa-circle-play'} text-sm shrink-0"></i>
+                                    <div class="min-w-0">
+                                        <div class="text-xs font-extrabold truncate">${ProApp.escapeHtml(sg.title)}</div>
+                                        <div class="text-[9px] opacity-70 truncate">${sg.isLocal ? '📱 ពីម៉ាស៊ីន (Session)' : '☁️ URL / GitHub'}</div>
+                                    </div>
+                                </button>
+                                <button type="button" onclick="ProApp.deleteCustomSong(${idx})" class="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center text-xs cursor-pointer shrink-0"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>`;
+                        }).join('');
+                    }
+                }
+            },
+            updateMusicUI: function() {
+                const playing = !!ProApp.musicState.playing;
+                const playIc = document.getElementById('musicPlayIcon');
+                const hIc = document.getElementById('headerMusicIcon');
+                const hEq = document.getElementById('headerMusicEq');
+                const lbl = document.getElementById('musicNowPlayingLbl');
+                if (playIc) playIc.className = playing ? 'fa-solid fa-pause' : 'fa-solid fa-play ml-0.5';
+                if (hIc) hIc.classList.toggle('hidden', playing);
+                if (hEq) hEq.classList.toggle('hidden', !playing);
+                if (lbl) {
+                    if (!playing) lbl.textContent = 'បានផ្អាក • ចុច Play ឬរើសបទដើម្បីស្តាប់';
+                    else if (ProApp.musicState.mode === 'song' && (ProApp.state.customSongs || [])[ProApp.musicState.songIdx]) {
+                        lbl.textContent = '🎤 កំពុងចាក់៖ ' + ProApp.state.customSongs[ProApp.musicState.songIdx].title;
+                    } else {
+                        const tr = ProApp.musicCatalog[ProApp.musicState.synthIdx] || ProApp.musicCatalog[0];
+                        lbl.textContent = `🎵 កំពុងចាក់៖ ${tr.icon} ${tr.name}`;
+                    }
+                }
+            },
+
+            computeDailyStreak: function() {
+                const daysSet = new Set();
+                (ProApp.state.transactions || []).forEach(tx => {
+                    if (tx && tx.date) daysSet.add(tx.date.split('T')[0]);
+                });
+                if (!daysSet.size) return 0;
+                const today = new Date();
+                let streak = 0;
+                let checkDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                if (!daysSet.has(ProApp.getLocalDateStr(checkDate))) {
+                    checkDate.setDate(checkDate.getDate() - 1);
+                }
+                while (daysSet.has(ProApp.getLocalDateStr(checkDate))) {
+                    streak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                }
+                return streak;
+            },
+            getRankProfile: function(xp, themeId) {
+                const level = Math.floor(xp / 100) + 1;
+                const pct = xp % 100;
+                const tier = Math.min(4, Math.floor((level - 1) / 2));
+                const ladders = {
+                    'anime-spyxfamily':  ['Eden Student 🥜', 'Stella ★', 'Stella ★★★', 'Secret Agent 🕵️', 'Imperial Scholar 🥜'],
+                    'anime-btth':        ['Dou Zhe 🪷', 'Dou Shi 🔥', 'Dou Huang 🪷', 'Dou Zun 🔥', 'Dou Di 👑'],
+                    'anime-sololeveling':['E-Rank Hunter', 'B-Rank Hunter', 'S-Rank Hunter ⚔️', 'National Level', 'Shadow Monarch ⚔️'],
+                    'anime-onepiece':    ['East Blue Rookie', 'Supernova 👒', 'Warlord ⛵', 'Yonko 🏴‍☠️', 'Pirate King 👒'],
+                    'anime-naruto':      ['Genin 🍃', 'Chunin 🌀', 'Jonin ⚡', 'Sage Mode 🦊', 'Hokage 🦊'],
+                    'anime-jjk':         ['Grade 3 Sorcerer', 'Grade 1', 'Special Grade ♾️', 'Six Eyes', 'Honored One ♾️'],
+                    'anime-dragonball':  ['Earth Fighter', 'Super Saiyan', 'SSJ God 🔥', 'SSJ Blue ⚡', 'Ultra Instinct 🐉'],
+                    'anime-demonslayer': ['Mizunoto', 'Kinoe', 'Hashira ⚔️', 'Sun Breather 🔥', 'Demon Slayer Master']
+                };
+                const vipLadder = ['Silver Member', 'Gold Member', 'Platinum VIP', 'Diamond Reserve', 'Black Card VIP 👑'];
+                const ladder = ladders[themeId] || vipLadder;
+                return { level, pct, title: ladder[tier], xpToNext: 100 - pct };
+            },
+            getDailyQuestsList: function() {
+                const todayStr = ProApp.getLocalDateStr();
+                const claimed = (ProApp.state.claimedQuests && ProApp.state.claimedQuests[todayStr]) || {};
+                const txs = ProApp.state.transactions || [];
+                const todayTxs = txs.filter(t => t && t.date && t.date.split('T')[0] === todayStr);
+                const todayExpUSD = todayTxs.reduce((s, t) => s + (ProApp.isInternalMovement(t) ? 0 : ProApp.toUSD(t.exp, t.cur)), 0);
+                const curM = ProApp.getLocalMonthStr(0);
+                const monthExpUSD = txs.reduce((s, t) => s + (t && t.date && t.date.startsWith(curM) && !ProApp.isInternalMovement(t) ? ProApp.toUSD(t.exp, t.cur) : 0), 0);
+                const avgDailyExp = Math.max(5, monthExpUSD / Math.max(1, new Date().getDate()));
+                const hasGoal = (ProApp.state.goals || []).length > 0;
+                return [
+                    { id: 'checkin', icon: '☀️', title: 'ចូលពិនិត្យហិរញ្ញវត្ថុប្រចាំថ្ងៃ (Daily Check-in)', xp: 15, done: true, claimed: !!claimed.checkin },
+                    { id: 'tx1',     icon: '📝', title: 'កត់ត្រាយ៉ាងតិច ១ ប្រតិបត្តិការថ្ងៃនេះ', xp: 25, done: todayTxs.length >= 1, claimed: !!claimed.tx1 },
+                    { id: 'tx3',     icon: '⚡', title: 'កត់ត្រាបាន ៣ ប្រតិបត្តិការឡើងទៅថ្ងៃនេះ', xp: 35, done: todayTxs.length >= 3, claimed: !!claimed.tx3 },
+                    { id: 'saver',   icon: '🛡️', title: hasGoal ? 'រក្សាចំណាយថ្ងៃនេះមិនឱ្យលើសមធ្យមភាគ' : 'បង្កើតគោលដៅសន្សំ ឬ ចាយតិចជាងមធ្យម', xp: 40, done: todayTxs.length >= 1 && todayExpUSD <= avgDailyExp * 1.15, claimed: !!claimed.saver }
+                ];
+            },
+            computeTotalXp: function() {
+                const txXp = (ProApp.state.transactions || []).length * 10;
+                const goalXp = (ProApp.state.goals || []).length * 25;
+                const streakXp = ProApp.computeDailyStreak() * 15;
+                return txXp + goalXp + streakXp + (Number(ProApp.state.bonusXp) || 0);
+            },
+            updateXpAndStreakUI: function() {
+                const xp = ProApp.computeTotalXp();
+                const streak = ProApp.computeDailyStreak();
+                const rank = ProApp.getRankProfile(xp, ProApp.state.themeStyle || 'default');
+                const quests = ProApp.getDailyQuestsList();
+                const hasClaimable = quests.some(q => q.done && !q.claimed);
+
+                const rEl = document.getElementById('heroRankBadge');
+                const sEl = document.getElementById('heroStreakBadge');
+                const xEl = document.getElementById('heroXpNumbers');
+                const bEl = document.getElementById('heroXpBarFill');
+                const dEl = document.getElementById('heroQuestDot');
+                if (rEl) rEl.textContent = `Lv.${rank.level} • ${rank.title}`;
+                if (sEl) sEl.textContent = `🔥 ${streak} ថ្ងៃ`;
+                if (xEl) xEl.textContent = `${xp} XP`;
+                if (bEl) bEl.style.width = `${Math.max(8, rank.pct)}%`;
+                if (dEl) dEl.classList.toggle('hidden', !hasClaimable);
+            },
+            openQuestsModal: function() {
+                ProApp.renderQuestsModal();
+                document.getElementById('questsModal')?.classList.remove('hidden');
+            },
+            closeQuestsModal: function() { document.getElementById('questsModal')?.classList.add('hidden'); },
+            renderQuestsModal: function() {
+                const t = ProApp.getThemeMeta(ProApp.state.themeStyle || 'default');
+                const s = ProApp.getThemeSkinMeta(t.id);
+                const xp = ProApp.computeTotalXp();
+                const streak = ProApp.computeDailyStreak();
+                const rank = ProApp.getRankProfile(xp, t.id);
+                const quests = ProApp.getDailyQuestsList();
+
+                const iconBox = document.getElementById('questModalIconBox');
+                const mTitle = document.getElementById('questModalTitle');
+                if (iconBox) iconBox.textContent = t.icon;
+                if (mTitle) {
+                    if (t.id === 'anime-sololeveling') mTitle.textContent = '[ DAILY QUEST • SYSTEM ]';
+                    else if (t.id === 'anime-spyxfamily') mTitle.textContent = '🥜 MISSION STRIX • Daily Quests';
+                    else mTitle.textContent = `${t.icon} បេសកកម្មប្រចាំថ្ងៃ (${s.badge})`;
+                }
+                const setTxt = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+                setTxt('qmRankTitle', `Lv.${rank.level} • ${rank.title}`);
+                setTxt('qmStreakNum', `🔥 ${streak} ថ្ងៃជាប់គ្នា`);
+                setTxt('qmTotalXp', `${xp} XP`);
+                setTxt('qmNextRankHint', `សល់ ${rank.xpToNext} XP ទៀតឡើង Lv.${rank.level + 1}!`);
+                const bar = document.getElementById('qmXpBar');
+                if (bar) bar.style.width = `${Math.max(6, rank.pct)}%`;
+
+                const listEl = document.getElementById('dailyQuestsList');
+                if (listEl) {
+                    listEl.innerHTML = quests.map(q => `
+                        <div class="settings-card flex items-center justify-between gap-2.5">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <span class="w-9 h-9 rounded-xl theme-icon-chip flex items-center justify-center text-base shrink-0">${q.icon}</span>
+                                <div class="min-w-0">
+                                    <div class="text-xs font-extrabold leading-snug">${ProApp.escapeHtml(q.title)}</div>
+                                    <div class="text-[10px] font-mono font-bold text-amber-500">+${q.xp} XP</div>
+                                </div>
+                            </div>
+                            ${q.claimed
+                                ? '<span class="px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-500 text-[10px] font-black shrink-0">✓ ទទួលរួច</span>'
+                                : (q.done
+                                    ? `<button type="button" onclick="ProApp.claimDailyQuest('${q.id}', ${q.xp})" class="px-3 py-1.5 rounded-xl theme-btn-primary text-[11px] font-black cursor-pointer active:scale-90 shrink-0">Claim +${q.xp}</button>`
+                                    : '<span class="px-2.5 py-1 rounded-xl bg-slate-200/70 dark:bg-white/10 text-slate-400 text-[10px] font-bold shrink-0">មិនទាន់គ្រប់</span>')}
+                        </div>`).join('');
+                }
+            },
+            claimDailyQuest: function(qid, xpAmt) {
+                const todayStr = ProApp.getLocalDateStr();
+                if (!ProApp.state.claimedQuests || typeof ProApp.state.claimedQuests !== 'object') ProApp.state.claimedQuests = {};
+                const keys = Object.keys(ProApp.state.claimedQuests).sort();
+                while (keys.length > 7) delete ProApp.state.claimedQuests[keys.shift()];
+                if (!ProApp.state.claimedQuests[todayStr]) ProApp.state.claimedQuests[todayStr] = {};
+                if (ProApp.state.claimedQuests[todayStr][qid]) return;
+                ProApp.state.claimedQuests[todayStr][qid] = true;
+                ProApp.state.bonusXp = (Number(ProApp.state.bonusXp) || 0) + xpAmt;
+                ProApp.playThemeSound('quest');
+                ProApp.fireConfetti();
+                ProApp.updateXpAndStreakUI();
+                ProApp.renderQuestsModal();
+                ProApp.saveUiConfigToCloud();
+                ProApp.showToast(`🎉 ទទួលបាន +${xpAmt} XP ជោគជ័យ!`, 'success');
+            },
+
+            openCalendarModal: function() {
+                const now = new Date();
+                ProApp.calYear = now.getFullYear();
+                ProApp.calMonth = now.getMonth();
+                ProApp.calSelectedDate = ProApp.getLocalDateStr(now);
+                ProApp.renderCalendarHeatmap();
+                document.getElementById('calendarModal')?.classList.remove('hidden');
+            },
+            closeCalendarModal: function() { document.getElementById('calendarModal')?.classList.add('hidden'); },
+            shiftCalendarMonth: function(delta) {
+                const d = new Date(ProApp.calYear, ProApp.calMonth + delta, 1);
+                ProApp.calYear = d.getFullYear();
+                ProApp.calMonth = d.getMonth();
+                ProApp.renderCalendarHeatmap();
+            },
+            renderCalendarHeatmap: function() {
+                const y = ProApp.calYear, m = ProApp.calMonth;
+                const ymStr = `${y}-${String(m + 1).padStart(2, '0')}`;
+                const titleEl = document.getElementById('calMonthTitle');
+                const subEl = document.getElementById('calStreakSubtitle');
+                if (titleEl) titleEl.textContent = `ខែ ${m + 1} ឆ្នាំ ${y}`;
+                if (subEl) subEl.textContent = `🔥 កត់ត្រាជាប់គ្នា ${ProApp.computeDailyStreak()} ថ្ងៃ`;
+
+                const dayStats = {};
+                const hidden = ProApp.state.hiddenAccounts || [];
+                (ProApp.state.transactions || []).forEach(tx => {
+                    if (!tx || !tx.date || hidden.includes(tx.acc) || ProApp.isInternalMovement(tx)) return;
+                    const ds = tx.date.split('T')[0];
+                    if (!ds.startsWith(ymStr)) return;
+                    if (!dayStats[ds]) dayStats[ds] = { inc: 0, exp: 0, count: 0 };
+                    dayStats[ds].inc += ProApp.toUSD(tx.inc, tx.cur);
+                    dayStats[ds].exp += ProApp.toUSD(tx.exp, tx.cur);
+                    dayStats[ds].count++;
+                });
+
+                const firstDow = new Date(y, m, 1).getDay();
+                const daysInMonth = new Date(y, m + 1, 0).getDate();
+                const todayStr = ProApp.getLocalDateStr();
+                const maxExp = Math.max(10, ...Object.values(dayStats).map(v => v.exp));
+                let cells = '';
+                for (let b = 0; b < firstDow; b++) cells += '<div></div>';
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const ds = `${ymStr}-${String(d).padStart(2, '0')}`;
+                    const st = dayStats[ds];
+                    let bgCls = 'bg-slate-100/80 dark:bg-white/5 text-slate-500 dark:text-slate-400';
+                    if (st) {
+                        if (st.exp === 0 && st.inc > 0) bgCls = 'bg-emerald-500/25 text-emerald-600 dark:text-emerald-300 border border-emerald-500/40';
+                        else if (st.exp > maxExp * 0.65) bgCls = 'bg-rose-500/30 text-rose-600 dark:text-rose-200 border border-rose-500/45';
+                        else if (st.exp > maxExp * 0.3) bgCls = 'bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-500/40';
+                        else bgCls = 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30';
+                    }
+                    const isSel = ProApp.calSelectedDate === ds;
+                    const isToday = todayStr === ds;
+                    cells += `<button type="button" onclick="ProApp.selectCalendarDay('${ds}')" class="cal-day-cell ${bgCls} ${isSel ? 'is-selected' : ''} ${isToday ? 'font-black' : 'font-bold'}">
+                        <span class="text-[11px] leading-none">${d}</span>
+                        ${st ? `<span class="text-[8px] font-mono opacity-90 leading-none">${st.exp > 0 ? '-' + Math.round(st.exp) + '$' : '+' + Math.round(st.inc) + '$'}</span>` : ''}
+                    </button>`;
+                }
+                const grid = document.getElementById('calHeatmapGrid');
+                if (grid) grid.innerHTML = cells;
+                if (ProApp.calSelectedDate) ProApp.renderCalendarDayDetails(ProApp.calSelectedDate);
+            },
+            selectCalendarDay: function(ds) {
+                ProApp.calSelectedDate = ds;
+                ProApp.renderCalendarHeatmap();
+            },
+            renderCalendarDayDetails: function(ds) {
+                const box = document.getElementById('calDayDetailsBox');
+                if (!box) return;
+                const rows = (ProApp.state.transactions || []).filter(t => t && t.date && t.date.split('T')[0] === ds);
+                if (!rows.length) {
+                    box.innerHTML = `<div class="text-xs font-bold text-slate-400 text-center py-2">📅 ថ្ងៃ ${ds} មិនមានប្រតិបត្តិការទេ</div>`;
+                    return;
+                }
+                let incU = 0, expU = 0;
+                rows.forEach(t => { if (!ProApp.isInternalMovement(t)) { incU += ProApp.toUSD(t.inc, t.cur); expU += ProApp.toUSD(t.exp, t.cur); } });
+                box.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-200/70 dark:border-white/10 pb-2">
+                        <span class="text-xs font-black">📅 ${ds} (${rows.length} ជួរ)</span>
+                        <span class="text-[10.5px] font-mono font-bold"><span class="text-emerald-500">+$${incU.toFixed(2)}</span> / <span class="text-rose-500">-$${expU.toFixed(2)}</span></span>
+                    </div>
+                    <div class="space-y-1.5 max-h-36 overflow-y-auto custom-scrollbar">
+                        ${rows.map(r => {
+                            const isInc = r.inc > 0;
+                            return `<div class="flex items-center justify-between text-[11px] py-1 border-b border-slate-200/40 dark:border-white/5 last:border-0">
+                                <span class="truncate pr-2 font-bold">${ProApp.escapeHtml(r.cat)} <span class="opacity-65 font-normal">${ProApp.escapeHtml(r.desc || '')}</span></span>
+                                <span class="font-mono font-black shrink-0 ${isInc ? 'text-emerald-500' : 'text-rose-500'}">${isInc ? '+' : '-'}${ProApp.formatMoney(isInc ? r.inc : r.exp, r.cur)}</span>
+                            </div>`;
+                        }).join('')}
+                    </div>`;
+            },
+
+            extractTags: function(text) {
+                if (!text) return [];
+                const m = String(text).match(/#[ក-៿a-zA-Z0-9_]+/g);
+                return m ? [...new Set(m.map(t => t.toLowerCase()))] : [];
+            },
+            renderTxTagsBar: function() {
+                const bar = document.getElementById('txTagsFilterBar');
+                const wrap = document.getElementById('txTagsChipsWrap');
+                const clearBtn = document.getElementById('btnClearActiveTag');
+                if (!bar || !wrap) return;
+                const tagTotals = {};
+                (ProApp.state.transactions || []).forEach(tx => {
+                    const tags = ProApp.extractTags((tx.desc || '') + ' ' + (tx.cat || ''));
+                    tags.forEach(tg => {
+                        if (!tagTotals[tg]) tagTotals[tg] = { count: 0, exp: 0, inc: 0 };
+                        tagTotals[tg].count++;
+                        if (!ProApp.isInternalMovement(tx)) {
+                            tagTotals[tg].exp += ProApp.toUSD(tx.exp, tx.cur);
+                            tagTotals[tg].inc += ProApp.toUSD(tx.inc, tx.cur);
+                        }
+                    });
+                });
+                const keys = Object.keys(tagTotals).sort((a, b) => tagTotals[b].count - tagTotals[a].count);
+                if (!keys.length) {
+                    bar.classList.add('hidden');
+                    return;
+                }
+                bar.classList.remove('hidden');
+                if (clearBtn) clearBtn.classList.toggle('hidden', !ProApp.activeTxTag);
+                wrap.innerHTML = keys.map(tg => {
+                    const info = tagTotals[tg];
+                    const active = ProApp.activeTxTag === tg;
+                    const amtTxt = info.exp > 0 ? `-$${info.exp.toFixed(0)}` : `+$${info.inc.toFixed(0)}`;
+                    return `<button type="button" onclick="ProApp.selectTxTag('${ProApp.escapeJsStr(tg)}')" class="tx-tag-pill ${active ? 'is-active' : ''}">${ProApp.escapeHtml(tg)} <span class="opacity-75 font-mono text-[9.5px]">(${info.count} • ${amtTxt})</span></button>`;
+                }).join('');
+            },
+            selectTxTag: function(tag) {
+                ProApp.activeTxTag = (ProApp.activeTxTag === tag) ? '' : tag;
+                if (ProApp.activeTxTag) {
+                    const periodSel = document.getElementById('filterDatePeriod');
+                    if (periodSel) periodSel.value = 'ALL';
+                }
+                ProApp.renderTable();
+            },
+
+            openAffordModal: function() {
+                document.getElementById('affItemName').value = '';
+                document.getElementById('affPrice').value = '';
+                document.getElementById('btnAffCreateGoal')?.classList.add('hidden');
+                document.getElementById('affResultCard').innerHTML = '<div class="text-xs text-slate-400 font-bold">បញ្ចូលតម្លៃខាងលើ ដើម្បីឱ្យប្រព័ន្ធវិភាគភ្លាមៗ ✨</div>';
+                document.getElementById('affordModal')?.classList.remove('hidden');
+                setTimeout(() => document.getElementById('affPrice')?.focus(), 180);
+            },
+            closeAffordModal: function() { document.getElementById('affordModal')?.classList.add('hidden'); },
+            calculateAffordability: function() {
+                const rawPrice = document.getElementById('affPrice')?.value || '';
+                const cur = document.getElementById('affCur')?.value || 'USD';
+                const box = document.getElementById('affResultCard');
+                const goalBtn = document.getElementById('btnAffCreateGoal');
+                if (!box) return;
+                const parsed = ProApp.parseSmartAmount(rawPrice);
+                const actualCur = parsed.hasCurrencyStr ? (parsed.isUSD ? 'USD' : 'KHR') : cur;
+                const priceUSD = ProApp.toUSD(parsed.amount, actualCur);
+                if (priceUSD <= 0) {
+                    goalBtn?.classList.add('hidden');
+                    box.innerHTML = '<div class="text-xs text-slate-400 font-bold">បញ្ចូលតម្លៃខាងលើ ដើម្បីឱ្យប្រព័ន្ធវិភាគភ្លាមៗ ✨</div>';
+                    return;
+                }
+                const hidden = ProApp.state.hiddenAccounts || [];
+                let netUSD = 0, mInc = 0, mExp = 0;
+                const curM = ProApp.getLocalMonthStr(0);
+                (ProApp.state.transactions || []).forEach(tx => {
+                    if (hidden.includes(tx.acc)) return;
+                    netUSD += ProApp.toUSD(tx.inc, tx.cur) - ProApp.toUSD(tx.exp, tx.cur);
+                    if (tx.date && tx.date.startsWith(curM) && !ProApp.isInternalMovement(tx)) {
+                        mInc += ProApp.toUSD(tx.inc, tx.cur);
+                        mExp += ProApp.toUSD(tx.exp, tx.cur);
+                    }
+                });
+                let oweUSD = 0;
+                (ProApp.state.debts || []).forEach(d => {
+                    if (!d.hidden && d.type !== 'LENT') oweUSD += ProApp.toUSD(Math.max(0, (Number(d.amount)||0) - (Number(d.paid)||0)), d.cur);
+                });
+                const trueCash = netUSD - oweUSD;
+                const afterBuy = trueCash - priceUSD;
+                const pctOfCash = trueCash > 0 ? Math.round((priceUSD / trueCash) * 100) : 999;
+                const monthlySave = Math.max(10, mInc - mExp);
+                const dailySave = monthlySave / 30;
+
+                let verdictIcon = '🟢', verdictTitle = 'ទិញបានដោយសុវត្ថិភាព!', verdictCls = 'text-emerald-600 dark:text-emerald-400', advice = `ក្រោយទិញ អ្នកនៅសល់សមតុល្យសុទ្ធ ${ProApp.formatMoney(afterBuy, 'USD')} (ប្រើអស់តែ ${pctOfCash}% នៃប្រាក់សុទ្ធ)។`;
+                if (afterBuy < 0) {
+                    const needUSD = Math.abs(afterBuy);
+                    const daysNeed = Math.ceil(needUSD / dailySave);
+                    verdictIcon = '🔴'; verdictTitle = 'មិនទាន់គួរទិញទេ! (ខ្វះសាច់ប្រាក់)'; verdictCls = 'text-rose-600 dark:text-rose-400';
+                    advice = `ខ្វះ ${ProApp.formatMoney(needUSD, 'USD')} ទៀត! តាមល្បឿនសន្សំខែនេះ អ្នកត្រូវសន្សំបន្ថែមប្រហែល <strong>${daysNeed} ថ្ងៃ</strong> (~${(daysNeed/30).toFixed(1)} ខែ) ទើបទិញបានស្រួល។`;
+                } else if (pctOfCash > 35) {
+                    const recoverDays = Math.ceil(priceUSD / dailySave);
+                    verdictIcon = '🟡'; verdictTitle = 'ប្រយ័ត្ន! ប៉ះពាល់ថវិកាខែនេះ'; verdictCls = 'text-amber-600 dark:text-amber-400';
+                    advice = `តម្លៃនេះស្មើ <strong>${pctOfCash}%</strong> នៃសាច់ប្រាក់សុទ្ធរបស់អ្នក (សល់ ${ProApp.formatMoney(afterBuy, 'USD')})។ ត្រូវចំណាយពេលប្រហែល <strong>${recoverDays} ថ្ងៃ</strong> ដើម្បីសន្សំបំពេញវិញ។`;
+                }
+                goalBtn?.classList.remove('hidden');
+                box.innerHTML = `
+                    <div class="text-3xl">${verdictIcon}</div>
+                    <div class="text-sm font-black ${verdictCls}">${verdictTitle}</div>
+                    <p class="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">${advice}</p>
+                    <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/70 dark:border-white/10 text-[10.5px] font-mono">
+                        <div class="p-2 rounded-xl bg-white/70 dark:bg-black/20"><div class="text-slate-400 font-sans text-[9.5px]">សាច់ប្រាក់សុទ្ធពិត</div><strong>${ProApp.formatMoney(trueCash, 'USD')}</strong></div>
+                        <div class="p-2 rounded-xl bg-white/70 dark:bg-black/20"><div class="text-slate-400 font-sans text-[9.5px]">តម្លៃរបស់ (USD)</div><strong class="theme-accent-text">$${priceUSD.toFixed(2)}</strong></div>
+                    </div>`;
+            },
+            convertAffordToGoal: function() {
+                const name = (document.getElementById('affItemName')?.value || '').trim() || 'គោលដៅទិញរបស់ថ្មី';
+                const rawPrice = document.getElementById('affPrice')?.value || '';
+                const cur = document.getElementById('affCur')?.value || 'USD';
+                const parsed = ProApp.parseSmartAmount(rawPrice);
+                if (parsed.amount <= 0) return;
+                const finalCur = parsed.hasCurrencyStr ? (parsed.isUSD ? 'USD' : 'KHR') : cur;
+                ProApp.state.goals.push({ id: ProApp.generateId(), name: '🎯 ' + name, target: parsed.amount, current: 0, cur: finalCur, linkedAcc: '', hidden: false });
+                ProApp.saveGoalsToCloud();
+                ProApp.updateDashboard();
+                ProApp.closeAffordModal();
+                ProApp.fireConfetti();
+                ProApp.showToast(`🐖 បានបង្កើតគោលដៅសន្សំ «${name}» រួចរាល់!`, 'success');
+            },
+
+            openFlexCardModal: function() {
+                ProApp.renderFlexCard();
+                document.getElementById('flexCardModal')?.classList.remove('hidden');
+            },
+            closeFlexCardModal: function() { document.getElementById('flexCardModal')?.classList.add('hidden'); },
+            renderFlexCard: function() {
+                const t = ProApp.getThemeMeta(ProApp.state.themeStyle || 'default');
+                const s = ProApp.getThemeSkinMeta(t.id);
+                const hideMoney = !!document.getElementById('chkFlexHideMoney')?.checked;
+                const curM = ProApp.getLocalMonthStr(0);
+                const hidden = ProApp.state.hiddenAccounts || [];
+                let inc = 0, exp = 0; const catMap = {};
+                (ProApp.state.transactions || []).forEach(tx => {
+                    if (!tx.date || !tx.date.startsWith(curM) || hidden.includes(tx.acc) || ProApp.isInternalMovement(tx)) return;
+                    inc += ProApp.toUSD(tx.inc, tx.cur);
+                    const e = ProApp.toUSD(tx.exp, tx.cur);
+                    exp += e;
+                    if (e > 0) catMap[tx.cat] = (catMap[tx.cat] || 0) + e;
+                });
+                const topCat = Object.entries(catMap).sort((a, b) => b[1] - a[1])[0]?.[0] || 'មិនទាន់មាន';
+                const saveRate = inc > 0 ? Math.max(-99, Math.round(((inc - exp) / inc) * 100)) : 0;
+                const xp = ProApp.computeTotalXp();
+                const rank = ProApp.getRankProfile(xp, t.id);
+                const streak = ProApp.computeDailyStreak();
+
+                const avBox = document.getElementById('flexAvatarBox');
+                const av = ProApp.state.appAvatar || '';
+                if (avBox) {
+                    if (av.startsWith('data:image/')) avBox.innerHTML = `<img src="${av}" class="w-full h-full object-cover">`;
+                    else if (av.startsWith('emoji:')) avBox.innerHTML = `<span>${ProApp.escapeHtml(av.slice(6))}</span>`;
+                    else avBox.innerHTML = `<span>${t.icon}</span>`;
+                }
+                const emb = document.getElementById('flexEmblemBg');
+                if (emb) emb.innerHTML = ProApp.getHeroEmblemSvg(s.emblem);
+                const setT = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+                setT('flexAppTitle', ProApp.state.welcomeName || ProApp.state.appTitle || 'Pro Cloud Finance');
+                setT('flexMonthLabel', `Monthly Flex • ${curM}`);
+                setT('flexThemeBadge', `${t.icon} ${s.badge}`);
+                setT('flexSaveRate', `${saveRate}%`);
+                setT('flexRankVal', `Lv.${rank.level} • ${rank.title}`);
+                setT('flexStreakVal', `🔥 ${streak} ថ្ងៃជាប់គ្នា • ${xp} XP`);
+                setT('flexTopCat', topCat);
+                document.getElementById('flexMoneyGrid')?.classList.toggle('hidden', hideMoney);
+                setT('flexIncVal', '$' + inc.toFixed(2));
+                setT('flexExpVal', '$' + exp.toFixed(2));
+                setT('flexNetVal', (inc - exp >= 0 ? '+' : '') + '$' + (inc - exp).toFixed(2));
+            },
+            downloadFlexCard: function() {
+                const el = document.getElementById('flexCardExportArea');
+                if (!el || typeof html2canvas !== 'function') return;
+                ProApp.showToast('កំពុងបង្កើតរូបភាពកាតសង្ខេប...', 'info');
+                html2canvas(el, { scale: 2, backgroundColor: null, logging: false }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `ProCloud_Flex_${ProApp.getLocalMonthStr(0)}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    ProApp.fireConfetti();
+                    ProApp.showToast('🪪 បានទាញយកកាតសង្ខេបជោគជ័យ!', 'success');
+                }).catch(() => ProApp.showToast('មានបញ្ហាក្នុងការបង្កើតរូបភាព', 'error'));
+            },
+
             openThemeStudioModal: function() {
                 const fxChk = document.getElementById('chkThemeFxEnabled');
                 if (fxChk) fxChk.checked = ProApp.state.themeFxEnabled !== false;
@@ -5215,6 +6529,8 @@
             saveUiCustomizations: function() {
                 ProApp.state.appTitle = document.getElementById('cfgAppTitle').value.trim() || 'ប្រព័ន្ធគ្រប់គ្រងហិរញ្ញវត្ថុ Pro Cloud';
                 ProApp.state.appSubtitle = document.getElementById('cfgAppSubtitle').value.trim() || 'ទិន្នន័យ Sync ស្វ័យប្រវត្តិ ☁️';
+                const wNameEl = document.getElementById('cfgWelcomeName'); if (wNameEl) ProApp.state.welcomeName = wNameEl.value.trim();
+                const wEnEl = document.getElementById('cfgWelcomeEnabled'); if (wEnEl) ProApp.state.welcomeEnabled = wEnEl.checked;
                 const urlVal = document.getElementById('cfgBgImageUrl').value.trim();
                 if (urlVal) ProApp.state.bgImageUrl = urlVal;
                 if (document.getElementById('cfgTgToken')) ProApp.state.tgBotToken = document.getElementById('cfgTgToken').value.trim();
@@ -5372,6 +6688,10 @@
                         : `<span class="text-[21px] leading-none drop-shadow">${skinMeta.fab || t.icon}</span>`;
                 }
                 ProApp.applyAvatarUI();
+                ProApp.applyThemeMenuIcons(t.id);
+                ProApp.applyThemedPinLock();
+                ProApp.updateHeaderSoundUI();
+                ProApp.updateXpAndStreakUI();
                 ProApp.initTouchBurstEngine();
                 if (ProApp.state.bgImageUrl) {
                     body.classList.add('has-custom-bg');
@@ -5403,7 +6723,7 @@
             },
             saveUiConfigToLocal: function() {
                 localStorage.setItem('finance_ui_config', JSON.stringify({
-                    appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle, themeFxEnabled: ProApp.state.themeFxEnabled !== false, themeSoundEnabled: ProApp.state.themeSoundEnabled !== false, appAvatar: ProApp.state.appAvatar || '', appAvatarShape: ProApp.state.appAvatarShape || 'rounded',
+                    appTitle: ProApp.state.appTitle, appSubtitle: ProApp.state.appSubtitle, themeStyle: ProApp.state.themeStyle, themeFxEnabled: ProApp.state.themeFxEnabled !== false, themeSoundEnabled: ProApp.state.themeSoundEnabled !== false, appAvatar: ProApp.state.appAvatar || '', appAvatarShape: ProApp.state.appAvatarShape || 'rounded', welcomeName: ProApp.state.welcomeName || '', welcomeEnabled: ProApp.state.welcomeEnabled !== false, autoMatchMusic: ProApp.state.autoMatchMusic !== false, bonusXp: Number(ProApp.state.bonusXp) || 0, claimedQuests: ProApp.state.claimedQuests || {}, customSongs: (ProApp.state.customSongs || []).filter(s => s && s.url && !String(s.url).startsWith('blob:')),
                     bgImageUrl: ProApp.state.bgImageUrl, hideAmounts: ProApp.state.hideAmounts,
                     hiddenAccounts: ProApp.state.hiddenAccounts || [], visibleSections: ProApp.state.visibleSections || {},
                     dashboardOrder: ProApp.state.dashboardOrder || ['sec-accounts', 'sec-goals', 'sec-budgets', 'sec-debts', 'sec-charts'],
@@ -5565,6 +6885,7 @@
                 ProApp.renderBudgetWidget();
                 ProApp.renderSavingsGoals(accBalances);
                 ProApp.renderDebtsWidget();
+                ProApp.updateXpAndStreakUI();
                 ProApp.drawCharts();
             },
             drawCharts: function() {
@@ -8147,8 +9468,12 @@
                 ProApp.state.currencies.forEach(c => totals[c] = { in: 0, out: 0 });
 
                 let summaryIncUSD = 0, summaryExpUSD = 0;
+                ProApp.renderTxTagsBar();
                 const baseRows = ProApp.getBaseFilteredTransactions();
-                const filteredRows = baseRows.filter(tx => ProApp.matchesExcelColumnFilters(tx, null));
+                const tagRows = ProApp.activeTxTag
+                    ? baseRows.filter(tx => ProApp.extractTags((tx.desc || '') + ' ' + (tx.cat || '')).includes(ProApp.activeTxTag))
+                    : baseRows;
+                const filteredRows = tagRows.filter(tx => ProApp.matchesExcelColumnFilters(tx, null));
                 const sortedTx = [...filteredRows].sort((a, b) => ProApp.compareTxByLevels(a, b));
 
                 // Totals ALWAYS compute across 100% of filtered rows (even paginated ones!)
@@ -8462,6 +9787,12 @@
                     if (parsed.themeSoundEnabled !== undefined) ProApp.state.themeSoundEnabled = parsed.themeSoundEnabled !== false;
                     if (parsed.appAvatar !== undefined) ProApp.state.appAvatar = parsed.appAvatar || '';
                     if (parsed.appAvatarShape) ProApp.state.appAvatarShape = parsed.appAvatarShape;
+                    if (parsed.welcomeName !== undefined) ProApp.state.welcomeName = parsed.welcomeName || '';
+                    if (parsed.welcomeEnabled !== undefined) ProApp.state.welcomeEnabled = parsed.welcomeEnabled !== false;
+                    if (parsed.autoMatchMusic !== undefined) ProApp.state.autoMatchMusic = parsed.autoMatchMusic !== false;
+                    if (parsed.bonusXp !== undefined) ProApp.state.bonusXp = Number(parsed.bonusXp) || 0;
+                    if (parsed.claimedQuests && typeof parsed.claimedQuests === 'object') ProApp.state.claimedQuests = parsed.claimedQuests;
+                    if (Array.isArray(parsed.customSongs)) ProApp.state.customSongs = parsed.customSongs;
                     ProApp.state.bgImageUrl = parsed.bgImageUrl || '';
                     ProApp.state.hideAmounts = !!parsed.hideAmounts;
                     ProApp.state.hiddenAccounts = parsed.hiddenAccounts || [];
@@ -8517,6 +9848,9 @@
             ProApp.initShakeDetection();
             ProApp.initPWA();
             if (window.innerWidth > 768) { ProApp.initResizers(); ProApp.initDesktopDragScroll(); }
+            if (ProApp.state.licenseKey && !ProApp.hasPinEnabled() && ProApp.state.welcomeEnabled !== false) {
+                setTimeout(() => ProApp.showWelcomeIntro(false), 120);
+            }
 
             // Close popovers when clicking outside or pressing Escape
             document.addEventListener('click', (e) => {
@@ -8563,6 +9897,12 @@
                     ProApp.closeModal();
                     ProApp.closeCustomizeModal();
                     ProApp.closeSmartAddModal();
+                    ProApp.closeMusicModal();
+                    ProApp.closeQuestsModal();
+                    ProApp.closeCalendarModal();
+                    ProApp.closeAffordModal();
+                    ProApp.closeFlexCardModal();
+                    ProApp.dismissWelcomeIntro(false);
                 }
             });
             document.getElementById('tableScrollContainer')?.addEventListener('scroll', () => {
