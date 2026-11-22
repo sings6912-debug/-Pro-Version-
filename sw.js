@@ -1,5 +1,5 @@
-// Pro Cloud Finance V13.3 - Offline-First Service Worker
-const CACHE_NAME = 'pro-cloud-finance-v13.3';
+// Pro Cloud Finance V13.4 - Offline-First Service Worker
+const CACHE_NAME = 'pro-cloud-finance-v13.4';
 const CORE_ASSETS = [
     './',
     './index.html',
