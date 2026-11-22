@@ -1,17 +1,18 @@
-// Pro Cloud Finance V13.4 - Offline-First Service Worker
-const CACHE_NAME = 'pro-cloud-finance-v13.4';
+// Pro Cloud Finance V15.0 - Production Offline-First Service Worker (PWA + Webfonts Ready)
+const CACHE_NAME = 'pro-cloud-finance-v15.0';
 const CORE_ASSETS = [
     './',
     './index.html',
+    './manifest.json',
+    './icon-192.png',
+    './icon-512.png',
     'https://cdn.tailwindcss.com',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-    'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2',
     'https://cdn.jsdelivr.net/npm/chart.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js',
-    'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js',
-    'https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;900&display=swap'
+    'https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700;900&display=swap'
 ];
 
 self.addEventListener('install', (event) => {
@@ -37,10 +38,11 @@ self.addEventListener('fetch', (event) => {
     if (req.method !== 'GET') return;
     const url = req.url;
 
-    // Never intercept Firebase RTDB, Telegram API, or live exchange rate API calls
+    // Never intercept Firebase RTDB/Auth, Telegram API, or live exchange rate API calls
     if (
         url.includes('firebaseio.com') ||
         url.includes('googleapis.com/identitytoolkit') ||
+        url.includes('securetoken.googleapis.com') ||
         url.includes('api.telegram.org') ||
         url.includes('open.er-api.com')
     ) {
@@ -63,7 +65,7 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Static & CDN Assets: Stale-While-Revalidate (instant offline load + background update)
+    // Static, Fonts (.woff2), Icons & Lazy-Loaded CDN Assets: Stale-While-Revalidate
     event.respondWith(
         caches.match(req).then((cached) => {
             const networkFetch = fetch(req)
