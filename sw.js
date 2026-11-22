@@ -1,5 +1,5 @@
-// Pro Cloud Finance V15.2 - Production Offline-First Service Worker (PWA + Webfonts Ready)
-const CACHE_NAME = 'pro-cloud-finance-v15.2';
+// Pro Cloud Finance V15.5 - Production Offline-First Service Worker (PWA + Webfonts Ready)
+const CACHE_NAME = 'pro-cloud-finance-v15.5';
 const CORE_ASSETS = [
     './',
     './index.html',
@@ -23,6 +23,10 @@ self.addEventListener('install', (event) => {
             );
         }).then(() => self.skipWaiting())
     );
+});
+
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
