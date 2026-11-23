@@ -1,5 +1,5 @@
-// Pro Cloud Finance V15.6 - Production Offline-First Service Worker (PWA + Webfonts Ready)
-const CACHE_NAME = 'pro-cloud-finance-v15.6';
+// Pro Cloud Finance V15.8 - Production Offline-First Service Worker (PWA + Webfonts Ready)
+const CACHE_NAME = 'pro-cloud-finance-v15.8';
 const CORE_ASSETS = [
     './',
     './index.html',
